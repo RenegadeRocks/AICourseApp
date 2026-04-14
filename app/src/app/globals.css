@@ -1,0 +1,117 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light dark;
+}
+
+html,
+body {
+  background: theme("colors.paper");
+  color: theme("colors.ink");
+  font-family: theme("fontFamily.sans");
+  -webkit-font-smoothing: antialiased;
+}
+
+.prose-lesson {
+  max-width: 72ch;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: theme("fontFamily.serif");
+  font-size: 1.1rem;
+  line-height: 1.75;
+}
+.prose-lesson h1 {
+  font-family: theme("fontFamily.sans");
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+.prose-lesson h2 {
+  font-family: theme("fontFamily.sans");
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 2.25rem;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.01em;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.25rem;
+}
+.prose-lesson h3 {
+  font-family: theme("fontFamily.sans");
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+.prose-lesson p {
+  margin: 0.9rem 0;
+}
+.prose-lesson code {
+  background: #f2f0ea;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  font-family: theme("fontFamily.mono");
+  font-size: 0.95em;
+}
+.prose-lesson pre {
+  background: #1a1a1a;
+  color: #f2f0ea;
+  padding: 1rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 1.25rem 0;
+}
+.prose-lesson pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+}
+.prose-lesson blockquote {
+  border-left: 3px solid theme("colors.accent");
+  padding: 0.2rem 0 0.2rem 1rem;
+  margin: 1rem 0;
+  color: theme("colors.muted");
+  font-style: italic;
+}
+.prose-lesson a {
+  color: theme("colors.accent");
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+.prose-lesson ul,
+.prose-lesson ol {
+  padding-left: 1.25rem;
+  margin: 0.75rem 0;
+}
+.prose-lesson li {
+  margin: 0.3rem 0;
+}
+.prose-lesson table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-family: theme("fontFamily.sans");
+  font-size: 0.95rem;
+}
+.prose-lesson th,
+.prose-lesson td {
+  border: 1px solid #e5e5e0;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+.prose-lesson th {
+  background: #f5f3ed;
+}
+
+/* highlight.js minimal */
+.hljs-keyword { color: #d97706; }
+.hljs-string { color: #7f1d1d; }
+.hljs-number { color: #065f46; }
+.hljs-comment { color: #6b7280; font-style: italic; }

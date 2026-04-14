@@ -4,7 +4,13 @@
       "WebFetch(domain:docs.google.com)",
       "WebFetch(domain:doc-08-58-sheets.googleusercontent.com)",
       "Bash(python -c ':*)",
-      "Bash(python -m pip install --quiet openpyxl)"
+      "Bash(python -m pip install --quiet openpyxl)",
+      "Bash(python scripts/parse_xlsx.py)",
+      "Bash(python scripts/scaffold_vault.py)",
+      "Bash(npm install:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npx next:*)",
+      "Bash(python -m pip install --quiet genanki)"
     ]
   }
 }

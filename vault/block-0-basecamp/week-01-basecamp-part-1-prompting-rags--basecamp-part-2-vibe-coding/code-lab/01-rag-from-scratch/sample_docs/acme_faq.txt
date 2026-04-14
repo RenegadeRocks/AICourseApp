@@ -1,0 +1,69 @@
+ACME SaaS Platform — Frequently Asked Questions
+Last updated: March 2026
+
+=== BILLING & PLANS ===
+
+Q: What plans do you offer?
+A: We offer three plans: Starter ($29/month), Growth ($99/month), and Enterprise (custom pricing). All plans include a 14-day free trial with no credit card required. Annual billing is available at a 20% discount versus monthly pricing.
+
+Q: What is your refund policy?
+A: For monthly plans, we offer a full refund within 7 days of any billing date if you are not satisfied with the service. For annual plans, we offer a prorated refund for the remaining months if you cancel within the first 30 days of the annual billing period. After 30 days on an annual plan, no refunds are issued, but you retain access until the end of the paid period.
+
+Q: Can I change my plan mid-month?
+A: Yes. Upgrading takes effect immediately and you are billed the prorated difference. Downgrading takes effect at the next billing cycle — you will not receive a refund for the current period's difference.
+
+Q: What payment methods do you accept?
+A: We accept all major credit cards (Visa, Mastercard, American Express, Discover), PayPal, and ACH bank transfer for annual Enterprise plans. We do not accept cryptocurrency.
+
+Q: Do you offer discounts for nonprofits or educational institutions?
+A: Yes. Registered nonprofits receive 30% off any plan. Accredited educational institutions receive 50% off the Starter or Growth plan. Email billing@acme.com with proof of status to apply the discount.
+
+=== FEATURES ===
+
+Q: How many users can I add to my account?
+A: Starter allows up to 5 users. Growth allows up to 25 users. Enterprise allows unlimited users. Additional user seats can be purchased on Starter and Growth plans at $8/user/month.
+
+Q: Is there an API?
+A: Yes. The ACME REST API is available on Growth and Enterprise plans. The API uses OAuth 2.0 for authentication and supports JSON. Rate limits are 1,000 requests/hour on Growth and 10,000 requests/hour on Enterprise. Full API documentation is at docs.acme.com/api.
+
+Q: Does ACME support Single Sign-On (SSO)?
+A: SSO via SAML 2.0 is available on Enterprise plans only. We support integration with Okta, Azure AD, Google Workspace, and any SAML 2.0-compliant identity provider. Setup typically takes 1-2 business days with assistance from our Enterprise onboarding team.
+
+Q: Can I export my data?
+A: Yes. You can export all your data at any time from Settings > Data Export. Supported formats: CSV, JSON, and Excel (.xlsx). If your account is closed, you have 30 days to export your data before it is permanently deleted.
+
+=== SECURITY & COMPLIANCE ===
+
+Q: Is ACME SOC 2 certified?
+A: Yes. ACME is SOC 2 Type II certified. Our most recent audit report was completed in January 2026. Enterprise customers can request the full audit report by contacting their account manager.
+
+Q: Where is my data stored?
+A: All data is stored in the United States on AWS us-east-1. Enterprise customers can request EU data residency (stored in AWS eu-west-1) for an additional fee. We do not store data in other regions at this time.
+
+Q: How is my data encrypted?
+A: Data is encrypted at rest using AES-256 and in transit using TLS 1.3. Encryption keys are managed by AWS KMS with rotation every 90 days. We do not have access to your encryption keys.
+
+Q: Is ACME GDPR compliant?
+A: Yes. ACME processes data as a data processor under GDPR. We provide a Data Processing Agreement (DPA) for all customers who require one for compliance. Contact privacy@acme.com to request a DPA. We support the right to erasure: submit a deletion request at privacy@acme.com and all personal data is deleted within 72 hours.
+
+=== SUPPORT ===
+
+Q: What support options are available?
+A: Starter customers receive email support with a 24-hour response time during business hours (Mon-Fri, 9 AM-6 PM EST). Growth customers receive priority email and live chat support with a 4-hour response time. Enterprise customers receive a dedicated Customer Success Manager, 24/7 phone support, and a 1-hour response time SLA.
+
+Q: Do you offer onboarding assistance?
+A: Growth and Enterprise customers receive a complimentary onboarding call with our Customer Success team within the first week of signup. We also provide onboarding documentation, video tutorials, and a template library at help.acme.com.
+
+Q: What is your uptime SLA?
+A: We guarantee 99.9% uptime on Growth and Enterprise plans (approximately 8.7 hours of downtime per year). Starter plans do not include an uptime SLA but historically match our infrastructure uptime of 99.95%. Status and incident history are available at status.acme.com.
+
+=== INTEGRATIONS ===
+
+Q: What integrations do you support?
+A: ACME integrates natively with: Slack (notifications and slash commands), HubSpot (CRM sync), Salesforce (Enterprise only), Zapier (500+ apps via Zapier), Google Workspace (SSO and Drive import), Microsoft 365 (SSO and SharePoint import), and GitHub (project linking). A full integration directory is at acme.com/integrations.
+
+Q: Is there a Zapier integration?
+A: Yes. The ACME Zapier integration supports 12 triggers (e.g., "new project created," "task completed") and 8 actions (e.g., "create task," "update project status"). Available on Growth and Enterprise plans. Find it at zapier.com/apps/acme.
+
+Q: Can I connect ACME to my own database?
+A: Enterprise customers can use the ACME Data Connector to sync data bidirectionally with PostgreSQL, MySQL, and Microsoft SQL Server. Setup requires a technical integration call with our team. Contact sales@acme.com for details.
