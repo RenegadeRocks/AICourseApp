@@ -1,0 +1,486 @@
+=== SHEET: Program Schedule ===
+INSTRUCTIONS 
+
+Here's your AI Catalyst schedule. Please note that this is a TENTATIVE schedule. We are building the program as we speak. So the topics and the structure would change while the dates would not change. As we finalize on topics and curriculum, we will update it here. Any questions or concerns, reach out on dileep@outskill.com
+
+1. Weekly Core Sessions - Every Saturday & Sunday - 7:30 PM IST
+2. Office Hours - Every Thursday  - 7:30 PM IST
+3. Recordings will be available within the next 24 hours of the completion of a session on the LMS.
+4. The timings of the sessions or officers might be subject to change based on extraneous circumstances.  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | Week | Details of each week | Date | Time (IST) | GMT/UTC | EST |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+Basecamp | Week 0 | AI Catalyst Program - Onboarding | 2026-04-18 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | Week 1 | Basecamp Part 1: Prompting & RAGs | 2026-05-02 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Basecamp Part 2 : Vibe Coding ✍️ | 2026-05-03 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) | 2026-05-04 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 | 04:30:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | Week 2 | Basecamp Part 3: MCPs & Voice Agents | 2026-05-09 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Basecamp Part 4: Revisiting n8n & AI Agent Fundamentals | 2026-05-10 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) | 2026-05-11 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 | 04:30:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | Week 3 | Decoding Real Business Problems with AI - I | 2026-05-16 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Decoding Real Business Problems with AI - II | 2026-05-17 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) | 2026-05-18 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 | 04:30:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+
+Problem Solving with AI & Outreach | Week 1 | Getting your first client | 2026-05-23 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | How to Plan, Scope and Sell AI projects. | 2026-05-24 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) | 2026-05-25 00:00:00 | 14:00:00 | 08:30:00 | 04:30:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Office Hours Session I (Doubt clarification, Networking)  | 2026-05-28 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | Week 2 | Importance of Personal Branding  | 2026-05-30 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Niche Discovery | 2026-05-31 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) | 2026-06-01 00:00:00 | 14:00:00 | 08:30:00 | 04:30:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Office Hours Session (Doubt clarification, Networking) | 2026-06-04 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+
+AI Employees / Interns that work for you | Week 3 | Building Elegant Landing Pages | 2026-06-06 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | How to Build Micro Prototypes  | 2026-06-07 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) | 2026-06-08 00:00:00 | 14:00:00 | 08:30:00 | 04:30:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Office Hours Session (Doubt clarification, Networking) | 2026-06-11 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | Week 4 | Building a Sales Agent  | 2026-06-13 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Building Comprehensive RAG AI Agent  | 2026-06-14 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) | 2026-06-15 00:00:00 | 14:00:00 | 08:30:00 | 04:30:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Office Hours Session (Doubt clarification, Networking) | 2026-06-18 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | Week 5 | AI That Reads Your Business: Reports & Insights | 2026-06-20 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Build: Weekly Business Report Generator | 2026-06-21 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) | 2026-06-22 00:00:00 | 14:00:00 | 08:30:00 | 04:30:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Office Hours Session (Doubt clarification, Networking) | 2026-06-25 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+
+Advanced Topics & Voice Agents | Week 6 |         Beyond Prompt Engineering – Context Engineering | 2026-06-27 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Advanced RAGs | 2026-06-28 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) | 2026-06-29 00:00:00 | 14:00:00 | 08:30:00 | 04:30:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Office Hours Session (Doubt clarification, Networking) | 2026-07-02 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | Week 7 | Voice Agent squad | 2026-07-04 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Voice agent Extened to a Chatbot on WA | 2026-07-05 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) | 2026-07-06 00:00:00 | 14:00:00 | 08:30:00 | 04:30:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Office Hours Session (Doubt clarification, Networking) | 2026-07-09 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | Week 8 | Automation + Agent Integration (MCPs) | 2026-07-11 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Build: Hybrid Agent (Scraper + Summarizer) | 2026-07-12 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) | 2026-07-13 00:00:00 | 14:00:00 | 08:30:00 | 04:30:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Office Hours Session (Doubt clarification, Networking) | 2026-07-16 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+
+Test, Validate & Package your Ideas | Week 9 | Packaging & Selling Your AI Agents | 2026-07-18 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Create: Your First Sellable Agent Package | 2026-07-19 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) | 2026-07-20 00:00:00 | 14:00:00 | 08:30:00 | 04:30:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Office Hours Session (Doubt clarification, Networking) | 2026-07-23 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | Week 10 | Build landing page with CTA Recap | 2026-07-25 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Create AI-generated launch creatives | 2026-07-26 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) | 2026-07-27 00:00:00 | 14:00:00 | 08:30:00 | 04:30:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Office Hours Session (Doubt clarification, Networking) | 2026-07-30 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | Week 11 | Define Your Product Idea - Validate idea using AI | 2026-08-01 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Market & User Validation - Interview or poll potential users | 2026-08-02 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) | 2026-08-03 00:00:00 | 14:00:00 | 08:30:00 | 04:30:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Office Hours Session (Doubt clarification, Networking) | 2026-08-06 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+Block 5 - 
+Product Building Principles | Week 12 | Frontend - Basic UI/UX Design Principles | 2026-08-08 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Build MVP backend & connect with AI workflows | 2026-08-09 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) | 2026-08-10 00:00:00 | 14:00:00 | 08:30:00 | 04:30:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Office Hours Session (Doubt clarification, Networking) | 2026-08-13 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | Week 13 | Making Your Product Feel Magic with AI | 2026-08-15 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | How to add Smart Features That Wow Users | 2026-08-16 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) | 2026-08-17 00:00:00 | 14:00:00 | 08:30:00 | 04:30:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Office Hours Session (Doubt clarification, Networking) | 2026-08-20 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | Week 14 | Analytics & Iteration - what to measure | 2026-08-22 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  |  Scale Infra (Auth, DB, UI polish) | 2026-08-23 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) | 2026-08-24 00:00:00 | 14:00:00 | 08:30:00 | 04:30:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Office Hours Session (Doubt clarification, Networking) 20 - Indian Slot | 2026-08-27 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+Block 6 - 
+Launch & Monetization | Week 15 | Plan Product Hunt + Social Strategy | 2026-08-29 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Publish live + cold outreach | 2026-08-30 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) | 2026-08-31 00:00:00 | 14:00:00 | 08:30:00 | 04:30:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Office Hours Session (Doubt clarification, Networking) 17 - Indian Slot | 2026-09-03 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | Week 16 | Explore monetisation paths : Using AI in Sales Calls & Pricing Strategy | 2026-09-05 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Pricing & Revenue Planning : Pricing tiers & upsell hooks | 2026-09-06 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) | 2026-09-07 00:00:00 | 14:00:00 | 08:30:00 | 04:30:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Office Hours Session (Doubt clarification, Networking) 19 - Indian Slot | 2026-09-10 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | Week 17 | Feedback Metrics : Setup retargeting or re-engagement | 2026-09-12 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Growth hacking + referral loops | 2026-09-13 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) | 2026-09-14 00:00:00 | 14:00:00 | 08:30:00 | 04:30:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Office Hours Session (Doubt clarification, Networking) 20 - Indian Slot | 2026-09-17 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+Block 7 - 
+Onboarding & Tracking | Week 18 | Create a Lead Magnet using social media distribution | 2026-09-19 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Aquire leads using Paid ads | 2026-09-20 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) | 2026-09-21 00:00:00 | 14:00:00 | 08:30:00 | 04:30:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Office Hours Session (Doubt clarification, Networking) 17 - Indian Slot | 2026-09-24 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | Week 19 | Build async client dashboard or Project tracking for agency | 2026-09-26 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Productizing Your Service + Community Market research | 2026-09-27 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) | 2026-09-28 00:00:00 | 14:00:00 | 08:30:00 | 04:30:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Office Hours Session (Doubt clarification, Networking) 19 - Indian Slot | 2026-10-01 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | Week 20 | SOPs for onbaording delivery & growth | 2026-10-03 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Build Community & paid inner circle | 2026-10-04 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) | 2026-10-05 00:00:00 | 14:00:00 | 08:30:00 | 04:30:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Office Hours Session (Doubt clarification, Networking) 20 - Indian Slot | 2026-10-08 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+Block 8 - 
+Wind-up & Checklists | Week 21 | Complete Agency / SaaS system | 2026-10-10 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Build your thought leadership Machine - newsletter & content engine | 2026-10-11 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) | 2026-10-12 00:00:00 | 14:00:00 | 08:30:00 | 04:30:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Office Hours Session (Doubt clarification, Networking) 17 - Indian Slot | 2026-10-15 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ | Week 22 | Final Thoughts, Recap & Checklists - 1 | 2026-10-17 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Final Thoughts, Recap & Checklists - 2 | 2026-10-18 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) | 2026-10-19 00:00:00 | 14:00:00 | 08:30:00 | 04:30:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Office Hours Session (Doubt clarification, Networking) 19 - Indian Slot | 2026-10-22 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+ |  | Offline Events - DEMO DAY & IMMERSION will be shared later. A good 2 months heads up will be given for all.  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+=== SHEET: Sheet10 ===
+ | Week | Details of each week | Tools | Outcomes | Skills |  |  |  |  | 
+Level 0 - 
+Basecamp & Revision | Week 1 | Onboarding | Basecamp Part 1: Prompting & RAGs |  |  |  |  |  |  |  | 
+ |  | Basecamp Part 2 : Vibe Coding ✍️ |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) |  |  |  |  |  |  |  | 
+ | Week 2 | Basecamp Part 3: Revisiting n8n & AI Agent Fundamentals |  |  |  |  |  |  |  | 
+ |  | Basecamp Part 4: MCPs & Voice Agents |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) |  |  |  |  |  |  |  | 
+ |  |  |  |  |  |  |  | Tools | Outcome | Skills 
+Block 1 - 
+Problem Solving with AI & Outreach | Week 3 | Decoding Real Business Problems with AI |  |  |  |  |  | Overview of everything | Understand vision, toolset, monetization roadmap | AI mindset, monetization pathways & Clarity of Outcome 
+ |  | Map Your First Client's Workflow |  |  |  |  |  | Overview of everything | Map out your future path: product or business | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) |  |  |  |  |  |  |  | 
+ |  | Office Hours Session (Doubt clarification, Networking)  |  |  |  |  |  | Tools | Outcome | Skills 
+ |  |  |  |  |  |  |  | Make/Zapier, N8N, APIs | Learn automation logic structure | Hard Skills:
+- Workflow automation (Make, Zapier, N8N, APIs, Airtable)
+- Cold outreach setup (Gmail, Sheets, Sendinblue)
+- Voice agent deployment (VAPI, WhatsApp bots)
+- Prompt engineering (Basic to Chain of Thought)
+- AI tool usage: GPT-4, Claude, OpenAI Studio
+
+Soft Skills:
+- Business problem mapping
+- Client-centric thinking
+- Communication through automation flows
+- Outcome-focused solution building
+
+Outcome:
+- Build your first working automation and lead gen bot
+- Deploy a functional voice agent on WhatsApp
+- Ship 2–3 complete client-facing automations
+- Master prompt creation and execution
+ | Week 4 | Beyond Cold Email: AI-Powered Outreach Systems |  |  |  |  |  | Make/Zapier, APIs | Launch your first working automation | 
+ |  | From Automation to Intelligence: What AI Agents Can Do |  |  |  |  |  | Make, N8N, Zapier, API platform deepdives | Identify problems that automation can solve | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) |  |  |  |  |  | N8N , APIs | Ship a working solution for client-like use case | 
+ |  | Office Hours Session (Doubt clarification, Networking) |  |  |  |  |  | Make, Gmail , Send in Blue , Instantly  | Learn automated outbound campaigns | 
+ |  |  |  |  |  |  |  | Make, Sheets | Launch & test outreach funnel | 
+Block 2 - 
+AI Employees / Interns that work for you | Week 5 | 24/7 Support Without Hiring: Voice + Chat Agents |  |  |  |  |  | Make, N8N | Learn advanced logic & nested workflows | 
+ |  | Deploy a WhatsApp Bot + Voice Agent |  |  |  |  |  | Airtable, Make |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) |  |  |  |  |  | GPT-3/GPT-4, Claude, Gemini, AI studio, Open AI playground | Master agent-first prompts | 
+ |  | Office Hours Session (Doubt clarification, Networking) |  |  |  |  |  | GPT-3/GPT-4, Claude, Gemini, AI studio, Open AI playground | Document reusable prompts | 
+ |  |  |  |  |  |  |  | N8N + VAPI | full-stack deployable voice system | 
+ | Week 6 | Scaling: Webhooks, Airtable, Multi-step Logic |  |  |  |  |  | AI sensi , WATI, Relevance, VAPI  |  | 
+ |  | Build: CRM + Lead Nurture System |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) |  |  |  |  |  | Tools | Outcome | Skills 
+ |  | Office Hours Session (Doubt clarification, Networking) |  |  |  |  |  | Lindy, N8N/Zapier agents | Understand how agents think and act | Hard Skills:
+- AI agent building (Lindy, Gumloop, Claude, Zapier Agents)
+- Chaining logic, memory architecture, and context window tuning
+- Replit deployment, API integration
+- Building hybrid agents (scraper + summariser)
+
+Soft Skills:
+- Solution architecture & modular thinking
+- Design thinking applied to AI systems
+- Debugging mindset and iterative testing
+- Documentation for agent handover
+
+Outcome:
+- Deploy 2 business-use agents 
+- Build personalised creator/client agents
+- Integrate agents with automation tools
+- Wrap & present agent with GTM assets
+ |  |  |  |  |  |  |  | Gumloop, Lindy/ zapier agents | Deploy your first business-use agent | 
+ | Week 7 | AI That Reads Your Business: Reports & Insights |  |  |  |  |  | Gumloop, Lindy/ zapier agents | Learn memory + chain of thought logic | 
+ |  | Build: Weekly Business Report Generator |  |  |  |  |  | Gumloop, Lindy | Launch business-facing AI agent | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) |  |  |  |  |  | Replit, Gumloop | Publish advanced hybrid tool | 
+ |  | Office Hours Session (Doubt clarification, Networking) |  |  |  |  |  | Claude, Lindy | Context windows, fine-tuned prompts | 
+ |  |  |  |  |  |  |  | Claude, Lindy | Context windows, fine-tuned prompts | 
+Block 3 - 
+Advanced Topics & Voice Agents | Week 8 |         Beyond Prompt Engineering – Context Engineering |  |  |  |  |  | Gumroad | Public-ready portfolio agent | 
+ |  | Advanced RAGs |  |  |  |  |  | N8N, Gumloop | Polish and fix your agents for real use | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) |  |  |  |  |  | Notion, Loom | Wrap agent with GTM assets | 
+ |  | Office Hours Session (Doubt clarification, Networking) |  |  |  |  |  |  |  | 
+ |  |  |  |  |  |  |  | Tools | Outcome | Skills 
+ | Week 9 | Voice Agent squad |  |  |  |  |  | Bolt, Lovable, cursor, replit | Live working demo of your solution | Hard Skills:
+- Product built with Bolt, Lovable, Cursor, Replit
+- Supabase setup, front-end + back-end prototyping
+- Working knowledge of the AI toolchain for MVP/MVB
+
+Soft Skills:
+- Storytelling & product thinking
+- Clarity in solution-market fit
+- Decision-making between product vs business path
+
+Outcome:
+- Launch the working prototype
+- Choose between the Product (MVP) or Business (MVB) track
+- Set up for the next phase with clarity of direction
+ |  | Voice agent Extened to a Chatbot on WA |  |  |  |  |  | Bolt, Lovable, cursor, replit | Setup launch basics | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) |  |  |  |  |  | Bolt, Lovable, cursor, replit | Decide your track: MVP or MVB | 
+ |  | Office Hours Session (Doubt clarification, Networking) |  |  |  |  |  | Bolt, Lovable, cursor, replit | MVP or MVB preparation | 
+ | Week 10 | Automation + Agent Integration (MCPs) |  |  |  |  |  |  |  | 
+ |  | Build: Hybrid Agent (Scraper + Summarizer) |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) |  |  |  |  |  |  |  | 
+ |  | Office Hours Session (Doubt clarification, Networking) |  |  |  |  |  |  |  | 
+Block 4 - 
+Test, Validate & Package your Ideas | Week 11 | Packaging & Selling Your AI Agents |  |  |  |  |  |  |  | 
+ |  | Create: Your First Sellable Agent Package |  |  |  |  |  | Tools | Outcome | Skills 
+ |  | Release of Session Resources (recordings, worksheets, prompts) |  |  |  |  |  | Bolt , Lovable | Live landing page and marketing creative; First live product site + branding | Hard Skills:
+- Landing page, MVP backend, and database (NextAuth, Supabase)
+- AI feature integration (GPT, Claude, personalisation logic)
+- Analytics setup (PostHog, GA), UI polish
+- Launch prep: Product Hunt, outreach, pricing models
+
+Soft Skills:
+- User testing, iteration, and storytelling
+- Launch strategy, pricing psychology
+- GTM planning and sales alignment
+- Community seeding & user onboarding
+
+Outcome:
+- Functional, AI-powered MVP with live users
+- Product demo, public case study, and launch site
+- Monetisation paths defined (SaaS/API)
+- Portfolio-ready product for showcase
+ |  | Office Hours Session (Doubt clarification, Networking) |  |  |  |  |  |  |  | 
+ |  |  |  |  |  |  |  | Use ChatGPT + Perplexity to validate product-market fit | Problem-solution clarity | 
+ | Week 12 | Build landing page with CTA Recap |  |  |  |  |  | Use Supabase, Lovable, Bolt, Zapier, N8N | Functional MVP + backend logic | 
+ |  | Create AI-generated launch creatives |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) |  |  |  |  |  | Add feedback loops, analytics (PostHog / Google Analytics) | Improved MVP based on test feedback | 
+ |  | Office Hours Session (Doubt clarification, Networking) |  |  |  |  |  |  |  | 
+ |  |  |  |  |  |  |  | Add AI -based personalization & LLM logic | Personalized interaction in product | 
+ | Week 13 | Define Your Product Idea - Validate idea using AI |  |  |  |  |  |  |  | 
+ |  | Market & User Validation - Interview or poll potential users |  |  |  |  |  | Use NextAuth, Supabase, design clean UI | Beta Launch with product demo | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) |  |  |  |  |  |  |  | 
+ |  | Office Hours Session (Doubt clarification, Networking) |  |  |  |  |  | AI-generated launch assets & copywriting | Live launch on chosen platforms | 
+ |  |  |  |  |  |  |  | Explore SaaS, subscription, or API monetization | Revenue model defined | 
+Block 5 - 
+Product Building Principles | Week 14 | Frontend - Basic UI/UX Design Principles |  |  |  |  |  |  |  | 
+ |  | Build MVP backend & connect with AI workflows |  |  |  |  |  | Build AI-powered support agent + Notion docs | Self-serve support in place | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) |  |  |  |  |  |  |  | 
+ |  | Office Hours Session (Doubt clarification, Networking) |  |  |  |  |  | Track usage, optimize retention using AI & Ongoing acquisition loop | Usage dashboard + growth roadmap | 
+ |  |  |  |  |  |  |  | Demo day + share with community | Portfolio-worthy asset	 | 
+ | Week 15 | Making Your Product Feel Magic with AI |  |  |  |  |  |  | Product demo video | 
+ |  | How to add Smart Features That Wow Users |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) |  |  |  |  |  |  |  | 
+ |  | Office Hours Session (Doubt clarification, Networking) |  |  |  |  |  | Tools | Outcome | 
+ |  |  |  |  |  |  |  | Use AI to niche down 03 , Deep research  | Clear agency niche, offer definition, and positioning based on AI-powered research | Hard Skills:
+- AI-driven content funnels (Heygen, Opusclip, LinkedIn, Substack)
+- CRM setup, lead gen via ads and outreach
+- Client onboarding automation (Zapier, N8N), async delivery dashboards
+- SOP building, skool/Topmate community setup
+
+Soft Skills:
+- Service packaging, pitch refinement
+- Niche clarity and positioning
+- Thought leadership + content marketing
+- Retention and referral strategy
+
+Outcome:
+- Live, operational MVC with lead funnels and offer pages
+- Onboarding + delivery systems are fully automated
+- Demo-ready portfolio of services and testimonials
+- Launched community + monetisation roadmap
+ | Week 16 | Analytics & Iteration - what to measure |  |  |  |  |  |  |  | 
+ |  |  Scale Infra (Auth, DB, UI polish) |  |  |  |  |  | Claude AI projects & other AI tools | - | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) |  |  |  |  |  | Recollect every assignment did in the cohort & see what can be offered as a solution or service |  | 
+ |  | Office Hours Session (Doubt clarification, Networking) 20 - Indian Slot |  |  |  |  |  | heygen , instagram , Youtube, twitter, Opusclip | Build a lead magnet; social-first presence on Instagram, YouTube, LinkedIn | 
+ |  |  |  |  |  |  |  | Linkedin sales nav , Linkedin , mailchimp , beehive , convertkit , Substack | Launch outreach systems: first 100 DMs/emails sent + inbound channels activated | 
+Block 6 - 
+Launch & Monetization | Week 17 | Plan Product Hunt + Social Strategy |  |  |  |  |  |  |  | 
+ |  | Publish live + cold outreach |  |  |  |  |  | Use Zapier/N8N to automate onboarding, linkedin outreach | Notion onboarding kit + delivery flow | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) |  |  |  |  |  |  |  | 
+ |  | Office Hours Session (Doubt clarification, Networking) 17 - Indian Slot |  |  |  |  |  | Build SOPs and dashboards , notion, Asana & trello | Build async delivery dashboards with SOPs | 
+ | Week 18 | Explore monetisation paths : Using AI in Sales Calls & Pricing Strategy |  |  |  |  |  | Turn work into reusable proof, show exampels of ALex , Cole medin , liam otley , Nick Sarev  | Turn work into proof (case studies, testimonials); launch Topmate/Skool community | 
+ |  | Pricing & Revenue Planning : Pricing tiers & upsell hooks |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) |  |  |  |  |  | Build skool community , Topmate , Linkedin Community  | Publish gig listings; design your paid inner circle; launch retention/referral engine | 
+ |  | Office Hours Session (Doubt clarification, Networking) 19 - Indian Slot |  |  |  |  |  |  |  | 
+ |  |  |  |  |  |  |  | Final Setup of Agency  |  | 
+ | Week 19 | Feedback Metrics : Setup retargeting or re-engagement |  |  |  |  |  |  |  | 
+ |  | Growth hacking + referral loops |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) |  |  |  |  |  |  |  | 
+ |  | Office Hours Session (Doubt clarification, Networking) 20 - Indian Slot |  |  |  |  |  |  |  | 
+Block 7 - 
+Onboarding & Tracking | Week 20 | Create a Lead Magnet using social media distribution |  |  |  |  |  |  |  | 
+ |  | Aquire leads using Paid ads |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) |  |  |  |  |  |  |  | 
+ |  | Office Hours Session (Doubt clarification, Networking) 17 - Indian Slot |  |  |  |  |  |  |  | 
+ | Week 21 | Build async client dashboard or Project tracking for agency |  |  |  |  |  |  |  | 
+ |  | Productizing Your Service + Community Market research |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) |  |  |  |  |  |  |  | 
+ |  | Office Hours Session (Doubt clarification, Networking) 19 - Indian Slot |  |  |  |  |  |  |  | 
+ | Week 22 | SOPs for onbaording delivery & growth |  |  |  |  |  |  |  | 
+ |  | Build Community & paid inner circle |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) |  |  |  |  |  |  |  | 
+ |  | Office Hours Session (Doubt clarification, Networking) 20 - Indian Slot |  |  |  |  |  |  |  | 
+Block 8 - 
+Wind-up & Checklists | Week 23 | Complete Agency / SaaS system |  |  |  |  |  |  |  | 
+ |  | Build your thought leadership Machine - newsletter & content engine |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) |  |  |  |  |  |  |  | 
+ |  | Office Hours Session (Doubt clarification, Networking) 17 - Indian Slot |  |  |  |  |  |  |  | 
+ | Week 24 | Final Thoughts, Recap & Checklists - 1 |  |  |  |  |  |  |  | 
+ |  | Final Thoughts, Recap & Checklists - 2 |  |  |  |  |  |  |  | 
+ |  | Release of Session Resources (recordings, worksheets, prompts) |  |  |  |  |  |  |  | 
+ |  | Office Hours Session (Doubt clarification, Networking) 19 - Indian Slot |  |  |  |  |  |  |  | 
+ |  | Offline Events - DEMO DAY & IMMERSION will be shared later. A good 2 months heads up will be given for all.  |  |  |  |  |  |  |  | 
+=== SHEET: Program Outline ===
+ |   |  |  |  |  | 
+ | Program Start Date | 25-10-2025 |  |  |  | 
+ | Learning -> Building -> Earning  |  |  |  |  | 
+ | Phase 1 builds a strong foundation in automation, prompt engineering, and AI agent creation. Learners use tools like Make, Zapier, N8N, Claude, and Lindy to build real-world workflows and agents. By the end, they develop a working AI-powered product prototype. The focus is on mastering tools, solving problems, and preparing for monetization.  |  |  |  |  | 
+ | PHASE 1 (Weeks 1–14) : Hard Skills Foundation |  |  |  |  | 
+ | PRE - PHASE |  |  |  |  | 
+Theme | Sessions | Week | Tools | Outcome | Skills  | 
+Orientation & Monetization |  Orientation - Program walkthrough, expectations, tools you'll master | 1.0 | Overview of everything | Understand vision, toolset, monetization roadmap | AI mindset, monetization pathways & Clarity of Outcome  | 
+ | Monetization Roadmap - Learn the Earning Lens (MVP vs. MVC) |  | Overview of everything | Map out your future path: product or business |  | 
+ | Block 1: Foundations of AI Automation |  |  |  |  | 
+Theme | Sessions | Week | Tools | Outcome | Skills  | 
+Automation Foundations | Intro to Automation Tools : Automation Foundations  | 2.0 | Make/Zapier, N8N, APIs | Learn automation logic structure | Hard Skills:
+- Workflow automation (Make, Zapier, N8N, APIs, Airtable)
+- Cold outreach setup (Gmail, Sheets, Sendinblue)
+- Voice agent deployment (VAPI, WhatsApp bots)
+- Prompt engineering (Basic to Chain of Thought)
+- AI tool usage: GPT-4, Claude, OpenAI Studio
+
+Soft Skills:
+- Business problem mapping
+- Client-centric thinking
+- Communication through automation flows
+- Outcome-focused solution building
+
+Outcome:
+- Build your first working automation and lead gen bot
+- Deploy a functional voice agent on WhatsApp
+- Ship 2–3 complete client-facing automations
+- Master prompt creation and execution | 
+ | Build Your First Workflow – Lead Capture Bot |  | Make/Zapier, APIs | Launch your first working automation |  | 
+Client Mapping & Solutioning | Client Problem Decoding : Use Case Mapping | 3.0 | Make, N8N, Zapier, API platform deepdives | Identify problems that automation can solve |  | 
+ | Solution Sprint – Build automation for Real Use Case |  | N8N , APIs | Ship a working solution for client-like use case |  | 
+Lead Gen & Cold Email Automations | Marketing Campaign Automation – Email, Outreach | 4.0 | Make, Gmail , Send in Blue , Instantly  | Learn automated outbound campaigns |  | 
+ | Build: Cold Outreach Engine (Make + Sheets) |  | Make, Sheets | Launch & test outreach funnel |  | 
+Advanced Automation Flows | Scaling: Webhooks, Airtable, Multi-step Logic | 5.0 | Make, N8N | Learn advanced logic & nested workflows |  | 
+ | Build: CRM + Lead Nurture System |  | Airtable, Make |  |  | 
+Prompt Engineering & RAGs | 	Prompt Engineering – Basics to CoT | 6.0 | GPT-3/GPT-4, Claude, Gemini, AI studio, Open AI playground | Master agent-first prompts |  | 
+ | RAGs |  | GPT-3/GPT-4, Claude, Gemini, AI studio, Open AI playground | Document reusable prompts |  | 
+Voice Agent Squad | Voice Agent squad | 7.0 | N8N + VAPI | full-stack deployable voice system |  | 
+ | Voice agent Extened to a Chatbot on WA  |  | AI sensi , WATI, Relevance, VAPI  |  |  | 
+ | Block 2: Prompt Engineering & AI Agent Buildin |  |  |  |  | 
+Theme | Sessions | Week | Tools | Outcome | Skills  | 
+Agent Fundamentals | Intro to AI Agents – Concepts, Tools, Triggers | 8.0 | Lindy, N8N/Zapier agents | Understand how agents think and act | Hard Skills:
+- AI agent building (Lindy, Gumloop, Claude, Zapier Agents)
+- Chaining logic, memory architecture, and context window tuning
+- Replit deployment, API integration
+- Building hybrid agents (scraper + summariser)
+
+Soft Skills:
+- Solution architecture & modular thinking
+- Design thinking applied to AI systems
+- Debugging mindset and iterative testing
+- Documentation for agent handover
+
+Outcome:
+- Deploy 2 business-use agents 
+- Build personalised creator/client agents
+- Integrate agents with automation tools
+- Wrap & present agent with GTM assets | 
+ | Build: Basic AI Agent (e.g., Research Bot) |  | Gumloop, Lindy/ zapier agents | Deploy your first business-use agent |  | 
+Advanced Agent Systems | Advanced Agent Design – Chaining, Relevance AI | 9.0 | Gumloop, Lindy/ zapier agents | Learn memory + chain of thought logic |  | 
+ | Build: Client-Facing Agent (Lead Gen, Summary) |  | Gumloop, Lindy | Launch business-facing AI agent |  | 
+Personalization & Tuning | Automation + Agent Integration (MCPs) | 10.0 | Replit, Gumloop | Publish advanced hybrid tool |  | 
+ | Build: Hybrid Agent (Scraper + Summarizer) |  | Claude, Lindy | Context windows, fine-tuned prompts |  | 
+Debugging  | Training + Personalisation of Agents | 11.0 | Claude, Lindy | Context windows, fine-tuned prompts |  | 
+ | Build: Personalized Agent for Creator/Client |  | Gumroad | Public-ready portfolio agent |  | 
+Deployment | AI Agent Deployment + Debugging | 12.0 | N8N, Gumloop | Polish and fix your agents for real use |  | 
+ | Final Build Sprint + Showcase Prep + Selling Your Agent |  | Notion, Loom | Wrap agent with GTM assets |  | 
+ | Block 3: Product Building & Prototype |  |  |  |  | 
+Theme | Sessions | Week | Tools | Outcome | Skills  | 
+Product Building | Building Product part 1 (Tool Deepdive )  | 13.0 | Bolt, Lovable, cursor, replit | Live working demo of your solution | Hard Skills:
+- Product built with Bolt, Lovable, Cursor, Replit
+- Supabase setup, front-end + back-end prototyping
+- Working knowledge of the AI toolchain for MVP/MVB
+
+Soft Skills:
+- Storytelling & product thinking
+- Clarity in solution-market fit
+- Decision-making between product vs business path
+
+Outcome:
+- Launch the working prototype
+- Choose between the Product (MVP) or Business (MVB) track
+- Set up for the next phase with clarity of direction | 
+ | Building Product part 2 ( Tool deepdive)  |  | Bolt, Lovable, cursor, replit | Setup launch basics |  | 
+Product Building + Track Decision  | Building Product part 3 ( Tool deepdive) | 14.0 | Bolt, Lovable, cursor, replit | Decide your track: MVP or MVB |  | 
+ | Building Product part 4 + Track chosiong |  | Bolt, Lovable, cursor, replit | MVP or MVB preparation |  | 
+ | PHASE 2 (Weeks 15 - 24) : Pick Your Path |  |  |  |  | 
+ | In Phase 2, learners choose between two tracks: building a product (MVP) or launching a service-based AI business (MVC). Each path includes hands-on sessions in product deployment, user acquisition, sales, pricing, and community growth. Learners build monetization-ready assets like landing pages, AI agents, funnels, and demos. The phase culminates in a public demo day with a portfolio-ready launch. |  |  |  |  | 
+Track A: Product Owner – MVP Path    OR.    Track B: Business Owner – MVC ( Minimum Viable Company) Path |  |  |  |  |  | 
+ | Track A: Product Owner – MVP Path |  |  |  |  | 
+Theme | Sessions | Week | Tools | Outcome | Skills  | 
+Idea to Execution | Build landing page with CTA Recap | 15.0 | Bolt , Lovable | Live landing page and marketing creative; First live product site + branding | Hard Skills:
+- Landing page, MVP backend, and database (NextAuth, Supabase)
+- AI feature integration (GPT, Claude, personalisation logic)
+- Analytics setup (PostHog, GA), UI polish
+- Launch prep: Product Hunt, outreach, pricing models
+
+Soft Skills:
+- User testing, iteration, and storytelling
+- Launch strategy, pricing psychology
+- GTM planning and sales alignment
+- Community seeding & user onboarding
+
+Outcome:
+- Functional, AI-powered MVP with live users
+- Product demo, public case study, and launch site
+- Monetisation paths defined (SaaS/API)
+- Portfolio-ready product for showcase | 
+ | Create AI-generated launch creatives |  |  |  |  | 
+ | Define Your Product Idea - Validate idea using AI | 16.0 | Use ChatGPT + Perplexity to validate product-market fit | Problem-solution clarity |  | 
+ | Market & User Validation - Interview or poll potential users |  |  |  |  | 
+ | Build MVP backend | 17.0 | Use Supabase, Lovable, Bolt, Zapier, N8N | Functional MVP + backend logic |  | 
+ | Connect with AI Agents/Workflows |  |  |  |  | 
+Launch & Monetize | User Testing & Feedback Loops | 18.0 | Add feedback loops, analytics (PostHog / Google Analytics) | Improved MVP based on test feedback |  | 
+ | Analytics & Iteration |  |  |  |  | 
+ | AI Powered Features | 19.0 | Add AI -based personalization & LLM logic | Personalized interaction in product |  | 
+ | Personalization Logic |  |  |  |  | 
+ |  Scale Infra (Auth, DB, UI polish) | 20.0 | Use NextAuth, Supabase, design clean UI | Beta Launch with product demo |  | 
+ | Final Touches & Beta Launch |  |  |  |  | 
+Optimize & Scale | Plan Product Hunt + Social Strategy | 21.0 | AI-generated launch assets & copywriting | Live launch on chosen platforms |  | 
+ | Publish live + cold outreach |  |  |  |  | 
+ | Explore monetisation paths : Using AI in Sales Calls & Pricing Strategy | 22.0 | Explore SaaS, subscription, or API monetization | Revenue model defined |  | 
+ | Pricing & Revenue Planning : Pricing tiers & upsell hooks |  |  |  |  | 
+Support & Growth | Support & User Queries : Build AI support agent | 23.0 | Build AI-powered support agent + Notion docs | Self-serve support in place |  | 
+ | Create Documentation : Onboarding Plan + Community Discovery Strategy |  |  |  |  | 
+ | Feedback Metrics : Setup retargeting or re-engagement | 23.0 | Track usage, optimize retention using AI & Ongoing acquisition loop | Usage dashboard + growth roadmap |  | 
+ | Growth hacking + referral loops |  |  |  |  | 
+Demo Day | LIVE DEMO WEEK – pitch to cohort & mentors ; Share public case study (LinkedIn, Loom) | 24.0 | Demo day + share with community | Portfolio-worthy asset	 |  | 
+ |  |  |  | Product demo video |  | 
+Track B: Business Owner – MVC ( Minimum Viable Company) Path |  |  |  |  |  | 
+Theme | Sessions | Week | Tools | Outcome |  | 
+Ideation & Business Plan | Find Your Profitable Niche & Build Offering  | 15.0 | Use AI to niche down 03 , Deep research  | Clear agency niche, offer definition, and positioning based on AI-powered research | Hard Skills:
+- AI-driven content funnels (Heygen, Opusclip, LinkedIn, Substack)
+- CRM setup, lead gen via ads and outreach
+- Client onboarding automation (Zapier, N8N), async delivery dashboards
+- SOP building, skool/Topmate community setup
+
+Soft Skills:
+- Service packaging, pitch refinement
+- Niche clarity and positioning
+- Thought leadership + content marketing
+- Retention and referral strategy
+
+Outcome:
+- Live, operational MVC with lead funnels and offer pages
+- Onboarding + delivery systems are fully automated
+- Demo-ready portfolio of services and testimonials
+- Launched community + monetisation roadmap | 
+ | Sales led Copy writing using AI  |  |  |  |  | 
+ | Build a Landing Page with CTAs & offerings - Plan Your Video Sales Letter  | 16.0 | Claude AI projects & other AI tools | - |  | 
+ | Recap & Reflect of entire cohort till now! |  | Recollect every assignment did in the cohort & see what can be offered as a solution or service |  |  | 
+Lead Enrichment , Client Aquisiton & Nurturing | Create a Lead Magnet using social media distribution | 17.0 | heygen , instagram , Youtube, twitter, Opusclip | Build a lead magnet; social-first presence on Instagram, YouTube, LinkedIn |  | 
+ | Aquire leads using Paid ads  |  |  |  |  | 
+ | Outreach system , Send first 100 dms / emails | 18.0 | Linkedin sales nav , Linkedin , mailchimp , beehive , convertkit , Substack | Launch outreach systems: first 100 DMs/emails sent + inbound channels activated |  | 
+ | Build your thought leadership Machine - newsletter & content engine |  |  |  |  | 
+ Sales Funnel & Community Plan | Getting your first client  | 19.0 | Use Zapier/N8N to automate onboarding, linkedin outreach | Notion onboarding kit + delivery flow |  | 
+ | Client Onboarding Automation  |  |  |  |  | 
+ | Upsell + referal engine + retainers | 20.0 | Build SOPs and dashboards , notion, Asana & trello | Build async delivery dashboards with SOPs |  | 
+ | Build async client dashboard or  Project tracking for agency  |  |  |  |  | 
+ | Productizing Your Service + Community Market research  | 21.0 | Turn work into reusable proof, show exampels of ALex , Cole medin , liam otley , Nick Sarev  | Turn work into proof (case studies, testimonials); launch Topmate/Skool community |  | 
+ | SOPs for onbaording delivery & growth  |  |  |  |  | 
+ | Build Community & paid inner circle  | 21.0 | Build skool community , Topmate , Linkedin Community  | Publish gig listings; design your paid inner circle; launch retention/referral engine |  | 
+The final MVC ! | Agency launch pad  |  |  |  |  | 
+ |  | 23.0 | Final Setup of Agency  |  |  | 
+ |  | 24.0 |  |  |  | 
+=== SHEET: Mentor Details ===
+ | Mentor Name | Module | LinkedIn Profile | Email |  |  |  | 
+=== SHEET: Resources ===
+Deck Name | Deck Link
