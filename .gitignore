@@ -28,6 +28,11 @@ _curriculum_dump.txt
 .DS_Store
 Thumbs.db
 
+# Transient content-pipeline artifacts
+.tmp_*.md
+.upload_*.json
+**/_probe_*.md
+
 # Editor
 .vscode/
 .idea/
