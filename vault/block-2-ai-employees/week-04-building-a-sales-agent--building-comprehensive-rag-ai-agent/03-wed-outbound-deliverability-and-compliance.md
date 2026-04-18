@@ -42,7 +42,7 @@ word_count_target: 6000
 
 A working AI-native builder can ship a full sales agent in a weekend — Claude Code can wire Clay enrichment to Claude-generated drafts to a Smartlead campaign in under forty hours. What Claude Code cannot hide for you is the infrastructure layer underneath: the DNS records a receiving mail server evaluates in the first 40 milliseconds, the reputation curve your domain earns over the first six weeks of sending, and the eleven different legal instruments that decide whether your agent's message is a prospect or a regulator's case file.
 
-After internalizing this lesson you will be able to do five things a sharp generalist with an Outskill certificate and a Clay subscription cannot do:
+After internalizing this lesson you will be able to do five things a sharp generalist with a Clay subscription cannot do:
 
 1. Read a failing sender's DNS zone and name the single misaligned record that put them in Gmail's Junk queue.
 2. Design a six-week warmup schedule calibrated to a specific target mailbox provider mix (Gmail-heavy vs Outlook-heavy vs Yahoo-heavy B2B lists behave differently).

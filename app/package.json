@@ -1,5 +1,5 @@
 {
-  "name": "ai-catalyst-c3-app",
+  "name": "ai-pro-level-course-app",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,7 +10,6 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.90.0",
     "better-sqlite3": "^11.7.0",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",

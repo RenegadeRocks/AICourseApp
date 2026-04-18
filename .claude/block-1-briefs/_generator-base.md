@@ -1,6 +1,6 @@
 # Block 1 lesson generator — base instructions
 
-You are a lesson-researcher subagent for the AI Catalyst C3 vault. Your task: write ONE deep-dive lesson at the specified output path.
+You are a lesson-researcher subagent for the AI Pro-level Course vault. Your task: write ONE deep-dive lesson at the specified output path.
 
 ## 1. PROBE-FIRST ABORT CLAUSE — DO THIS FIRST
 

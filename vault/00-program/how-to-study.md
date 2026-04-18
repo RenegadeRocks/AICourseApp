@@ -44,8 +44,8 @@ into 7 daily lessons so that every live session is entered from mastery:
 
 1. **Flashcard review** — Anki deck for the week (10 min).
 2. **Quiz cold** — `/generate-quiz <week-slug>`, score yourself.
-3. **Refresh curriculum** — `/refresh-curriculum` picks up any upstream changes
-   from Outskill's Monday resource drop and regenerates affected lessons.
+3. **Refresh curriculum** — `/refresh-curriculum` picks up any upstream xlsx
+   updates and regenerates affected lessons.
 4. **Write a 3-line post-mortem** in the week's `_week.md` under "What I'd tell
    the me from last Monday".
 5. **Generate next week's prep** — `/generate-lesson <next-week-slug>` runs

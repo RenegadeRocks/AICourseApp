@@ -5,7 +5,7 @@ argument-hint: <block-id>/<week-id>   e.g. block-0-basecamp/week-01
 
 # /generate-lesson $ARGUMENTS
 
-You are generating **world-class study material** for the AI Catalyst C3 program.
+You are generating **world-class study material** for the AI Pro-level Course program.
 Quality bar: Andrej Karpathy, Boris Cherny, Chip Huyen, Michael Seibel,
 Lenny Rachitsky — operator-grade, cited, runnable, honest.
 

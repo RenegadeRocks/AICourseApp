@@ -1,16 +1,10 @@
 {
   "program": {
-    "name": "AI Catalyst C3",
-    "instructor": "Dileep (Outskill)",
-    "start_date": "2026-04-18",
-    "end_date": "2026-10-22",
-    "session_time_ist": "19:30",
-    "office_hours_day": "Thursday",
-    "core_session_days": [
-      "Saturday",
-      "Sunday"
-    ],
-    "resource_drop_day": "Monday",
+    "name": "AI Pro-level Course",
+    "instructor": "Claude Opus 4.6 and 4.7",
+    "provider": "Renegade Rocks",
+    "duration_weeks": 26,
+    "self_paced": true,
     "source_file": "AI Catalyst C3 - Tentative Schedule.xlsx",
     "parsed_at": "2026-04-14T17:01:59.851187Z"
   },
@@ -27,7 +21,7 @@
           "sessions": [
             {
               "slug": "ai-catalyst-program-onboarding",
-              "title": "AI Catalyst Program - Onboarding",
+              "title": "Program Onboarding",
               "date": "2026-04-18",
               "kind": "onboarding"
             }

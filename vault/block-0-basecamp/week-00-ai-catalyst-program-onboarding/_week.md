@@ -6,7 +6,7 @@ title: 'Week 0'
 live_week_number: 0
 sessions:
   - slug: ai-catalyst-program-onboarding
-    title: 'AI Catalyst Program - Onboarding'
+    title: 'Program Onboarding'
     date: 2026-04-18
     kind: onboarding
 ---

@@ -39,7 +39,7 @@ This is not a survey. If you want a survey, the LlamaIndex docs are excellent an
 
 ## Prerequisites
 
-- You have built one trivial RAG pipeline. LangChain's "Chat with your PDF" or the Anthropic SDK's retrieval cookbook. If you have read Block 0 Week 1 and done the Outskill Generalist cohort, you qualify.
+- You have built one trivial RAG pipeline. LangChain's "Chat with your PDF" or the Anthropic SDK's retrieval cookbook. If you have read Block 0 Week 1 and completed a generalist AI fellowship, you qualify.
 - You know what an embedding is — a vector of typically 256–3072 floats that represents a piece of text in a geometry where cosine distance approximates semantic similarity. You don't need to know the architecture of the BERT variant underneath.
 - Optional but useful: skim Anthropic's September 2024 Contextual Retrieval post[^3] before reading this — the lesson interrogates it heavily.
 

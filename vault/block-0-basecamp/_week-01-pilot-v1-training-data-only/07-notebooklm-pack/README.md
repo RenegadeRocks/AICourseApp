@@ -3,7 +3,7 @@
 ## How to use this pack
 
 1. Open [NotebookLM](https://notebooklm.google.com) (requires a Google account).
-2. Create a new notebook. Name it "AI Catalyst C3 — Week 01".
+2. Create a new notebook. Name it "AI Pro-level Course — Week 01".
 3. Click **Add sources** → **Upload file**.
 4. Upload `bundle.md` from this folder.
 5. Wait for indexing (30–60 seconds).

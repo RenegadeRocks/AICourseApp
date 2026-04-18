@@ -3,8 +3,8 @@ import Link from "next/link";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "AI Catalyst C3",
-  description: "Personal daily study for the AI Catalyst C3 program",
+  title: "AI Pro-level Course",
+  description: "Personal daily study for the AI Pro-level Course",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -14,7 +14,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <header className="border-b border-stone-200 bg-paper/80 backdrop-blur sticky top-0 z-10">
           <div className="mx-auto max-w-6xl px-6 h-14 flex items-center justify-between">
             <Link href="/" className="font-semibold tracking-tight">
-              AI Catalyst C3
+              AI Pro-level Course
             </Link>
             <nav className="flex gap-6 text-sm text-stone-600">
               <Link href="/" className="hover:text-ink">Today</Link>

@@ -4,7 +4,7 @@ block: block-0-basecamp
 week: week-00
 title: 'Week 0 — Basecamp: the AI-native builder''s substrate'
 live_sessions:
-  - '2026-04-18 — AI Catalyst Program Onboarding'
+  - 'Program Onboarding — AI Pro-level Course'
 study_window: 2026-04-20 to 2026-04-26
 last_verified: 2026-04-15
 ---
@@ -15,11 +15,11 @@ last_verified: 2026-04-15
 
 The rest of the program — prompting, RAG, MCPs, voice agents, business problem decoding, fine-tuning, production ops — is built on a handful of assumptions about *what a language model is*, *how your tooling actually talks to it*, *what model-card numbers really mean*, *what a 1M-token context window does and does not buy you*, and *what git gives you when an agent writes code for you*. If any of those assumptions is shaky, the later weeks will land as tricks instead of as mechanisms.
 
-Week 0 is where we install the substrate. Not orientation. Not "what you'll learn." Six standalone L3 masterclasses, one per day Monday through Saturday, plus a Sunday synthesis. Each lesson stands on its own — it teaches the topic in full, not as prep for a Saturday live session. The onboarding session on 2026-04-18 sets context for the cohort; the lessons here do the actual teaching.
+Week 0 is where we install the substrate. Not orientation. Not "what you'll learn." Six standalone L3 masterclasses, one per day Monday through Saturday, plus a Sunday synthesis. Each lesson stands on its own — it teaches the topic in full.
 
 ## Who this week is for
 
-You finished a generalist AI cohort (Outskill Generalist Fellowship or equivalent). You ship utility apps, small automations, custom agents — by directing Claude Code, Codex, Cursor, or similar. You can read a model card without glazing over, but you haven't yet developed the reflex to ask *"what eval harness produced this number?"*. You can set up an MCP server but couldn't sketch why 1M-context Opus behaves differently from Gemini 2.5 Pro on long documents. You have enough surface-level fluency to be dangerous; this week converts that fluency into structural understanding.
+You finished a generalist AI cohort or fellowship. You ship utility apps, small automations, custom agents — by directing Claude Code, Codex, Cursor, or similar. You can read a model card without glazing over, but you haven't yet developed the reflex to ask *"what eval harness produced this number?"*. You can set up an MCP server but couldn't sketch why 1M-context Opus behaves differently from Gemini 2.5 Pro on long documents. You have enough surface-level fluency to be dangerous; this week converts that fluency into structural understanding.
 
 ## Shape of the week
 

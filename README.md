@@ -1,16 +1,20 @@
-# AI Catalyst C3 — Personal Study System
+# AI Pro-level Course — Personal Study System
 
-A hybrid markdown-vault + local Next.js app for studying the **AI Catalyst C3**
-cohort (Outskill, Apr 18 2026 → Oct 22 2026) at a Karpathy / YC / fast.ai
-level of rigor.
+A hybrid markdown-vault + local Next.js app for a 26-week self-paced AI
+Pro-level Course (from **Renegade Rocks**, taught by **Claude Opus 4.6 and
+4.7**) at a Karpathy / YC / fast.ai level of rigor. No cohort calendar — you
+run it on your own schedule.
 
 ## What you get
 
-- **`vault/`** — an Obsidian-compatible markdown vault. Source of truth. Every
-  week expands to 7 daily lessons, each cited, with runnable code labs.
-- **`app/`** — a local Next.js 15 app at `http://localhost:3000` that routes
-  by date to "today's lesson", tracks your streak, lets you search and chat
-  with your vault, and exports to NotebookLM / Anki.
+- **`vault/`** — the source of truth: plain markdown, one file per lesson.
+  Optionally open in Obsidian (the vault is Obsidian-compatible — wikilinks
+  and all — but Obsidian is not required). Every week expands to 7 daily
+  lessons, each cited, with runnable code labs.
+- **`app/`** — a local Next.js 15 app at `http://localhost:3000`. Primary
+  reader: today's lesson auto-routes by date, streak tracked locally,
+  full-text search, chat-with-vault (via your `claude` CLI), and one-click
+  exports to NotebookLM / Anki.
 - **`.claude/commands/`** — slash commands you run inside Claude Code (uses
   your Claude Max subscription — zero API cost) to generate lessons,
   quizzes, flashcards, and NotebookLM bundles on demand.
@@ -18,8 +22,7 @@ level of rigor.
   AutoHotkey) shortcuts so opening today's lesson is one click.
 - **`scripts/`** — `parse_xlsx.py` (curriculum), `scaffold_vault.py` (folder
   tree), `anki_export.py` (`.apkg` decks), `notebooklm_export.py` (bundles).
-- **`curriculum.json`** — canonical parsed schedule (9 blocks, 26 weeks, 50
-  live sessions).
+- **`curriculum.json`** — canonical parsed schedule (9 blocks, 26 weeks).
 
 ## Quick start
 
@@ -90,7 +93,7 @@ you want shared streaks — defer until you actually feel the friction.
 
 ```
 .
-├── AI Catalyst C3 - Tentative Schedule.xlsx   — source of truth (upstream)
+├── AI Catalyst C3 - Tentative Schedule.xlsx   — upstream curriculum xlsx
 ├── curriculum.json                             — parsed, versioned
 ├── vault/                                      — study material
 │   ├── 00-program/                             — index, how-to-study, quality-standard

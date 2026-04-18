@@ -38,7 +38,7 @@ The failure mode is not effort. It is that they have no rigorous frame for *what
 ## Prerequisites
 
 - You have read, or are willing to skim while we reference it, Bob Moesta's Lenny Rachitsky podcast appearance on JTBD (2023, ~70 min).[^3] This lesson does not require it — we explain what we use — but the interview will pay for itself by Wednesday.
-- Familiarity with the Outskill Generalist "problem statement" exercise, or any equivalent discovery workshop. If you have ever written a PRD, user story, or product brief, you qualify.
+- Familiarity with a "problem statement" discovery workshop. If you have ever written a PRD, user story, or product brief, you qualify.
 - Optional: Teresa Torres, *Continuous Discovery Habits* (2021). Five years old and still the most operational treatment of weekly discovery rhythm. Torres shipped her own first AI products in 2025 and has publicly updated the framework in that context.[^4]
 
 ## Layer 1 — Three JTBD schools, and why the difference matters for AI

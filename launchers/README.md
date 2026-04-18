@@ -1,4 +1,4 @@
-# Launchers — Open AI Catalyst on any machine
+# Launchers — Open AI Pro-level Course on any machine
 
 One click / one shortcut to: **start the dev server (if needed) → open today's lesson in your browser**.
 

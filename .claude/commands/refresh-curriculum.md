@@ -1,11 +1,11 @@
 ---
-description: Re-parse the Outskill xlsx, diff against curriculum.json, flag affected weeks for regeneration.
+description: Re-parse the curriculum xlsx, diff against curriculum.json, flag affected weeks for regeneration.
 ---
 
 # /refresh-curriculum
 
-Outskill updates the xlsx weekly as topics firm up. This command picks up
-those changes.
+When the upstream curriculum xlsx is updated, run this to pick up the
+changes.
 
 1. Run `python scripts/parse_xlsx.py` to re-parse the xlsx.
 2. **Diff** the new `curriculum.json` against the previously committed version
