@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 import FlexSearch from "flexsearch";
-import { listVaultFiles } from "./vault";
+import { listVaultFiles, extractTitle, prettifySlugPart } from "./vault";
 
 type Doc = { id: string; title: string; body: string; path: string };
 
@@ -20,7 +20,13 @@ function build() {
   const docs = new Map<string, Doc>();
   for (const f of listVaultFiles()) {
     const id = f.slug.join("/");
-    const title = typeof f.data.title === "string" ? f.data.title : id;
+    const frontmatterTitle =
+      typeof f.data.title === "string" && f.data.title.trim().length > 0
+        ? f.data.title.trim()
+        : null;
+    const { title: h1Title } = extractTitle(f.body);
+    const title =
+      frontmatterTitle ?? h1Title ?? prettifySlugPart(f.slug[f.slug.length - 1]);
     const doc = { id, title, body: f.body, path: id };
     idx.add(doc);
     docs.set(id, doc);

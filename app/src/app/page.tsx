@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { slotForDate, nextSlotFrom, progressStats } from "@/lib/schedule";
-import { readVaultFile, render } from "@/lib/vault";
+import { readVaultFile, render, findWeekFolder, resolveDayFileBasename } from "@/lib/vault";
 import { currentStreak } from "@/lib/db";
 
 export default async function HomePage() {
@@ -23,11 +23,11 @@ export default async function HomePage() {
   }
 
   const isFuture = slot.date > todayISO;
-  const weekFolder = `${slot.block.id}/${findWeekFolder(slot.block.id, slot.week.id)}`;
-  const lessonSlug = [
-    ...weekFolder.split("/"),
-    slot.fileBasename,
-  ];
+  const weekFolderName = findWeekFolder(slot.block.id, slot.week.id);
+  const actualBasename =
+    resolveDayFileBasename(slot.block.id, weekFolderName, slot.day_of_cycle) ??
+    slot.fileBasename;
+  const lessonSlug = [slot.block.id, weekFolderName, actualBasename];
   const file = readVaultFile(lessonSlug);
   const rendered = file ? await render(file) : null;
 
@@ -95,16 +95,3 @@ export default async function HomePage() {
   );
 }
 
-function findWeekFolder(blockId: string, weekId: string): string {
-  // The vault folder names include the week id prefix (e.g. "week-01-...").
-  // We resolve by scanning vault at runtime via listVaultFiles results rather
-  // than a hard-coded map.
-  const fs = require("node:fs") as typeof import("node:fs");
-  const path = require("node:path") as typeof import("node:path");
-  const blockDir = path.resolve(process.cwd(), "..", "vault", blockId);
-  if (!fs.existsSync(blockDir)) return weekId;
-  const match = fs
-    .readdirSync(blockDir)
-    .find((name) => name.startsWith(`${weekId}-`) || name === weekId);
-  return match ?? weekId;
-}

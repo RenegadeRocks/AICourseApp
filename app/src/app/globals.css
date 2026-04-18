@@ -110,6 +110,43 @@ body {
   background: #f5f3ed;
 }
 
+/* Heading-anchor links (from rehype-autolink-headings behavior: "append") */
+.prose-lesson .heading-anchor {
+  margin-left: 0.5rem;
+  color: theme("colors.stone.300");
+  text-decoration: none;
+  font-weight: 400;
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+.prose-lesson :is(h1, h2, h3, h4, h5, h6):hover .heading-anchor {
+  opacity: 1;
+}
+.prose-lesson .heading-anchor:hover {
+  color: theme("colors.accent");
+}
+
+/* Footnote styling (remark-gfm [^N] → <sup> + footer list) */
+.prose-lesson sup a {
+  text-decoration: none;
+  font-size: 0.75em;
+  padding: 0 0.15rem;
+  color: theme("colors.accent");
+}
+.prose-lesson .footnotes {
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e5e0;
+  font-size: 0.9rem;
+  color: theme("colors.stone.600");
+}
+.prose-lesson .footnotes ol {
+  padding-left: 1.5rem;
+}
+.prose-lesson .footnotes li {
+  margin: 0.4rem 0;
+}
+
 /* highlight.js minimal */
 .hljs-keyword { color: #d97706; }
 .hljs-string { color: #7f1d1d; }
