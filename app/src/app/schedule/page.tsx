@@ -1,6 +1,8 @@
 import Link from "next/link";
+import type { Route } from "next";
 import { buildDailySchedule } from "@/lib/schedule";
 import { completionsInRange } from "@/lib/db";
+import { findWeekFolder, resolveDayFileBasename } from "@/lib/vault";
 
 export default function SchedulePage() {
   const schedule = buildDailySchedule();
@@ -33,6 +35,15 @@ export default function SchedulePage() {
               {slots.map((s) => {
                 const isDone = done.has(s.date);
                 const isToday = s.date === today;
+                const weekFolder = findWeekFolder(s.block.id, s.week.id);
+                const basename = resolveDayFileBasename(
+                  s.block.id,
+                  weekFolder,
+                  s.day_of_cycle,
+                );
+                const href = basename
+                  ? (`/vault/${s.block.id}/${weekFolder}/${basename}` as Route)
+                  : null;
                 return (
                   <li
                     key={s.date}
@@ -45,15 +56,15 @@ export default function SchedulePage() {
                       <span className="uppercase text-[10px] tracking-wider text-stone-400 w-10">
                         {s.day_name}
                       </span>
-                      <Link
-                        href={`/vault/${s.block.id}/${weekFolderFromId(
-                          s.block.id,
-                          s.week.id,
-                        )}/${s.fileBasename}`}
-                        className="truncate hover:text-accent"
-                      >
-                        {s.anchorSession.title}
-                      </Link>
+                      {href ? (
+                        <Link href={href} className="truncate hover:text-accent">
+                          {s.anchorSession.title}
+                        </Link>
+                      ) : (
+                        <span className="truncate text-stone-400" title="Lesson not yet generated">
+                          {s.anchorSession.title}
+                        </span>
+                      )}
                     </div>
                     <div className="flex items-center gap-3 text-xs text-stone-500 shrink-0">
                       <span>{s.role}</span>
@@ -70,15 +81,4 @@ export default function SchedulePage() {
       </div>
     </div>
   );
-}
-
-function weekFolderFromId(blockId: string, weekId: string): string {
-  const fs = require("node:fs") as typeof import("node:fs");
-  const path = require("node:path") as typeof import("node:path");
-  const blockDir = path.resolve(process.cwd(), "..", "vault", blockId);
-  if (!fs.existsSync(blockDir)) return weekId;
-  const match = fs
-    .readdirSync(blockDir)
-    .find((name) => name.startsWith(`${weekId}-`) || name === weekId);
-  return match ?? weekId;
 }

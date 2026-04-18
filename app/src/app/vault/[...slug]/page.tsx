@@ -2,6 +2,9 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Route } from "next";
 import { readVaultFile, render, extractTitle, prettifySlugPart, siblingLessons } from "@/lib/vault";
+import { dateForLessonSlug } from "@/lib/schedule";
+import { isCompleted } from "@/lib/db";
+import CompleteButton from "./CompleteButton";
 
 export default async function VaultPage({
   params,
@@ -30,6 +33,10 @@ export default async function VaultPage({
   // Prev/next day navigation across all lesson files in the vault.
   const { prev, next } = siblingLessons(slug);
 
+  // Completion state — only for files that map to a scheduled date.
+  const scheduledDate = dateForLessonSlug(slug);
+  const done = scheduledDate ? isCompleted(scheduledDate) : false;
+
   return (
     <div>
       <nav className="text-sm text-stone-500 flex flex-wrap items-center gap-x-1">
@@ -48,13 +55,37 @@ export default async function VaultPage({
         ))}
       </nav>
       <h1 className="mt-4 text-3xl font-bold tracking-tight leading-tight">{title}</h1>
-      <div className="mt-1 text-xs text-stone-500">
-        {rendered.readingMinutes} min read
+      <div className="mt-1 flex items-center gap-3 text-xs text-stone-500">
+        <span>{rendered.readingMinutes} min read</span>
+        {scheduledDate && (
+          <>
+            <span className="text-stone-300">·</span>
+            <span>Scheduled · {scheduledDate}</span>
+          </>
+        )}
       </div>
+      {scheduledDate && (
+        <div className="mt-4">
+          <CompleteButton
+            date={scheduledDate}
+            slug={slug.join("/")}
+            initiallyDone={done}
+          />
+        </div>
+      )}
       <article
         className="prose-lesson mt-8"
         dangerouslySetInnerHTML={{ __html: rendered.html }}
       />
+      {scheduledDate && !done && (
+        <div className="mt-12 flex justify-end">
+          <CompleteButton
+            date={scheduledDate}
+            slug={slug.join("/")}
+            initiallyDone={false}
+          />
+        </div>
+      )}
       <PrevNextNav prev={prev} next={next} />
     </div>
   );

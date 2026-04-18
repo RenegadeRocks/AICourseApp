@@ -93,6 +93,26 @@ export function buildDailySchedule(): DailySlot[] {
   return slots.sort((a, b) => a.date.localeCompare(b.date));
 }
 
+/**
+ * Reverse-lookup: given a vault slug [blockId, weekFolder, "0N-dayname-topic"]
+ * find the scheduled date for that lesson (if any). Non-lesson files (e.g.
+ * program docs) return null.
+ */
+export function dateForLessonSlug(slug: string[]): string | null {
+  if (slug.length < 3) return null;
+  const [blockId, weekFolder, file] = slug;
+  const weekId = weekFolder.match(/^(week-\d+)/)?.[1];
+  if (!weekId) return null;
+  const dayMatch = file.match(/^0(\d)-/);
+  if (!dayMatch) return null;
+  const day = parseInt(dayMatch[1], 10);
+  const schedule = buildDailySchedule();
+  const hit = schedule.find(
+    (s) => s.block.id === blockId && s.week.id === weekId && s.day_of_cycle === day,
+  );
+  return hit?.date ?? null;
+}
+
 export function slotForDate(date: Date): DailySlot | null {
   const target = date.toISOString().slice(0, 10);
   const schedule = buildDailySchedule();

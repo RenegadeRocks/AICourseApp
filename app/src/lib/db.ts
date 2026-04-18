@@ -67,3 +67,10 @@ export function completionsInRange(from: string, to: string): Set<string> {
     .all(from, to) as Array<{ date: string }>;
   return new Set(rows.map((r) => r.date));
 }
+
+export function isCompleted(date: string): boolean {
+  const row = db()
+    .prepare("SELECT 1 FROM completions WHERE date = ?")
+    .get(date) as { 1: number } | undefined;
+  return !!row;
+}

@@ -37,3 +37,7 @@ Thumbs.db
 .vscode/
 .idea/
 *.swp
+
+# Playwright screenshot artifacts from dev auditing
+.playwright-mcp/
+/*.png

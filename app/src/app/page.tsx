@@ -1,7 +1,9 @@
 import Link from "next/link";
+import type { Route } from "next";
 import { slotForDate, nextSlotFrom, progressStats } from "@/lib/schedule";
 import { readVaultFile, render, findWeekFolder, resolveDayFileBasename } from "@/lib/vault";
-import { currentStreak } from "@/lib/db";
+import { currentStreak, isCompleted } from "@/lib/db";
+import CompleteButton from "./vault/[...slug]/CompleteButton";
 
 export default async function HomePage() {
   const today = new Date();
@@ -30,6 +32,8 @@ export default async function HomePage() {
   const lessonSlug = [slot.block.id, weekFolderName, actualBasename];
   const file = readVaultFile(lessonSlug);
   const rendered = file ? await render(file) : null;
+  const lessonHref = `/vault/${lessonSlug.join("/")}` as Route;
+  const done = file && !isFuture ? isCompleted(slot.date) : false;
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[1fr_260px] gap-10">
@@ -42,6 +46,22 @@ export default async function HomePage() {
         <div className="mt-1 text-stone-600">
           {slot.block.title} · {slot.week.title}
         </div>
+
+        {file && !isFuture && (
+          <div className="mt-4 flex items-center gap-4">
+            <CompleteButton
+              date={slot.date}
+              slug={lessonSlug.join("/")}
+              initiallyDone={done}
+            />
+            <Link
+              href={lessonHref}
+              className="text-sm text-stone-500 hover:text-accent hover:underline"
+            >
+              Open full lesson →
+            </Link>
+          </div>
+        )}
 
         {rendered ? (
           <article
