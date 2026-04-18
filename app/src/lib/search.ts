@@ -35,6 +35,39 @@ function build() {
   _docs = docs;
 }
 
+/**
+ * RAG variant: returns top hits with a body excerpt suitable for stuffing
+ * into a Claude context window. Excerpts are centered on the first
+ * occurrence of a query term, or the document head if no match is found.
+ */
+export function searchVaultForChat(
+  query: string,
+  limit = 6,
+  excerptChars = 2400,
+): Array<{ id: string; title: string; path: string; excerpt: string }> {
+  if (!_idx || !_docs) build();
+  const hits = searchVault(query, limit);
+  const lowerTerms = query
+    .toLowerCase()
+    .split(/\s+/)
+    .filter((t) => t.length > 2);
+  return hits.slice(0, limit).map((h) => {
+    const doc = _docs!.get(h.id);
+    const body = doc?.body ?? "";
+    // Find the first match of any query term; fall back to the document head.
+    let start = 0;
+    for (const term of lowerTerms) {
+      const idx = body.toLowerCase().indexOf(term);
+      if (idx >= 0) {
+        start = Math.max(0, idx - 200);
+        break;
+      }
+    }
+    const excerpt = body.slice(start, start + excerptChars);
+    return { id: h.id, title: h.title, path: h.path, excerpt };
+  });
+}
+
 export function searchVault(query: string, limit = 20) {
   if (!_idx || !_docs) build();
   const results = _idx.search(query, { limit, enrich: true }) as Array<{
