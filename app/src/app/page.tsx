@@ -1,57 +1,80 @@
 import Link from "next/link";
 import type { Route } from "next";
-import { slotForDate, nextSlotFrom, progressStats } from "@/lib/schedule";
-import { readVaultFile, render, findWeekFolder, resolveDayFileBasename } from "@/lib/vault";
-import { currentStreak, isCompleted } from "@/lib/db";
+import {
+  firstIncompleteSlot,
+  programStats,
+  slotKey,
+  type DailySlot,
+} from "@/lib/schedule";
+import {
+  readVaultFile,
+  render,
+  findWeekFolder,
+  resolveDayFileBasename,
+} from "@/lib/vault";
+import { getCompletedSlotKeys, isLessonCompleted } from "@/lib/db";
 import CompleteButton from "./vault/[...slug]/CompleteButton";
+import { streakFromCompletions } from "@/lib/schedule";
 
 export default async function HomePage() {
-  const today = new Date();
-  const todayISO = today.toISOString().slice(0, 10);
-  const stats = progressStats(today);
-  const streak = currentStreak(todayISO);
+  const completed = getCompletedSlotKeys();
+  const stats = programStats(completed.size);
+  const streak = streakFromCompletions(completed);
 
-  const slot = slotForDate(today) ?? nextSlotFrom(today);
+  // "Next up" is the first uncompleted slot in schedule order.
+  const slot: DailySlot | null = firstIncompleteSlot(completed);
 
   if (!slot) {
     return (
       <div className="max-w-3xl">
-        <h1 className="text-3xl font-bold">Welcome</h1>
-        <p className="mt-3 text-stone-600">
-          No lessons scheduled. Run <code>python scripts/parse_xlsx.py</code> to (re)build the schedule.
+        <div className="text-sm text-stone-500 uppercase tracking-wider">
+          Program complete
+        </div>
+        <h1 className="mt-2 text-4xl font-bold tracking-tight">
+          You&rsquo;ve finished every lesson.
+        </h1>
+        <p className="mt-4 text-stone-600">
+          {stats.total} lessons · {stats.completed} completed · {streak} lesson
+          streak. Go review the <Link href="/progress" className="text-accent hover:underline">progress heatmap</Link>.
         </p>
       </div>
     );
   }
 
-  const isFuture = slot.date > todayISO;
   const weekFolderName = findWeekFolder(slot.block.id, slot.week.id);
-  const actualBasename =
-    resolveDayFileBasename(slot.block.id, weekFolderName, slot.day_of_cycle) ??
-    slot.fileBasename;
-  const lessonSlug = [slot.block.id, weekFolderName, actualBasename];
-  const file = readVaultFile(lessonSlug);
+  const basename = resolveDayFileBasename(
+    slot.block.id,
+    weekFolderName,
+    slot.day_of_cycle,
+  );
+  const lessonSlug = basename
+    ? [slot.block.id, weekFolderName, basename]
+    : null;
+  const file = lessonSlug ? readVaultFile(lessonSlug) : null;
   const rendered = file ? await render(file) : null;
-  const lessonHref = `/vault/${lessonSlug.join("/")}` as Route;
-  const done = file && !isFuture ? isCompleted(slot.date) : false;
+  const lessonHref = lessonSlug
+    ? (`/vault/${lessonSlug.join("/")}` as Route)
+    : null;
+  const slotKeyStr = slotKey(slot);
+  const done = isLessonCompleted(slotKeyStr);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[1fr_260px] gap-10">
       <section>
         <div className="text-sm text-stone-500 uppercase tracking-wider">
-          {isFuture ? `Upcoming — starts ${slot.date}` : `Today · ${slot.date}`}
-          {" · "}Day {slot.day_of_cycle}/7 · {slot.role}
+          Next up · Week {slot.weekInProgram} · Day {slot.day_of_cycle}/7 · {slot.role}
         </div>
         <h1 className="mt-2 text-4xl font-bold tracking-tight">{slot.anchorSession.title}</h1>
         <div className="mt-1 text-stone-600">
-          {slot.block.title} · {slot.week.title}
+          {slot.block.title}
         </div>
 
-        {file && !isFuture && (
+        {file && lessonHref && (
           <div className="mt-4 flex items-center gap-4">
             <CompleteButton
-              date={slot.date}
-              slug={lessonSlug.join("/")}
+              slotKey={slotKeyStr}
+              slug={lessonSlug!.join("/")}
+              label={`Week ${slot.weekInProgram} · Day ${slot.day_of_cycle}`}
               initiallyDone={done}
             />
             <Link
@@ -72,14 +95,16 @@ export default async function HomePage() {
           <div className="mt-8 rounded-lg border border-dashed border-stone-300 p-8 bg-white/60">
             <h2 className="text-xl font-semibold">Lesson not yet generated</h2>
             <p className="mt-2 text-stone-600">
-              This week's lessons haven't been written yet. From the project root:
+              This lesson hasn&rsquo;t been written yet. From the project root:
             </p>
             <pre className="mt-3 bg-stone-900 text-stone-100 rounded p-3 text-sm overflow-x-auto">
               {`claude\n> /generate-lesson ${slot.block.id}/${slot.week.id}`}
             </pre>
-            <p className="mt-3 text-sm text-stone-500">
-              Expected file: <code>vault/{lessonSlug.join("/")}</code>.md
-            </p>
+            {lessonSlug && (
+              <p className="mt-3 text-sm text-stone-500">
+                Expected file: <code>vault/{lessonSlug.join("/")}</code>.md
+              </p>
+            )}
           </div>
         )}
       </section>
@@ -87,26 +112,28 @@ export default async function HomePage() {
       <aside className="space-y-6 text-sm">
         <div className="rounded-lg bg-white border border-stone-200 p-4">
           <div className="text-xs uppercase tracking-wider text-stone-500">Streak</div>
-          <div className="mt-1 text-3xl font-bold">{streak} <span className="text-base font-normal text-stone-500">days</span></div>
+          <div className="mt-1 text-3xl font-bold">
+            {streak} <span className="text-base font-normal text-stone-500">lessons</span>
+          </div>
         </div>
         <div className="rounded-lg bg-white border border-stone-200 p-4">
           <div className="text-xs uppercase tracking-wider text-stone-500">Program progress</div>
           <div className="mt-1">
-            Day <strong>{stats.daysElapsed}</strong> of <strong>{stats.total}</strong>
+            <strong>{stats.completed}</strong> of <strong>{stats.total}</strong> lessons
           </div>
           <div className="mt-2 h-2 w-full bg-stone-100 rounded-full overflow-hidden">
             <div
               className="h-full bg-accent"
-              style={{ width: `${(100 * stats.daysElapsed) / Math.max(1, stats.total)}%` }}
+              style={{ width: `${(100 * stats.completed) / Math.max(1, stats.total)}%` }}
             />
           </div>
-          <div className="mt-1 text-xs text-stone-500">{stats.daysRemaining} days remaining</div>
+          <div className="mt-1 text-xs text-stone-500">{stats.remaining} lessons remaining</div>
         </div>
         <div className="rounded-lg bg-white border border-stone-200 p-4">
           <div className="text-xs uppercase tracking-wider text-stone-500">Quick links</div>
           <ul className="mt-2 space-y-1">
-            <li><Link href="/vault/00-program/how-to-study" className="text-accent hover:underline">Study protocol</Link></li>
-            <li><Link href="/vault/00-program/quality-standard" className="text-accent hover:underline">Quality standard</Link></li>
+            <li><Link href="/vault/00-program/index" className="text-accent hover:underline">Program index</Link></li>
+            <li><Link href="/vault/00-program/how-to-study" className="text-accent hover:underline">How to study</Link></li>
             <li><Link href="/schedule" className="text-accent hover:underline">Full schedule</Link></li>
           </ul>
         </div>
@@ -114,4 +141,3 @@ export default async function HomePage() {
     </div>
   );
 }
-

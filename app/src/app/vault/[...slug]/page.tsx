@@ -2,8 +2,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Route } from "next";
 import { readVaultFile, render, extractTitle, prettifySlugPart, siblingLessons } from "@/lib/vault";
-import { dateForLessonSlug } from "@/lib/schedule";
-import { isCompleted } from "@/lib/db";
+import { slotForVaultSlug, slotKey } from "@/lib/schedule";
+import { isLessonCompleted } from "@/lib/db";
 import CompleteButton from "./CompleteButton";
 
 export default async function VaultPage({
@@ -16,7 +16,6 @@ export default async function VaultPage({
   if (!file) return notFound();
   const rendered = await render(file);
 
-  // Title resolution priority: frontmatter `title` → first H1 in body → slug.
   const frontmatterTitle =
     typeof file.data.title === "string" && file.data.title.trim().length > 0
       ? file.data.title.trim()
@@ -24,18 +23,21 @@ export default async function VaultPage({
   const { title: h1Title } = extractTitle(file.body);
   const title = frontmatterTitle ?? h1Title ?? prettifySlugPart(slug[slug.length - 1]);
 
-  // Build cumulative breadcrumb links.
   const crumbs = slug.map((part, i) => ({
     label: prettifySlugPart(part),
     href: `/vault/${slug.slice(0, i + 1).join("/")}`,
   }));
 
-  // Prev/next day navigation across all lesson files in the vault.
   const { prev, next } = siblingLessons(slug);
 
-  // Completion state — only for files that map to a scheduled date.
-  const scheduledDate = dateForLessonSlug(slug);
-  const done = scheduledDate ? isCompleted(scheduledDate) : false;
+  // Map this vault slug back to a program slot so we can show week/day context
+  // and wire the Mark-complete button.
+  const slot = slotForVaultSlug(slug);
+  const slotKeyStr = slot ? slotKey(slot) : null;
+  const positionLabel = slot
+    ? `Week ${slot.weekInProgram} · Day ${slot.day_of_cycle} · ${slot.day_name.toUpperCase()}`
+    : null;
+  const done = slotKeyStr ? isLessonCompleted(slotKeyStr) : false;
 
   return (
     <div>
@@ -57,18 +59,19 @@ export default async function VaultPage({
       <h1 className="mt-4 text-3xl font-bold tracking-tight leading-tight">{title}</h1>
       <div className="mt-1 flex items-center gap-3 text-xs text-stone-500">
         <span>{rendered.readingMinutes} min read</span>
-        {scheduledDate && (
+        {positionLabel && (
           <>
             <span className="text-stone-300">·</span>
-            <span>Scheduled · {scheduledDate}</span>
+            <span>{positionLabel}</span>
           </>
         )}
       </div>
-      {scheduledDate && (
+      {slotKeyStr && positionLabel && (
         <div className="mt-4">
           <CompleteButton
-            date={scheduledDate}
+            slotKey={slotKeyStr}
             slug={slug.join("/")}
+            label={`Week ${slot!.weekInProgram} · Day ${slot!.day_of_cycle}`}
             initiallyDone={done}
           />
         </div>
@@ -77,11 +80,12 @@ export default async function VaultPage({
         className="prose-lesson mt-8"
         dangerouslySetInnerHTML={{ __html: rendered.html }}
       />
-      {scheduledDate && !done && (
+      {slotKeyStr && positionLabel && !done && (
         <div className="mt-12 flex justify-end">
           <CompleteButton
-            date={scheduledDate}
+            slotKey={slotKeyStr}
             slug={slug.join("/")}
+            label={`Week ${slot!.weekInProgram} · Day ${slot!.day_of_cycle}`}
             initiallyDone={false}
           />
         </div>

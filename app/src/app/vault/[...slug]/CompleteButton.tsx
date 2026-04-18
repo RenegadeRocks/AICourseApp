@@ -2,12 +2,15 @@
 import { useState } from "react";
 
 export default function CompleteButton({
-  date,
+  slotKey,
   slug,
+  label,
   initiallyDone,
 }: {
-  date: string;
+  slotKey: string;
   slug: string;
+  /** Short label shown next to the checkmark after completion (e.g. "Week 5 · Day 3"). */
+  label: string;
   initiallyDone: boolean;
 }) {
   const [done, setDone] = useState(initiallyDone);
@@ -22,7 +25,7 @@ export default function CompleteButton({
       const res = await fetch("/api/progress", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ date, slug }),
+        body: JSON.stringify({ slotKey, slug }),
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = (await res.json()) as { ok: boolean; streak: number };
@@ -44,9 +47,9 @@ export default function CompleteButton({
         >
           ✓
         </span>
-        <span>Completed · {date}</span>
+        <span>Completed · {label}</span>
         {streak !== null && (
-          <span className="text-stone-500">· {streak} day streak</span>
+          <span className="text-stone-500">· {streak} lesson streak</span>
         )}
       </div>
     );

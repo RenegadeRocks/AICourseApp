@@ -15,6 +15,13 @@ export function db(): Database.Database {
       notes TEXT,
       minutes INTEGER
     );
+    CREATE TABLE IF NOT EXISTS lesson_completions (
+      slot_key TEXT PRIMARY KEY,
+      slug TEXT NOT NULL,
+      completed_at TEXT NOT NULL,
+      notes TEXT,
+      minutes INTEGER
+    );
     CREATE TABLE IF NOT EXISTS quiz_attempts (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       slug TEXT NOT NULL,
@@ -33,44 +40,40 @@ export function db(): Database.Database {
   return _db;
 }
 
-export function markComplete(date: string, slug: string, notes?: string, minutes?: number) {
+/**
+ * Mark a lesson completed. The `slotKey` is the program-relative key
+ * (e.g. "block-0-basecamp/week-01/day-3"); the `slug` is the vault
+ * path so we can render back-references.
+ */
+export function markLessonComplete(
+  slotKey: string,
+  slug: string,
+  notes?: string,
+  minutes?: number,
+) {
   db()
     .prepare(
-      `INSERT INTO completions (date, slug, completed_at, notes, minutes)
+      `INSERT INTO lesson_completions (slot_key, slug, completed_at, notes, minutes)
        VALUES (?, ?, ?, ?, ?)
-       ON CONFLICT(date) DO UPDATE SET
+       ON CONFLICT(slot_key) DO UPDATE SET
          slug = excluded.slug,
          completed_at = excluded.completed_at,
-         notes = COALESCE(excluded.notes, completions.notes),
-         minutes = COALESCE(excluded.minutes, completions.minutes)`
+         notes = COALESCE(excluded.notes, lesson_completions.notes),
+         minutes = COALESCE(excluded.minutes, lesson_completions.minutes)`,
     )
-    .run(date, slug, new Date().toISOString(), notes ?? null, minutes ?? null);
+    .run(slotKey, slug, new Date().toISOString(), notes ?? null, minutes ?? null);
 }
 
-export function currentStreak(today: string): number {
-  const rows = db()
-    .prepare("SELECT date FROM completions ORDER BY date DESC")
-    .all() as Array<{ date: string }>;
-  const set = new Set(rows.map((r) => r.date));
-  let streak = 0;
-  const d = new Date(today);
-  while (set.has(d.toISOString().slice(0, 10))) {
-    streak++;
-    d.setUTCDate(d.getUTCDate() - 1);
-  }
-  return streak;
-}
-
-export function completionsInRange(from: string, to: string): Set<string> {
-  const rows = db()
-    .prepare("SELECT date FROM completions WHERE date BETWEEN ? AND ?")
-    .all(from, to) as Array<{ date: string }>;
-  return new Set(rows.map((r) => r.date));
-}
-
-export function isCompleted(date: string): boolean {
+export function isLessonCompleted(slotKey: string): boolean {
   const row = db()
-    .prepare("SELECT 1 FROM completions WHERE date = ?")
-    .get(date) as { 1: number } | undefined;
+    .prepare("SELECT 1 FROM lesson_completions WHERE slot_key = ?")
+    .get(slotKey) as { 1: number } | undefined;
   return !!row;
+}
+
+export function getCompletedSlotKeys(): Set<string> {
+  const rows = db()
+    .prepare("SELECT slot_key FROM lesson_completions")
+    .all() as Array<{ slot_key: string }>;
+  return new Set(rows.map((r) => r.slot_key));
 }

@@ -1,69 +1,88 @@
 import Link from "next/link";
 import type { Route } from "next";
-import { buildDailySchedule } from "@/lib/schedule";
-import { completionsInRange, currentStreak } from "@/lib/db";
+import {
+  buildDailySchedule,
+  slotKey,
+  streakFromCompletions,
+  programStats,
+} from "@/lib/schedule";
+import { getCompletedSlotKeys } from "@/lib/db";
 import { findWeekFolder, resolveDayFileBasename } from "@/lib/vault";
 
 export default function ProgressPage() {
   const schedule = buildDailySchedule();
   if (schedule.length === 0) return <p>No schedule.</p>;
-  const today = new Date().toISOString().slice(0, 10);
-  const first = schedule[0].date;
-  const last = schedule[schedule.length - 1].date;
-  const done = completionsInRange(first, last);
-  const streak = currentStreak(today);
-  const pastOrToday = schedule.filter((s) => s.date <= today);
-  const completion = (100 * done.size) / Math.max(1, pastOrToday.length);
+  const done = getCompletedSlotKeys();
+  const stats = programStats(done.size);
+  const streak = streakFromCompletions(done);
+  const completionRate = (100 * stats.completed) / Math.max(1, stats.total);
 
   return (
     <div className="max-w-4xl">
       <h1 className="text-3xl font-bold tracking-tight">Progress</h1>
       <div className="grid grid-cols-3 gap-4 mt-8">
-        <Stat label="Streak" value={`${streak}d`} />
-        <Stat label="Lessons completed" value={`${done.size}`} />
-        <Stat label="On-time rate" value={`${completion.toFixed(0)}%`} />
+        <Stat label="Streak" value={`${streak}`} unit="lessons" />
+        <Stat label="Lessons completed" value={`${stats.completed}`} unit={`of ${stats.total}`} />
+        <Stat label="Completion" value={`${completionRate.toFixed(0)}%`} />
       </div>
 
       <h2 className="mt-10 font-semibold text-sm uppercase text-stone-500 tracking-wider">
-        {first} → {last}
+        Program heatmap
       </h2>
+      <p className="mt-1 text-xs text-stone-500">
+        One cell per lesson · 7 columns = Mon…Sun · rows are weeks in order.
+      </p>
+
+      {/* 7 cols wide; rows auto. One cell per slot. */}
       <div
-        className="mt-3 gap-1"
+        className="mt-3 gap-1 max-w-md"
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(22px, 1fr))",
+          gridTemplateColumns: "repeat(7, minmax(24px, 1fr))",
         }}
       >
         {schedule.map((s) => {
-          const isDone = done.has(s.date);
-          const isToday = s.date === today;
-          const isFuture = s.date > today;
+          const isDone = done.has(slotKey(s));
           const bg = isDone
             ? "bg-emerald-500 hover:bg-emerald-600"
-            : isToday
-            ? "bg-amber-400 hover:bg-amber-500"
-            : isFuture
-            ? "bg-stone-100 hover:bg-stone-200"
-            : "bg-stone-300 hover:bg-stone-400";
+            : "bg-stone-200 hover:bg-stone-300";
           const weekFolder = findWeekFolder(s.block.id, s.week.id);
           const basename = resolveDayFileBasename(s.block.id, weekFolder, s.day_of_cycle);
           const href = basename
-            ? `/vault/${s.block.id}/${weekFolder}/${basename}`
+            ? (`/vault/${s.block.id}/${weekFolder}/${basename}` as Route)
             : null;
+          const title = `Week ${s.weekInProgram} · ${s.day_name.toUpperCase()} · ${s.anchorSession.title}${isDone ? " · ✓" : ""}`;
           const cellClass = `aspect-square rounded-sm transition ${bg}`;
-          const title = `${s.date} · ${s.day_name.toUpperCase()} · ${s.anchorSession.title}${isDone ? " · ✓" : ""}`;
           return href ? (
-            <Link key={s.date} href={href as Route} className={cellClass} title={title} />
+            <Link key={slotKey(s)} href={href} className={cellClass} title={title} />
           ) : (
-            <div key={s.date} className={cellClass} title={title} />
+            <div key={slotKey(s)} className={cellClass} title={title} />
           );
         })}
       </div>
       <div className="mt-4 flex gap-4 text-xs text-stone-500 flex-wrap">
         <Legend color="bg-emerald-500" label="Completed" />
-        <Legend color="bg-amber-400" label="Today" />
-        <Legend color="bg-stone-300" label="Missed" />
-        <Legend color="bg-stone-100 border border-stone-200" label="Upcoming" />
+        <Legend color="bg-stone-200" label="Not yet completed" />
+      </div>
+    </div>
+  );
+}
+
+function Stat({
+  label,
+  value,
+  unit,
+}: {
+  label: string;
+  value: string;
+  unit?: string;
+}) {
+  return (
+    <div className="rounded-lg border border-stone-200 bg-white p-4">
+      <div className="text-xs uppercase tracking-wider text-stone-500">{label}</div>
+      <div className="mt-1 text-3xl font-bold">
+        {value}
+        {unit && <span className="ml-2 text-base font-normal text-stone-500">{unit}</span>}
       </div>
     </div>
   );
@@ -74,15 +93,6 @@ function Legend({ color, label }: { color: string; label: string }) {
     <div className="flex items-center gap-1.5">
       <span className={`inline-block w-3 h-3 rounded-sm ${color}`} />
       <span>{label}</span>
-    </div>
-  );
-}
-
-function Stat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-lg border border-stone-200 bg-white p-4">
-      <div className="text-xs uppercase tracking-wider text-stone-500">{label}</div>
-      <div className="mt-1 text-3xl font-bold">{value}</div>
     </div>
   );
 }
