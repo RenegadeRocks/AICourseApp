@@ -32,6 +32,8 @@ Thumbs.db
 .tmp_*.md
 .upload_*.json
 **/_probe_*.md
+.claude/*.lock
+.claude/w*_*.json
 
 # Editor
 .vscode/
