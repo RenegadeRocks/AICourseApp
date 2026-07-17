@@ -17,8 +17,9 @@ sources:
   - liu-2023-lost-in-middle
   - chroma-2025-context-rot
   - voyage-rerank-2-2024
+  - cohere-rerank-4-2025
   - ragas-framework-2024
-last_verified: 2026-04-15
+last_verified: 2026-07-17
 word_count_target: 6500
 ---
 
@@ -42,7 +43,7 @@ This capability delta matters because anyone with an Anthropic or OpenAI API key
 
 ## Prerequisites
 
-- Monday's lesson (prompting from first principles) or equivalent understanding of how a language model consumes its context.
+- [[01-mon-prompting-first-principles]] (prompting from first principles) or equivalent understanding of how a language model consumes its context. The eval discipline from [[02-tue-prompt-engineering-in-practice]] carries directly into Part 7 of this lesson.
 - Familiarity with vector similarity as a concept — you don't need the math, but you should know that embeddings are high-dimensional vectors and that "closer in vector space = semantically similar."
 - Claude.ai access and Claude Code installed in a working scratch folder. One of this lesson's experiments runs through Claude Code; one runs manually in Claude.ai. You do not write code by hand.
 
