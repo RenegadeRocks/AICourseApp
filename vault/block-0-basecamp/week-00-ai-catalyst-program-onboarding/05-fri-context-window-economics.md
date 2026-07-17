@@ -275,7 +275,7 @@ Cost estimate for option B: 3 positions × 20 samples × 200K input × $2/MTok (
 
 ## Problem set — five operator-shaped problems
 
-**P1 — Token price a real workflow.** Pick a Claude Code workflow you actually ran this week. From the terminal or the dashboard, pull the session's input/output token counts. Compute the cost at Opus 4.6 rates, Sonnet 4.6 rates, Haiku 4.5 rates, and Gemini 2.5 Pro rates (splitting at the 200K cliff if relevant). Write a one-paragraph note on which model you'd use for this workflow in production and what eval you'd want before committing. Do not guess — look up current prices from the provider.
+**P1 — Token price a real workflow.** Pick a Claude Code workflow you actually ran this week. From the terminal or the dashboard, pull the session's input/output token counts. Compute the cost at Opus 4.8 rates, Sonnet 5 intro rates, Haiku 4.5 rates, and Gemini 3.1 Pro rates (splitting at the 200K cliff if relevant). Write a one-paragraph note on which model you'd use for this workflow in production and what eval you'd want before committing. Do not guess — look up current prices from the provider, and date-stamp the Sonnet 5 figure.
 
 **P2 — Run the caching experiment OR the lost-in-the-middle experiment above.** Paste the final numbers into `week-00-notes.md`. Do not summarize; paste the actual values Claude Code printed.
 

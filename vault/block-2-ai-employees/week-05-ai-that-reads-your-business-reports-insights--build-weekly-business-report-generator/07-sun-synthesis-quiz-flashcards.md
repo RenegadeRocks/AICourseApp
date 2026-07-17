@@ -392,9 +392,13 @@ The spec is the artifact. The commitment is the Week 5 test. Come back in 30 day
 
 [^16]: Jerry Liu, "Introducing LlamaCloud and LlamaParse," LlamaIndex Blog, Feb 2024. https://blog.llamaindex.ai/introducing-llamacloud-and-llamaparse-af8cedf9006b. Verified 2026-04-17. Supports LlamaParse launch date and "first parser built with genAI" framing.
 
-[^17]: DocVQA leaderboard at https://llm-stats.com/benchmarks/docvqa and the AndesVL technical report arxiv 2510.11496. Verified 2026-04-17. Supports 2025 SOTA DocVQA/ChartQA scores and frontier-VLM positioning.
+[^17]: DocVQA leaderboard at https://llm-stats.com/benchmarks/docvqa and the AndesVL technical report arxiv 2510.11496. Verified 2026-07-17. Supports 2025 SOTA DocVQA/ChartQA scores and frontier-VLM positioning. (Current native-multimodal roster: Claude Vision, GPT-5.x Vision, Gemini 3.1 Pro, Qwen-VL — the April draft's "GPT-4o/5, Gemini 2.5 Pro" names are two generations stale.)
 
-[^18]: Smock, B., Pesala, R., Abraham, R. (2022). *PubTables-1M: Towards comprehensive table extraction from unstructured documents.* CVPR 2022, arXiv:2110.00061. https://arxiv.org/abs/2110.00061. Verified 2026-04-17. Supports task-specific vs general-VLM table extraction gap on hierarchical/merged-cell tables.
+[^18]: Smock, B., Pesala, R., Abraham, R. (2022). *PubTables-1M: Towards comprehensive table extraction from unstructured documents.* CVPR 2022, arXiv:2110.00061. https://arxiv.org/abs/2110.00061. Verified 2026-07-17. Supports task-specific vs general-VLM table extraction gap on hierarchical/merged-cell tables.
+
+[^19]: Anthropic, "Agents for financial services," May 5, 2026, https://www.anthropic.com/news/finance-agents (plus "Use Claude for Excel," https://support.claude.com/en/articles/12650343-use-claude-for-excel); Menlo Ventures, "2025: The State of Generative AI in the Enterprise," Dec 9, 2025, https://menlovc.com/perspective/2025-the-state-of-generative-ai-in-the-enterprise/. Verified 2026-07-17. Supports: Anthropic's ten finance agent templates (month-end closer, GL reconciler, etc.) + GA Excel add-in entering categories 1–2, and Menlo's finding that 76% of AI use cases are bought rather than built (up from 53%). Model-lineup detail (Fable 5 / Mythos 5 above Opus, Opus 4.8, Sonnet 5): https://www.anthropic.com/news/claude-fable-5-mythos-5.
+
+[^20]: Datadog Security Labs, "MCP vulnerability case study: SQL injection in the PostgreSQL MCP server," 2025, https://securitylabs.datadoghq.com/articles/mcp-vulnerability-case-study-SQL-injection-in-the-postgresql-mcp-server/; `modelcontextprotocol/servers-archived`, https://github.com/modelcontextprotocol/servers-archived; maintained alternative `crystaldba/postgres-mcp`, https://github.com/crystaldba/postgres-mcp. Verified 2026-07-17. Supports: the archived `@modelcontextprotocol/server-postgres` reference server (archived May 29, 2025, "NO SECURITY GUARANTEES"), the documented stacked-query bypass of its read-only mode, and the maintained `crystaldba/postgres-mcp` `--access-mode=restricted` alternative.
 
 ---
 
