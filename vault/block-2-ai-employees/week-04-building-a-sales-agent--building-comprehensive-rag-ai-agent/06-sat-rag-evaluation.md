@@ -224,6 +224,7 @@ Expected vs observed: on most corpora the reranker intervention will Pareto-impr
 ## Further reading
 
 **Must-read**
+- Hamel Husain & Shreya Shankar, *Evals for AI Engineers* (O'Reilly) — the field's forthcoming book of record, publishing **October 31, 2026**; if your thesis is "evals are the moat," this is the canonical text to pre-order.[^evalsbook]
 - Hamel Husain, *Your AI Product Needs Evals* (March 29, 2024).[^14] The foundational piece that named the movement.
 - Hamel Husain, *A Field Guide to Rapidly Improving AI Products* (March 24, 2025).[^13] The numbers (Nurture Boss 33% → 95%, Honeycomb >90% agreement) come from here.
 - Zheng et al., *Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena*, arxiv 2306.05685 v4 (December 2023).[^9] The 80% claim, the four biases, the mitigation playbook.

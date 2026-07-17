@@ -395,6 +395,10 @@ Score honestly — the point is to find which variable your brief is under-speci
 
 [^26]: shadcn/ui, "October 2025 — New Components." ui.shadcn.com/docs/changelog/2025-10-new-components. Sourced for the Q4 2025 component wave. Verified 2026-04-17.
 
+[^25b]: shadcn/ui, "December 2025 — npx shadcn create." ui.shadcn.com/docs/changelog/2025-12-shadcn-create. Sourced for `shadcn create`, the five visual styles (Vega, Nova, Maia, Lyra, Mira), the code-rewriting (not just theming) behavior, and the Radix-or-Base-UI primitive choice. Verified via WebSearch 2026-07-17.
+
+[^26b]: shadcn/ui, "March 2026 — shadcn/cli v4." ui.shadcn.com/docs/changelog/2026-03-cli-v4, plus the registry directory at ui.shadcn.com/docs/directory. Sourced for presets (`init --preset`, build-and-share a design-system config as a short code) and the registry-directory build for distribution. Verified via WebSearch 2026-07-17.
+
 [^27]: Design Systems Collective, "Why Shadcn/ui Struggles at Enterprise Scale." designsystemscollective.com/why-shadcn-ui-struggles-at-enterprise-scale-9f7416f3af3f. 2025. Sourced for the drift / merge-cost critique. Also shadcn-ui/ui GitHub Issue #6417 "MORE MAINTAINERS" and Discussion #1374. Verified 2026-04-17.
 
 [^28]: Mashuk Tamim, "Is Your Shadcn UI Project at Risk? A Deep Dive into Radix's Future." mashuktamim.medium.com/is-your-shadcn-ui-project-at-risk-a-deep-dive-into-radixs-future-91af267c4bec. Sourced for the Radix / Modulz / WorkOS maintainership timeline. Verified 2026-04-17.
