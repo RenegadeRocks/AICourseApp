@@ -109,7 +109,7 @@ For AI-directed work in 2026, **commit-per-iteration is the right default for so
 
 The mistake is picking a tool, using its default, and never noticing that the default is a philosophical bet that may not match what you are doing today.
 
-There is a third, more interesting position that several people in the Claude Code community have started publishing: **the agent should commit at every *successful test run*, not every edit and not every feature**. A passing test is the minimal signal that the state is consistent. Commit-per-green-test gives you a git log where every commit is, by construction, a working state of the codebase. `git bisect` becomes trivially useful. I have been running this pattern in my own work for six weeks and it is the best of both worlds — but it requires a fast, reliable test suite, which is itself a cultural prerequisite most codebases don't have yet.
+There is a third, more interesting position that several people in the Claude Code community have started publishing: **the agent should commit at every *successful test run*, not every edit and not every feature**. A passing test is the minimal signal that the state is consistent. Commit-per-green-test gives you a git log where every commit is, by construction, a working state of the codebase, so `git bisect` becomes trivially useful. It is arguably the best of both worlds — but it requires a fast, reliable test suite, which is itself a cultural prerequisite most codebases don't have yet. Treat it as a hypothesis worth trialing, not settled practice.
 
 ## Layer 3 — Worktrees: mechanics
 
@@ -171,7 +171,7 @@ This is close to ideal default behavior. An aborted agent run leaves no trace; a
 
 **Gotcha 1: `node_modules` and lockfile contention.** A fresh worktree does not have a `node_modules/`. The first thing an agent does in a JS project is often `npm install`, which costs 30–120 seconds and may pull slightly different versions than your main worktree has (if your `package-lock.json` has drifted). If you dispatch three parallel agents on a JS project, you pay the install cost three times and may end up with three slightly different resolved dep graphs. Workarounds: pre-create the worktree and run install once; use `pnpm` with a shared store; or use `npm ci` to guarantee lockfile fidelity.
 
-**Gotcha 2: `isolation: "worktree"` silently falls back on misconfiguration.** GitHub issue #39886 (filed December 2025) documents a class of failures where the `isolation: worktree` agent parameter is ignored — the agent runs in the main repo working tree instead — when combined with certain other agent parameters, or when the repo root is itself a worktree rather than a bare repo.[^10] Verify by logging the agent's `cwd` at start. If it's not inside `.claude/worktrees/`, isolation didn't take and you are about to have two agents writing to the same directory.
+**Gotcha 2: `isolation: "worktree"` silently falls back on misconfiguration.** GitHub issue #39886 (filed March 27, 2026; closed as duplicate) documents a class of failures where the `isolation: worktree` agent parameter is ignored — the agent runs in the main repo working tree instead, with `worktreePath: done` and `worktreeBranch: undefined` — when the worktree is never actually created, causing branch-checkout races when multiple agents share `.git` state.[^10] Verify by logging the agent's `cwd` at start. If it's not inside `.claude/worktrees/`, isolation didn't take and you are about to have two agents writing to the same directory.
 
 **Gotcha 3: Shared build caches and IDE state.** Your `.next/`, `dist/`, `target/`, `.venv/`, and `__pycache__/` are *not* automatically gitignored-per-worktree in most setups. If one agent compiles while another is running, they can corrupt each other's caches. Gitignore entries don't help because the problem isn't git; it's that two processes are writing to logically-distinct-but-physically-adjacent paths. Fix: add the worktree name into your build output path (`NEXT_DIST_DIR=.next-$WORKTREE`), or accept that one cache will rebuild per worktree.
 
@@ -187,7 +187,7 @@ Here is the specific disagreement I promised you, between two named voices.
 
 For the Aider-style, short-lived *"dispatch three agents on the same brief, compare diffs, throw two away"* pattern, worktrees are strictly better. You can't stomach the latency of three `git clone`s when the whole experiment takes 20 minutes. And the upside of having the same object store — you can `git diff worktree-a..worktree-b` trivially to compare the two candidate solutions — is exactly what you want.
 
-So the real answer is: **decide by session length**. Long-lived parallel sessions with independent PR destinies → separate clones. Short-lived parallel experiments with a comparison-and-pick phase → worktrees. I have never seen this framing written down anywhere; you heard it here.
+So the real answer is: **decide by session length**. Long-lived parallel sessions with independent PR destinies → separate clones. Short-lived parallel experiments with a comparison-and-pick phase → worktrees. Hold that as the operative heuristic for the rest of this lesson.
 
 ## Layer 6 — Diff review as primary QA
 
