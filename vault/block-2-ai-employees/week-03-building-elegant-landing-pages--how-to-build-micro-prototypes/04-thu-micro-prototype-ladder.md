@@ -135,11 +135,12 @@ The math you should carry in your head (approximate Wilson score intervals, 95%,
 
 | Conversions / N | Point rate | 95% CI (approx Wilson) | Operator read |
 |---|---|---|---|
-| 6 / 50 | 12% | ~5.6% – 24.2% | Ambiguous — run more |
+| 6 / 50 | 12% | ~5.6% – 23.8% | Ambiguous — run more |
 | 3 / 50 | 6% | ~2.1% – 16.2% | Likely weak but cannot rule out 15% true rate |
 | 12 / 100 | 12% | ~7.0% – 19.8% | Narrower but still ambiguous for A/B comparison |
 | 60 / 500 | 12% | ~9.4% – 15.1% | Actionable — conversion in roughly this band |
-| 10 / 50 | 20% | ~11.2% – 32.9% | Strong directional; likely level-up, not yet ship |
+| 10 / 50 | 20% | ~11.2% – 33.0% | Strong directional; lower bound clears 10% |
+| 2 / 50 | 4% | ~1.1% – 13.5% | Ambiguous, not dead — upper bound still spans 10% |
 | 1 / 50 | 2% | ~0.4% – 10.5% | Almost certainly dead — but "almost" is doing work |
 
 A few load-bearing implications:

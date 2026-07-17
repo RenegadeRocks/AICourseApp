@@ -54,7 +54,7 @@ This is the pattern you will reuse for every other AI vendor category you evalua
 
 ## Prerequisites
 
-- [[03-wed-decoding-real-business-problems-i|Wednesday's lesson on "where AI breaks in real workflows"]]
+- [[03-wed-scoping-ai-projects|Wednesday's scoping lesson]] and [[04-thu-pricing-ai-services|Thursday's pricing trilemma]] — this teardown runs the pipeline they built.
 - A rough sense of how RAG and tool-use agents are architected (we covered this in [[../week-02-decoding-real-business-problems-with-ai-i--basecamp-part-3-agents-and-apis/01-mon-agent-architectures|Week 2 Monday]]).
 - You do not need to have shipped a support bot yourself. You do need to have looked at a Zendesk or Intercom dashboard at some point in your career.
 
@@ -321,5 +321,6 @@ None of these are Google-able.
 [^23]: Morgan Lewis. *AI in Healthcare: Opportunities, Enforcement Risks and False Claims.* https://www.morganlewis.com/pubs/2025/07/ai-in-healthcare-opportunities-enforcement-risks-and-false-claims-and-the-need-for-ai-specific-compliance (Jul 2025).
 [^24]: CX Dive. *Klarna changes its AI tune and again recruits humans for customer service.* https://www.customerexperiencedive.com/news/klarna-reinvests-human-talent-customer-service-AI-chatbot/747586/ (May 2025).
 [^decagon-pricing]: Industry pricing reporting for Decagon's AI agent platform (Decagon does not publish a rate card). AgenticAIPricing.com, *Decagon AI pricing case study.* https://www.agenticaipricing.com/ — floor-plus-per-conversation structure referenced across 2025 procurement analyses; cross-check with Sacra, *Decagon* https://sacra.com/c/decagon/.
+[^25]: Salesforce, *Salesforce Signs Definitive Agreement to Acquire Fin* (Jun 15, 2026, ~$3.6B, expected close Q4 FY2027). https://www.salesforce.com/news/press-releases/2026/06/15/salesforce-signs-definitive-agreement-to-acquire-fin/ ; TechCrunch, *Salesforce acquires AI customer service platform Fin for $3.6B* https://techcrunch.com/2026/06/15/salesforce-acquires-ai-customer-service-platform-fin-for-3-6b/ ; Intercom renamed itself Fin in May 2026. Fin pricing unchanged at $0.99/resolution. Verified 2026-07-17.
 
-_last_verified: 2026-04-15_
+_last_verified: 2026-07-17_

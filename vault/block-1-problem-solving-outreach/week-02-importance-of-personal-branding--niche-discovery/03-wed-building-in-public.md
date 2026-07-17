@@ -46,7 +46,7 @@ By the end of this lesson you will be able to: (1) operationalize the "receipts 
 
 ## Layer 1 — The receipts shelf, operationalized
 
-Monday introduced proof as one of three brand pillars. Most operators stop at that level of abstraction and publish ad-hoc "case studies" when the mood or the pipeline demands it. The receipts-shelf discipline is different: it is a deliberate, maintained portfolio of five to seven artifacts, each engineered to answer a specific diligence question a buyer would otherwise need a reference call to answer. The shelf is not an archive of past posts. It is the set of objects a buyer can find in twenty minutes of Googling your name that does the work of a forty-five-minute reference interview.
+Monday introduced proof as one of three brand pillars. Most operators stop at that level of abstraction and publish ad-hoc "case studies" when the mood or the pipeline demands it. The receipts-shelf discipline is different: it is a deliberate, maintained portfolio of five to seven artifacts, each engineered to answer a specific diligence question a buyer would otherwise need a reference call to answer. Think of the shelf less as an archive of past posts and more as the set of objects a buyer can find in twenty minutes of Googling your name — objects that do the work of a forty-five-minute reference interview.
 
 The seven slots, in priority order:
 
