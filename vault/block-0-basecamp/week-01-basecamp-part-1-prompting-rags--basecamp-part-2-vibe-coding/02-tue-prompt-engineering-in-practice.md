@@ -364,3 +364,5 @@ The evidence is not settled. DSPy has documented gains on structured-output benc
 [^11]: Anthropic (2025-09-29). *Effective context engineering for AI agents.* https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents — "context engineering as the natural progression of prompt engineering"; just-in-time retrieval; compaction; sub-agent architectures; the distinction from single-turn prompt engineering.
 
 [^12]: Khattab, O., et al. Stanford NLP. *DSPy: Programming — not Prompting — Language Models.* https://github.com/stanfordnlp/dspy — automated prompt optimization via algorithmic search; tradeoffs: opacity, computational cost, metric dependency. The flagship optimizer moved from MIPROv2 to **GEPA** (Agrawal et al., *GEPA: Reflective Prompt Evolution Can Outperform Reinforcement Learning*, arXiv 2507.19457, ICLR 2026 oral; https://arxiv.org/abs/2507.19457 — reflective prompt evolution, reportedly ~13% over MIPROv2 with far fewer rollouts; integrated as `dspy.GEPA`). Verified 2026-07-17.
+
+_last_verified: 2026-07-17_

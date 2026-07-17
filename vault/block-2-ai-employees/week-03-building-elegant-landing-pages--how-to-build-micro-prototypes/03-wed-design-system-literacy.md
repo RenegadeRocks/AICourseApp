@@ -406,3 +406,5 @@ Score honestly — the point is to find which variable your brief is under-speci
 [^29]: Michael Andreuzza, Lexington Themes blog. lexingtonthemes.com/blog. 2025 posts on Tailwind v4 gradients, multi-theme toggles, and accessible carousels. Sourced as the shadcn-adjacent plunder alternative. Verified 2026-04-17.
 
 [^30]: Brian Lovin, personal site. brianlovin.com. Sourced for design-writing reviewer lens; Brian currently designs AI products at Notion (per public bio). Verified 2026-04-17.
+
+_last_verified: 2026-07-17_

@@ -459,3 +459,5 @@ Operator-documented patterns that surface when these tools move past single-sess
 [^32]: Lenny's Newsletter. *Head of Claude Code: What happens after coding is solved | Boris Cherny.* 2025. https://www.lennysnewsletter.com/p/head-of-claude-code-what-happens — supports Cherny's orchestration framing and the $1B run-rate Claude Code revenue claim as of mid-2025.
 
 [^33]: Andrej Karpathy, *Sequoia Ascent 2026 summary* (https://karpathy.bearblog.dev/sequoia-ascent-2026/) and his Feb 2 2025 X post coining "vibe coding" (https://x.com/karpathy/status/1886192184808149383). — support the "vibe coding raises the floor; agentic engineering raises the ceiling" framing and the agentic-engineering skills list (spec design, plan supervision, diff review, eval design). Verified 2026-07-17.
+
+_last_verified: 2026-07-17_

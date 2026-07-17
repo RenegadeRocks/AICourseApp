@@ -275,3 +275,5 @@ The following are the production-grade failure modes I and operators I have talk
 [^12]: Kamoi, R. et al. (2024). *When Can LLMs Actually Correct Their Own Mistakes? A Critical Survey of Self-Correction of LLMs.* TACL 2024, direct.mit.edu/tacl/article/doi/10.1162/tacl_a_00713. Supports the claim that self-correction's efficacy collapses to self-consistency under matched sampling budgets, and the taxonomy of when external-feedback loops do and do not help. Verified 2026-07-17.
 
 [^13]: Vals AI Finance Agent benchmark, https://www.vals.ai/models/anthropic_claude-opus-4-7 and https://www.vals.ai/home; plus Anthropic, "Advancing Claude for Financial Services," https://www.anthropic.com/news/advancing-claude-for-financial-services. Verified 2026-07-17. Supports: Claude Opus 4.7 leading the Vals AI Finance Agent benchmark at 64.37% (a tool-using agentic evaluation over financial filings) as the 2026 successor anchor to FinanceBench's original 2023 configuration numbers. Note the model lineup has since advanced (Opus 4.8, Sonnet 5, Fable 5), so re-check the live leaderboard before quoting a client.
+
+_last_verified: 2026-07-17_

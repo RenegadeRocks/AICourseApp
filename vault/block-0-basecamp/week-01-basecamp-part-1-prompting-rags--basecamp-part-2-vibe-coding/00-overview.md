@@ -80,3 +80,5 @@ The cohort has live sessions on 2026-05-02 and 2026-05-03. They are bonuses. The
 [^3]: Anthropic (2024-09-19). *Introducing Contextual Retrieval.* https://www.anthropic.com/news/contextual-retrieval — Contextual Embeddings + Contextual BM25 reduce top-20-chunk retrieval failure from 5.7% to 2.9% (49% relative reduction); with a reranker, 67%.
 [^4]: Hamel Husain (2024). *Your AI Product Needs Evals.* https://hamel.dev/blog/posts/evals/ — eval-driven development framework: binary LLM-as-judge, human-agreement calibration, error analysis as systematic process.
 [^5]: SWE-bench Verified landscape. Historical: Sonnet 4.5 77.2% / Opus 4.5 80.9% (first over 80%), late 2025 (https://www.anthropic.com/news/claude-sonnet-4-5, https://www.anthropic.com/news/claude-opus-4-5). Current, July 2026: Claude Opus 4.8 88.6% (https://www.anthropic.com/news/claude-opus-4-8), Claude Fable 5 ~95% on the independent vals.ai leaderboard (https://www.vals.ai/benchmarks/swebench). Verified 2026-07-17.
+
+_last_verified: 2026-07-17_

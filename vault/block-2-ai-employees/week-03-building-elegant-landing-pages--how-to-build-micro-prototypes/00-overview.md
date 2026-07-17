@@ -88,3 +88,5 @@ The cohort has live sessions on 2026-06-06 (landing pages) and 2026-06-07 (micro
 - An event model, a Wilson-interval-sized sample plan, a session-replay legal checklist, and a Mom-Test-hardened AI interview script — all pre-registered as a go/no-go rule before your first visitor arrives.
 
 By Monday of Week 4, you should be able to turn any assumption about any audience into a measurable experiment in under a working day, and kill it — or double down on it — with evidence rather than conviction.
+
+_last_verified: 2026-07-17_

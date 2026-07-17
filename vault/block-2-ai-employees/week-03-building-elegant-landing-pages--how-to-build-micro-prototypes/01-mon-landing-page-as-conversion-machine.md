@@ -330,3 +330,5 @@ If your page has 800 monthly visitors and the required sample size is ~16,800 pe
 [^14]: Fitzpatrick, Rob. *The Mom Test: How to Talk to Customers and Learn If Your Business Is a Good Idea When Everyone Is Lying to You.* Revised and expanded edition (2024). URL: https://www.momtestbook.com. Claim supported: validation-interview protocol referenced in problem-set and Thursday lesson; book used as training manual at Shopify, SkyScanner, Harvard, MIT. Verified 2026-04-17.
 
 [^15]: Chartbeat + Poool. *"The Essential Engagement KPIs for Optimizing Conversion Rates."* Whitepaper, April 2024. URL: https://chartbeat.com/wp-content/uploads/2024/04/ChartbeatxPoool-Whitepaper-Engagement-KPIs-Optimize-Conversion-Rates.pdf. Claim supported: engaged-time thresholds (25s → 9% return; 75s → 14%; 125s → 22%); 5-second inactivity threshold for attention; the engagement-to-return-visit ladder used implicitly in the conversion-math discussion. Verified 2026-04-17.
+
+_last_verified: 2026-07-17_

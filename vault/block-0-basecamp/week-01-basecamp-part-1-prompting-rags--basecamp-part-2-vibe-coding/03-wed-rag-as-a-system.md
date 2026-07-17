@@ -463,3 +463,5 @@ A team built a RAG system for a marketing agency's client intelligence database.
 [^14]: MongoDB / Voyage AI. (2025, August 11). rerank-2.5 and rerank-2.5-lite: Instruction-Following Rerankers. https://www.mongodb.com/company/blog/product-release-announcements/rerank-2-5-and-rerank-2-5-lite-instruction-following-rerankers — Supports: 32K context (2x rerank-2), first instruction-following rerankers, +11.48% average accuracy from instructions (rerank-2.5), accuracy gains over Cohere Rerank v3.5; MongoDB acquisition context. Verified 2026-07-17.
 
 [^15]: byteiota. (2026). RAG vs Long Context 2026: Is Retrieval Really Dead? https://byteiota.com/rag-vs-long-context-2026-retrieval-debate/ — Supports: the January 2026 viral "RAG is dead" wave and the resolution into "naive RAG is dead; sophisticated/agentic RAG is thriving." See also LightOn, "RAG is Dead, Long Live RAG: Retrieval in the Age of Agents," https://lighton.ai/lighton-blogs/rag-is-dead-long-live-rag-retrieval-in-the-age-of-agents. Verified 2026-07-17.
+
+_last_verified: 2026-07-17_

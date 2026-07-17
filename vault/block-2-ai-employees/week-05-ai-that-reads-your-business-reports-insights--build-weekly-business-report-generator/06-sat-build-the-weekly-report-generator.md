@@ -225,3 +225,5 @@ Read what Claude Code produces. Accept the parts that match the architecture in 
 [^11]: ZenML / LangWatch / Speakeasy comparison pieces on Pydantic AI, LangGraph, CrewAI, 2025. https://langwatch.ai/blog/best-ai-agent-frameworks-in-2025-comparing-langgraph-dspy-crewai-agno-and-more and https://www.zenml.io/blog/pydantic-ai-vs-langgraph. Supports: Pydantic AI v1.0 release September 2025 with API stability commitment; CrewAI's 44.6k GitHub stars; the code-size comparison (Pydantic AI ~160 lines, LangChain ~170, LangGraph ~280, CrewAI ~420 for the same chat functionality); Nextbuild 90-day benchmark result of 8/10 for Pydantic AI developer experience. Verified 2026-04-17.
 
 [^12]: Simon Willison, *Building effective agents*, simonwillison.net, December 20 2024. https://simonwillison.net/2024/Dec/20/building-effective-agents/. Supports: the "don't use a framework" annotation; the start-with-direct-API-calls principle; the workflow-vs-agent distinction as the most useful contribution of the Anthropic paper. Verified 2026-04-17.
+
+_last_verified: 2026-07-17_

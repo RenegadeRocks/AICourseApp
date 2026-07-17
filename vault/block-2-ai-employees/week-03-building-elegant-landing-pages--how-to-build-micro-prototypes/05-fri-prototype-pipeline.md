@@ -450,3 +450,5 @@ All URLs verified 2026-04-17.
 [26]: https://support.bolt.new/release-notes — Bolt.new Release Notes. Standard/Max two-agent model on "Claude Agent" default; MCP connections; v1 (legacy) unselectable since April 13 2026 and v1 projects/sites inaccessible after August 3 2026. Verified 2026-07-17.
 
 [27]: https://resend.com/pricing — Resend Pricing (2025). Free 3k/mo + 100/day; Pro $20/mo 50k; Scale $90/mo 100k.
+
+_last_verified: 2026-07-17_

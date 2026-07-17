@@ -76,3 +76,5 @@ The cohort's onboarding session on Saturday 2026-04-18 is a kickoff: cohort norm
 ## Week 0 is permanent infrastructure
 
 Treat these six lessons as reference material you will come back to. When a later week asks you to compare Sonnet 5 to Gemini 3.1 Pro on a long-context agent, you will re-open Friday's lesson. When a later week asks you to reason about why your CLAUDE.md instructions are being ignored by a nested subagent, you will re-open Wednesday's. Week 0 is the layer underneath every other week — and because it covers the fastest-moving layer of the stack (model names, prices, tool features), it is also the layer most in need of the re-verification habit the lessons themselves teach. Model facts in this vault carry a `_last_verified` stamp; distrust anything older than a quarter.
+
+_last_verified: 2026-07-17_

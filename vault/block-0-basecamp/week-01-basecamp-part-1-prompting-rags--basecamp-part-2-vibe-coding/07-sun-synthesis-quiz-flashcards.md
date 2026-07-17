@@ -542,3 +542,5 @@ These are the five sources that give the most durable ROI across the whole progr
 [^13]: Liu, J. (2024-01-07). *How to Build a Terrible RAG System.* https://jxnl.co/writing/2024/01/07/inverted-thinking-rag/ — Inverted-thinking framework; document diversity as a first-class engineering problem. Verified 2026-04-15.
 
 [^14]: Wei, J., Wang, X., et al. (2022-01). *Chain-of-Thought Prompting Elicits Reasoning in Large Language Models.* Google Brain. arXiv:2201.11903. https://arxiv.org/abs/2201.11903 — CoT as emergent ability of scale; below ~100B parameters CoT hurts; 540B + 8 exemplars SOTA on GSM8K.
+
+_last_verified: 2026-07-17_

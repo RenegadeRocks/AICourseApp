@@ -377,3 +377,5 @@ Expected observation pattern: at N=50 the quantitative layer is almost always in
 [^23]: Evan Miller, "Sample Size Calculator (Evan's Awesome A/B Tools)." https://www.evanmiller.org/ab-testing/sample-size.html — Claim: interactive sample-size calculator with MDE, baseline, power, significance parameters. Verified 2026-04-17.
 
 [^24]: Julian Shapiro, "Startup Handbook: Landing Page Copywriting." https://www.julian.com/guide/startup/landing-pages and Demand Curve "above the fold" playbook https://www.demandcurve.com/playbooks/above-the-fold — Claim: copy-hierarchy framework and demand-test / smoke-test pattern for landing pages. Referenced for cross-week continuity with Monday's lesson. Verified 2026-04-17.
+
+_last_verified: 2026-07-17_

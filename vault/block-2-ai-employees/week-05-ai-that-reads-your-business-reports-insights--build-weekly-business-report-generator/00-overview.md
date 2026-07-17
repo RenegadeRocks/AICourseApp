@@ -82,3 +82,5 @@ The cohort has live sessions on 2026-06-20 and 2026-06-21. They are bonuses. The
 ## Prerequisites from earlier weeks
 
 This week assumes Block 2 Week 3 (landing pages and micro-prototypes) and Week 4 ([[01-mon-what-a-sales-agent-is|sales agent]] with [[04-thu-rag-fundamentals|RAG]]). Specifically: you can reason about structured output, you've wired at least one retrieval system, you know what an evaluator-critic loop is, and you have an opinion on LangGraph vs Claude Code for orchestration. If any of those is shaky, the Thursday and Saturday lessons will hurt more than they should — go back and ship the Week 4 capstone first.
+
+_last_verified: 2026-07-17_

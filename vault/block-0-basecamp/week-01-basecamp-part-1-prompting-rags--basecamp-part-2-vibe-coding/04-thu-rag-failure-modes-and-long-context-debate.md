@@ -422,3 +422,5 @@ RAFT (Zhang et al. 2024, *RAFT: Adapting Language Model to Domain Specific RAG*,
 [^19]: Anthropic, "Introducing Claude Sonnet 5" (2026-06-30). https://www.anthropic.com/news/claude-sonnet-5 — 1M-token native context; intro pricing $2/$10 per M tokens through 2026-08-31, then $3/$15; default model in Claude Code and on Free/Pro. Verified 2026-07-17.
 
 [^20]: byteiota, "RAG vs Long Context 2026: Is Retrieval Really Dead?" https://byteiota.com/rag-vs-long-context-2026-retrieval-debate/ — Documents the January 2026 viral "RAG is dead" wave and the resolution into "naive RAG is dead; sophisticated/agentic RAG is thriving." See also LightOn, https://lighton.ai/lighton-blogs/rag-is-dead-long-live-rag-retrieval-in-the-age-of-agents. Verified 2026-07-17.
+
+_last_verified: 2026-07-17_

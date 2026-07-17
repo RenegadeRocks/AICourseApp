@@ -384,3 +384,5 @@ Expected outcome: you will find Pattern A reads correct-but-flat, Pattern B read
 [^14]: Sourcery (Molly O'Shea), "Packy McCormick, Not Boring" profile, <https://www.sourcery.vc/p/packy-mccormick-not-boring>. Supports the Not-Boring writer profile context (239K+ subscriber newsletter, deep-dive essay format) that anchors why LLM-cadence drift matters for his voice. Verified via WebFetch 2026-04-17. Specific LLM-use claims are sourced to [^15] (CO/AI).
 
 [^15]: CO/AI, "Founder of 'Not Boring' Shares How He Uses AI to Enhance his Writing," <https://getcoai.com/news/founder-of-not-boring-shares-how-he-uses-ai-to-enhance-his-writing/>. Supports the specific uses (information gathering/synthesis, outlines, alternative phrasings, interactive visuals) and the "human judgment and creativity remain central" framing. Verified via WebSearch 2026-04-17.
+
+_last_verified: 2026-07-17_

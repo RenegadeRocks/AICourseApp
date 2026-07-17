@@ -49,3 +49,5 @@ Every lesson engages: (1) at least one live controversy with both sides and name
 Treat the daily experiments as a **live deal simulator**. Pick one real prospect or one hypothetical ICP on Monday. Carry that prospect through every day's experiment so the outputs compound: Mon's ICP definition feeds Tue's outbound sequence, which feeds Wed's discovery-call rubric, which feeds Thu's phasing plan, which feeds Fri's SOW, which is closed Sat under objections. By Sunday you have a full deal file for one prospect you could hand to a co-founder.
 
 Saturday's live session on 2026-05-23 doubles down on first-client acquisition; Sunday's live session on 2026-05-24 doubles down on planning/scoping/selling. The vault lessons teach the seven-stage pipeline so the live classes can push on the edges — escalating objections, weird edge cases, regulated-industry variants — rather than re-teaching fundamentals.
+
+_last_verified: 2026-07-17_

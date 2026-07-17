@@ -497,3 +497,5 @@ Read Simon Willison's *Vibe engineering* post (Oct 2025) and Karpathy's February
 [^13]: Veracode. "2025 GenAI Code Security Report." https://www.veracode.com/blog/genai-code-security-report/ — Over 100 LLMs on 80 coding tasks; 45% of AI-generated code introduced an OWASP Top-10 vulnerability; failure rate did not improve with model scale (systemic, not a small-model artifact); Java worst (>70%). See also the Spring 2026 update: https://www.veracode.com/blog/spring-2026-genai-code-security/ . Verified 2026-07-17.
 
 [^14]: "The AI Superstars Who Say a 'Vibe Slop' Crisis Is Coming" (WSJ-reported, May 2026). https://medium.com/newsarticulated/the-ai-superstars-who-say-a-vibe-slop-crisis-is-coming-and-what-it-means-for-software-s-future-f276c4d875b2 ; https://cryptobriefing.com/vibe-slop-crisis-ai-generated-code/ — Mario Zechner and Armin Ronacher (Pi harness / OpenClaw) warn that companies are trading near-term productivity for buggier software, outages, security vulnerabilities, and unsustainable cloud costs. Verified 2026-07-17.
+
+_last_verified: 2026-07-17_

@@ -433,3 +433,5 @@ The human-in-loop argument assumes that human review checkpoints catch real erro
 [^13]: Addy Osmani, "Vibe Coding Is Not the Same as AI-Assisted Engineering," medium.com/@addyosmani/vibe-coding-is-not-the-same-as-ai-assisted-engineering-3f81088d5b98, 2025. Two-phase model: sandbox phase (vibe freely) → production phase (design, test, review, own it). Decision criterion: scope, stakes, maintainability. Verified 2026-07-17.
 
 [^14]: Veracode, "2025 GenAI Code Security Report." https://www.veracode.com/blog/genai-code-security-report/ — 100+ LLMs on 80 coding tasks; 45% of AI-generated code introduced an OWASP Top-10 vulnerability; failure rate did not improve with model scale (systemic). See also the Spring 2026 update (https://www.veracode.com/blog/spring-2026-genai-code-security/). Verified 2026-07-17.
+
+_last_verified: 2026-07-17_

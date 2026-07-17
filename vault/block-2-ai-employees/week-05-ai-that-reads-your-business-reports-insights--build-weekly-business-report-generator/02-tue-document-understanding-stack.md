@@ -247,3 +247,5 @@ Expected output: you will find that on most business-document classes, the front
 [^13]: Brandon Smock, Rohith Pesala, Robin Abraham (Microsoft), "PubTables-1M: Towards comprehensive table extraction from unstructured documents," CVPR 2022 (arxiv 2110.00061). https://github.com/microsoft/table-transformer and https://arxiv.org/abs/2110.00061. Supports: Table Transformer (TATR) model, PubTables-1M dataset, GriTS metric, argument that table structure recognition is a distinct task from OCR, baseline for task-specific vs general-VLM table extraction.
 
 [^14]: LlamaIndex, "LiteParse: Local Document Parsing for AI Agents," 2026. https://www.llamaindex.ai/blog/liteparse-local-document-parsing-for-ai-agents, product page https://www.llamaindex.ai/liteparse, repo https://github.com/run-llama/liteparse. Retrieved 2026-07-17. Supports: LlamaIndex open-sourced its layout-aware core as a fast, fully local, Rust-based parser (layout-aware text with bounding boxes) with no LLM or cloud dependency, aimed at agent/real-time pipelines.
+
+_last_verified: 2026-07-17_

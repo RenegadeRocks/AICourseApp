@@ -269,3 +269,5 @@ Five problems, each takes 10–30 minutes. Each produces an artifact you can reu
 ---
 
 *Self-check against the L3 spec: engages ≥1 live controversy (the METR vs. adoption-numbers debate, now updated with METR's Feb 2026 control-group-refusal finding); post-2024 citations refreshed to July 2026 (SpaceX–Cursor $60B, Copilot usage-based flip Jun 2026, Cognition $26B / Devin Desktop, Codex 5M weekly users + Gartner MQ, Anthropic ~$47B run-rate, Opus 4.8/Sonnet 5 pricing, SWE-bench Pro); runnable experiment that demonstrates mechanism (SWE-bench-style loop felt on one real issue via Claude Code); operator numbers with sources (all pricing and ARR numbers cited and re-verified 2026-07-17); reviewer lens naming three specific pushbacks with named roles (skeptical CTO on contamination; Hamel Husain on measurement; Cognition founder rebuttal); domain variety (enterprise procurement, indie builder, async delegation, incumbent distribution); no "live session" framing, no fabricated URLs, experiment framed as illustrative.*
+
+_last_verified: 2026-07-17_

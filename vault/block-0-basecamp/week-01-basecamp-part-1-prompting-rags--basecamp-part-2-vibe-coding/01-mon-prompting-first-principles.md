@@ -346,3 +346,5 @@ Each bullet names a paragraph and what a named critic would specifically argue i
 [^15]: Anthropic. *Prompt Engineering Interactive Tutorial.* https://github.com/anthropics/prompt-eng-interactive-tutorial — 9-chapter hands-on notebook tutorial.
 [^16]: Vaswani, A., et al. (2017). *Attention Is All You Need.* NeurIPS 2017. https://arxiv.org/abs/1706.03762 — original transformer paper. §3 defines the attention mechanism induction heads are built on.
 [^17]: Chen, Y., Benton, J., et al. (Anthropic Alignment Science) (2025-05-08). *Reasoning Models Don't Always Say What They Think.* arXiv:2505.05410. https://arxiv.org/abs/2505.05410 — blog: https://www.anthropic.com/research/reasoning-models-dont-say-think — frontier reasoning models (Claude 3.7 Sonnet, DeepSeek R1) verbalize hints they demonstrably use only ~25% / ~39% of the time; outcome-based RL improves faithfulness then plateaus; CoT monitoring is a useful but insufficient signal. Verified 2026-07-17.
+
+_last_verified: 2026-07-17_

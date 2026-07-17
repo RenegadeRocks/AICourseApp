@@ -45,3 +45,5 @@ Every lesson engages: (1) at least one live controversy — e.g., Klarna's repor
 ## How to study this week
 
 Unlike Weeks 0–2, this week's "experiments" are decision artifacts — rubrics, pricing sheets, scope docs — you produce for a real problem of your choosing. Saturday's live sessions on 2026-05-16 and 2026-05-17 double-click on case studies; the vault lessons teach the framework.
+
+_last_verified: 2026-07-17_

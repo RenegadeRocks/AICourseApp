@@ -51,3 +51,5 @@ Every deep-dive engages: (1) at least one live controversy — MCP security boun
 ## How to study this week
 
 Same priority order as every other week: experiment first, Must-read citations second, problem set third, prose last. Saturday's live sessions on 2026-05-09 and 2026-05-10 are kickers, not the core — the vault lessons are.
+
+_last_verified: 2026-07-17_
