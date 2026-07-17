@@ -257,7 +257,7 @@ Specifically: which signals were reliable vs. noise? Which industries had higher
 
 [^21]: The Logic, *Top consulting firms are being hit by an AI reckoning*, 2025 — Canadian consulting job postings down 44% vs early-2022; non-senior roles -40%; PwC -1,500 U.S. jobs; McKinsey -~10% global staff; EY delaying start dates. https://thelogic.co/news/ai-consultant-reckoning/
 
-[^22]: Distyl AI funding coverage, 2025 — $175M round at $1.8B valuation; enterprise-AI consulting & services for Fortune 500 across telecom, insurance, manufacturing, finance. https://www.secondtalent.com/resources/top-ai-startups-that-raised-funding-in-november-2025/
+[^22]: Distyl AI — $175M Series B at $1.8B valuation (announced Sept 23 2025; Khosla Ventures and Lightspeed led; founders ex-Palantir), enterprise-AI consulting & services for Fortune 500 across telecom, insurance, manufacturing, finance. https://www.prnewswire.com/news-releases/distyl-ai-raises-175-million-at-1-8-billion-valuation-to-help-global-enterprises-become-ai-native-302564270.html ; https://news.crunchbase.com/ai/distyl-raises-valuation-175m-seriesb/ (verified 2026-07-17)
 
 [^23]: Harvard Business Review, *AI Is Changing the Structure of Consulting Firms*, Sep 2025. https://hbr.org/2025/09/ai-is-changing-the-structure-of-consulting-firms
 

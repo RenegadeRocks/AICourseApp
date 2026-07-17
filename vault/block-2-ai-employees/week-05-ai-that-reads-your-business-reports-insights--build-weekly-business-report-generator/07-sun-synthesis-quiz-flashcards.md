@@ -402,4 +402,4 @@ The spec is the artifact. The commitment is the Week 5 test. Come back in 30 day
 
 ---
 
-_last_verified: 2026-04-17_
+_last_verified: 2026-07-17_

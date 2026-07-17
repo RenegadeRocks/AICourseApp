@@ -111,7 +111,7 @@ Takeaway: treat the advertised context window as a legal upper bound on request 
 
 ## Layer 3 — Lost in the middle: Liu 2023, RULER 2024, NoLiMa 2025
 
-Here is the part most AI-catalyst leads are foggy on, because the benchmarks keep landing faster than the practitioner Twitter discourse processes them.
+Here is the part most AI-pro leads are foggy on, because the benchmarks keep landing faster than the practitioner discourse processes them.
 
 ### Liu et al. 2023 — the original finding
 
@@ -226,7 +226,7 @@ Third, Jason Liu's 2025 writing has shifted the framing from "RAG vs long contex
 
 **My position, for this lesson: both framings have truth; the operator-actionable synthesis is closer to B.** Specifically:
 
-- Long context is a *quality budget* for the small number of tasks where keeping a full artifact (a codebase, a book, a trial transcript) together matters more than selecting from it. Pick Opus 4.6 1M for a legal-review workflow where excising context changes the answer.
+- Long context is a *quality budget* for the small number of tasks where keeping a full artifact (a codebase, a book, a trial transcript) together matters more than selecting from it. Pick a 1M-window model (Opus 4.8 or Fable 5) for a legal-review workflow where excising context changes the answer.
 - Retrieval (in its modern form — contextual embeddings, rerankers, agentic tool calls) is how you handle everything else. The economics of prompt caching plus the quality economics of RULER/NoLiMa both argue for keeping the stable prompt large and cacheable, and the variable content small and high-precision.
 - "RAG is dead" is a slogan that is useful for selling a 2026 SaaS; it is not a claim Anthropic's own research supports, and it is not a claim that survives a careful read of 2024-2025 long-context benchmarks.
 
@@ -311,9 +311,9 @@ Cost estimate for option B: 3 positions × 20 samples × 200K input × $2/MTok (
 
 ## Open questions — what is not settled as of 2026-04-15
 
-**Does the attention-compute scaling of 1M windows degrade silently as the weights drift across model updates?** Opus 4.5 and Opus 4.6 both advertise 1M (4.5 at beta, 4.6 at GA). Whether the quality curve at 500K or 900K is identical across those releases, or whether minor post-training shifts move the usable ceiling around, is not publicly benchmarked by Anthropic. Teams running long-context workloads should re-run their evals on every model update.
+**Does the attention-compute scaling of 1M windows degrade silently as the weights drift across model updates?** Opus 4.6, 4.7, 4.8, Sonnet 5, and Fable 5 all advertise 1M. Whether the quality curve at 500K or 900K is identical across those releases — especially given the tokenizer change, which reshapes how much *text* fits — is not publicly benchmarked by Anthropic. Teams running long-context workloads should re-run their evals on every model update.
 
-**Will per-provider tier-step pricing come back?** Anthropic removed the Opus 4.6 200K cliff in March 2026 citing improved serving efficiency. Under heavier demand or a new architecture with steeper memory curves, tier steps could return. Gemini 2.5 Pro still has one. The industry default is unstable; price against documented rates on the day you ship.
+**Will per-provider tier-step pricing come back?** Anthropic removed the >200K cliff in March 2026 citing improved serving efficiency, and the current lineup has none. Under heavier demand or a new architecture with steeper memory curves, tier steps could return. Gemini 3.1 Pro still has one. The industry default is unstable; price against documented rates on the day you ship.
 
 **Is context engineering (Jason Liu's frame) a durable discipline or a transitional one?** The optimistic view is that agents will get good enough that they can navigate messy information landscapes with simpler tool interfaces — the skill decays. The skeptical view (which I lean toward) is that as stakes rise and information density grows, the skill gets larger, not smaller — closer to information architecture than to prompt-craft. Week 2 onward assumes the second framing.
 
