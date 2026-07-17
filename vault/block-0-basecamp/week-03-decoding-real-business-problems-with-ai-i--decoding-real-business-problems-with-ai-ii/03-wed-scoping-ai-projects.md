@@ -124,7 +124,7 @@ Suggested gate structure for a first-pass RAG MVP on internal enterprise documen
 
 Miss any of the three at the 4-week checkpoint → you don't graduate to production pilot; you rescope retrieval (different chunker, different embedding, different query rewriter, hybrid search) or you kill the project.
 
-Frontier practice (per Anthropic's contextual retrieval work and multiple 2025 RAG post-mortems) shows that teams without this gate ship RAG systems that look fine on demo queries and catastrophically hallucinate on the long tail — the *80% RAG failure rate* figure circulating in 2025 traces to MIT Media Lab's NANDA initiative *State of AI in Business 2025* report, which found roughly 95% of enterprise generative-AI pilots producing zero measurable P&L impact, a population dominated by teams who never gated on retrieval quality as a prerequisite to generation quality.[^10][^9]
+Frontier practice (per Anthropic's contextual retrieval work and multiple 2025 RAG post-mortems) shows that teams without this gate ship RAG systems that look fine on demo queries and catastrophically hallucinate on the long tail. Two different numbers get muddled here, so keep them separate. The "*most enterprise RAG deployments underperform*" claim circulating among practitioners is an engineering observation about retrieval quality, not a measured statistic. Distinct from it is MIT's NANDA *State of AI in Business 2025* figure — roughly **95% of enterprise generative-AI pilots produce no measurable P&L impact** — which is a *business-outcome* stat covering all pilot types, not a RAG-specific failure rate.[^10] Do not fuse them into an "80% RAG failure rate that traces to MIT NANDA"; that bridge conflates a retrieval-engineering intuition with a pilot-ROI survey. What *is* fair to say: the NANDA population is dominated by pilots that never gated on retrieval quality as a prerequisite to generation quality, so retrieval gating is one concrete lever against being in the 95%.
 
 ### Tool-call success rate (agentic projects)
 
@@ -164,7 +164,14 @@ If you start building before you've costed, you are not scoping; you're gambling
 
 Per-query cost = (input_tokens × input_rate) + (output_tokens × output_rate), summed over the call graph. For agentic systems multiply by expected trajectory length. Don't forget: retrieval call context, tool-call arguments, intermediate reasoning tokens, and reflection turns all count.
 
-As of April 2026, the spread is large:[^11] Claude Opus 4.5 and GPT-5-class models sit at $10–15/M input, $50–75/M output; Sonnet/Haiku-class and GPT-5-mini in the $1–3/M range; Grok, Gemini Flash, open models under $0.50/M. For agent trajectories averaging 30k tokens in / 6k out, per-trajectory cost ranges from $0.02 on cheap models to $0.75 on frontier. Multiply by expected monthly trajectory count, add a 2× safety factor for the retry/error path you haven't budgeted for yet.
+As of July 2026, the spread is large — and one worked number is worth pinning because people quote it wrong constantly. **Verify the current card yourself before every pricing meeting** (https://platform.claude.com/docs/en/about-claude/pricing); as of 2026-07-17 the Anthropic frontier tier is:[^11]
+
+- **Claude Opus 4.8** (and 4.5/4.6/4.7): **$5/M input, $25/M output.** (Fast Mode, research preview, is $10/$50.) Note: $15/$75 is *deprecated Opus 4.1* pricing — do not quote it for any current Opus.
+- **Claude Fable 5 / Mythos 5** (the new Mythos-class tier *above* Opus, June 2026): **$10/$50** — exactly 2× Opus.
+- **Claude Sonnet 5** (default model since June 30 2026): **$2/$10 introductory through Aug 31 2026, then $3/$15**; Haiku 4.5 at $1/$5.
+- GPT-5.5/5.6 family and Gemini 3.5 Flash occupy comparable and lower tiers; Grok, Gemini Flash, and open-weight models (Kimi K3, Qwen) run well under $0.50/M input.
+
+**The tokenizer trap.** Opus 4.7+, Sonnet 5, Fable 5, and Mythos 5 use a newer tokenizer that produces **~30% more tokens for the same text** (the exact increase depends on content).[^11] Same nominal per-token price, ~30% more billed tokens — a novel COGS variable with no SaaS analog. If you built a cost model on an Opus-4.5-era token count, re-count against the new tokenizer before you trust the margin. For agent trajectories averaging ~30k tokens in / ~6k out (post-tokenizer), per-trajectory cost ranges from a couple of cents on cheap models to roughly $0.30 on Opus-class frontier (~$0.15 in + ~$0.15 out) and ~$0.60 on Mythos-class. Multiply by expected monthly trajectory count, add a 2× safety factor for the retry/error path you haven't budgeted for yet, and add ~30% if you sized the workload on old-tokenizer counts.
 
 ### Cost surface 2 — Eval-run costs
 
@@ -176,7 +183,7 @@ You need real labels. At senior-analyst rates ($80–150/hr fully loaded), 200 l
 
 ### Cost surface 4 — Fine-tuning costs (if applicable)
 
-As of late 2025, Microsoft Foundry and OpenAI's fine-tuning prices are low enough that a fine-tune is often cheaper than a prompt engineer's month.[^13] Training a GPT-4.1-mini fine-tune on 10k examples is ~$100–500 in training; serving adds a 50% premium on input tokens for OpenAI but no premium on Gemini 2.0 Flash tunes.[^11] The non-obvious cost is *re-tuning cadence*: when the base model version deprecates, you re-tune. Budget for 2–3 re-tunes over a 12-month product lifecycle.
+The fine-tuning landscape shifted materially in mid-2026, and the shift is itself a scoping signal: **OpenAI began winding down its self-serve fine-tuning API on May 7, 2026** — new orgs already blocked, all new job creation ending January 2027 — steering customers toward prompt caching plus small base models (GPT-5.x-mini / Nano class) instead.[^13] The historical anchor still worth knowing: pre-wind-down, a GPT-4.1-mini fine-tune on 10k examples ran ~$100–500 in training. But do not scope a 2026 project around OpenAI self-serve fine-tuning as an available path; verify what's live (open-weight tuning via providers like Together/Fireworks, Google Vertex tuning, or Thinking Machines' Tinker for open models) before you commit. The non-obvious cost that survives regardless is *re-tuning cadence*: when the base model version deprecates, you re-tune. Budget for 2–3 re-tunes over a 12-month product lifecycle — and note that a base-model deprecation can now strand a fine-tune entirely if the provider has exited self-serve tuning.
 
 ### Cost surface 5 — Fallback-to-human costs
 

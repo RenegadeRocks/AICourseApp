@@ -199,9 +199,9 @@ At 1 run/week for 1 reader, none of these matter. All of them start biting betwe
 **Must-read (< 5):**
 - Anthropic, *Building Effective Agents* (Dec 2024) — orchestrator-workers and prompt-chain patterns that Saturday's build uses directly.[^16]
 - Hex, *We're not building 'AI data scientists'* (Apr 16, 2024) — the sharpest operator counter-thesis, required grounding.[^10]
-- Menlo Ventures, *2024 State of Generative AI in the Enterprise* — the capital-flow map for the category.[^8]
-- Ramp, *Announcing Ramp Intelligence* (May 17, 2023) and *Ramp Agents announcement* (2025) — category-1 incumbent's public pitch.[^2][^17]
-- Brex, *Intelligent Finance* platform page and Fall 2025 Release — the other category-1 incumbent's pitch.[^11][^1]
+- Menlo Ventures, *2025 State of Generative AI in the Enterprise* (Dec 2025) — the current capital-flow map: $37B spend, 76% bought-not-built.[^8]
+- Anthropic, *Agents for financial services* (May 5, 2026) — the frontier lab shipping the exact category you're building; read before you pitch a custom build.[^19]
+- Brynjolfsson, Chandar & Chen, *Canaries in the Coal Mine* + the Stanford×ADP dashboard — the empirical spine of the replacement/augmentation debate.[^20]
 
 **Recommended:**
 - Patronus AI, *FinanceBench* paper (arxiv 2311.11944) — the numerical benchmark that anchors Thursday's lesson and should be loaded into your head now.[^18]

@@ -225,7 +225,7 @@ LlamaIndex published "RAG is dead, long live agentic retrieval" (2025), marking 
 
 ### Where agentic RAG breaks
 
-Agentic RAG is not a free lunch. The survey paper (arXiv:2501.09136, January 2025) identifies the predictable failure modes of agentic retrieval systems.[^18] Three are critical:
+Agentic RAG is not a free lunch. The survey paper by Singh et al. (arXiv:2501.09136, January 2025) identifies the predictable failure modes of agentic retrieval systems.[^18] Three are critical:
 
 **Planning failures.** The orchestrator agent misdiagnoses what is needed and issues irrelevant sub-queries. This is a direct descendant of the query-document mismatch failure, now at the orchestrator level instead of the retriever level. A bad planner compounds errors across multiple retrieval calls.
 
@@ -383,15 +383,15 @@ RAFT (Zhang et al. 2024, *RAFT: Adapting Language Model to Domain Specific RAG*,
 
 ## Citations
 
-[^1]: Anthropic, "Introducing Contextual Retrieval," September 19, 2024. https://www.anthropic.com/news/contextual-retrieval — Supports the claims about context-blind chunking causing ~35–40% retrieval failures, 49% reduction with Contextual Embeddings + BM25, 67% with reranking. Methodology caveat: evaluation corpus is five domains of moderate-size technical documents.
+[^1]: Anthropic, "Introducing Contextual Retrieval," September 19, 2024. https://www.anthropic.com/news/contextual-retrieval — Correct figures: 5.7% baseline top-20 failure rate; Contextual Embeddings alone 3.7% (35% relative reduction); + Contextual BM25 2.9% (49% relative); + reranking 1.9% (67% relative). The 35/49/67% are *relative reductions*, not absolute failure rates. Methodology caveat: evaluation corpus is five domains of moderate-size technical documents. Verified 2026-07-17.
 
 [^2]: Nelson F. Liu, Kevin Lin, John Hewitt, Ashwin Paranjape, Michele Bevilacqua, Fabio Petroni, Percy Liang, "Lost in the Middle: How Language Models Use Long Contexts," arXiv:2307.03172 (July 2023), published in TACL 2024. https://arxiv.org/abs/2307.03172 — Foundational finding that relevant information in the middle of long contexts degrades LLM performance significantly on multi-document QA.
 
 [^3]: Journal of Empirical Legal Studies, 2025, "Legal RAG Hallucinations" (Stanford). https://dho.stanford.edu/wp-content/uploads/Legal_RAG_Hallucinations.pdf — Reports hallucination rates: 17% Lexis+ AI, 33% Westlaw AI-Assisted Research, 43% GPT-4 on legal research tasks.
 
-[^4]: "Detecting and Correcting Reference Hallucinations in Commercial LLMs and Deep Research Agents," arXiv:2604.03173 (2025). https://arxiv.org/html/2604.03173v1 — Finds 3–13% URL fabrication rate in search-grounded systems.
+[^4]: "Detecting and Correcting Reference Hallucinations in Commercial LLMs and Deep Research Agents," arXiv:2604.03173 (April 2026 — the arXiv ID is a 2026 submission). https://arxiv.org/abs/2604.03173 — Finds 3–13% URL fabrication rate in search-grounded systems. Verified 2026-07-17.
 
-[^5]: "FACTUM: Mechanistic Detection of Citation Hallucination in Long-Form RAG," arXiv:2601.05866 (January 2026). https://arxiv.org/abs/2601.05866 — Finds 57% of citations in a RAG-optimized model showed unfaithful behavior (cited source does not support the claim).
+[^5]: "FACTUM: Mechanistic Detection of Citation Hallucination in Long-Form RAG," arXiv:2601.05866 (submitted 2026-01-09; also ECIR 2026 / Springer, https://link.springer.com/chapter/10.1007/978-3-032-21289-4_18). https://arxiv.org/abs/2601.05866 — Reframes citation hallucination as an attention/FFN pathway coordination failure and introduces a mechanistic detector (four scores: CAS, BAS, PFS, PAS) that beats prior baselines by up to 37.5% AUC. Verified 2026-07-17. (The earlier "57% unfaithful" figure was not confirmable from the abstract and has been dropped.)
 
 [^6]: Gao et al., "Precise Zero-Shot Dense Retrieval without Relevance Labels" (HyDE), 2022. Referenced in context of query-document mismatch mitigation strategies. For HyDE implementation context: https://arxiv.org/abs/2212.10496
 
@@ -399,13 +399,13 @@ RAFT (Zhang et al. 2024, *RAFT: Adapting Language Model to Domain Specific RAG*,
 
 [^8]: Cheng-Ping Hsieh, Simeng Sun, Samuel Kriman, Shantanu Acharya, Dima Rekesh, Fei Jia, Yang Zhang, Boris Ginsburg (NVIDIA), "RULER: What's the Real Context Size of Your Long-Context Language Models?", arXiv:2404.06654 (April 2024). https://arxiv.org/abs/2404.06654 — Evaluates 17+ models on multi-task long-context benchmark; finds large degradation beyond claimed context sizes for all but a subset of tested models.
 
-[^9]: Adobe Research, "NoLiMa: Long-Context Evaluation Beyond Literal Matching," arXiv:2502.05167 (February 2025), accepted ICML 2025. https://arxiv.org/abs/2502.05167 — 13 LLMs tested claiming 128K+ context; 11 of 13 drop below 50% of short-context baseline at 32K tokens when literal matching is removed. GPT-4o declines from 99.3% to 69.7%.
+[^9]: Adobe Research, "NoLiMa: Long-Context Evaluation Beyond Literal Matching," arXiv:2502.05167 (February 2025), accepted ICML 2025. https://arxiv.org/abs/2502.05167 — Abstract: 12 LLMs evaluated, all claiming ≥128K context; at 32K tokens, 10 drop below 50% of their strong short-context baseline when literal matching is removed. GPT-4o declines from 99.3% to 69.7%. (Counts differ slightly across paper versions/secondary coverage.) Verified 2026-07-17.
 
-[^10]: Anthropic, "1M context is now generally available for Opus 4.6 and Sonnet 4.6." https://claude.com/blog/1m-context-ga — Confirms GA status, pricing ($5/$25 Opus 4.6, $3/$15 Sonnet 4.6 per M tokens), and MRCR v2 score 78.3% for Opus 4.6.
+[^10]: Anthropic, "1M context is now generally available" (2026-03-13). https://claude.com/blog/1m-context-ga — Full 1M window billed at standard per-token rates with no long-context multiplier; a 900K request costs the same per token as a 9K one. Model landscape as of 2026-07-17: Claude Fable 5 / Mythos 5 (2026-06-09, $10/$50, 1M ctx, 128K output — https://www.anthropic.com/news/claude-fable-5-mythos-5), Opus 4.8 (2026-05-28, $5/$25 — https://www.anthropic.com/news/claude-opus-4-8), Sonnet 5 (2026-06-30, $2/$10 intro through 08-31 then $3/$15 — https://www.anthropic.com/news/claude-sonnet-5). Verified 2026-07-17.
 
-[^11]: Google, Gemini 2.5 Pro specs. https://ai.google.dev/gemini-api/docs/models — 1,048,576 token context window; 2M forthcoming; 100% recall to 530K tokens, 99.7% recall at 1M tokens.
+[^11]: Google DeepMind, Gemini 3.1 Pro model card. https://deepmind.google/models/model-cards/gemini-3-1-pro/ — Current Google flagship, up to 1M-token context. Gemini 3.5 Pro was announced but remains unshipped as of 2026-07-17 (base model scrapped and rebuilt; missed its July-17 target — https://www.techtimes.com/articles/320308/20260713/gemini-35-pro-targets-july-17-after-full-rebuild-every-spec-remains-unconfirmed.htm). Do not teach 3.5 Pro specs as fact. Verified 2026-07-17.
 
-[^12]: OpenAI, "Introducing GPT-4.1 in the API" (April 14, 2025). https://openai.com/index/gpt-4-1/ — 1M token context window; $2/$8 per M tokens in/out for full model.
+[^12]: OpenAI, "Introducing GPT-5.5" (2026-04-23). https://openai.com/index/introducing-gpt-5-5/ — First OpenAI model with a 1M-token API context window (1,050,000 ctx / 128K output); $5/$30 per M tokens. GPT-5.6 (Sol/Terra/Luna) reached GA 2026-07-09 (https://openai.com/index/gpt-5-6/). Verified 2026-07-17.
 
 [^13]: Jue Wang, Bhavnick Minhas, Purva Patel, Chirag Gokul, et al. (Databricks), "Long Context RAG Performance of LLMs," arXiv:2411.03538 (November 2024). https://www.databricks.com/blog/long-context-rag-performance-llms — Benchmarks 20+ models on DocsQA, FinanceBench, NaturalQuestions at 2K–2M token context; finds per-model performance peaks far below advertised context limits.
 
