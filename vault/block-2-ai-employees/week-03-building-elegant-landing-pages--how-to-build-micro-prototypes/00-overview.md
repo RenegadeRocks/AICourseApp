@@ -7,7 +7,7 @@ live_sessions:
   - '2026-06-06 — Building Elegant Landing Pages'
   - '2026-06-07 — How to Build Micro Prototypes'
 study_window: 2026-06-01 to 2026-06-07
-last_verified: 2026-04-17
+last_verified: 2026-07-17
 ---
 
 # Week 3 — Landing pages and micro-prototypes, treated as one pipeline
@@ -58,10 +58,10 @@ By Sunday, you have a repeatable artifact: a one-page brief, a pipeline, and a m
 Every deep-dive this week engages five things:
 
 1. **At least one live controversy in the field.** Shapiro's Desire − (Labor + Confusion) vs Laja's four-layer messaging hierarchy; commodity-vs-envelope between Klinger and Rauch; shadcn wholesale-copy vs plunder-for-primitives; Cagan's "minimum viable product bar" vs Savoia's ladder; AI-moderated interviews (Outset/Nestlé "10× reach, 2× depth") vs NN/g 2024 and Pearson May 2025 methodological critiques.
-2. **Citations dated after January 2024.** Unbounce CBR 2024, Vercel v0 2026 launch notes, Lovable $10M-in-60-days disclosures, Anthropic Claude Code metrics, CPPA dark-patterns advisory 2024, Loeb & Loeb session-replay advisory July 2025, Clarity EEA October 2025 enforcement, Strella Series A, Listen Labs Series B, Outset Series B.
+2. **Citations dated after January 2024.** Unbounce CBR 2024 plus the mid-2026 CRO Intelligence Report (8.1% median), Vercel v0 2026 full-stack rebuild notes, Lovable disclosures ($10M-in-60-days through the 2026 $500M-ARR/$13.2B-talks arc), Anthropic Claude Code / Claude Design metrics, CPPA dark-patterns advisory 2024, Loeb & Loeb session-replay advisory July 2025, Clarity EEA October 2025 enforcement, Strella Series A, Listen Labs Series B, Outset Series B.
 3. **Runnable experiments that produce numbers you can see.** A cross-tool bake-off (same brief, four tools, same rubric). A seven-variable design brief scored against a live target page. A 4-hour shipping diary you actually run. A Wilson-interval table for 6/50, 12/100, 60/500.
-4. **Operator-level specifics with numbers.** TruckersReport 79.3% lift; NeuroMD 55.3%; Vercel 30%+ deploys from agents; Lovable $10M in 60 days with 15 people; Replit $2.8M→$150M in 9 months; Bolt $40M in 5 months; 43% AI-code redebug rate; Buffer's 4-day-to-paying-customer two-page smoke test; Superhuman's concierge onboarding (~2 hours per session, tens of thousands of customers); Wilson interval widths (18.6pp at n=50, 5.8pp at n=500).
-5. **A reviewer lens with named technical disagreement.** Each lesson names paragraphs that a Julian Shapiro, Peep Laja, Guillermo Rauch, Max Freiberg, Adam Wathan, shadcn, Rauno Freiberg, Teresa Torres, Alberto Savoia, Marty Cagan, Rob Fitzpatrick, Ronny Kohavi, Boris Cherny, Erik Schluntz, or Simon Willison would push back on — and what they would specifically argue instead.
+4. **Operator-level specifics with numbers.** TruckersReport 79.3% lift; NeuroMD 55.3%; Vercel agents driving >50% of deploys (mid-2026); Lovable $500M ARR at ~146 people (2026); Replit ~$525M annualized / $9B (2026, on Agent 3); Bolt's Standard/Max agents and Aug 3 2026 v1 cutoff; 43% AI-code redebug rate; Buffer's 4-day-to-paying-customer two-page smoke test; Superhuman's concierge onboarding (~2 hours per session, tens of thousands of customers); Wilson interval widths (18.2pp at n=50, 5.7pp at n=500).
+5. **A reviewer lens with named technical disagreement.** Each lesson names paragraphs that a Julian Shapiro, Peep Laja, Guillermo Rauch, Anton Osika, Adam Wathan, shadcn, Rauno Freiberg, Teresa Torres, Alberto Savoia, Marty Cagan, Rob Fitzpatrick, Ronny Kohavi, Boris Cherny, Erik Schluntz, or Simon Willison would push back on — and what they would specifically argue instead.
 
 ## How to study this week
 

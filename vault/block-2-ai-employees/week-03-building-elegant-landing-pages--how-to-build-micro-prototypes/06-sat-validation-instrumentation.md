@@ -28,7 +28,7 @@ sources:
   - fitzpatrick-mom-test-rules
   - torres-producttalk-weekly-2024
   - julian-shapiro-startup-handbook-landing
-last_verified: 2026-04-17
+last_verified: 2026-07-17
 word_count_target: 6000
 ---
 
@@ -36,7 +36,7 @@ word_count_target: 6000
 
 ## Why this matters
 
-You have shipped a prototype by Friday night. A landing page, a fake-door, a concierge scaffold — something live on the internet with traffic pointed at it. The week has taught you how to compose conversion copy, how to pick a code-gen tool, how to override AI taste defaults, how to position a hypothesis on the pretotyping ladder, how to run the whole pipeline in a workday. None of it matters if by Wednesday morning you cannot *read* the thing you shipped.
+You have shipped a prototype by Friday night. A landing page, a fake-door, a concierge scaffold — something live on the internet with traffic pointed at it. The week has taught you how to compose conversion copy, how to pick a code-gen tool, how to override AI taste defaults, how to position a hypothesis on [[04-thu-micro-prototype-ladder|the pretotyping ladder]], how to run [[05-fri-prototype-pipeline|the whole pipeline in a workday]]. None of it matters if by Wednesday morning you cannot *read* the thing you shipped.
 
 The single most common prototype failure in 2026 is not "the page looked wrong" or "the tool was bad." It is that the operator deployed a prototype with no instrumentation beyond a Google Analytics tag and a half-read funnel chart, ran a hundred visitors through it, watched twelve of them "convert," told themselves the hypothesis had validated, and burned the next quarter building the wrong thing. The entire discipline of validation instrumentation exists to prevent that story — to force a prototype to earn its "validated" label with a numerator, a denominator, a confidence interval, a qualitative tape, and an explicit sunset condition.
 
@@ -109,7 +109,7 @@ Pattern across all four: *conversion alone is not enough*. The confirming event 
 
 Properties are what turn an event from a counter into a pivotable object. Three rules.
 
-**Attach what makes a cohort.** Variant label (for A/B splits), utm_source (for channel attribution), viewport class (mobile vs desktop splits matter — we know from Friday that 75%+ of 2026 traffic is mobile), bucketed firmographic where available (company_size_bucket rather than raw company name).
+**Attach what makes a cohort.** Variant label (for A/B splits), utm_source (for channel attribution), viewport class (mobile vs desktop splits matter — Monday's Unbounce figure puts mobile at ~83% of landing-page visit volume), bucketed firmographic where available (company_size_bucket rather than raw company name).
 
 **Standardize once, propagate everywhere.** PostHog and Amplitude both warn that inconsistent naming is the single highest-leverage data-quality failure mode.[^1][^2] Decide `utm_source` vs `source` vs `channel` on day one, write it in the tracking plan, and have Claude Code enforce it on every new event it helps instrument. This is the kind of discipline that is cheap on day one and nearly impossible to retrofit on day ninety.
 
@@ -164,7 +164,7 @@ Two positions, both held seriously.
 
 Teresa Torres's weekly-interview discipline assumes human moderation because the exploratory work (pushing past three whys, sensing performance vs disclosure) is what AI currently cannot do.[^17] Rob Fitzpatrick's Mom Test is structurally *harder* for an AI interviewer, not easier, because every Mom Test rule is about *what the interviewer must not do in the moment* based on a signal only a human can currently read.[^18]
 
-**Resolution for a prototype-stage operator.** Run AI-moderated interviews for the *structured-feedback* surface — "tell me what you expected, what confused you, what would stop you from using it" — where the question scope is defined in advance and reach matters. Run human-moderated interviews (yourself, five calls) for the *generative* surface — "tell me about the last time you dealt with [job]; what did you try, what did you switch away from, what almost made you give up." Mixing the two is a division of labor, not a hedge. Reach and consistency on the structured surface; depth and adaptation on the generative. Do not substitute one for the other.
+**Resolution for a prototype-stage operator.** Run AI-moderated interviews for the *structured-feedback* surface — "tell me what you expected, what confused you, what would stop you from using it" — where the question scope is defined in advance and reach matters. Run human-moderated interviews (yourself, five calls) for the *generative* surface — "tell me about the last time you dealt with [job]; what did you try, what did you switch away from, what almost made you give up." Split them deliberately: reach and consistency on the structured surface, depth and adaptation on the generative. Do not substitute one for the other.
 
 ### A Mom-Test-hardened AI interview script
 
@@ -200,19 +200,19 @@ where z = 1.96 for a 95% confidence level. You do not need to compute this by ha
 
 ### The three 12%-point-estimates, worked
 
-**Case A — 6 / 50.** Wilson 95% CI = [5.6%, 24.2%]. Width ≈ 18.6 percentage points.
+**Case A — 6 / 50.** Wilson 95% CI = [5.6%, 23.8%]. Width ≈ 18.2 percentage points.
 
 **Case B — 12 / 100.** Wilson 95% CI = [7.0%, 19.8%]. Width ≈ 12.8 percentage points.
 
-**Case C — 60 / 500.** Wilson 95% CI = [9.4%, 15.2%]. Width ≈ 5.8 percentage points.
+**Case C — 60 / 500.** Wilson 95% CI = [9.4%, 15.1%]. Width ≈ 5.7 percentage points.
 
-All three are "12%." The first says "the true conversion rate of this prototype, given the data, is plausibly anywhere from 5.6% to 24.2% — a 4x range." The second narrows that to roughly a 3x range. The third narrows it to a ~1.6x range. The inference differs completely.
+All three are "12%." The first says "the true conversion rate of this prototype, given the data, is plausibly anywhere from 5.6% to 23.8% — a 4x range." The second narrows that to roughly a 3x range. The third narrows it to a ~1.6x range. The inference differs completely.
 
-**Case A (6/50) inference.** You have seen a 12% conversion rate. You have *not* excluded the hypothesis that the real rate is 6%, which in most B2B contexts would kill the project. You have also not excluded the hypothesis that it is 24%, which in most B2B contexts would be a clear green-light. The 6/50 result, by itself, tells you essentially nothing that could drive a go/no-go decision. The correct next action is almost always *more traffic* — not "ship it," not "kill it." If your decision threshold was 10%, you cannot tell from 6/50 whether you cleared it. If your decision threshold was 15%, you also cannot tell. The only decision 6/50 reliably supports is "run it to 200 visitors before reading again."
+**Case A (6/50) inference.** You have seen a 12% conversion rate. You have *not* excluded the hypothesis that the real rate is 6%, which in most B2B contexts would kill the project. You have also not excluded the hypothesis that it is 23%, which in most B2B contexts would be a clear green-light. The 6/50 result, by itself, tells you essentially nothing that could drive a go/no-go decision. The correct next action is almost always *more traffic* — not "ship it," not "kill it." If your decision threshold was 10%, you cannot tell from 6/50 whether you cleared it. If your decision threshold was 15%, you also cannot tell. The only decision 6/50 reliably supports is "run it to 200 visitors before reading again."
 
 **Case B (12/100) inference.** Tighter, but not much. You have roughly excluded rates below 7% and above 20%. If your decision threshold was "kill below 5%," you can now kill or continue. If your threshold was "ship above 20%," you can make that call. If your threshold was somewhere in the middle — as almost all real thresholds are — you still cannot force the decision from this data alone, and more traffic or a qualitative supplement is the right next step.
 
-**Case C (60/500) inference.** Now the interval is tight enough to drive a decision. You have excluded rates below 9.4% and above 15.2%. If your pre-registered threshold was "ship at 10% or better," this data ships it. If it was "kill below 8%," this data continues. If it was "ship above 18%," this data kills it. 500-visitor sample sizes are where prototype-stage A/B thinking starts to become tractable.
+**Case C (60/500) inference.** Now the interval is tight enough to drive a decision. You have excluded rates below 9.4% and above 15.1%. If your pre-registered threshold was "ship at 10% or better," this data ships it. If it was "kill below 8%," this data continues. If it was "ship above 18%," this data kills it. 500-visitor sample sizes are where prototype-stage A/B thinking starts to become tractable.
 
 ### The operator rule
 

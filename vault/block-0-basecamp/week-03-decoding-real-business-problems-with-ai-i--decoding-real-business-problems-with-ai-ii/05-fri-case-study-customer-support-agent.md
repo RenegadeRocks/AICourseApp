@@ -32,7 +32,7 @@ sources:
   - gartner-ai-cost-exceed-human-2030
   - cx-dive-klarna-reinvest-human
   - morgan-lewis-ai-healthcare-enforcement-2025
-last_verified: 2026-04-15
+last_verified: 2026-07-17
 word_count_target: 6000
 ---
 
@@ -250,7 +250,7 @@ Five specific disagreements, since we don't do generic reviewer lenses in this c
 
 3. **Klarna's walk-back was mostly narrative, not technical.** Every vendor deck that cites Klarna's $40M 2024 profit improvement without citing the May 2025 "lower quality" admission is lying by omission. Every Klarna-skeptic piece that treats the walk-back as a refutation of AI support is also wrong. The correct read is: the pure-AI phase was a learning phase; the hybrid is the durable architecture; Klarna's 2024 numbers are real *and* incomplete.[^4][^5]
 
-4. **Sierra's valuation-to-ARR multiple is either a bubble signal or an architecture signal, and you should know which before you buy.** A 100x ARR multiple for Sierra[^15] is not defensible under normal SaaS benchmarks. It is only defensible if outcome-based pricing becomes the industry-wide shape and Sierra becomes the platform. If you're evaluating Sierra, you are implicitly betting on that macro thesis. Be clear with yourself that you are.
+4. **Sierra's valuation-to-ARR multiple is either a bubble signal or an architecture signal, and you should know which before you buy.** A ~79x ARR multiple for Sierra ($15.8B on ~$200M ARR, May 2026 — down from ~100x and falling as ARR compounds)[^15] is not defensible under normal SaaS benchmarks. It is only defensible if outcome-based pricing becomes the industry-wide shape and Sierra becomes the platform. If you're evaluating Sierra, you are implicitly betting on that macro thesis. Be clear with yourself that you are.
 
 5. **The category is going to consolidate on hybrid, and the winners will be the vendors who price the human escalation as a feature instead of a failure.** Sierra's "escalation is free" is a leading indicator. Klarna's "human on demand as brand promise" is another. Fin's resolution-only billing prices the human escalation as vendor lost revenue — a laggard signal I predicted would age badly. The 2026 update partly arbitrates that: Fin didn't reprice, it got *acquired* (Salesforce, ~$3.6B, June 2026), folding its resolution-billed agent into Agentforce.[^25] Consolidation, not repricing, is how the pricing-model tension resolved for the vertically-integrated independent — which is its own lesson about what happens to a strong product with a contested pricing axis in a consolidating market: a platform buys the distribution and inherits the pricing question.
 

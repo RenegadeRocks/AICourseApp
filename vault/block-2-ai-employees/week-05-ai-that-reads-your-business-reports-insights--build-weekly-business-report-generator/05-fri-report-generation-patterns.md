@@ -30,7 +30,7 @@ sources:
   - vegachat-llm-vega-lite-2025-arxiv
   - vl2nl-chi-2024
   - evaluating-llms-visualization-2025-arxiv
-last_verified: 2026-04-17
+last_verified: 2026-07-17
 word_count_target: 6000
 ---
 
@@ -40,12 +40,12 @@ word_count_target: 6000
 
 After this lesson you will be able to look at any AI-generated business report — a Monday sales-ops flash, a monthly finance snapshot, a competitive-intel brief — and name (1) which *generation pattern* produced it, (2) the single architectural reason it reads like every other AI-generated report, and (3) the minimum change set that would move it from descriptive to insightful. You will also be able to defend, with evidence, when to reach for a JSON-schema-enforced slot-fill and when to let Claude write free-form narrative constrained by a critic loop.
 
-The sharp generalist reading Monday's analyst-replacement thesis and Thursday's numerical-reasoning ceiling can believe that "just let Claude write it" is a shippable strategy. It is not. The last mile — turning verified numbers into prose a CEO will forward — is where most AI-analyst builds collapse into uncanny, samey, insight-poor output. The collapse is not a model-scale problem; Opus 4.7 is perfectly capable of writing in a distinctive voice. It is a *prompt architecture* problem, and the cost of getting it wrong is that your client's executives start forwarding your reports with a shrug and stop forwarding them entirely by week six.
+Reading Monday's analyst-replacement thesis and Thursday's numerical-reasoning ceiling, it is tempting to conclude that "just let Claude write it" is a shippable strategy. It is not. The last mile — turning verified numbers into prose a CEO will forward — is where most AI-analyst builds collapse into uncanny, samey, insight-poor output. The cause is prompt architecture, not model scale: today's frontier models (Opus 4.8, Fable 5, Sonnet 5) are perfectly capable of writing in a distinctive voice when the harness asks for one. Get it wrong and your client's executives start forwarding your reports with a shrug, then stop forwarding them entirely by week six.
 
 ## Prerequisites
 
-- Tuesday's document-understanding pipeline and Thursday's verified numerical outputs. This lesson assumes you already have *trustworthy numbers* and *structured facts*. Everything below is about the generation layer that sits on top.
-- Familiarity with tool-calling and structured output from Week 4 (you are not relearning function calls here).
+- [[02-tue-document-understanding-stack|Tuesday's]] document-understanding pipeline and [[04-thu-analytical-reasoning-and-code-offload|Thursday's]] verified numerical outputs. This lesson assumes you already have *trustworthy numbers* and *structured facts*. Everything below is about the generation layer that sits on top.
+- Familiarity with tool-calling and structured output from [[04-thu-rag-fundamentals|Week 4]] (you are not relearning function calls here).
 
 ## Layer 1 — The three generation patterns, and why the choice between them is the architectural question
 
@@ -55,7 +55,12 @@ There are three durable patterns for LLM-driven report generation, and the archi
 
 The report is a deterministic template with fixed sections and a fixed number of slots; the LLM's job is to fill each slot with a typed value, a bullet list, or a short paragraph constrained by explicit length and topic rules. The structure is a JSON schema; the LLM is constrained, at inference time, to produce output that validates against it. No free-form prose outside the slots.
 
-The mechanism that made this production-grade was OpenAI's `type: "json_schema"` structured outputs launch on 6 August 2024[^1][^2], which used grammar-based constrained decoding to guarantee schema conformance. The accompanying model, `gpt-4o-2024-08-06`, reported 100% reliability on complex-schema evaluations versus under 40% for earlier JSON-mode attempts[^1][^2]. Anthropic followed in November 2025 with its own strict structured-outputs beta for Claude Sonnet 4.5 and Opus 4.1, using the `structured-outputs-2025-11-13` beta header and lifting the same grammar-constrained-decoding approach[^3]. The combination of these two launches made slot-fill the *default defensible choice* for any report whose downstream consumer is a database row, an email template, a PDF renderer, or a BI tool expecting structured inputs.
+The mechanism that made this production-grade was OpenAI's `type: "json_schema"` structured outputs launch on 6 August 2024[^1][^2], which used grammar-based constrained decoding to guarantee schema conformance. The accompanying model, `gpt-4o-2024-08-06`, reported 100% reliability on complex-schema evaluations versus under 40% for earlier JSON-mode attempts[^1][^2]. Anthropic's equivalent, which launched in November 2025 as a beta, is now **generally available** — and the API surface changed, so the April draft of this lesson is a trap if you follow it literally.[^3] Two things moved:
+
+1. **The beta header is deprecated.** You no longer send `structured-outputs-2025-11-13`; structured outputs are GA on `messages.create` (it still works during a transition window, but do not write new code against it).
+2. **The parameter moved.** The old top-level `output_format` is deprecated in favour of **`output_config.format`** — e.g. `output_config={"format": {"type": "json_schema", "schema": {...}}}`. For tool inputs specifically, strict validation is a top-level field on the tool definition: **`tools[].strict: true`** (with `additionalProperties: false` and a `required` array), which guarantees the `tool_use.input` validates exactly. In Python the ergonomic path is `client.messages.parse(..., output_format=MyPydanticModel)`, which validates the response against your schema automatically.
+
+Structured outputs are GA across the current model lineup — Fable 5, Mythos 5, Opus 4.8/4.7/4.6/4.5, Sonnet 5/4.6/4.5, Haiku 4.5 — and on Bedrock and Vertex.[^3] The combination of these launches made slot-fill the *default defensible choice* for any report whose downstream consumer is a database row, an email template, a PDF renderer, or a BI tool expecting structured inputs.
 
 A skeletal slot-fill schema for a weekly sales-ops report:
 
@@ -163,7 +168,7 @@ Strengths: much higher insight ceiling, writes around the edges of what the sche
 
 The report is a sequence of charts, each generated as a Vega-Lite or Plotly JSON specification, with narrative paragraphs written *around* the charts after the chart-generation step has succeeded. The LLM is not drawing pixels; it is producing a data-grammar specification that a deterministic renderer turns into SVG or PNG.
 
-Vega-Lite[^10][^11] is the workhorse here because its grammar is small enough to fit in a prompt, the JSON it produces is validatable, and the community work on LLM-to-Vega-Lite generation — VegaChat[^10] (arxiv 2601.15385, 2025), VL2NL (CHI 2024)[^11], and the July 2025 "Evaluating LLMs for Visualization Generation and Understanding" survey[^12] (arxiv 2507.22890) — gives you an accuracy floor to plan against. The 2025 survey[^12] found that frontier models handle common chart types (bar, line, stacked area) at > 90% spec-valid + semantically-correct, drop to 60–75% on grouped or faceted charts, and fall below 50% on layered or bullet-chart specifications where only GPT-4o class models reliably produce correct output. Claude Opus 4.6/4.7 behaves similarly in my own benchmarks on the same patterns; the failure modes are not stylistic but *grammatical* — forgotten `encoding.y.stack: null`, confused `mark: {type: "bar", clip: true}` configurations, invalid `transform` specifications on faceted data.
+Vega-Lite[^10][^11] is the workhorse here because its grammar is small enough to fit in a prompt, the JSON it produces is validatable, and the community work on LLM-to-Vega-Lite generation — VegaChat[^10] (arxiv 2601.15385, **published January 21, 2026**), VL2NL (CHI 2024)[^11], and the July 2025 "Evaluating LLMs for Visualization Generation and Understanding" survey[^12] (arxiv 2507.22890) — gives you an accuracy floor to plan against. The 2025 survey[^12] found that frontier models handle common chart types (bar, line, stacked area) at > 90% spec-valid + semantically-correct, drop to 60–75% on grouped or faceted charts, and fall below 50% on layered or bullet-chart specifications. (VegaChat itself uses **GPT-4o-mini** as its chart generator and reports that model struggling with advanced VL features like transformations and faceting; the "only GPT-4o-class models reliably produce correct bullet-charts" observation belongs to the 2507.22890 survey, not to VegaChat — the April draft conflated the two.[^10][^12]) Current frontier Claude models (Opus 4.8, Sonnet 5) behave similarly on the same patterns in my own benchmarks; the failure modes are not stylistic but *grammatical* — forgotten `encoding.y.stack: null`, confused `mark: {type: "bar", clip: true}` configurations, invalid `transform` specifications on faceted data.
 
 The Plotly-via-code-execution variant (use Thursday's code execution tool[^4] to have Claude write Python that produces a chart) is more flexible but more expensive and harder to cache. The Mermaid variant is lower-complexity and excellent for architecture or flow visualisations but wrong for data visualisation. A defensible 2026 default: Vega-Lite for anything that fits its grammar, Plotly-via-code-execution for anything that does not, deterministic BI tools (Tableau, Looker, Metabase embeds) for anything whose chart complexity exceeds what frontier LLMs can reliably produce unattended.
 
@@ -185,7 +190,7 @@ This is the insight-vs-description gap, and it is the single most underappreciat
 
 **Voice homogenisation.** The sentence-level rhythm of default Claude/GPT/Gemini output converges across users because the training signal did. Every AI report uses roughly the same clause length, roughly the same ratio of subordinate clauses, roughly the same cadence of example-then-generalisation. Packy McCormick's own Substack note captures the reader's perception of this convergence verbatim — "as a writer… they produce a weird uncanny valley style of writing"[^13] — and paraphrased across podcast appearances he has been explicit that he uses LLMs as research-and-synthesis assistants (outlines, alternative phrasings, interactive visuals) rather than as drafters of Not Boring essays, because the uncanny cadence degrades the voice he is selling.
 
-**The same-voice-as-competitors problem.** If your AI-generated reports read identically to your competitors' AI-generated reports, your product's narrative layer is commoditised. Morning Brew's explicit voice — "it's your friend telling you the news in a very conversational way, as if you're at a bar after work with your feet up on the bar"[^9] — is not decorative; it is the moat. Austin Rief and Alex Lieberman treat voice as product. The 2026 implication for builders: if you ship an AI report product at mid-market or above, voice is not a finishing touch; it is a structural design decision made before the first prompt is written.
+**The same-voice-as-competitors problem.** If your AI-generated reports read identically to your competitors' AI-generated reports, your product's narrative layer is commoditised. Morning Brew's explicit voice — "it's your friend telling you the news in a very conversational way, as if you're at a bar after work with your feet up on the bar"[^9] — is the moat, not decoration. Austin Rief and Alex Lieberman treat voice as product. The 2026 implication for builders: if you ship an AI report product at mid-market or above, voice is a structural design decision made before the first prompt is written, not a finishing touch bolted on at the end.
 
 ### Closing the gap — techniques that demonstrably work
 
@@ -225,8 +230,10 @@ modes and write each to a separate markdown file:
 
 (1) Pattern A — Templated slot-fill. Use the JSON schema at
     @schemas/weekly-ops.json (12 required fields including
-    evidence_refs). Use Claude structured outputs beta if available.
-    Render as markdown from the validated JSON.
+    evidence_refs). Use Claude's GA structured outputs —
+    output_config.format with the json_schema (no beta header; the
+    old structured-outputs-2025-11-13 header and output_format
+    parameter are deprecated). Render as markdown from the validated JSON.
 
 (2) Pattern B — Narrative synthesis constrained by
     @rubrics/weekly-ops-rubric.yaml. Run the evaluator-optimizer loop
@@ -303,13 +310,13 @@ Expected outcome: you will find Pattern A reads correct-but-flat, Pattern B read
 
 **Audit trail decay.** On day one, `evidence_refs` is populated correctly. By month three, the prompt has drifted, a new section was added without updating the schema, and half the claims no longer trace to cells. Mitigation: make evidence-completeness a regression gate in the eval harness; every report whose evidence_refs array is shorter than N_claims fails CI and does not ship.
 
-**Token costs that blow up on narrative-plus-critic loops.** Three critic iterations on a 1,000-word report with 10K tokens of retrieved context runs to 30–40K tokens per weekly generation per client. At 500 clients that is 15–20M tokens/week, which is real money. Mitigation: cache the retrieved context (Anthropic's prompt caching, OpenAI's equivalent); use Sonnet or Haiku class for the writer and only Opus for the critic (inversion of the intuitive allocation); short-circuit the critic on high-confidence drafts detected via a cheap pre-check.
+**Token costs that blow up on narrative-plus-critic loops.** Three critic iterations on a 1,000-word report with 10K tokens of retrieved context runs to 30–40K tokens per weekly generation per client. At 500 clients that is 15–20M tokens/week, which is real money — and the 2026 pricing spread makes the model-allocation choice sharper than it was. With Sonnet 5 at intro $2/$10 per Mtok, Opus 4.8 at $5/$25, and Fable 5 at $10/$50 (double Opus), the "use the most expensive model for the critic" heuristic is no longer automatic: Fable 5 as a critic on every draft is a real line-item, so reserve the top tier for the drafts that actually fail a cheap pre-check. Mitigation: cache the retrieved context (Anthropic's prompt caching); draft with Sonnet 5 or Haiku 4.5 and escalate to Opus 4.8 (or Fable 5 only when correctness genuinely dominates cost) for the critic; short-circuit the critic on high-confidence drafts detected via a cheap pre-check. Note the newer tokenizer (Opus 4.7+/Sonnet 5/Fable) produces ~30% more tokens for the same text, so re-baseline any April token math before quoting a client.
 
 ## Open questions / what's not settled
 
 **Is voice transfer a durable moat in 2026 or a vanishing one?** The optimistic case (Packy's own skepticism notwithstanding) is that voice-transfer techniques are improving with every model generation; by the time Opus 5 / GPT-6 ship, mid-reader voice fidelity will be good enough that Packy-indistinguishable reports are mass-producible. The pessimistic (or realist) case is that the *premium end* of writing — Ben Thompson's Stratechery, Byrne Hobart's The Diff — encodes human judgement and private information that voice transfer cannot simulate, and that economic value will concentrate there. Both positions have evidence; the 2026 answer depends on what class of reader you serve.
 
-**Do structured-output grammars kill insight?** The critic position (Jerry Liu and Jason Liu both flirt with versions of this[^6][^7]) is that every constraint you add to the generation layer narrows what the model can say, and that the most interesting AI output is the least constrained. The counter-position (Anthropic's structured-outputs launch materials[^3], the OpenAI team's argument[^1][^2]) is that constraints make outputs *shippable* — and an unshippable insight is worth zero. The practical compromise that most production systems converge on is the composition pattern (Layer 1): structure at the outer envelope, freedom inside narrative fields, critic loop to enforce rubric inside those fields.
+**Do structured-output grammars kill insight?** The critic position (Jerry Liu and Jason Liu both flirt with versions of this[^6][^7]) is that every constraint you add to the generation layer narrows what the model can say, and that the most interesting AI output is the least constrained. The counter-position (Anthropic's now-GA structured-outputs docs[^3], the OpenAI team's argument[^1][^2]) is that constraints make outputs *shippable* — and an unshippable insight is worth zero. The practical compromise that most production systems converge on is the composition pattern (Layer 1): structure at the outer envelope, freedom inside narrative fields, critic loop to enforce rubric inside those fields.
 
 **At what chart-complexity does LLM-to-chart stop being the right tool?** The 2025 evaluations[^10][^11][^12] give you a rough ordering — common charts yes, layered and bullet charts often no — but the right boundary for your application depends on your chart vocabulary. Builders should run the 2025 VegaChat/VL2NL evals on their own chart library before committing to the pattern at scale.
 
@@ -337,7 +344,7 @@ Expected outcome: you will find Pattern A reads correct-but-flat, Pattern B read
 **Recommended**
 - Latent Space (Swyx), "High Agency Pydantic > VC Backed Frameworks — with Jason Liu" (2024)[^7].
 - Instructor library documentation[^6].
-- Anthropic, "Structured Outputs on the Claude Developer Platform" (14 Nov 2025)[^3].
+- Anthropic, "Structured Outputs on the Claude Developer Platform" — now GA (`output_config.format`, `tools[].strict`)[^3].
 - VegaChat paper (2025)[^10] and "Evaluating LLMs for Visualization Generation and Understanding" (July 2025)[^12].
 - VL2NL / CHI 2024 paper[^11].
 
@@ -352,7 +359,7 @@ Expected outcome: you will find Pattern A reads correct-but-flat, Pattern B read
 
 [^2]: Willison, Simon. "OpenAI: Introducing Structured Outputs in the API." simonwillison.net, 6 August 2024. <https://simonwillison.net/2024/Aug/6/openai-structured-outputs/>. Supports: launch date, the `strict: true` + `json_schema` mechanism, pricing ($2.50/$10 per 1M tokens for gpt-4o-2024-08-06), the grammar-based token-selection approach borrowing from jsonformer, and Willison's commentary that constrained-decoding is the mechanism, not prompting. Verified via WebFetch 2026-04-17.
 
-[^3]: Anthropic. "Structured Outputs on the Claude Developer Platform." Public beta announcement, 14 November 2025. <https://platform.claude.com/docs/en/build-with-claude/structured-outputs>. Supports: (a) Claude Sonnet 4.5 + Opus 4.1 as launch models, Haiku 4.5 to follow; (b) the `structured-outputs-2025-11-13` beta header; (c) grammar-constrained decoding approach; (d) Pydantic + Zod integrations as first-class. Verified via WebSearch 2026-04-17 (official docs URL surfaced).
+[^3]: Anthropic. "Structured Outputs on the Claude Developer Platform." Originally a public beta (14 November 2025), now **generally available**. <https://platform.claude.com/docs/en/build-with-claude/structured-outputs>. Verified via WebFetch 2026-07-17. Supports the CURRENT (GA) API surface: (a) structured outputs are GA on Fable 5, Mythos 5, Opus 4.8/4.7/4.6/4.5, Sonnet 5/4.6/4.5, Haiku 4.5, plus Bedrock and Vertex; (b) the `structured-outputs-2025-11-13` beta header is **deprecated** (still works during a transition window); (c) `output_format` moved to **`output_config.format`**; (d) strict tool-input validation is the top-level tool field **`tools[].strict: true`** (requires `additionalProperties: false` + `required`); (e) `client.messages.parse()` as the recommended validated path; (f) grammar-constrained decoding; (g) Pydantic + Zod integrations. (The April draft described this as a beta with the deprecated header and the old `output_format` parameter and named only "Sonnet 4.5 / Opus 4.1" — corrected here.)
 
 [^4]: Anthropic Engineering. "Building Effective AI Agents." December 2024. <https://www.anthropic.com/research/building-effective-agents>. Supports: the five workflow patterns (prompt chaining, routing, parallelization, orchestrator-workers, evaluator-optimizer) and the "start simple, add agentic only when simpler solutions fall short" framing. Verified via WebSearch 2026-04-17.
 
@@ -366,7 +373,7 @@ Expected outcome: you will find Pattern A reads correct-but-flat, Pattern B read
 
 [^9]: Perell, David. "Austin Rief & Alex Lieberman: Morning Brew's Secret Sauce." David Perell podcast. <https://perell.com/podcast/austin-rief-amp-alex-lieberman-morning-brews-secret-sauce/>. Supports: the Morning Brew voice framing ("your friend telling you the news... at a bar after work... not your boss in a suit"), the "modern business leader" persona, and voice-as-moat thesis. Verified via WebSearch 2026-04-17.
 
-[^10]: "VegaChat: A Robust Framework for LLM-Based Chart Generation and Assessment." arxiv 2601.15385, 2025. <https://arxiv.org/html/2601.15385>. Supports: the Spec Score / Vision Score evaluation metrics for LLM-to-Vega-Lite generation, and the GPT-4o-only bullet-chart result used in Layer 1 Pattern C. Verified via WebSearch 2026-04-17.
+[^10]: "VegaChat: A Robust Framework for LLM-Based Chart Generation and Assessment." arxiv 2601.15385, **published January 21, 2026** (the April draft mis-dated it 2025). <https://arxiv.org/abs/2601.15385>. Verified via WebSearch 2026-07-17. Supports: the Spec Score / Vision Score evaluation metrics for LLM-to-Vega-Lite generation, and that VegaChat's chart generator is **GPT-4o-mini** (which the paper reports struggling with advanced VL features like transformations and faceting). The "only GPT-4o-class models reliably produce correct bullet-charts" observation belongs to the 2507.22890 survey[^12], not to VegaChat — that attribution is corrected in Layer 1.
 
 [^11]: Ko, Hyungkwon et al. "Natural Language Dataset Generation Framework for Visualizations Powered by Large Language Models." CHI 2024 / arxiv 2309.10245. <https://arxiv.org/abs/2309.10245>. Supports: the 89.4% / 76.0% L1/L2 caption-extraction accuracy on real-world Vega-Lite specs, and the VL2NL framework cited in Pattern C. Verified via WebSearch 2026-04-17.
 

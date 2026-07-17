@@ -400,8 +400,7 @@ The human-in-loop argument assumes that human review checkpoints catch real erro
 **Optional**
 
 - OpenHands paper (formerly OpenDevin), arxiv.org/abs/2407.16741.[^10] The CodeAct framework and SWE-bench methodology for full-autonomy agents.
-- Anthropic Claude Sonnet 4.5 release, anthropic.com/news/claude-sonnet-4-5.[^11] Primary source for the 77.2%/82.0% SWE-bench numbers.
-- Anthropic Claude Opus 4.5 release, anthropic.com/news/claude-opus-4-5.[^12] Primary source for the 80.9% number and multi-agent orchestration claims.
+- Anthropic Claude Opus 4.8 release, anthropic.com/news/claude-opus-4-8.[^12] Current (May 2026) primary source: 88.6% SWE-bench Verified, dynamic workflows. The Sonnet 4.5 / Opus 4.5 releases[^11] are the historical anchors (77.2%/82.0% and 80.9%).
 
 ---
 

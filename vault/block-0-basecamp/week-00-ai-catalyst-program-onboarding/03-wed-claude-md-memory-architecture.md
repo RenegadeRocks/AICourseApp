@@ -51,12 +51,14 @@ This is an architectural lesson. You will direct Claude Code; you will not hand-
 
 The single most important mental model: `CLAUDE.md` is a convention, not a data structure. The Claude Code harness reads files from disk at specific paths and inlines them into the system prompt before your first message. That is the whole mechanism. Everything else — precedence, imports, nested loading — is policy layered on top.
 
-There are **four tiers** where `CLAUDE.md` can live.[^1]
+There are **four scope tiers** where `CLAUDE.md` can live, plus a documented *local* tier and per-directory *nested* files.[^1]
 
-1. **Enterprise policy.** A single file, installed by IT at an OS-specific path (`/Library/Application Support/ClaudeCode/CLAUDE.md` on macOS, `C:\ProgramData\ClaudeCode\CLAUDE.md` on Windows, `/etc/claude-code/CLAUDE.md` on Linux). This tier is designed for regulated environments: "do not paste PII into prompts," "do not call external APIs from this codebase," "always produce audit-trail comments on modified files." In practice most individual operators never see this tier; in a regulated org you will absolutely see it.
-2. **User tier — `~/.claude/CLAUDE.md`.** This is *you*. Your voice, your permanent preferences, things that should be true in every repo you ever open. "I write in British English." "Never use emojis in committed code unless I explicitly ask." "Assume I'm not a beginner; skip explanations of basic Python syntax." "I want concise commits, imperative mood, under 72 chars." Edit it with `/memory` or with your editor of choice — [Simon Willison, who has been using Claude Code heavily since its May 2025 public release, prefers editing `CLAUDE.md` directly rather than going through the `#`-prefix memory shortcut, because the shortcut can produce sloppy phrasing the model then internalizes](https://simonwillison.net/tags/claude-code/).[^9]
-3. **Project tier — `./CLAUDE.md` at the repo root.** This is *the team*. Build commands, test commands, architectural invariants, "do not touch `migrations/` directly, always generate via Alembic," domain vocabulary, the list of files that cause pain if you edit them. Boris Cherny — who created Claude Code — describes his team's practice bluntly: *"we keep one shared `CLAUDE.md` checked into git, everyone updates it multiple times a week, and the rule is: when Claude does something wrong, add a line so it doesn't repeat."*[^7] If you take one thing from this lesson, take that rule. It's the flywheel that makes `CLAUDE.md` compound instead of rot.
-4. **Nested tier — `./packages/api/CLAUDE.md`, `./services/billing/CLAUDE.md`, etc.** Subdirectory `CLAUDE.md` files live at any depth. They exist for monorepos where `/packages/api` has different conventions than `/packages/web` — different languages, different test runners, different deployment targets.
+1. **Managed-policy (enterprise).** A single file, installed by IT at an OS-specific path — `/Library/Application Support/ClaudeCode/CLAUDE.md` on macOS, **`C:\Program Files\ClaudeCode\CLAUDE.md`** on Windows, `/etc/claude-code/CLAUDE.md` on Linux/WSL. (The April draft gave the Windows path as `C:\ProgramData\...`; current docs say `C:\Program Files\...`.) It can also be embedded directly via a `claudeMd` key in `managed-settings.json`. This tier is designed for regulated environments and **cannot be excluded** by individual settings. Most individual operators never see it; in a regulated org you will.
+2. **User tier — `~/.claude/CLAUDE.md`.** This is *you*: voice, permanent preferences, things true in every repo. "I write in British English." "Never use emojis in committed code unless I explicitly ask." Edit it with `/memory` or your editor — [Simon Willison prefers editing `CLAUDE.md` directly rather than the `#`-prefix shortcut, because the shortcut can produce sloppy phrasing the model then internalizes](https://simonwillison.net/tags/claude-code/).[^9]
+3. **Project tier — `./CLAUDE.md` or `./.claude/CLAUDE.md`.** This is *the team*. Build/test commands, architectural invariants, "do not touch `migrations/` directly," domain vocabulary. Boris Cherny — who created Claude Code — describes his team's practice bluntly: *"we keep one shared `CLAUDE.md` checked into git, everyone updates it multiple times a week, and the rule is: when Claude does something wrong, add a line so it doesn't repeat."*[^7] It's the flywheel that makes `CLAUDE.md` compound instead of rot.
+4. **Local tier — `./CLAUDE.local.md`.** Personal, project-specific, gitignored preferences: your sandbox URLs, preferred test data. Loads alongside project `CLAUDE.md` and is treated the same way — but only exists in the worktree where you created it (to share across worktrees, import a file from `~/`).[^1]
+
+Below these, **nested** `CLAUDE.md` files (`./packages/api/CLAUDE.md`, etc.) live at any depth for monorepos where subdirectories differ — different languages, test runners, deployment targets. And for large projects, `.claude/rules/` holds topic-specific files that can be **path-scoped** (see Layer 6).
 
 ### Load order and merge semantics
 
@@ -65,47 +67,43 @@ Here is where the harness design matters, and where most operators have a wrong 
 - **Files at or above the working directory load in full at session launch.** That means: enterprise policy, user `CLAUDE.md`, every `CLAUDE.md` in the chain from filesystem root down to your current directory — all of them, concatenated into the session system prompt before you type a single token.[^1]
 - **Files in subdirectories load on demand.** A `CLAUDE.md` inside `./packages/api/` is *not* in your context at session start. It only gets pulled in when Claude actually reads a file under `./packages/api/` — at which point the harness detects the subdirectory `CLAUDE.md` and inlines it.[^1]
 
-Precedence, when rules conflict, runs **most-specific-wins**: nested subdirectory beats project root beats user beats enterprise. Intuitively: the closer the file to the code Claude is currently touching, the more authority it has. Caveat: enterprise policy files, in a properly-configured org, are *designed* to be non-overridable — they set hard rules (e.g. "never exfiltrate to a non-allowlisted domain") that are enforced further up the stack by hooks and allowlists, not just by prompt ordering. Don't assume "most specific wins" lets a project file override a compliance rule; in most orgs it won't, because the real enforcement is in `settings.json`, not `CLAUDE.md`.
+Load order runs broadest-scope-first, most-specific-last: managed policy, then user, then every `CLAUDE.md`/`CLAUDE.local.md` from filesystem root down to your cwd (project instructions therefore appear in context *after* user instructions, and `CLAUDE.local.md` is appended after `CLAUDE.md` within each directory).[^1] When rules conflict, the effect is roughly **most-specific-wins** — the docs are blunt that "if two rules contradict each other, Claude may pick one arbitrarily," so this is a tendency from load order and salience, not a hard symbolic priority. Caveat: managed-policy files are *designed* to be non-overridable, but the real enforcement of a compliance rule ("never exfiltrate to a non-allowlisted domain") is in managed `settings.json` (`permissions.deny`, `sandbox.enabled`), enforced by the client regardless of what Claude decides — not in `CLAUDE.md`, which only shapes behavior.
 
 ### Imports via `@path/to/file`
 
-A `CLAUDE.md` can reference another file using the `@` notation — e.g. `@docs/api-conventions.md` or `@../shared-rules.md`. When the harness loads the parent, it inlines the referenced file as a separate context entry before the parent.[^1] This is how you keep a small, readable `CLAUDE.md` in the repo while keeping detailed specs in separate files.
+A `CLAUDE.md` can reference another file using `@path/to/import` — e.g. `@docs/api-conventions.md` or `@../shared-rules.md`. Imported files are expanded and loaded into context at launch alongside the `CLAUDE.md` that references them.[^1] This is how you keep a small, readable `CLAUDE.md` while keeping detailed specs in separate files. (Note: `@`-imports help *organization*, not context budget — the imported files still load at launch and consume tokens.)
 
-Two operator-level gotchas:
+Three operator-level facts the current docs make explicit:[^1]
 
-- **Imports don't traverse (empirical as of Claude Code v2.x, early 2026).** If `CLAUDE.md` imports `docs/style.md` and `style.md` itself contains an `@` import to another file, the second-level import may or may not be followed depending on your harness version. Tested on Claude Code v2.1.x in early 2026; older and future versions may differ, and this behaviour is not contractually specified in the docs. Don't build deep import trees. One level is reliable; two is not guaranteed.
-- **Imports are resolved relative to the file that contains them.** An `@../config.md` inside a nested `CLAUDE.md` points somewhere different from the same line in the root `CLAUDE.md`. This bites people.
+- **Imports recurse, to a maximum depth of four hops.** If `CLAUDE.md` imports `style.md` and `style.md` imports another file, that chain *is* followed — up to four levels deep. (The April draft claimed imports "don't traverse; one level is reliable, two is not guaranteed." That was wrong even then and is contradicted by current docs.)
+- **Imports resolve relative to the file that contains them**, not the working directory. An `@../config.md` inside a nested `CLAUDE.md` points somewhere different from the same line in the root `CLAUDE.md`.
+- **Import parsing skips Markdown code spans and fenced blocks**, and the first time a project uses *external* imports Claude Code shows a one-time approval dialog. To mention a path without importing it, wrap it in backticks: `` `@README` `` stays literal; `@README` outside backticks imports.
 
 ### Quantitative rigor — how big is too big?
 
-Every token in loaded `CLAUDE.md` files is a token *not* available for your actual work. Sonnet 4.5 and Opus 4.5 ship with 200K-token context windows. A 2,000-token `CLAUDE.md` is 1% of the budget. A team with a 30K-token bloated `CLAUDE.md` + user file + two nested files is spending 15%+ of every session on standing instructions. Measurable consequences:
+Every token in loaded `CLAUDE.md` files is a token *not* available for your actual work. The current defaults (Sonnet 5, Opus 4.8) ship with 1M-token context windows — but a bigger window is not a licence to bloat, because `MEMORY.md` is capped at 200 lines / 25 KB, adherence drops on long `CLAUDE.md` files (the docs target under 200 lines each), and the new tokenizer means the *same* instructions cost ~30% more tokens than they did on Sonnet 4.6. A team with a 30K-token bloated `CLAUDE.md` + user file + two nested files is burning standing-instruction budget on every session — and compaction hits sooner. Measurable consequences:
 
 - Longer sessions compact earlier — the harness summarises older turns to make room once you approach ~80% fill, and compaction is lossy.
 - Tool-heavy sessions (many Bash/Read results) hit the ceiling faster, because tool output and your memory files share the same budget.
 
 Rough operational ceiling most teams converge on: **project `CLAUDE.md` under 2,000 words, user `CLAUDE.md` under 800 words**. Anything bigger wants to be a skill or an imported doc, not a standing instruction.
 
-## Layer 2 — Auto-memory (v2.1.59+): the second memory system
+## Layer 2 — Auto-memory: the second memory system
 
-In late 2025, Anthropic shipped a second, parallel memory system — auto-memory — with Claude Code v2.1.59.[^6] It is not a replacement for `CLAUDE.md`; the two coexist and serve different purposes. Conflating them is the single most common mistake operators make in 2026.
+In late 2025, Anthropic shipped a second, parallel memory system — auto-memory — in Claude Code.[^6] It is not a replacement for `CLAUDE.md`; the two coexist and serve different purposes. `CLAUDE.md` is what *you* write; auto-memory is what *Claude* writes for itself, saving notes about build commands, debugging insights, and preferences it discovers as it works. Conflating them is the single most common mistake operators make in 2026.
 
 ### Where it lives
 
-Auto-memory files live under `~/.claude/projects/<project-slug>/memory/`. The directory contains:
+Auto-memory files live under `~/.claude/projects/<project>/memory/`. Crucially, `<project>` is **derived from the git repository, so all worktrees and subdirectories within the same repo share one auto-memory directory** — a fact that matters the moment you start running parallel worktrees (Saturday). Outside a git repo, the project root is used. You can relocate it with `autoMemoryDirectory` in settings.[^2] The directory contains:
 
-- `MEMORY.md` — the **index**, not the content. The first ~200 lines or ~25 KB (whichever hits first) are auto-loaded at session start.[^2]
-- Topic files — e.g. `user_profile.md`, `feedback_commit_style.md`, `project_overview.md`, `reference_key_paths.md`. These are *not* auto-loaded. They sit on disk until `MEMORY.md` references them and the model decides (or is explicitly directed) to read them via Bash/Read.
+- `MEMORY.md` — the **index**, not the content. The first 200 lines or 25 KB (whichever hits first) are auto-loaded at session start; content beyond that threshold is dropped on load, so Claude Code nudges (and eventually errors) to keep the index short.[^2]
+- Topic files — e.g. `debugging.md`, `api-conventions.md`, `patterns.md`. These are *not* auto-loaded. They sit on disk until `MEMORY.md` references them and the model reads them on demand.
 
-This distinction — *index auto-loads, topic files load on demand* — is the design decision that makes auto-memory scalable. You can accumulate hundreds of kilobytes of project-specific memory without bloating every session, because only the index pays the context cost up-front.
+This distinction — *index auto-loads, topic files load on demand* — is the design decision that makes auto-memory scalable: you can accumulate hundreds of kilobytes without bloating every session.
 
-### The four memory categories
+### What lands in auto-memory
 
-By convention (not hard enforcement), auto-memory files sort into four prefixes:[^2]
-
-- **user_** — facts about the human operator. Preferences, background, voice, domains of expertise.
-- **feedback_** — rules the model learned by being corrected. "User prefers X over Y." "Don't use emojis unless asked." These accumulate when the operator says things like *"stop doing X"* and the harness saves the correction.
-- **project_** — state of the current project. Current phase, decisions, open questions, the thing we're working on this week.
-- **reference_** — durable artefacts. URLs already verified, paths, canonical docs, re-usable citations. The kind of thing you'd otherwise re-research every session.
+There is **no prefix convention** in the current docs (the April draft claimed a `user_`/`feedback_`/`project_`/`reference_` scheme attributed to the docs; the docs describe plainly named topic files like `debugging.md` instead — the scheme was overclaimed). What the docs *do* specify is the kind of content Claude saves for itself: build commands, debugging insights, architecture notes, code-style preferences, and workflow habits it would otherwise re-derive. Claude doesn't save every session — it decides what's worth remembering based on whether it would help a future conversation. The useful operator taxonomy to keep in your head is still: facts about *you*, corrections you gave, current project *state*, and durable *references* — just don't expect filename prefixes to enforce it.
 
 ### How auto-memory differs from CLAUDE.md
 
@@ -185,7 +183,7 @@ The fifth memory layer isn't a memory layer at all — it's the harness's behavi
 
 Everything in `CLAUDE.md`, auto-memory, and skills is **suggestion**: text the model reads and may or may not follow. A line in `CLAUDE.md` that says *"always run tests before committing"* depends on the model actually doing that. A hook in `settings.json` that runs `npm test` on every `PostToolUse` after a `Write` to `src/**` happens whether the model wants it to or not. The harness runs it.
 
-Hooks are therefore **enforcement memory**: the rules you can't trust the model to remember, implemented as deterministic code. As of early 2026, Claude Code supports 21 lifecycle events with four handler types, blocking or non-blocking, via command, script, or MCP tool.[^8]
+Hooks are therefore **enforcement memory**: the rules you can't trust the model to remember, implemented as deterministic code. As of mid-2026 Claude Code documents roughly **30 lifecycle events** — including `SessionStart`, `PreToolUse`, `PostToolUse`, `SubagentStart`/`SubagentStop`, `WorktreeCreate`/`WorktreeRemove`, `PreCompact`/`PostCompact`, and `InstructionsLoaded` (which fires when CLAUDE.md or `.claude/rules/*.md` load — useful for debugging exactly what's in context) — with five handler types: `command`, `http`, `mcp_tool`, `prompt`, and `agent`.[^8]
 
 Common uses:
 
@@ -198,7 +196,7 @@ The design rule: *if a rule matters enough that you'd be angry if Claude ignored
 
 ### The hooks security surface
 
-Hooks are arbitrary shell commands run on the operator's machine. That is exactly as dangerous as it sounds. Check Point Research disclosed **CVE-2025-59536** in 2026: a malicious project file could inject hooks into `settings.local.json` that exfiltrated API tokens when the operator opened the repo.[^14] Anthropic patched the load path; the broader lesson stands: **never accept `settings.json` / `settings.local.json` from an untrusted source**, and review hook definitions in PRs the way you'd review a GitHub Action. A hook is a `curl | bash` running under your user on your machine every time Claude Code touches a file.
+Hooks are arbitrary shell commands run on the operator's machine. That is exactly as dangerous as it sounds. Check Point Research disclosed **CVE-2025-59536** (CVSS 8.7): the mechanism was a **startup trust-dialog bypass** — repository-controlled configuration (hooks, MCP servers, env) could be tricked into executing *before* the user accepted the startup trust dialog, so simply opening a malicious repo could run arbitrary shell commands and exfiltrate API keys. Anthropic patched it in **Claude Code v1.0.111**.[^14] The broader lesson stands: **never open an untrusted repo, or accept its `settings.json` / `settings.local.json`, without review**, and review hook definitions in PRs the way you'd review a GitHub Action. A hook is a `curl | bash` running under your user on your machine.
 
 ## Layer 6 — The live controversy: converging spec or divergent designs?
 
@@ -206,11 +204,11 @@ Step back from Claude Code for a moment. The same design problem — *how do we 
 
 ### Position A — "one spec to rule them all"
 
-In mid-2025, Sourcegraph, OpenAI, Google, Cursor and others published `AGENTS.md` as a proposed cross-tool standard, subsequently placed under the Agentic AI Foundation at the Linux Foundation.[^12][^13] Claude Code, Cursor, GitHub Copilot, Gemini CLI, Windsurf, Aider, Zed, Warp, and RooCode all announced some level of `AGENTS.md` support. The argument: *your team uses multiple agents, contributors open the repo in whatever tool they prefer, and having the same standing instructions live in five separate files is ridiculous. One file, any agent.* Proponents analogise to `README.md` — a de-facto standard that won on gravity, not technical superiority.
+In mid-2025, OpenAI, Google, Cursor and others published `AGENTS.md` as a proposed cross-tool standard. On December 9, 2025 it was formally donated (with MCP and Block's goose) to the Linux Foundation's new **Agentic AI Foundation**, whose founding members include AWS, Anthropic, Block, Bloomberg, Cloudflare, Google, Microsoft, and OpenAI — and by early 2026 AGENTS.md was adopted by 60,000+ repos and read natively by Codex, Cursor, Copilot, Devin, Gemini CLI, and others.[^12] The argument: *your team uses multiple agents, contributors open the repo in whatever tool they prefer, and having the same standing instructions live in five separate files is ridiculous. One file, any agent.* Proponents analogise to `README.md` — a de-facto standard that won on gravity, not technical superiority. Claude Code itself reads `CLAUDE.md`, not `AGENTS.md`, but the docs recommend a one-line `@AGENTS.md` import (or a symlink) so both tools read the same instructions.[^1]
 
 ### Position B — "memory is structural to the agent loop"
 
-Anthropic's design rationale, visible in the four-tier `CLAUDE.md` hierarchy plus auto-memory plus skills plus subagents plus hooks, is that memory architecture is *not a thin file — it's a system that encodes how the agent loop uses context*. A `CLAUDE.md` is loaded at a specific time in a specific way with specific precedence rules and specific import semantics, because those choices interact with Claude Code's particular harness, context management, and tool use. An `AGENTS.md` that has to work for Cursor (which uses different rule scoping with glob patterns), Aider (which runs a much smaller context model), and Claude Code (which has skills + auto-memory + hooks) will necessarily be a lowest-common-denominator file — the intersection of what every agent can use — rather than any one agent's full expressive power. Cursor's own Project Rules with glob-based file scoping, for example, don't have a clean analogue in `CLAUDE.md`; Claude Code's four-tier hierarchy doesn't have a clean analogue in `.cursorrules`.[^11]
+Anthropic's design rationale, visible in the `CLAUDE.md` hierarchy plus auto-memory plus skills plus subagents plus hooks, is that memory architecture is *not a thin file — it's a system that encodes how the agent loop uses context*. A `CLAUDE.md` is loaded at a specific time in a specific way with specific precedence and import semantics, because those choices interact with Claude Code's particular harness. An `AGENTS.md` that must work for Cursor, Aider (a much smaller context model), and Claude Code (skills + auto-memory + hooks) tends toward a lowest-common-denominator file rather than any one agent's full expressive power. (Note the moving target: the glob-based rule scoping Cursor pioneered now *does* have a clean Claude Code analogue — `.claude/rules/` files with a `paths:` frontmatter field, covered in Layer 7. The April draft claimed it had no analogue; that's no longer true, which is itself evidence of the convergence Position A predicts.)[^11]
 
 ### My read
 
@@ -287,17 +285,19 @@ A monorepo with 12 packages, each with its own `CLAUDE.md`, plus a root `CLAUDE.
 
 ### 4. Auto-memory drift over long projects
 
-The failure mode multiple GitHub issues in 2026 flag hardest.[^10][^16] Auto-memory accumulates entries across sessions. Some are correct. Some are corrections of the corrections. Some were correct last month and are wrong now. The harness does not, in current versions, reconcile contradictions well. You end up with a `MEMORY.md` listing "user prefers tabs" *and* "user prefers spaces" *and* "user prefers tabs again" — and Claude either ignores all of them or picks the wrong one. Issue #37314 on `anthropics/claude-code` documents exactly this: *"Claude repeatedly fails to apply its own memory/feedback — same mistakes recur across sessions."*[^16] Issue #23544 is the feature request to disable auto-memory entirely, which as of early 2026 had no fully-supported off switch and significant user traction.[^10]
+The failure mode multiple GitHub issues in 2026 flagged hardest.[^10][^16] Auto-memory accumulates entries across sessions. Some are correct. Some are corrections of the corrections. Some were correct last month and are wrong now. Older versions did not reconcile contradictions well — you could end up with a `MEMORY.md` listing "user prefers tabs" *and* "user prefers spaces" *and* "user prefers tabs again." Issue #37314 documents exactly this: *"Claude repeatedly fails to apply its own memory/feedback — same mistakes recur across sessions."*[^16] Issue #23544 was the feature request to disable auto-memory entirely.[^10] That request has since been fully answered: current docs support a `/memory` toggle, `autoMemoryEnabled: false` in settings, and a `CLAUDE_CODE_DISABLE_AUTO_MEMORY=1` environment variable.[^2] Newer versions also actively guard the index against bloat, warning (and eventually erroring) when `MEMORY.md` nears the 200-line / 25 KB read limit.
 
-**Mitigation:** periodic `memory/` pruning. Treat it like a file the model wrote that needs a human editor once a month. Or — and this is increasingly common on teams that are burned by drift — disable auto-memory project-by-project via `autoMemoryEnabled: false` in project settings when the team prefers `CLAUDE.md` as the single source of truth.
+**Mitigation:** periodic pruning — treat `memory/` like a file the model wrote that needs a human editor once a month — or, for teams that prefer `CLAUDE.md` as the single source of truth, turn auto-memory off outright via `autoMemoryEnabled: false` (a fully supported switch now, not the workaround it was in early 2026).
 
 ### The controversy in one sentence
 
 Anthropic's positioning: auto-memory is essential infrastructure for agents that learn across sessions.[^2] A non-trivial slice of users in the GitHub issue tracker argue it's too opinionated for teams that already have disciplined `CLAUDE.md` hygiene, and the drift costs outweigh the "learning" benefits until the harness ships real contradiction resolution.[^10][^16] There is no "correct" answer yet; pick the tradeoff that fits your team's discipline.
 
-## Layer 9 — Operator war story: the memory audit
+## Layer 9 — Composite scenario: the memory audit
 
-A mid-sized B2B SaaS shop I worked with (not named here for obvious reasons) ran a three-month rollout of Claude Code across a 14-person engineering team. Month one felt magical. By month three, three senior engineers had quietly stopped using it for anything above tab-completion. When we audited, the memory architecture looked like this:
+*This is an illustrative composite, not a real named engagement — it stitches together the failure modes that recur across the GitHub issue threads and practitioner writeups cited in this lesson. Treat the numbers as representative, not reported.*
+
+Picture a mid-sized B2B SaaS shop running a three-month rollout of Claude Code across a 14-person engineering team. Month one feels magical. By month three, three senior engineers have quietly stopped using it for anything above tab-completion. An audit of the memory architecture would plausibly find:
 
 - One project `CLAUDE.md`, 4,100 words, written nine months earlier, never updated, referring to a deprecated testing framework and two repositories that had been merged.
 - Every engineer had a user `CLAUDE.md` averaging 600 words, with no coordination between them — different commit-message conventions, different voice instructions, two engineers who'd written "always use the legacy ORM" because they'd gotten burned once.
@@ -312,12 +312,10 @@ What we changed, in rough order of impact:
 1. **Project `CLAUDE.md` halved in size, rewritten in a morning.** Cut everything stale, imported the live style guide with `@docs/style.md`, listed the five don't-touch files by path.
 2. **Added two hooks:** format-on-save (`prettier --write`) and a test gate on `git commit` (exit 2 on failure). Those two hooks eliminated ~60% of the class of complaints that had been framed as "Claude ignores our rules." The rules just weren't enforced rules.
 3. **Consolidated skills to three**, each with non-overlapping triggers. Killed the other two.
-4. **Turned off auto-memory project-wide** in `settings.json` (the workaround pattern from the GitHub issue thread)[^10] because the team's `CLAUDE.md` discipline was higher than auto-memory's contradiction handling. Your team may choose differently.
+4. **Turned off auto-memory project-wide** via `autoMemoryEnabled: false` in `settings.json`[^2] because the team's `CLAUDE.md` discipline was higher than auto-memory's contradiction handling. Your team may choose differently.
 5. **Instituted the "when Claude does it wrong, add a line" ritual** for project `CLAUDE.md`.[^7] One PR a week, 2–5 lines added, 1–2 lines pruned.
 
-Four weeks later the three senior engineers were back on Claude Code. Bug count in commit messages dropped. Nobody describes this as magical anymore, which is the correct outcome. It's infrastructure.
-
-The lesson is not *"copy what they did."* It's *"memory architecture is a design problem, not a default. You will have to audit yours, probably twice a year, forever."*
+Four weeks later the three senior engineers would plausibly be back on Claude Code, the bug count in commit messages down. The point of the scenario is not *"copy what they did"* — it's that memory architecture is a design problem, not a default. You will have to audit yours, probably twice a year, forever.
 
 ## Experiment — verify load order empirically
 
@@ -404,13 +402,13 @@ This sequence — hierarchy probe, auto-memory audit, skill activation, hook ver
 - **Letting auto-memory accumulate without review.** Treat `memory/` like a file the model wrote. It needs a human editor once a month or it drifts.
 - **Relying on `CLAUDE.md` lines to enforce critical rules.** If a rule is "must never happen," it's a hook, not a line. *"Never commit without running tests"* is a `PreToolUse` hook on `git commit`.
 - **Monorepo with a `CLAUDE.md` in every package.** You just loaded six files at session start. Consolidate with one root file that `@`-imports per-package specs *only when the agent is working in that package* — via a nested subdirectory `CLAUDE.md`, not a root import.
-- **Accepting `settings.local.json` from a PR without review.** Hooks run arbitrary shell commands under your user. CVE-2025-59536 was exactly this.[^14]
+- **Opening an untrusted repo or accepting its `settings.local.json` without review.** Hooks and project config run arbitrary shell commands under your user. CVE-2025-59536 (the trust-dialog bypass, patched in v1.0.111) was exactly this.[^14]
 
 ## Reflection questions
 
 1. If your project `CLAUDE.md` were the *only* onboarding artefact a new team member got, what would they still be missing after a week? That missing thing is either a skill, a hook, or a `docs/` file you need.
 2. Look at your own user `CLAUDE.md` (run `cat ~/.claude/CLAUDE.md`). Is every line true across every repo you will ever work in? What isn't?
-3. Which of the four auto-memory categories (user / feedback / project / reference) is your `memory/` directory heaviest in, and what does the imbalance tell you?
+3. Open your own `memory/` directory with `/memory`. Sort its content mentally into four buckets — facts about you, corrections you gave, current project state, durable references. Which bucket is heaviest, and what does the imbalance tell you? (Remember the docs impose no filename convention; the buckets are yours.)
 4. Name one rule currently in your `CLAUDE.md` that should be a hook. What's stopping you from promoting it today?
 5. If your team runs both Claude Code and Cursor, where are the conventions *currently* duplicated, and which tier is the source of truth when they drift?
 6. For the most expensive failure in your last month of agent use — where Claude did something wrong — which memory tier should have prevented it, and why didn't it?
@@ -434,27 +432,27 @@ Five disagreements a serious reviewer would raise with this lesson, with specifi
 **Must-read**
 
 - Claude Code: *How Claude remembers your project* — the primary source for everything in Layers 1 and 2. [code.claude.com/docs/en/memory](https://code.claude.com/docs/en/memory).[^1]
-- Claude Code v2.1.59 release notes — auto-memory introduction, the one change that justified this whole lesson being rewritten. [claude-world.com/articles/claude-code-2159-release](https://claude-world.com/articles/claude-code-2159-release/).[^6]
+- Claude Code docs, auto-memory section — the first-party reference for the second memory system (per-repo directory, `MEMORY.md` index, off switches). [code.claude.com/docs/en/memory](https://code.claude.com/docs/en/memory).[^6]
 - Anthropic engineering: *Equipping agents for the real world with Agent Skills* — the design rationale for skills as procedural memory. [anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills).[^5]
 
 **Recommended**
 
 - Gergely Orosz interviewing Boris Cherny — *Building Claude Code with Boris Cherny* — the memory update ritual described as the team uses it. [newsletter.pragmaticengineer.com/p/building-claude-code-with-boris-cherny](https://newsletter.pragmaticengineer.com/p/building-claude-code-with-boris-cherny).[^7]
 - Simon Willison's Claude Code tag — ongoing field notes, 2025–2026. [simonwillison.net/tags/claude-code](https://simonwillison.net/tags/claude-code/).[^9]
-- TokenCentric: *AI Coding Assistant Config Files Compared* — the clearest single comparison of CLAUDE.md, `.cursorrules`, and `copilot-instructions.md` in April 2026. [tokencentric.app/blog/ai-coding-config-files-compared](https://www.tokencentric.app/blog/ai-coding-config-files-compared).[^12]
+- Linux Foundation press release on the Agentic AI Foundation — the neutral-governance answer to the "will config formats fragment?" question, with the AGENTS.md cross-tool adoption list. [linuxfoundation.org/press/...agentic-ai-foundation](https://www.linuxfoundation.org/press/linux-foundation-announces-the-formation-of-the-agentic-ai-foundation).[^12]
 - Check Point Research on CVE-2025-59536 — read this once, then never accept `settings.local.json` from a stranger again. [research.checkpoint.com/2026/rce-and-api-token-exfiltration-through-claude-code-project-files-cve-2025-59536](https://research.checkpoint.com/2026/rce-and-api-token-exfiltration-through-claude-code-project-files-cve-2025-59536/).[^14]
 
 **Optional**
 
 - GitHub issue #23544 (disable auto-memory) and #37314 (feedback not applied) — read the comment threads; they are the ground truth for the auto-memory controversy.[^10][^16]
 - InfoQ: *Claude Code Subagents Enable Modular AI Workflows with Isolated Context* — subagents-as-memory-mechanism from a neutral outlet.[^15]
-- *The Prompt Shelf* — `.cursorrules` vs `CLAUDE.md` vs `AGENTS.md` — useful for the cross-tool section.[^11]
+- AGENTS.md standard site and the Claude Code `.claude/rules/` docs — the cross-tool format and Claude Code's path-scoped-rules analogue. [agents.md](https://agents.md/), [code.claude.com/docs/en/memory](https://code.claude.com/docs/en/memory).[^11]
 
 ## Citations
 
-[^1]: *How Claude remembers your project* — Claude Code Docs. [code.claude.com/docs/en/memory](https://code.claude.com/docs/en/memory). Primary source for the four-tier hierarchy, load semantics, `@` imports, and precedence. Verified 2026-04-15.
+[^1]: *How Claude remembers your project* — Claude Code Docs, fetched 2026-07-17. [code.claude.com/docs/en/memory](https://code.claude.com/docs/en/memory). Primary source for the scope tiers (managed/user/project/local + nested), load order (root-down, most-specific-last), `@` imports (recurse to max depth 4, resolve relative to the containing file, skip code spans, external-import approval dialog), `.claude/rules/` path scoping, `CLAUDE.local.md`, `claudeMdExcludes`, managed `claudeMd`, and the Windows managed-policy path `C:\Program Files\ClaudeCode\CLAUDE.md`.
 
-[^2]: *How Claude remembers your project*, auto-memory section — Claude Code Docs. [code.claude.com/docs/en/memory](https://code.claude.com/docs/en/memory). Source for `memory/` directory layout, `MEMORY.md` as index, 200-line / 25 KB auto-load limit, four category prefixes. Verified 2026-04-15.
+[^2]: *How Claude remembers your project*, auto-memory section — Claude Code Docs, fetched 2026-07-17. [code.claude.com/docs/en/memory](https://code.claude.com/docs/en/memory). Source for `~/.claude/projects/<project>/memory/` layout keyed per git repo and shared across worktrees, `MEMORY.md` as index (first 200 lines / 25 KB loaded), plainly named topic files (no prefix convention), `autoMemoryDirectory`, and the three off switches (`/memory` toggle, `autoMemoryEnabled: false`, `CLAUDE_CODE_DISABLE_AUTO_MEMORY=1`).
 
 [^3]: *Extend Claude with skills* — Claude Code Docs. [code.claude.com/docs/en/skills](https://code.claude.com/docs/en/skills). Primary source for `SKILL.md` frontmatter schema, `description` field semantics, and skill activation. Verified 2026-04-15.
 
@@ -462,26 +460,26 @@ Five disagreements a serious reviewer would raise with this lesson, with specifi
 
 [^5]: *Equipping agents for the real world with Agent Skills* — Anthropic Engineering. [anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills). Source for progressive disclosure and the 500-line `SKILL.md` body recommendation. Published October 2025.
 
-[^6]: *Claude Code v2.1.59 Release Notes* — ClaudeWorld. [claude-world.com/articles/claude-code-2159-release](https://claude-world.com/articles/claude-code-2159-release/). Source for auto-memory introduction in v2.1.59, late 2025.
+[^6]: *How Claude remembers your project*, auto-memory section — Claude Code Docs, fetched 2026-07-17. [code.claude.com/docs/en/memory](https://code.claude.com/docs/en/memory). First-party source for auto-memory (introduced late 2025): Claude writes its own notes, keyed per git repository. (Re-cited from a third-party fan-site "v2.1.59 release notes" page that could not be re-verified in the 2026-07 refresh.)
 
 [^7]: Gergely Orosz, *Building Claude Code with Boris Cherny* — The Pragmatic Engineer, 2025. [newsletter.pragmaticengineer.com/p/building-claude-code-with-boris-cherny](https://newsletter.pragmaticengineer.com/p/building-claude-code-with-boris-cherny). Source for "when Claude does it wrong, add a line" team ritual, from Boris Cherny directly.
 
-[^8]: *Automate workflows with hooks* — Claude Code Docs. [code.claude.com/docs/en/hooks-guide](https://code.claude.com/docs/en/hooks-guide). Primary source for 21 hook lifecycle events, four handler types, and `settings.json` precedence. Verified 2026-04-15.
+[^8]: *Hooks reference* and *Automate workflows with hooks* — Claude Code Docs, fetched 2026-07-17. [code.claude.com/docs/en/hooks](https://code.claude.com/docs/en/hooks) and [code.claude.com/docs/en/hooks-guide](https://code.claude.com/docs/en/hooks-guide). Source for the ~30 documented lifecycle events (incl. `InstructionsLoaded`, `SubagentStart`/`Stop`, `WorktreeCreate`/`Remove`, `PreCompact`/`PostCompact`), five handler types (`command`/`http`/`mcp_tool`/`prompt`/`agent`), and `settings.json` precedence. (April draft's "21 events, four handler types" superseded.)
 
 [^9]: Simon Willison, tag: claude-code. [simonwillison.net/tags/claude-code](https://simonwillison.net/tags/claude-code/). Ongoing 2025–2026 coverage including Willison's preference for editing `CLAUDE.md` directly over the memory shortcut.
 
 [^10]: GitHub issue anthropics/claude-code #23544, *Need ability to disable auto-memory (MEMORY.md)*. [github.com/anthropics/claude-code/issues/23544](https://github.com/anthropics/claude-code/issues/23544). Feature request thread documenting user demand to disable auto-memory, early 2026.
 
-[^11]: *.cursorrules vs CLAUDE.md vs AGENTS.md* — The Prompt Shelf. [thepromptshelf.dev/blog/cursorrules-vs-claude-md](https://thepromptshelf.dev/blog/cursorrules-vs-claude-md/). Source for cross-tool comparison, 2025–2026.
+[^11]: *How Claude remembers your project* (`.claude/rules/` with `paths:` frontmatter glob scoping; the `@AGENTS.md` import pattern) and the AGENTS.md standard site — Claude Code Docs, [code.claude.com/docs/en/memory](https://code.claude.com/docs/en/memory), and [agents.md](https://agents.md/), both fetched 2026-07-17. First-party sources for Claude Code's path-scoped-rules analogue to Cursor's glob rules and for the cross-tool AGENTS.md format. (Replaces three SEO-blog URLs — thepromptshelf.dev, tokencentric.app, deployhq.com — that could not be verified in the 2026-07 refresh.)
 
-[^12]: *AI Coding Assistant Config Files Compared: CLAUDE.md vs .cursorrules vs copilot-instructions.md* — TokenCentric, 2026. [tokencentric.app/blog/ai-coding-config-files-compared](https://www.tokencentric.app/blog/ai-coding-config-files-compared). Source for side-by-side format comparison and `AGENTS.md` positioning.
+[^12]: Linux Foundation (2025-12-09). *Formation of the Agentic AI Foundation (AAIF), anchored by MCP, goose and AGENTS.md.* [linuxfoundation.org/press/...agentic-ai-foundation](https://www.linuxfoundation.org/press/linux-foundation-announces-the-formation-of-the-agentic-ai-foundation). Founding platinum members AWS, Anthropic, Block, Bloomberg, Cloudflare, Google, Microsoft, OpenAI; AGENTS.md adopted by 60,000+ repos, read natively by Codex, Cursor, Copilot, Devin, Gemini CLI. Verified 2026-07-17.
 
-[^13]: *How to Configure Every AI Coding Assistant: CLAUDE.md, AGENTS.md, Cursor Rules and More* — DeployHQ, 2026. [deployhq.com/blog/ai-coding-config-files-guide](https://www.deployhq.com/blog/ai-coding-config-files-guide). Source for AGENTS.md Linux-Foundation governance and cross-tool adoption list.
+[^13]: TechCrunch (2025-12-09). *OpenAI, Anthropic, and Block join new Linux Foundation effort to standardize the AI agent era.* [techcrunch.com/2025/12/09/openai-anthropic-and-block-join-new-linux-foundation-effort](https://techcrunch.com/2025/12/09/openai-anthropic-and-block-join-new-linux-foundation-effort-to-standardize-the-ai-agent-era/). Secondary coverage of the AAIF formation and the cross-tool adoption list. Verified 2026-07-17.
 
-[^14]: Check Point Research, *Caught in the Hook: RCE and API Token Exfiltration Through Claude Code Project Files — CVE-2025-59536*, 2026. [research.checkpoint.com/2026/rce-and-api-token-exfiltration-through-claude-code-project-files-cve-2025-59536](https://research.checkpoint.com/2026/rce-and-api-token-exfiltration-through-claude-code-project-files-cve-2025-59536/). Hooks-as-attack-surface disclosure.
+[^14]: Check Point Research, *Caught in the Hook: RCE and API Token Exfiltration Through Claude Code Project Files — CVE-2025-59536*, 2026. [research.checkpoint.com/2026/rce-and-api-token-exfiltration-through-claude-code-project-files-cve-2025-59536](https://research.checkpoint.com/2026/rce-and-api-token-exfiltration-through-claude-code-project-files-cve-2025-59536/). CVSS 8.7 startup trust-dialog bypass — project config (hooks/MCP/env) executes before the trust dialog is accepted; patched in Claude Code v1.0.111 (per Tenable/SentinelOne CVE entries). Verified 2026-07-17.
 
 [^15]: *Claude Code Subagents Enable Modular AI Workflows with Isolated Context* — InfoQ, August 2025. [infoq.com/news/2025/08/claude-code-subagents](https://www.infoq.com/news/2025/08/claude-code-subagents/). Third-party coverage of subagent context isolation.
 
 [^16]: GitHub issue anthropics/claude-code #37314, *Claude repeatedly fails to apply its own memory/feedback — same mistakes recur across sessions*. [github.com/anthropics/claude-code/issues/37314](https://github.com/anthropics/claude-code/issues/37314). Documentation of the auto-memory drift / contradiction failure mode, 2026.
 
-_last_verified: 2026-04-15_
+_last_verified: 2026-07-17_

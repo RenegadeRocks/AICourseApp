@@ -7,7 +7,7 @@ live_sessions:
   - '2026-05-23 — Getting your first client'
   - '2026-05-24 — How to Plan, Scope and Sell AI projects'
 study_window: 2026-05-18 to 2026-05-24
-last_verified: 2026-04-16
+last_verified: 2026-07-17
 ---
 
 # Week 1 — Getting your first client & planning, scoping, selling AI projects
@@ -42,7 +42,7 @@ Every AI services deal moves through the same seven stages: **ICP definition →
 
 ## What "L3 depth" means this week
 
-Every lesson engages: (1) at least one live controversy with both sides and named proponents — AI-personalized outreach raising or killing reply rates, flat-fee vs value-based vs milestone pricing under 30% token-cost swings, POC-as-trojan-horse vs POC-as-commitment-device, model-risk language in SOWs as bulletproofing vs deal-killer; (2) at least eight post-2024-01 citations — Parlance Labs engagement disclosures, a16z State of AI Services, Gartner 2026 AI-spend forecasts, Accenture Q1 FY2026 AI bookings, 30MPC Newsletter, Smartlead/Instantly benchmarks, patio11 / Hamel Husain / Jason Cohen / Rob Walling / Jason Lemkin / Chris Voss operator posts, and specific X/LinkedIn posts with URLs; (3) a runnable Claude Code or Claude.ai experiment producing a commercial artifact — ICP research CSV, outbound sequence, qualification rubric, phased project plan, full SOW draft, objection-response playbook; (4) a named reviewer lens — 3–5 operators with specific disagreements on specific paragraphs, not generic "Dunford would say simplify" lenses; (5) cross-domain examples across marketing, finance, legal, ops, product, research, support — never creative-director-only or engineer-only.
+Every lesson engages: (1) at least one live controversy with both sides and named proponents — AI-personalized outreach raising or killing reply rates, flat-fee vs value-based vs milestone pricing under two-directional token-cost swings (2026 saw frontier prices rise as well as fall), POC-as-trojan-horse vs POC-as-commitment-device, model-risk language in SOWs as bulletproofing vs deal-killer; (2) at least eight post-2024-01 citations — Parlance Labs engagement disclosures, a16z State of AI Services, Gartner 2026 AI-spend forecasts, Accenture Q1 FY2026 AI bookings, 30MPC Newsletter, Smartlead/Instantly benchmarks, patio11 / Hamel Husain / Jason Cohen / Rob Walling / Jason Lemkin / Chris Voss operator posts, and specific X/LinkedIn posts with URLs; (3) a runnable Claude Code or Claude.ai experiment producing a commercial artifact — ICP research CSV, outbound sequence, qualification rubric, phased project plan, full SOW draft, objection-response playbook; (4) a named reviewer lens — 3–5 operators with specific disagreements on specific paragraphs, not generic "Dunford would say simplify" lenses; (5) cross-domain examples across marketing, finance, legal, ops, product, research, support — never creative-director-only or engineer-only.
 
 ## How to study this week
 

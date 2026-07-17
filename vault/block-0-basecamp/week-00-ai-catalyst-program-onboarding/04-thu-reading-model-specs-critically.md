@@ -23,7 +23,9 @@ sources:
   - hamel-husain-evals-faq
   - eugene-yan-task-specific-evals
   - turpin-2023-unfaithful-cot
-last_verified: 2026-04-15
+  - anthropic-fable-5-mythos-5
+  - swe-bench-pro-leaderboard
+last_verified: 2026-07-17
 word_count_target: 6000
 ---
 
@@ -31,9 +33,9 @@ word_count_target: 6000
 
 ## Why this matters
 
-Every two to three months, one of four labs drops a model card with a table of benchmarks and a headline number. Your feed fills with "Opus 4.6 hits 80.8% on SWE-bench Verified," "GPT-5.2 Thinking hits 80%," "Gemini 3 Pro takes GPQA Diamond at 91.9% (93.8% with Deep Think)."[^1][^2][^3] Someone on your team forwards the chart, and within 48 hours there is a Slack thread, a migration plan, and a calendar invite to "evaluate switching models."
+Every few weeks in 2026, one of the labs drops a model card with a table of benchmarks and a headline number. Your feed fills with "Fable 5 hits 95% on SWE-bench Verified," "Mythos 5 leads SWE-bench Pro at 80.3%," "Gemini 3.1 Pro takes GPQA Diamond in the low-90s."[^1][^2][^3] Someone on your team forwards the chart, and within 48 hours there is a Slack thread, a migration plan, and a calendar invite to "evaluate switching models."
 
-The central skill of an AI-catalyst lead is *not* tracking who is ahead on which benchmark. It is knowing, within ninety seconds of opening a model card, which numbers are meaningful for your pipeline, which are load-bearing PR, which are almost certainly gamed, and which are telling you something real about a capability you care about. The cards are not designed to answer your question. They are designed to answer the *vendor's* question: *"why should this release trend on Hacker News?"* Those two questions overlap only partially.
+The central skill of an AI-pro lead is *not* tracking who is ahead on which benchmark. It is knowing, within ninety seconds of opening a model card, which numbers are meaningful for your pipeline, which are load-bearing PR, which are almost certainly gamed, and which are telling you something real about a capability you care about. The cards are not designed to answer your question. They are designed to answer the *vendor's* question: *"why should this release trend on Hacker News?"* Those two questions overlap only partially.
 
 By the end of today you will be able to, for any model card Anthropic/OpenAI/Google/xAI ships in the next twelve months:
 
@@ -42,12 +44,13 @@ By the end of today you will be able to, for any model card Anthropic/OpenAI/Goo
 3. Identify at least one benchmark on the card that is saturated or contaminated, and therefore cannot distinguish this release from the last three.
 4. Extract the one signal from the card that would actually change something about how you'd build, evaluate, or price your pipeline — or, more often, conclude that no such signal exists and you should ignore the release until independent numbers land.
 
-This is a calibration skill. Tomorrow's lesson on grading your own evals builds on it; Saturday's cohort discussion on model selection depends on it.
+This is a calibration skill, and it is the substrate under every model-choice decision the rest of the program asks you to make.
 
 ## Prerequisites
 
 - Claude.ai access and Claude Code installed.
-- Monday's lesson on prompting first principles, especially the faithfulness section — you'll use the same epistemic stance here.
+- [[01-mon-mental-model-of-llms|Monday's mental model of LLMs]], especially the reasoning-model and confabulation sections — you'll use the same epistemic stance ("what produced this number?") here that Monday used for "which of the three failures was this?".
+- [[02-tue-ai-native-builder-stack|Tuesday's tool-stack lesson]] introduced SWE-bench Verified vs Pro and the harness-confound problem; this lesson generalizes that skepticism to every benchmark on a card.
 - Familiarity with the idea that a "benchmark score" is a point estimate, not a capability. If you're hazy on confidence intervals, keep a tab open to Epoch AI's Capabilities Index methodology page.[^4]
 
 ## Layer 1 — The anatomy of a 2025-era model card
@@ -58,7 +61,7 @@ A modern vendor model card is a document of roughly 30–90 pages that mixes fou
 
 **2. The capability section.** Five to fifteen pages. Benchmark tables, agentic evaluations, a coding section, a math section, a reasoning section, sometimes a long-context section, sometimes a multimodal section. This is where vendor-reported benchmark numbers live. *This is the section most readers skim for the bold numbers and move on.* You are going to read it differently starting today.
 
-**3. The safety section.** Ten to forty pages. Refusal rates on harmful categories, jailbreak robustness, bioweapon/chem uplift evals, autonomy evals, persuasion evals, sometimes "Responsible Scaling Policy" / "Preparedness Framework" assessments with threshold thresholds. The GPT-5 system card runs to dozens of pages of this, with detailed sections on capabilities in biology, cyber, persuasion, and autonomy.[^7] Anthropic's cards spend comparable ink on RSP evals. xAI's Grok 4.1 card, despite being shorter, devotes a substantial portion to bio-risk and CBRN evaluations.[^8] Google's Gemini 3.1 Pro card likewise partitions capability from safety.[^9]
+**3. The safety section.** Ten to forty pages. Refusal rates on harmful categories, jailbreak robustness, bioweapon/chem uplift evals, autonomy evals, persuasion evals, sometimes "Responsible Scaling Policy" / "Preparedness Framework" assessments against capability thresholds. The GPT-5-era system cards run to dozens of pages of this, with detailed sections on capabilities in biology, cyber, persuasion, and autonomy.[^7] Anthropic's cards spend comparable ink on RSP evals — and by mid-2026 the safety section is where the whole *access model* of a release lives: Fable 5's card documents that high-risk queries (cyber/bio/chem/distillation) are blocked and answered by an Opus 4.8 fallback, and that its more-capable sibling Mythos 5 is restricted to Project Glasswing partners.[^23] xAI's Grok 4.1 card devotes a substantial portion to bio-risk and CBRN evaluations.[^8] Google's Gemini 3.1 Pro card likewise partitions capability from safety.[^9]
 
 The safety section is written by a different internal team than the capability section, typically operates under a different review process, and uses far more rigorous methodology. Read it with less skepticism — the incentive gradient is genuinely different. A lab publishing a safety eval showing their model performs badly on biorisk uplift has every reason to bury it and none to inflate it.
 
@@ -83,7 +86,7 @@ Most model cards from Anthropic, OpenAI, Google, and xAI now share a core set of
 
 **What it is.** A 500-problem human-filtered subset of SWE-bench, released by OpenAI's Preparedness team in August 2024 in collaboration with the SWE-bench authors.[^10] Each problem is a GitHub issue from a real open-source Python project (Django, sympy, scikit-learn, etc.); the model must produce a patch that passes the project's hidden test suite.
 
-**Why it took over.** The original SWE-bench had known issues: some problems were ambiguous, some had underspecified tests, some were effectively unsolvable without external context. Verified filtered the set to 500 human-validated problems, giving vendors a stable, clean target. Anthropic, OpenAI, Google, and xAI all report SWE-bench Verified as a headline number. Opus 4.6 ships at 80.8%; GPT-5.2 Thinking at 80%; Opus 4.5 previously at 80.9%; Sonnet 4.5 at 77.2% / 82.0% with parallel test-time compute.[^1][^2][^11]
+**Why it took over — and why it just retired.** The original SWE-bench had known issues: some problems were ambiguous, some had underspecified tests, some were effectively unsolvable without external context. Verified filtered the set to 500 human-validated problems, giving vendors a stable, clean target, and through 2025 Anthropic, OpenAI, Google, and xAI all reported it as a headline number. As of July 2026 it has **saturated**: Fable 5 leads at 95.0% and the frontier bunches in the high 80s, so a Verified score can no longer distinguish this release from the last three.[^1][^2][^11] This is the exact "last useful quarter" dynamic this lesson teaches — Verified has now aged out of the *headline* bucket and into the *decorative* one, the way HumanEval did before it. The discriminating coding benchmark is now SWE-bench **Pro** (see below).
 
 **What it doesn't measure, and what the cards hide.** The benchmark is a *tuple*: (model, agentic harness, retrieval strategy, sample budget, temperature, and patience). Anthropic has stated that their custom harness contributes roughly a ten-percentage-point improvement in accuracy over a minimal baseline.[^10] Different vendors report numbers under different harnesses. The fine print — usually a footnote the size of an ant — says things like "evaluated on Anthropic's internal harness with parallel test-time compute (n=k samples, reranker)" or "evaluated with pass@1 under the default SWE-agent scaffold."
 
@@ -91,11 +94,11 @@ Two numbers from the same benchmark, reported by two vendors, can differ by more
 
 **The live controversy.** Is SWE-bench Verified a good proxy for real-world coding capability?
 
-*Position A (the vendors'):* Yes. Anthropic, OpenAI, and Google all use SWE-bench Verified as the primary coding headline across 2025–2026 releases. Saturation on Verified is what drove the Preparedness team to release SWE-Bench Pro in September 2025 — harder problems, with GPT-5.2 Thinking at 55.6% SOTA, a far larger dynamic range for future releases.[^12] Saturation is a sign the benchmark *did* its job.
+*Position A (the vendors'):* Yes — it tracked real progress, and its saturation drove the move to Scale AI's contamination-resistant SWE-bench **Pro**, where the July-2026 frontier still has dynamic range: Mythos 5 leads at 80.3%, Fable 5 is at ~80%, and Opus 4.8 leads *active* models at 69.2%.[^12] Saturation is a sign the benchmark *did its job*. Carry one caveat, though: OpenAI's July 2026 audit estimated ~30% of the public Pro tasks are broken and retracted its earlier recommendation — so Pro is the better discriminator but is itself noisy.
 
-*Position B (practitioners, ML engineers):* Hamel Husain has argued across his 2024–2025 posts that foundation-model benchmarks answer a fundamentally different question than product-specific evals. He distinguishes cleanly between "benchmarks that justify a release" and "evals that tell you if your product works," and warns that the former routinely overfit to the benchmark in ways that do not transfer.[^13] Eugene Yan, writing on task-specific evals, makes the adjacent point that generic metrics — including aggregated coding benchmarks — underperform task-specific rubrics on production distributions; the fluency and surface coherence that benchmarks reward are already solved, so the signal is elsewhere.[^14] The operational claim: a three-point jump on SWE-bench Verified is not evidence that the model will be three points better on *your* codebase. The harness and retrieval choices swamp the model delta for many production contexts.
+*Position B (practitioners, ML engineers):* Hamel Husain has argued across his 2024–2025 posts that foundation-model benchmarks answer a fundamentally different question than product-specific evals. He distinguishes cleanly between "benchmarks that justify a release" and "evals that tell you if your product works," and warns that the former routinely overfit in ways that do not transfer.[^13] Eugene Yan, writing on task-specific evals, makes the adjacent point that generic metrics — including aggregated coding benchmarks — underperform task-specific rubrics on production distributions; the fluency benchmarks reward is already solved, so the signal is elsewhere.[^14] The operational claim: a jump on SWE-bench (Verified *or* Pro) is not evidence the model will be better on *your* codebase. Harness and retrieval choices swamp the model delta for many production contexts.
 
-Both positions are partially correct. The responsible calibration: SWE-bench Verified tracks *something* — a model that rises from 65% to 80% has genuinely improved at agentic coding in a specific setup. But the delta from 78% to 80.8% between two model generations, under different harnesses, inside different labs' scaffolds, should not drive a migration decision. That decision needs your own eval, which is Friday's lesson.
+Both positions are partially correct. The responsible calibration: a coding benchmark tracks *something* — a model that rises from 65% to 80% on Pro has genuinely improved at agentic coding in a specific setup. But a two-point delta between generations, under different harnesses, inside different labs' scaffolds, should not drive a migration decision. That decision needs your own eval — the discipline [[05-fri-context-window-economics|Friday]] and the later evals week build.
 
 ### TAU-bench (τ-bench)
 
@@ -111,7 +114,7 @@ Both positions are partially correct. The responsible calibration: SWE-bench Ver
 
 **What it is.** The "Graduate-Level Google-Proof Q&A" benchmark, 448 multiple-choice questions across biology, physics, and chemistry, written by PhDs and PhD students in the relevant domains. Rein et al., Nov 2023, arXiv 2311.12022.[^16] The "Diamond" subset is the hardest 198 questions. PhD-domain-expert humans reach 65% accuracy; non-expert humans with internet access reach 34%.
 
-**Why vendors love it.** It's hard, it's tasteful, it looks like "real graduate-level science," and as of late 2025 it was still on the non-saturated side. That changed in 2026: Gemini 3.1 Pro hit 91.9% on GPQA Diamond (93.8% with Deep Think), several points above GPT-5.1's 88.1% reported number.[^3] When a benchmark goes from 39% (GPT-4 initial) to 91.9% in under three years, the next generation of models will hit the ceiling and the benchmark will be retired. *You are looking at a benchmark in its last useful quarter.*
+**Why vendors love it.** It's hard, it's tasteful, it looks like "real graduate-level science," and through 2025 it was still on the non-saturated side. That has now flipped: Gemini 3 Pro reported 91.9% on GPQA Diamond (93.8% with Deep Think), and the later Gemini 3.1 Pro refresh reached ~94.3% with Deep Think.[^3] When a benchmark goes from 39% (GPT-4 initial) to the mid-90s in under three years, the next generation hits the ceiling and it retires. *This is a benchmark you are watching leave its last useful quarter in real time* — exactly the pattern SWE-bench Verified completed above.
 
 **What it doesn't measure.** Multiple choice collapses the answering surface. The benchmark measures *knowledge and reasoning on closed, canonical graduate-level scientific questions* — a non-trivial capability — but says nothing about open-ended problem framing, experimental design, or the capacity to notice a question is ill-posed.
 
@@ -139,7 +142,7 @@ If you still see HumanEval on a 2026 model card — and you will, in the long-ta
 
 ### MMLU
 
-**Status.** Saturated and contaminated. MMLU is 57 subject areas of multiple-choice academic knowledge, released 2020. By mid-2024, frontier models were saturating at the high end; by 2026, GPT-5.3, Opus 4.6, and Gemini 3.1 cluster at 88–93%.[^4][^20] Epoch AI's Capabilities Index explicitly exists because individual benchmarks like MMLU saturate faster than models improve, making single-benchmark comparisons meaningless across releases.[^4]
+**Status.** Saturated and contaminated. MMLU is 57 subject areas of multiple-choice academic knowledge, released 2020. By mid-2024, frontier models were saturating at the high end; by 2026 the current frontier (Fable 5, Opus 4.8, Gemini 3.1 Pro) clusters at 88–93%.[^4][^20] Epoch AI's Capabilities Index explicitly exists because individual benchmarks like MMLU saturate faster than models improve, making single-benchmark comparisons meaningless across releases.[^4]
 
 Worse, GPT-4 and ChatGPT have been shown to complete held-out MMLU questions with exact-match rates of 57% and 52% respectively when simply asked to fill in missing options — strong evidence of training-set leakage.[^20] MMLU-CF (ACL 2025) was built explicitly to create a contamination-free replacement, with rephrased questions and shuffled options.[^21] MMLU-Pro (ten answer choices, harder questions) is approaching saturation as well, with top 2026 models at ~90%.
 
@@ -155,11 +158,11 @@ The most important numbers in your pipeline are typically not on any card. Make 
 
 **Stylistic / taste / QA judgments.** Does the model write summary bullets the way your brand writes them? Does it preserve a specific voice? Can it match house style on memos? These are untestable by any capability benchmark; they are your evals to build.
 
-**Latency and p99 reliability.** Cards report capability numbers, not timing distributions. A model that hits 80.8% on SWE-bench over a 48-hour eval run can also have a 4-second p50 and a 40-second p99 under tool-use workloads; neither number is on the card. Latency shifts when thinking is enabled — sometimes dramatically — and vendor-reported latency numbers, when they exist at all, are typically median under benign conditions.
+**Latency and p99 reliability.** Cards report capability numbers, not timing distributions. A model that hits 80% on SWE-bench Pro over a 48-hour eval run can also have a 4-second p50 and a 40-second p99 under tool-use workloads; neither number is on the card. Latency shifts when thinking is enabled — sometimes dramatically — and vendor-reported latency numbers, when they exist at all, are typically median under benign conditions.
 
 **Cost efficiency on *your* distribution.** Pricing is on the release blog, not the card. A model that's 10% better and 5x more expensive is not "better" for most production systems. This is a pipeline-level accounting question, not a model-level benchmark question.
 
-**Safety under adversarial *tool output*.** Safety sections evaluate refusal on adversarial *user* prompts. They do not typically evaluate what happens when a web search tool returns attacker-controlled content containing prompt injection — Simon Willison's lethal trifecta, which Monday's lesson covered.[^22] As of early 2026, no major vendor publishes a standard adversarial-tool-output benchmark. This is the single largest unmeasured safety surface in current model cards.
+**Safety under adversarial *tool output*.** Safety sections evaluate refusal on adversarial *user* prompts. They do not typically evaluate what happens when a web search tool returns attacker-controlled content containing prompt injection — Simon Willison's lethal trifecta (private data + untrusted content + exfiltration channel), which [[02-tue-ai-native-builder-stack|Tuesday's tool-stack lesson]] introduced.[^22] As of mid-2026, no major vendor publishes a standard adversarial-tool-output benchmark, even as dynamic-workflow orchestration multiplies the injection surface. This is the single largest unmeasured safety surface in current model cards.
 
 ## Layer 4 — Contamination, Goodhart, and spotting a suspicious number
 
@@ -173,7 +176,7 @@ Three failure modes cluster here.
 
 **How to spot a suspicious number.** Five heuristics:
 
-1. *The number is a new record by a suspiciously clean margin.* Vendor-reported SWE-bench Verified jumped from 77.2% to 80.9% to 80.8%. Those deltas are plausible. A jump of 15 points would not be — no single model release produces a 15-point real capability jump without a fundamental architectural change.
+1. *The number is a new record by a suspiciously clean margin.* Generation-over-generation SWE-bench deltas of a few points are plausible. A jump of 15 points would not be — no single model release produces a 15-point real capability jump without a fundamental architectural change. (When a leader instead posts a huge jump because a *new* model tier appeared — Fable 5's Mythos-class leap over Opus — read the access policy in the safety section, not just the number.)
 2. *The benchmark is one the vendor has never previously reported.* This often means the model is much better on new benchmarks the competitor reports and much worse on the old one.
 3. *The number is reported without sample budget, temperature, or scaffold details.* "Pass@1 under Anthropic's internal harness with parallel test-time compute at n=unspecified" is pseudo-science. You cannot reproduce it.
 4. *The "+X points" baseline is selectively chosen.* "Our new model is +8 points over the previous model" — but the comparison is against an old, non-thinking variant while the current competitor is a thinking variant. Watch for cross-comparison across reasoning modes.
@@ -195,14 +198,14 @@ Do this before you move on. The exercise is intentionally small; the point is th
 
 **Step 2.** Direct Claude Code with this instruction (adapt the numbers if the release has moved by the time you read this):
 
-> Please look up the following from primary sources (vendor model cards and release notes, not third-party blogs):
+> Please look up the following from primary sources (vendor model cards and release notes, not third-party blogs). Pick the two current frontier models the day you run this — as of mid-July 2026 that is Claude Fable 5 and either GPT-5.6 Sol or Gemini 3.1 Pro:
 >
-> 1. The exact SWE-bench Verified score Anthropic reports for Opus 4.6 in its February 2026 release notes.
-> 2. The harness, sample budget (n), temperature, and whether parallel test-time compute was used, from the footnotes in the Anthropic release page or any linked model card PDF.
-> 3. The exact SWE-bench Verified score OpenAI reports for GPT-5.2 Thinking.
-> 4. The harness, sample budget, temperature, and test-time compute settings OpenAI reports.
+> 1. The exact SWE-bench Pro score the vendor reports for model A (use Pro, not the now-saturated Verified).
+> 2. The harness, sample budget (n), temperature, and whether parallel test-time compute was used, from the footnotes in the release page or any linked model card PDF.
+> 3. The exact SWE-bench Pro score the second vendor reports for model B.
+> 4. The harness, sample budget, temperature, and test-time compute settings that vendor reports.
 > 5. Where the two methodologies differ, list each concrete difference.
-> 6. Where Artificial Analysis or Epoch AI has published independent rerun numbers for either model, report those and the delta from the vendor number.
+> 6. Where an independent tracker (Epoch AI, Artificial Analysis, BenchLM, llm-stats) has published rerun numbers for either model, report those and the delta from the vendor number — and note that OpenAI's July 2026 audit flagged ~30% of public SWE-bench Pro tasks as broken.
 >
 > For each of the six items, cite the URL and exact section you pulled it from. If any item is missing from the source (e.g., vendor doesn't publish n), say "not reported" — do not guess.
 
@@ -232,7 +235,7 @@ Writing this lesson, I am aware of where a reviewer who does this full-time woul
 
 5. *"TAU-bench's pass^k is a better reliability metric, but is also subject to simulator bias."* A reviewer close to the Sierra team would point out that pass^k depends on the user simulator behaving consistently across trials, and the simulator is itself an LLM with its own variance. Reliability measured by pass^k conflates model unreliability with simulator unreliability. The Sierra team acknowledges this in the τ2-bench followup.
 
-## Common mistakes I see AI-catalyst leads make when reading cards
+## Common mistakes I see AI-pro leads make when reading cards
 
 - **Migrating on a headline number without running a personal eval first.** The composite operator war story above generalizes — if your pipeline is non-trivial, the public benchmark is a weak prior.
 - **Treating the safety section as skim content.** The safety section is often the most honest section of the card; the capability section is the most marketed.
@@ -242,7 +245,7 @@ Writing this lesson, I am aware of where a reviewer who does this full-time woul
 
 ## Reflection prompts — not Googleable
 
-- You are evaluating whether to migrate from Sonnet 4.5 to Opus 4.6 for a production retail customer-service agent. Which three sections of each card do you read in which order, and what specific number would make you *not* migrate even if SWE-bench Verified moved significantly?
+- You are evaluating whether to migrate from Sonnet 5 to Opus 4.8 (or up to Fable 5) for a production retail customer-service agent. Which three sections of each card do you read in which order, and what specific number would make you *not* migrate even if the headline coding benchmark moved significantly? (Remember Fable 5 costs 2× Opus per token and tokenizes ~30% heavier.)
 - The 2027 version of GPQA Diamond hits 98% across all four major labs. What do you, as a calibration-conscious reader, now do differently when GPQA appears in a capability table?
 - A new vendor you have not used before releases a model with headline numbers +4 points above the nearest Anthropic/OpenAI/Google offering on three benchmarks and -8 points on one. What is your prior on this release being (a) a genuine advance, (b) a cherry-picked report, (c) a sign of training-data leakage on the +4 benchmarks? What single piece of evidence would most rapidly update you?
 - Your legal team asks you to generate a one-page "why we chose model X" justification based entirely on vendor-reported benchmarks. What do you push back on, and what do you provide instead?
@@ -251,7 +254,7 @@ Writing this lesson, I am aware of where a reviewer who does this full-time woul
 ## Further reading
 
 **Must-read (this week):**
-- The Opus 4.6 release page (Feb 2026) and the GPT-5 system card (Aug 2025). Read them side by side; note the framing differences.[^5][^7]
+- The Claude Fable 5 release page (Jun 2026) and a current GPT-5.6 or Gemini 3.1 Pro system card. Read them side by side; note how a capability-first release buries safety and an access-gated release leads with it.[^5][^7][^23]
 - Hamel Husain, *"Your AI Product Needs Evals"* and the FAQ post.[^13]
 - Eugene Yan, *"Task-Specific LLM Evals That Do & Don't Work."*[^14]
 
@@ -268,18 +271,18 @@ Writing this lesson, I am aware of where a reviewer who does this full-time woul
 
 ## Citations
 
-[^1]: Anthropic, "Claude Opus 4.6" release coverage, February 2026. SWE-bench Verified 80.8% headline; adaptive thinking; 1M token beta context; 72.7% OSWorld; 65.4% Terminal-Bench 2.0. https://www.anthropic.com/news/claude-opus-4-5 (canonical Anthropic release page template; 4.6 release documented at https://techcrunch.com/2026/02/05/anthropic-releases-opus-4-6-with-new-agent-teams/ and https://thenewstack.io/anthropics-opus-4-6-is-a-step-change-for-the-enterprise/).
-[^2]: Vellum AI, "GPT-5.2 Benchmarks (Explained)," 2025. GPT-5.2 Thinking 80% SWE-bench Verified; 55.6% SWE-Bench Pro SOTA. https://www.vellum.ai/blog/gpt-5-2-benchmarks
-[^3]: Vellum AI, "Google Gemini 3 Benchmarks (Explained)," 2026. Gemini 3 Pro: 91.9% GPQA Diamond; Gemini 3 Deep Think: 93.8% GPQA Diamond; ARC-AGI-2 31.1% (45.1% Deep Think); AIME 2025 100% with code exec, 95% without. https://www.vellum.ai/blog/google-gemini-3-benchmarks. Official model card (Gemini 3.1 Pro, a later refresh reaching 94.3% on GPQA Diamond with Deep Think Mini at thinking_level="high"): https://deepmind.google/models/model-cards/gemini-3-1-pro/
+[^1]: SWE-bench leaderboards, fetched 2026-07-17: Verified (now saturated; Fable 5 leads at 95.0%) https://llm-stats.com/benchmarks/swe-bench-verified and https://www.swebench.com/; SWE-bench Pro (Mythos 5 80.3%, Opus 4.8 69.2% active) https://benchlm.ai/benchmarks/swePro. Fable 5 release (95.0–95.5% Verified, Mythos-class tier, access model): Anthropic https://www.anthropic.com/news/claude-fable-5-mythos-5 (corroborated via search; 403s to the fetch proxy) and https://simonwillison.net/2026/Jun/9/claude-fable-5/.
+[^2]: SWE-bench Pro leaderboard (BenchLM), fetched 2026-07-17. https://benchlm.ai/benchmarks/swePro — July 2026: Mythos 5 80.3%, Fable 5 ~80%; Opus 4.8 leads active models at 69.2% (llm-stats aggregate, https://llm-stats.com/benchmarks/swe-bench-pro). Note OpenAI's July 2026 audit estimated ~30% of public Pro tasks are broken.
+[^3]: Vellum AI, "Google Gemini 3 Benchmarks (Explained)," 2026. Gemini 3 Pro: 91.9% GPQA Diamond; Gemini 3 Deep Think: 93.8%. https://www.vellum.ai/blog/google-gemini-3-benchmarks. Official Gemini 3.1 Pro model card (later refresh reaching ~94.3% GPQA Diamond with Deep Think): https://deepmind.google/models/model-cards/gemini-3-1-pro/. (Body/footnote corrected 2026-07-17: the 91.9%/93.8% figures are Gemini 3 Pro / Deep Think, not 3.1 Pro.)
 [^4]: Epoch AI, "Epoch Capabilities Index" methodology, 2024–2025. Addresses benchmark saturation by aggregating across benchmarks on a general-capability scale. https://epoch.ai/benchmarks/eci/
-[^5]: Anthropic, "Introducing Claude Opus 4.5" release page, 2025 (template for 4.x announcements). https://www.anthropic.com/news/claude-opus-4-5
+[^5]: Anthropic, "Claude Fable 5 and Claude Mythos 5" release page, 2026-06-09. https://www.anthropic.com/news/claude-fable-5-mythos-5 (corroborated via search; 403s to the fetch proxy). A capability-and-access-first release page — useful contrast to a capability-only announcement.
 [^6]: Google, "Gemini 3.1 Pro: A smarter model for your most complex tasks," blog.google, 2026. https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-1-pro/
 [^7]: OpenAI, GPT-5 System Card, August 2025. https://cdn.openai.com/gpt-5-system-card.pdf (updated version: https://cdn.openai.com/pdf/8124a3ce-ab78-4f06-96eb-49ea29ffb52f/gpt5-system-card-aug7.pdf). Covers capability evaluations, Preparedness Framework assessments including biology, cybersecurity, persuasion, and autonomy categories.
 [^8]: xAI, "Grok 4.1 Model Card," November 17, 2025. https://data.x.ai/2025-11-17-grok-4-1-model-card.pdf. See also Grok 4 card (Aug 20, 2025) at https://data.x.ai/2025-08-20-grok-4-model-card.pdf and Grok 4 Fast card (Sep 19, 2025) at https://data.x.ai/2025-09-19-grok-4-fast-model-card.pdf. Grok 4.1 Thinking LMArena #1 at 1483 Elo; underperforms human baselines on FigQA and CloningScenarios despite strong aggregate scores.
 [^9]: Google DeepMind, "Gemini 3.1 Pro Model Card." https://deepmind.google/models/model-cards/gemini-3-1-pro/
 [^10]: OpenAI, "Introducing SWE-bench Verified," August 2024. https://openai.com/index/introducing-swe-bench-verified/. 500 human-validated problems; harness contribution documented. SWE-bench official site and mini-SWE-agent: https://www.swebench.com/ and https://www.swebench.com/verified.html. Anthropic harness improvement (~10 points) discussed in SWE-bench guides: https://www.swebench.com/SWE-bench/guides/evaluation/
 [^11]: CodeSOTA analysis of Claude Opus 4.5: 80.9% SWE-bench Verified. https://www.codesota.com/news/claude-opus-4-5-swe-bench-80. Sonnet 4.5 figures (77.2%, 82.0% with parallel test-time compute) from Anthropic Sonnet 4.5 release page.
-[^12]: "SWE-Bench Pro: Can AI Agents Solve Long-Horizon Software Engineering Tasks?" arXiv 2509.16941, September 2025 (updated November 2025). https://arxiv.org/pdf/2509.16941. Introduces harder problems; GPT-5.2 Thinking SOTA at 55.6%.
+[^12]: "SWE-Bench Pro: Can AI Agents Solve Long-Horizon Software Engineering Tasks?" arXiv 2509.16941, September 2025 (updated November 2025). https://arxiv.org/pdf/2509.16941. Introduces the harder, contamination-resistant benchmark. Current (July 2026) leaderboard: Mythos 5 80.3%, Opus 4.8 69.2% active — https://benchlm.ai/benchmarks/swePro and https://www.morphllm.com/swe-bench-pro. (The April draft's "GPT-5.2 Thinking 55.6% SOTA" figure is superseded.) OpenAI's July 2026 audit flagged ~30% of public Pro tasks as broken.
 [^13]: Hamel Husain, "Your AI Product Needs Evals." https://hamel.dev/blog/posts/evals/ and "LLM Evals FAQ" https://hamel.dev/blog/posts/evals-faq/. Also "A Field Guide to Rapidly Improving AI Products" https://hamel.dev/blog/posts/field-guide/. Core claim: foundation-model benchmarks and product-specific evals answer different questions; the former routinely overfits in ways that don't transfer to production distributions.
 [^14]: Eugene Yan, "Task-Specific LLM Evals That Do & Don't Work." https://eugeneyan.com/writing/evals/. N-gram metrics and generic LLM-evals found unreliable/impractical on production workloads; binary task-specific labels outperform 1–5 Likert scales for calibration.
 [^15]: Yao, Shinn, Razavi, Narasimhan, "τ-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains," arXiv 2406.12045, 2024. https://arxiv.org/abs/2406.12045. Retail and airline domains; pass^k reliability metric; state-of-the-art function-calling agents <50% success, pass^8 <25% in retail.
@@ -289,6 +292,7 @@ Writing this lesson, I am aware of where a reviewer who does this full-time woul
 [^19]: Survey on Data Contamination for LLMs, arXiv 2502.14425, 2025. https://arxiv.org/html/2502.14425v2. HumanEval: 8–18% overlap with common training data; CodeAlpaca synthetic dataset contains 12.8% rephrased HumanEval samples. "Investigating Data Contamination in Modern Benchmarks for Large Language Models," arXiv 2311.09783.
 [^20]: Deng et al. (NAACL 2024). *Investigating Data Contamination in Modern Benchmarks for Large Language Models.* https://arxiv.org/abs/2311.09783 / https://aclanthology.org/2024.naacl-long.482/ — introduces the Testset Slot Guessing (TS-Guessing) protocol: masking a wrong option in MMLU multiple-choice items and prompting the model to fill it in. ChatGPT and GPT-4 achieve 52% and 57% exact-match rates respectively on the masked held-out options, providing strong evidence of training-set leakage. Epoch AI MMLU tracking: https://epoch.ai/benchmarks/mmlu/
 [^21]: Microsoft, "MMLU-CF: A Contamination-free Multi-task Language Understanding Benchmark," ACL 2025. https://github.com/microsoft/MMLU-CF. Contamination-free replacement using rephrased questions and shuffled answer options.
-[^22]: Monday's lesson (this vault): Prompting from first principles — covers Simon Willison's lethal trifecta and the prompt-injection attack surface that model cards' safety sections largely do not measure. See also Turpin et al., "Language Models Don't Always Say What They Think," 2023 (cited in Monday's lesson) for the faithfulness framing applied here.
+[^22]: Simon Willison (2025-06-16). *The lethal trifecta for AI agents.* https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/ — private data + untrusted content + exfiltration channel. Coined June 2025; introduced in this week's [[02-tue-ai-native-builder-stack|Tuesday tool-stack lesson]] (the April draft mis-pointed this to a nonexistent "Monday prompting lesson"). See also Turpin et al., "Language Models Don't Always Say What They Think," 2023, for the faithfulness framing applied here.
+[^23]: Anthropic (2026-06-09). *Claude Fable 5 and Claude Mythos 5.* https://www.anthropic.com/news/claude-fable-5-mythos-5 (corroborated via search; page 403s to the fetch proxy). Mythos-class tier above Opus; high-risk queries (cyber/bio/chem/distillation) blocked with an Opus 4.8 fallback; Mythos 5 restricted to Project Glasswing partners (https://anthropic.com/glasswing). Public risk-warning context days before launch: https://techcrunch.com/2026/06/09/anthropics-claude-fable-5-is-a-version-of-mythos-the-public-can-access-today/. Verified 2026-07-17.
 
-_last_verified: 2026-04-15_
+_last_verified: 2026-07-17_

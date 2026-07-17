@@ -20,7 +20,8 @@ sources:
   - modarressi-2025-nolima
   - jxnl-context-engineering-2025
   - lighton-rag-is-dead-long-live-rag
-last_verified: 2026-04-15
+  - anthropic-pricing-docs-2026-07
+last_verified: 2026-07-17
 word_count_target: 6000
 ---
 
@@ -30,18 +31,18 @@ word_count_target: 6000
 
 You are about to start Week 1. You will spend the next six months pointing Claude Code at real codebases, running Claude.ai against 200-page PDFs, stuffing RAG pipelines with retrieved chunks, and routing long transcripts through agents that reason, tool-call, and reason again. Every one of those actions has a unit cost measured in tokens — and a unit *quality* measured by how well the model actually uses the tokens you shove into its context.
 
-Most AI-catalyst leads lose money and lose quality in the same place: they treat the context window as free memory. It is not. It is a rate-limited, tier-stepped, quality-degrading, provider-specific resource whose pricing changes quarterly and whose *useful* capacity is strictly smaller than the advertised number on the model card. Opus 4.6 advertises 1M. Gemini 2.5 Pro advertises 1M. On controlled benchmarks (RULER, NoLiMa) every frontier model loses 20-60 percentage points of accuracy somewhere between 32K and 200K — long before you hit the advertised ceiling.[^1][^2]
+Most AI-pro leads lose money and lose quality in the same place: they treat the context window as free memory. It is not. It is a rate-limited, quality-degrading, provider-specific resource whose pricing changes monthly and whose *useful* capacity is strictly smaller than the advertised number on the model card. Opus 4.8, Sonnet 5, and Fable 5 all advertise 1M; so does Gemini 3.1 Pro. On controlled benchmarks (RULER, NoLiMa) every frontier model loses 20-60 percentage points of accuracy somewhere between 32K and 200K — long before you hit the advertised ceiling.[^1][^2] And a subtler trap since 2026: the new Anthropic tokenizer means the *same document* now consumes ~30% more of that window than it did on Sonnet 4.6, so both your quality budget and your cost math shifted under you.
 
 This lesson is the economics you should have had before your first production prompt. By the end of it you will:
 
 1. Price a token in your head for the four providers you actually use, and know which direction the output-to-input ratio cuts on each.
-2. Know what "1M context" means operationally — including the tier-step pricing cliffs that existed through most of 2025 and the GA unification in March 2026.[^3]
+2. Know what "1M context" means operationally — including that Anthropic bills the full 1M window at standard rates (no >200K surcharge) while Gemini still steps at 200K.[^3]
 3. Be able to predict when long-context retrieval will silently degrade by citing Liu 2023, Hsieh 2024, and Modarressi 2025 by result, not just by name.[^4][^1][^2]
-4. Have the prompt-caching mental model cold — cache writes cost 1.25× (5-min) or 2× (1-hour), cache reads cost 0.10×, break-even is roughly 2 reads, and the breakpoint is positional.[^5]
-5. Have taken a defensible position on the 2025 "RAG is dead, long context wins" debate, grounded in a specific Anthropic result (49% / 67% on Contextual Retrieval) and a specific Jason Liu framing (context engineering).[^6][^7]
+4. Have the prompt-caching mental model cold — cache writes cost 1.25× (5-min) or 2× (1-hour), cache reads cost 0.10×, break-even is **one** read for the 5-min cache and **two** for the 1-hour cache, and the breakpoint is positional.[^5]
+5. Have taken a defensible position on the "RAG is dead, long context wins" debate, grounded in a specific Anthropic result (49% / 67% on Contextual Retrieval) and Jason Liu's context-engineering framing.[^6][^7]
 6. Have watched, on your own screen, a single fact placed at 5 / 50 / 95% of a 200K-token prompt be retrieved at dramatically different rates — because you will have directed Claude Code to run the experiment.
 
-This is a standalone masterclass. No Saturday prep, no wait-and-see. Bring these mechanics into Week 1.
+This builds directly on [[01-mon-mental-model-of-llms|Monday's tokenization and prefill/decode mechanics]] and [[02-tue-ai-native-builder-stack|Tuesday's per-tool cost axis]]. Bring these mechanics into Week 1.
 
 ## Prerequisites
 
@@ -51,59 +52,60 @@ This is a standalone masterclass. No Saturday prep, no wait-and-see. Bring these
 
 ## Layer 1 — Tokens as currency: the asymmetry nobody flags loudly enough
 
-A token is not a word and not a character. For English text it is roughly 0.75 words, or about 4 characters; for code it ranges from 2 to 5 characters depending on language and identifier density. All frontier providers bill in tokens. All of them charge separately for **input** (prompt tokens sent in) and **output** (tokens generated back). Nearly all of them charge output at a large multiple of input.
+A token is not a word and not a character. For English text on the classic tokenizers it is roughly 0.75 words, or about 4 characters; on Anthropic's new tokenizer (Opus 4.7+, Sonnet 5, Fable/Mythos 5) the *same* English is ~30% more tokens, so budget closer to ~0.58 words per token there. Code ranges from 2 to 5 characters per token. All frontier providers bill in tokens, charge separately for **input** and **output**, and charge output at a large multiple of input.
 
-Here is the pricing table that matters as of the currency-stamp on this lesson (2026-04-15). Standard tier, no long-context surcharge, no cache, no batch discount. Per million tokens, USD.
+Here is the pricing table that matters as of the currency-stamp on this lesson (2026-07-17). Standard tier, no cache, no batch discount. Per million tokens, USD.[^8][^9][^10]
 
-| Model | Input $/MTok | Output $/MTok | Output/Input ratio | Max context |
-|---|---|---|---|---|
-| Claude Opus 4.6 | 5.00 | 25.00 | 5.0× | 1M (GA) |
-| Claude Sonnet 4.6 | 3.00 | 15.00 | 5.0× | 1M (GA) |
-| Claude Haiku 4.5 | 1.00 | 5.00 | 5.0× | 200K |
-| GPT-5 (high) | 1.25 | 10.00 | 8.0× | 400K |
-| GPT-5.4 | 2.50 | 15.00 | 6.0× | — |
-| GPT-5.4 nano | 0.20 | 1.25 | 6.25× | — |
-| Gemini 2.5 Pro (≤200K in) | 1.25 | 10.00 | 8.0× | 1M |
-| Gemini 2.5 Pro (>200K in) | 2.50 | 15.00 | 6.0× | 1M |
+| Model | Input $/MTok | Output $/MTok | Output/Input ratio | Max context | Tokenizer |
+|---|---|---|---|---|---|
+| Claude Fable 5 / Mythos 5 | 10.00 | 50.00 | 5.0× | 1M | new (+~30%) |
+| Claude Opus 4.8 | 5.00 | 25.00 | 5.0× | 1M | new (+~30%) |
+| Claude Sonnet 5 (intro, ≤Aug 31 2026) | 2.00 | 10.00 | 5.0× | 1M | new (+~30%) |
+| Claude Sonnet 5 (from Sep 1 2026) | 3.00 | 15.00 | 5.0× | 1M | new (+~30%) |
+| Claude Haiku 4.5 | 1.00 | 5.00 | 5.0× | 200K | classic |
+| GPT-5.6 Sol | 5.00 | 30.00 | 6.0× | 1.05M | — |
+| GPT-5.6 Terra | 2.50 | 15.00 | 6.0× | 1.05M | — |
+| GPT-5.6 Luna | 1.00 | 6.00 | 6.0× | 1.05M | — |
+| Gemini 3.1 Pro (≤200K in) | 2.00 | 12.00 | 6.0× | 1M | — |
+| Gemini 3.1 Pro (>200K in) | 4.00 | 18.00 | 4.5× | 1M | — |
+| Gemini 3.5 Flash | 1.50 | 9.00 | 6.0× | 1M | — |
 
-Sources: Anthropic pricing docs, OpenAI pricing page, Google Gemini Developer API pricing, all retrieved 2026-04-15.[^8][^9][^10]
+Sources: Anthropic pricing docs, OpenAI pricing, Google Gemini API pricing, all fetched 2026-07-17.[^8][^9][^10]
 
-Three things in this table deserve to be burned in:
+Four things in this table deserve to be burned in:
 
-**The output ratio is not 1×. It is almost never 2×. It is between 4.5× and 8×.** The implication: the expensive part of any call you make is not the 200K-token codebase you attach — it is the 3,000-token diff or explanation the model writes back. When people cost-model LLM systems by counting "context tokens" they are missing the bigger bucket. An Opus 4.6 call with 100K input tokens and 3K output tokens costs $0.50 for input and $0.075 for output — but double the output to 6K (a moderately chatty response) and you've added another $0.075 against a $0.50 input that didn't move. For any workflow where outputs can grow — code generation, long-form writing, extended thinking, agent loops — output is the variable you optimize first.
+**The output ratio is not 1×. It is almost never 2×. It is between 4.5× and 6×.** The expensive part of any call is not the 200K-token codebase you attach — it is the 3,000-token diff or explanation the model writes back. An Opus 4.8 call with 100K input and 3K output costs $0.50 for input and $0.075 for output — double the output to 6K and you've added another $0.075 against a $0.50 input that didn't move. For any workflow where outputs can grow — code generation, long-form writing, extended thinking, agent loops — output is the variable you optimize first.
 
-**Gemini 2.5 Pro still has a tier step at 200K; Anthropic got rid of its version in March 2026.** Until March 13, 2026, Anthropic charged 2× input and 1.5× output for any request whose *input* exceeded 200K tokens on Opus 4.6 — $10/$37.50 instead of $5/$25. On 2026-03-13 the cliff was removed; the 1M window is now billed at standard rates across its full range.[^3] Gemini 2.5 Pro retains a cliff: $1.25/$10 up to 200K prompt size, $4.00/$18.00 above it.[^10] A 900K-token Gemini call is 3.2× the per-token cost of a 150K-token one *on input alone*.
+**Anthropic has no long-context surcharge; Gemini still steps at 200K.** Anthropic bills the full 1M window at standard rates — a 900K-token request costs the same per token as a 9K one — for Fable 5, Opus 4.8/4.7, Sonnet 5, and Sonnet 4.6.[^3] Gemini 3.1 Pro retains a cliff: $2.00/$12.00 up to 200K prompt, $4.00/$18.00 above it.[^10] And OpenAI, which had *dropped* to a 400K window with GPT-5, went back to ~1M with GPT-5.5 in April 2026 and carries a >272K-input surcharge on some tiers — so the "only Gemini has a cliff" story from April is no longer clean.
 
-**The cheapest input token is not the cheapest call.** Gemini 2.5 Pro's $1.25 input beats Opus 4.6's $5.00 input 4× on paper. Once you factor output — Gemini's $10.00/MTok is 60% of Opus's $25.00 — the gap narrows. Once you factor cache hits (Anthropic: 0.10× input; Gemini: 0.50× input), the gap can invert.[^5][^10] Pricing comparisons that cite a single number per model are useless. Build the mental model around ratios, not absolutes.
+**The cheapest input token is not the cheapest call.** Sonnet 5's $2 intro input beats Opus 4.8's $5 by 2.5× on paper; once you factor output, cache hits (Anthropic reads at 0.10× input), and the ~30% tokenizer tax that hits *both* Anthropic models equally, the real comparison is workload-shaped. Pricing comparisons that cite a single number per model are useless. Build the mental model around ratios, not absolutes — and always date-stamp Sonnet 5 quotes, since its intro price expires 2026-08-31.
 
-An example to sharpen the point. You're running a nightly code-review agent on a repository. Every run: 80K tokens of code and test diff in, 4K tokens of review out. No cache yet. 30 runs/month.
+An example to sharpen the point. You're running a nightly code-review agent. Every run: 80K tokens of code and test diff in, 4K tokens of review out. No cache yet. 30 runs/month. (Token counts here are on the new tokenizer; the same source text would have been ~30% fewer tokens on Sonnet 4.6.)
 
-- On Opus 4.6: (80K × $5 + 4K × $25) / 1M × 30 = $15.00/month.
-- On Sonnet 4.6: $9.00/month.
-- On Gemini 2.5 Pro (under the 200K tier): $4.20/month.
-- On GPT-5 (high): $4.20/month.
+- On Opus 4.8: (80K × $5 + 4K × $25) / 1M × 30 = $15.00/month.
+- On Sonnet 5 (intro $2/$10): (80K × $2 + 4K × $10) / 1M × 30 = $6.00/month.
+- On Gemini 3.1 Pro (under the 200K tier, $2/$12): (80K × $2 + 4K × $12) / 1M × 30 = $6.24/month.
 
 Now attach the entire 350K-token codebase — not just the diff — because the reviewer keeps missing cross-file call-site impact:
 
-- On Opus 4.6 GA pricing: (350K × $5 + 4K × $25) / 1M × 30 = $55.50/month.
-- On Gemini 2.5 Pro, tier-stepped: (350K × $2.50 + 4K × $15) / 1M × 30 = $27.93/month.
-- On Opus 4.6 at the old (pre-2026-03-13) beta pricing for the >200K portion: $88.50/month.
+- On Opus 4.8 (no surcharge): (350K × $5 + 4K × $25) / 1M × 30 = $55.50/month.
+- On Gemini 3.1 Pro, tier-stepped (>200K → $4/$18): (350K × $4 + 4K × $18) / 1M × 30 = $44.16/month.
 
-The tier step matters. It could previously turn Opus from the expensive-premium option into the expensive-and-even-more-expensive option the moment you crossed 200K. If you are reading legacy 2025 pricing articles, that cliff is what they are talking about. If you are writing new code, it is gone on Anthropic and alive on Google.
+The Gemini tier step matters: crossing 200K doubles its input rate. If you are reading legacy 2025–early-2026 pricing articles that describe an Anthropic >200K cliff, that cliff is gone; on Google it is alive.
 
 ## Layer 2 — The 1M context beta and what "1M" actually means
 
-Opus 4.6 and Sonnet 4.6 both claim 1M-token context windows. Gemini 2.5 Pro claims the same. GPT-5 claims 400K; GPT-4.1 claimed 1M. Here is what "1M" actually means, operationally:
+Fable 5, Opus 4.8, and Sonnet 5 all claim 1M-token windows; Gemini 3.1 Pro claims the same; GPT-5.5/5.6 claim ~1.05M. Here is what "1M" actually means, operationally:
 
 **It means the server won't reject your request.** Nothing more. A 1M advertised window is a structural property of the attention implementation plus the positional encoding scheme (RoPE scaling, YaRN, interpolation, whatever the provider uses internally). The model's weights were trained on sequences of a certain length; inference-time position scaling extends that range at the cost of accuracy that decays with distance from the training distribution. The window is a physical fact. Quality inside the window is a separate, benchmarked question — see Layer 3.
 
-**Under Anthropic's pre-GA beta, 1M came with a pricing cliff.** Before 2026-03-13, Opus 4.6 requests with input > 200K tokens were billed at $10/MTok input and $37.50/MTok output — 2× and 1.5× the standard rates respectively.[^3] Anthropic framed this as a capacity-management mechanism: long-context requests consume disproportionate KV-cache memory and inference compute, and the premium rationed access. At GA, the cliff was removed; a 900K-token Opus request is now billed at exactly the same per-token rate as a 9K one.
+**Anthropic bills the full 1M at standard rates.** For Fable 5, Opus 4.8/4.7, Sonnet 5, and Sonnet 4.6, a 900K-token request is billed at exactly the same per-token rate as a 9K one — no >200K surcharge.[^3] (This corrects a real historical wrinkle: Opus 4.6's 1M *beta* in 2025 carried a 2×/1.5× premium above 200K, removed at GA on 2026-03-13. If you built a cost model under that beta, the cliff is gone — but so is the model.)
 
-**Gemini still has a cliff.** On Google's Developer API, prompts up to 200K hit the standard tier ($1.25 input / $10.00 output per MTok). Above 200K, long-context pricing kicks in at $2.50 / $15.00.[^10] If your pipeline routinely crosses 200K — RAG with large chunks, whole-codebase analysis, long transcripts — that cliff is a 2× input-cost / 1.5× output-cost multiplier and should appear explicitly in your cost model.
+**Gemini still has a cliff.** On Google's Developer API, Gemini 3.1 Pro prompts up to 200K hit the standard tier ($2.00 input / $12.00 output per MTok); above 200K the rate doubles to $4.00 / $18.00.[^10] If your pipeline routinely crosses 200K — RAG with large chunks, whole-codebase analysis, long transcripts — that step should appear explicitly in your cost model.
 
-**OpenAI GPT-4.1 had 1M; GPT-5 has 400K.** The direction of context windows is not monotonically up. GPT-5's smaller window is a deliberate choice — smaller windows let the model reserve more attention and compute per token, and OpenAI appears to have bet that a 400K window with higher *usable* quality beats 1M with worse quality-per-token. Whether that bet is right is an open empirical question that RULER-like benchmarks will settle across 2026.
+**The "windows aren't monotonically up" argument resolved — upward.** In 2025 OpenAI had *shrunk* to a 400K window with GPT-5, and it was reasonable to bet that a smaller window with higher usable quality beat 1M with worse quality-per-token. That bet was abandoned: GPT-5.5 (April 2026) went back to a ~1M (1.05M) API window, and GPT-5.6 kept it. So 1M is now table stakes at every major lab — which sharpens, rather than settles, the Layer-3 question of whether that capacity is *usable*.
 
-**Extended thinking eats your context window too.** On Opus 4.6 and Sonnet 4.6, when you enable extended thinking with a `budget_tokens` parameter, those reasoning tokens count as both (a) output tokens for billing and (b) context-window consumption for the duration of the current turn.[^11] A 200K-token prompt plus a 50K-token thinking budget leaves you 750K of headroom on Opus, not 800K. One Anthropic-specific relief: across multi-turn conversations, the API automatically strips previous turns' thinking blocks from the context sent to the model, so thinking doesn't accumulate.[^11] For single-turn long-context work, budget thinking against the window explicitly.
+**Extended thinking eats your context window too.** On current Claude models, when you enable extended thinking with a `budget_tokens` parameter, those reasoning tokens count as both (a) output tokens for billing and (b) context-window consumption for the duration of the current turn.[^11] A 200K-token prompt plus a 50K-token thinking budget leaves you 750K of headroom, not 800K. One relief: across multi-turn conversations, the API automatically strips previous turns' thinking blocks, so thinking doesn't accumulate.[^11] For single-turn long-context work, budget thinking against the window explicitly.
 
 Takeaway: treat the advertised context window as a legal upper bound on request size, not as a guide to where your pipeline should live. Stay as far under it as your task permits, both for quality reasons (Layer 3) and cost reasons (tier steps on Gemini, output-token amplification everywhere).
 
@@ -151,17 +153,17 @@ When a transformer processes a prompt, every layer attends over all previous tok
 
 Inside a single request, the KV cache is automatic — you don't pay extra for it, and you don't manage it. Between requests, though, the cache is normally discarded. If you send the same 100K-token system prompt back on the next request, the server recomputes every K and V from scratch. That recompute is what you are paying for on standard input tokens.
 
-**Prompt caching**, which Anthropic launched in public beta in August 2024 and made GA shortly after, lets you mark sections of your prompt with `cache_control` breakpoints. The server stores the computed KV tensors for those sections in a provider-managed cache keyed on the prompt prefix. On the next request within the TTL window, if the prefix up to a breakpoint matches exactly, the server skips recomputation and serves the cached KV.[^5]
+**Prompt caching**, which Anthropic launched in public beta in August 2024, lets you reuse the computed KV tensors for a stable prefix instead of re-prefilling it every call. There are now two modes: **automatic caching** — add a single top-level `cache_control` field and the system manages breakpoints as the conversation grows (the recommended default for most use cases) — and **explicit breakpoints** — place `cache_control` on individual content blocks for fine-grained control.[^5] Either way the server stores the KV for the matched prefix and, on the next request within the TTL, skips recomputation.
 
-The economics:
+The economics (verified against Anthropic's pricing docs, 2026-07-17):
 
-- **Cache write (5-min TTL, default)**: 1.25× standard input rate. You pay a modest premium on the first call.
-- **Cache write (1-hour TTL, extended)**: 2.0× standard input rate. Higher premium for longer shelf life.
-- **Cache read**: 0.10× standard input rate. 90% discount on every subsequent hit within TTL.[^5]
+- **Cache write (5-min TTL, default)**: 1.25× standard input rate.
+- **Cache write (1-hour TTL, extended)**: 2.0× standard input rate.
+- **Cache read (hit)**: 0.10× standard input rate — a 90% discount on every subsequent hit within TTL.[^5]
 
-Break-even for 5-minute caching is roughly 2 reads per write. (Write cost 1.25x; two reads at 0.10x = 0.20x; 1.25 + 0.20 = 1.45x vs uncached 2x → wins.) For 1-hour caching, break-even is roughly 3-4 reads depending on exact volumes. In practice, any workload where you reuse a long prefix more than 2-3 times inside the TTL window is cheaper with caching on. This covers a huge fraction of real agentic workflows — tool-loop agents, RAG systems with a stable instruction block, multi-turn conversations with a long system prompt, code-review bots with a fixed set of guidelines.
+Break-even is closer than the intuition suggests. Per Anthropic: *"caching pays off after just **one** cache read for the 5-minute duration (1.25× write), or after **two** cache reads for the 1-hour duration (2× write)."*[^5] (The arithmetic: one write plus one read at 5-min costs 1.25 + 0.10 = 1.35× versus 2× for two uncached reads — it already wins on the *first* reuse. The April draft's "roughly 2 reads" and "3–4 reads for 1-hour" were both wrong.) In practice, any workload that reuses a long prefix even once inside the TTL is cheaper with caching on — which covers nearly every real agentic workflow: tool-loop agents, RAG with a stable instruction block, multi-turn conversations with a long system prompt, code-review bots with fixed guidelines.
 
-**Breakpoint positioning matters.** You can set up to 4 breakpoints per request on Anthropic's API. The cache is prefix-matched — only tokens up to the last matching breakpoint reuse KV. So the structure is: stable-system-prompt → [breakpoint] → stable-tool-definitions → [breakpoint] → stable-context/docs → [breakpoint] → variable-user-query. If you put the variable content first, nothing matches. If you put breakpoints after only the first stable block, you cache less than you could. Good cache design is prompt architecture, not a flag you flip.
+**Breakpoint positioning matters (in explicit mode).** You can set up to 4 breakpoints per request. The cache is prefix-matched — only tokens up to the last matching breakpoint reuse KV. So the structure is: stable-system-prompt → [breakpoint] → stable-tool-definitions → [breakpoint] → stable-context/docs → [breakpoint] → variable-user-query. If you put the variable content first, nothing matches. Automatic caching handles this for the common case; reach for explicit breakpoints when you need to control exactly which region is the cacheable prefix.
 
 **TTL choice is a volume bet.** High-volume continuous pipelines (agent loops hitting the same prefix every few seconds): 5-min TTL dominates. Human-in-the-loop workflows where the same large context gets reused over minutes to hours (code-review session, research assistant, long document analysis): 1-hour TTL dominates.
 
@@ -169,11 +171,11 @@ Break-even for 5-minute caching is roughly 2 reads per write. (Write cost 1.25x;
 
 This is the specific scenario the L3 content spec calls for. Setup:
 
-- Static retrieved context: 500K tokens per invocation (say, a full knowledge base index plus the top 30 retrieved chunks — large but within Opus 4.6's 1M window).
+- Static retrieved context: 500K tokens per invocation (say, a full knowledge base index plus the top 30 retrieved chunks — large but within Opus 4.8's 1M window).
 - Variable user query: ~500 tokens.
 - Output: ~1,500 tokens per invocation.
 - Volume: 10,000 invocations/day.
-- Provider: Claude Opus 4.6 at GA pricing. Input $5, output $25, cache write (5-min) $6.25, cache read $0.50, per MTok.[^8][^5]
+- Provider: Claude Opus 4.8. Input $5, output $25, cache write (5-min) $6.25, cache read $0.50, per MTok.[^8][^5]
 
 **Without prompt caching:**
 - Input: 500,000 tokens × 10,000 invocations = 5,000,000,000 tokens/day = 5,000 MTok.
@@ -182,7 +184,7 @@ This is the specific scenario the L3 content spec calls for. Setup:
 - Output cost: 15 × $25 = $375/day.
 - **Daily total: $25,375. Monthly (30d): $761,250.**
 
-**With 5-minute prompt caching**, assuming the 500K context is stable enough that cache hits account for 99% of invocations (the first call/minute writes, the next ~1000 calls in that 5-min window read):
+**With 5-minute prompt caching**, assuming the 500K context is stable enough that cache hits account for 99% of invocations (at 10K/day there are ~35 calls in each rolling 5-min window, so the first writes the cache and the next ~34 read it before the TTL rolls):
 - Cache writes: 0.01 × 5,000 MTok/day = 50 MTok at $6.25 = $313/day.
 - Cache reads: 0.99 × 5,000 MTok/day = 4,950 MTok at $0.50 = $2,475/day.
 - Output: $375/day (unchanged).
@@ -285,7 +287,7 @@ Cost estimate for option B: 3 positions × 20 samples × 200K input × $3/MTok �
 
 ## Operator war stories — specific numbers, specific dates
 
-**The ChatGPT free-tier release of prompt caching, September 2024.** When Anthropic launched prompt caching on 2024-08-14, several early adopters posted specific before/after numbers. Notion's integration team reported [in Anthropic's customer story on the launch blog] ~90% reduction on input-token cost for long-document interactions against their help-content corpus. The multiplier was not theoretical; it was the entire reason the feature shipped publicly rather than staying a private-beta optimization. Within 6 weeks, OpenRouter, Bedrock, and Vertex had matching or similar features — the 90% discount on cache reads became an industry-wide expectation.[^5]
+**Anthropic's prompt-caching launch, August 2024.** Anthropic launched prompt caching on 2024-08-14 with a headline "up to 90% cost reduction" on cached input, and named early adopters (Notion among them). Treat the "90%" as the *feature ceiling* — the 0.10× cache-read rate is literally a 90% discount on the cached portion — not as a specific reported figure for any one customer; the April draft attached the 90% to a "Notion-reported" number that could not be verified, so read it as the generic ceiling. Within weeks, OpenRouter, Bedrock, and Vertex shipped matching features, and the 90% discount on cache reads became an industry-wide expectation.[^5]
 
 **Gemini 1.5's 10M-context demo and what it did not prove.** In February 2024, Google DeepMind published Gemini 1.5's technical report showing near-perfect NIAH recall at 1M and passable recall at 10M.[^12] The demo reshaped discourse overnight. What the paper did *not* demonstrate — and this is the gap RULER and NoLiMa filled over the next 12 months — was retrieval quality on complex tasks at those lengths. Vanilla NIAH was the easy problem. Aggregation, multi-hop, and association without literal overlap were the hard ones. RULER scores for Gemini 1.5 Pro dropped well below the Llama-2-7B 4K threshold by 32K on several task classes.[^1] The operational lesson: one benchmark at one scale is a demo, not a deployment story.
 

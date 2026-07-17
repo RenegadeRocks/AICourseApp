@@ -7,7 +7,7 @@ live_sessions:
   - '2026-05-02 — Basecamp Part 1: Prompting & RAGs'
   - '2026-05-03 — Basecamp Part 2: Vibe Coding'
 study_window: 2026-04-27 to 2026-05-03
-last_verified: 2026-04-15
+last_verified: 2026-07-17
 ---
 
 # Week 1 — Prompting, RAG, and vibe coding, rebuilt from first principles
@@ -30,13 +30,13 @@ Two paired deep-dives plus a synthesis day. Each day is ~90–120 minutes of rea
 
 | Day | Topic | Shape |
 |-----|-------|-------|
-| Mon | Prompting from first principles — what the model is actually doing when you prompt it | Deep-dive + experiment + problem set |
-| Tue | Prompt engineering in practice — composition, evals, versioning | Deep-dive + build |
-| Wed | RAG as a system — retrieval, rerank, context assembly, eval | Deep-dive + experiment |
-| Thu | RAG failure modes and the 2025 long-context vs retrieval debate | Deep-dive + problem set |
-| Fri | Vibe coding 1 — what Karpathy actually said, what Claude Code actually does | Deep-dive on agent mechanics |
-| Sat | Vibe coding 2 — the discipline: eval-driven dev, trace inspection, guardrails | Deep-dive + build |
-| Sun | Synthesis, quiz, flashcards | Review |
+| Mon | [[01-mon-prompting-first-principles\|Prompting from first principles]] — what the model is actually doing when you prompt it | Deep-dive + experiment + problem set |
+| Tue | [[02-tue-prompt-engineering-in-practice\|Prompt engineering in practice]] — composition, evals, versioning | Deep-dive + build |
+| Wed | [[03-wed-rag-as-a-system\|RAG as a system]] — retrieval, rerank, context assembly, eval | Deep-dive + experiment |
+| Thu | [[04-thu-rag-failure-modes-and-long-context-debate\|RAG failure modes]] and the long-context-vs-retrieval debate (incl. the Jan 2026 flare-up) | Deep-dive + problem set |
+| Fri | [[05-fri-vibe-coding-part-1-mechanics\|Vibe coding 1]] — what Karpathy said in 2025 and in 2026, what Claude Code actually does | Deep-dive on agent mechanics |
+| Sat | [[06-sat-vibe-coding-part-2-discipline\|Vibe coding 2]] — the discipline: eval-driven dev, trace inspection, guardrails | Deep-dive + build |
+| Sun | [[07-sun-synthesis-quiz-flashcards\|Synthesis, quiz, flashcards]] | Review |
 
 ## Why these three topics belong together
 
@@ -52,10 +52,10 @@ All three run on the same substrate — next-token prediction conditioned on the
 
 Every deep-dive this week engages five things:
 
-1. **At least one live controversy in the field.** The chain-of-thought faithfulness debate (Lanham 2023 and Turpin 2023 vs. the reasoning-model crowd)[^1][^2]; the long-context-vs-RAG argument (does a 1M-token window kill retrieval, or not?); the "is vibe coding responsible engineering?" tension between Karpathy's hedge and how the phrase is used in practice.
+1. **At least one live controversy in the field.** The chain-of-thought faithfulness debate — Lanham 2023 and Turpin 2023, now extended by Anthropic's 2025 finding that even RL-trained reasoning models verbalize the hints they use only ~25% of the time[^1][^2]; the long-context-vs-RAG argument (the January 2026 "RAG is dead" flare-up and its "naive RAG is dead, agentic RAG thrives" resolution); and the vibe-coding tension, now reframed by Karpathy's own February 2026 move to "agentic engineering."
 2. **At least three citations to research published after January 2024.** Frontier, not history.
 3. **Runnable experiments that demonstrate a mechanism.** Some you run in Claude.ai with pen and paper. Some you direct Claude Code to execute and report on. All produce numbers you can see.
-4. **Operator-level specifics with numbers.** Anthropic's Contextual Retrieval reducing top-20 retrieval failure from 5.7% to 2.9% (a 49% relative reduction)[^3]; Hamel Husain's eval-driven development discipline — binary LLM-as-judge, human-agreement calibration, systematic error analysis[^4]; Opus 4.5 hitting 80.9% on SWE-bench Verified while Sonnet 4.5 hits 77.2% at a 200K thinking budget[^5].
+4. **Operator-level specifics with numbers.** Anthropic's Contextual Retrieval reducing top-20 retrieval failure from 5.7% to 2.9% (a 49% *relative* reduction — the canonical treatment is in [[03-wed-rag-as-a-system]])[^3]; Hamel Husain's eval-driven development discipline — binary LLM-as-judge, human-agreement calibration, systematic error analysis[^4]; and a model landscape that, as of July 2026, runs to Claude Fable 5 / Opus 4.8 (88.6% SWE-bench Verified) — a frontier that reprints its own benchmark numbers every couple of months[^5].
 5. **A reviewer lens with named technical disagreements.** Each lesson names specific paragraphs that a Karpathy, a Chip Huyen, a Jason Liu, or a Boris Cherny would push back on, and what they'd specifically argue instead.
 
 ## How to study this week
@@ -79,4 +79,4 @@ The cohort has live sessions on 2026-05-02 and 2026-05-03. They are bonuses. The
 [^2]: Turpin, M., Michael, J., Perez, E., Bowman, S. (2023, NeurIPS). *Language Models Don't Always Say What They Think: Unfaithful Explanations in Chain-of-Thought Prompting.* https://arxiv.org/abs/2305.04388 — biasing features in prompts drop accuracy by up to 36% on BIG-Bench Hard while the model's reasoning trace never mentions the bias.
 [^3]: Anthropic (2024-09-19). *Introducing Contextual Retrieval.* https://www.anthropic.com/news/contextual-retrieval — Contextual Embeddings + Contextual BM25 reduce top-20-chunk retrieval failure from 5.7% to 2.9% (49% relative reduction); with a reranker, 67%.
 [^4]: Hamel Husain (2024). *Your AI Product Needs Evals.* https://hamel.dev/blog/posts/evals/ — eval-driven development framework: binary LLM-as-judge, human-agreement calibration, error analysis as systematic process.
-[^5]: Anthropic (2025-09-29 / 2025-11-24). *Introducing Claude Sonnet 4.5 / Claude Opus 4.5.* https://www.anthropic.com/news/claude-sonnet-4-5, https://www.anthropic.com/news/claude-opus-4-5 — Sonnet 4.5: 77.2% SWE-bench Verified at 200K thinking budget (10-trial avg), 82.0% with parallel test-time compute. Opus 4.5: 80.9%, first model over 80%.
+[^5]: SWE-bench Verified landscape. Historical: Sonnet 4.5 77.2% / Opus 4.5 80.9% (first over 80%), late 2025 (https://www.anthropic.com/news/claude-sonnet-4-5, https://www.anthropic.com/news/claude-opus-4-5). Current, July 2026: Claude Opus 4.8 88.6% (https://www.anthropic.com/news/claude-opus-4-8), Claude Fable 5 ~95% on the independent vals.ai leaderboard (https://www.vals.ai/benchmarks/swebench). Verified 2026-07-17.

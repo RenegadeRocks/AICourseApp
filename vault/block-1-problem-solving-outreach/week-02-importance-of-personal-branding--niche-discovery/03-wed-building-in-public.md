@@ -222,7 +222,7 @@ Five named operators with specific pushbacks on specific lines in this lesson.
 
 ## Citations
 
-[^1]: PhotoAI revenue trajectory — September 2024 $100K monthly milestone and November 2025 $132–138K MRR. *Pieter Levels just passed $100,000 a month in revenue with PhotoAI*, Indie Hackers, 2024, https://www.indiehackers.com/post/tech/pieter-levels-just-passed-100-000-a-month-in-revenue-with-photoai-NToMGI3ZjwSBOfTywZnG ; *Photo AI by Pieter Levels: Complete Deep Dive Case Study — $0 to $132K MRR in 18 Months*, Indie Hackers, 2025, https://www.indiehackers.com/post/photo-ai-by-pieter-levels-complete-deep-dive-case-study-0-to-132k-mrr-in-18-months-3a9a2b1579 .
+[^1]: PhotoAI revenue trajectory — $100K/month milestone September 2024, peak ~$132–138K MRR late 2025, then decline to ~$105K/month revenue (~$80K/month profit) by March 2026. *Pieter Levels just passed $100,000 a month in revenue with PhotoAI*, Indie Hackers, 2024, https://www.indiehackers.com/post/tech/pieter-levels-just-passed-100-000-a-month-in-revenue-with-photoai-NToMGI3ZjwSBOfTywZnG ; *Photo AI Deep Dive*, Indie Hackers, https://www.indiehackers.com/post/photo-ai-by-pieter-levels-complete-deep-dive-case-study-0-to-132k-mrr-in-18-months-3a9a2b1579 ; March-2026 figures via Inspectural, https://inspectural.com/blog/levelsio-photoai-single-file-php/ (verified 2026-07-17).
 
 [^2]: Pieter Levels, *Interior AI now has >99% profit margins — GPU bill is minimal, run by AI robots with no people*, Hacker News discussion thread, 2024, https://news.ycombinator.com/item?id=39886361 .
 
