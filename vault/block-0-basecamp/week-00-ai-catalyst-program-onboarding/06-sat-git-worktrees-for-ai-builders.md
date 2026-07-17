@@ -197,7 +197,7 @@ Here is the list. All four categories are AI-specific failure modes — things t
 
 ### 1. Hallucinated function names and wrong signatures
 
-The model has been trained on millions of APIs. It confidently calls functions that sound right but don't exist in the specific library version you're using, or that existed in v1 but were removed in v2. *Claude Code example from a real April 2026 user report:* the agent wrote `response = openai.ChatCompletion.create(...)` in a project using the `openai` Python SDK v1.x, where that call has been `openai.chat.completions.create(...)` since November 2023. The code looked right, passed lint, passed type-check (because the return type was `Any`), and failed only at runtime in production because the test suite mocked the call.
+The model has been trained on millions of APIs. It confidently calls functions that sound right but don't exist in the specific library version you're using, or that existed in v1 but were removed in v2. *Illustrative example (a common, reproducible class of failure):* an agent writes `response = openai.ChatCompletion.create(...)` in a project using the `openai` Python SDK v1.x, where that call has been `openai.chat.completions.create(...)` since November 2023. The code looks right, passes lint, passes type-check (because the return type is `Any`), and fails only at runtime — especially if the test suite mocks the call.
 
 **How to catch in diff review.** For any new function call you don't immediately recognize, grep the codebase for prior usage. If this is the first time the project is calling this function, open the library docs. If the diff adds a new import from a well-known library, double-check the import path against current docs, not training-data memory.
 
