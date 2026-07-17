@@ -19,18 +19,22 @@ sources:
   - upwork-in-demand-skills-2026
   - upwork-ai-skills-109-percent-2026
   - fiverr-2025-business-trends-index
-  - linkedin-jobs-on-the-rise-2025-ai-consultant
+  - fiverr-ai-squeeze-guidance-2026
+  - linkedin-jobs-on-the-rise-2026-ai-consultant
   - parlance-labs-services-pricing-2026
   - patio11-talking-about-money-2015
   - hbr-ai-structure-consulting-firms-2025
   - thelogic-ai-consultant-reckoning-2025
   - accenture-11000-layoffs-ai-cnbc-2025
+  - accenture-q3-fy26-results-2026
   - sierra-100m-arr-7q-techbuzz-2025
-  - harvey-195m-arr-2025-sacra
-  - jonathan-lasley-mid-market-ai-consulting-2025
+  - harvey-300m-arr-11b-2026
+  - legora-5-6b-valuation-2026
+  - jonathan-lasley-fractional-ai-director-2026
+  - boutique-ai-pricing-guides-2026
   - vstorm-smb-ai-consulting-2025
   - distyl-ai-funding-175m-2025
-last_verified: 2026-04-16
+last_verified: 2026-07-17
 word_count_target: 6000
 ---
 
@@ -40,13 +44,13 @@ word_count_target: 6000
 
 You have the skills. You have completed a generalist AI cohort, you direct Claude Code or Codex the way a senior engineer directs a mid-level one, you have shipped at least one real thing — an internal agent, a prototype, a marketing automation, a micro-product — that works. The question Block 0 answered was *what AI can do and whether a problem fits it*. The question Block 1 opens with is harder and more embarrassing to get wrong: **where is the demand, who is actually paying, and why is your first paying client almost certainly not the one you are currently pitching in your head?**
 
-The failure mode here is specific. Most AI-native builders at your level, when they decide to go independent or start a side services practice, default-pitch one of three wrong buyers: (a) a Fortune 500 "transformation" engagement they read about in a McKinsey slide, (b) a seed-stage AI startup that has less money than they do and wants equity, (c) the one specific enterprise contact they have from their previous job, regardless of whether that contact has a real AI budget or political authority to spend it. A few months in, they have done six discovery calls that went nowhere, one unpaid "pilot," and are starting to wonder if maybe the market isn't there. The market is absolutely there — Gartner pegs 2026 worldwide AI spend at $2.52 trillion, a 44% year-over-year jump[^1] — but it is structured in a way that is hostile to the three default pitches and generous to a fourth that most first-timers never consider.
+The failure mode here is specific. Most AI-native builders at your level, when they decide to go independent or start a side services practice, default-pitch one of three wrong buyers: (a) a Fortune 500 "transformation" engagement they read about in a McKinsey slide, (b) a seed-stage AI startup that has less money than they do and wants equity, (c) the one specific enterprise contact they have from their previous job, regardless of whether that contact has a real AI budget or political authority to spend it. A few months in, they have done six discovery calls that went nowhere, one unpaid "pilot," and are starting to wonder if maybe the market isn't there. The market is absolutely there — Gartner's January 2026 forecast pegged 2026 worldwide AI spend at $2.52 trillion, a 44% year-over-year jump, and its May 19, 2026 revision raised that to $2.59 trillion, 47% growth[^1] — but it is structured in a way that is hostile to the three default pitches and generous to a fourth that most first-timers never consider.
 
 By the end of this lesson you will be able to (1) name the six distinct AI-services buyer segments operating in 2026 and the revenue, deal-size, and sales-cycle signature of each; (2) reject "AI consulting" as a category label and replace it with a segment-specific positioning; (3) construct a bottom-up ICP from live LinkedIn and earnings-call signals rather than top-down demographics; (4) take a defensible position on three live controversies — whether the bottom of the market is defensible, whether verticalize-early dominates horizontal for first-timers, and whether winner-take-most consolidation or long-tail boutiques better describes 2024–2026 data; and (5) disqualify a bad-fit prospect in under 90 seconds using a three-signal rule grounded in data, not vibes. If you can do those five things, you will have collapsed about three months of typical first-timer thrashing into one week of disciplined targeting.
 
 ## Prerequisites
 
-- You have a working mental model of JTBD and problem-fit for AI (Block 0 Week 3 Monday). We reference it; we do not re-teach it.
+- You have a working mental model of JTBD and problem-fit for AI ([[01-mon-problem-discovery-frameworks]] and [[02-tue-when-ai-fits-a-problem]], Block 0 Week 3). We reference it; we do not re-teach it.
 - You know your own current capability envelope at the "what can I ship in 4 weeks directing Claude Code" level. If you don't, pause here and write one paragraph answering that before continuing — the ICP work in this lesson requires it as input.
 
 ## Layer 1 — The six-segment AI buyer taxonomy (and why "AI consulting" is a useless category)

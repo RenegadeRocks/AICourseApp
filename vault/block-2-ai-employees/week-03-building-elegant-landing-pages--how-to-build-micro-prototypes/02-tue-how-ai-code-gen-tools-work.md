@@ -9,30 +9,35 @@ date_due: 2026-06-02
 tags: [ai-code-gen, v0, lovable, bolt, replit, webcontainer, shadcn-ui, generative-ui, design-taste, prompt-engineering, tool-failure-modes, agentic-engineering]
 sources:
   - vercel-introducing-new-v0-2026
+  - vercel-ship-2026-recap
+  - vercel-v0-pricing-2026
   - vercel-ai-sdk-3-generative-ui-2024
   - stackblitz-bolt-new-github-repo
   - lennys-inside-bolt-eric-simons-2025
   - evilmartians-bolt-new-stackblitz-2025
   - posthog-how-bolt-works-2025
+  - bolt-release-notes-2026
   - lovable-prompting-handbook-2025
-  - techcrunch-lovable-16m-raise-2025
+  - techcrunch-lovable-13b-talks-2026
   - ycombinator-masad-coding-agents-2025
+  - replit-agent-3-announcement-2025
+  - techcrunch-replit-9b-valuation-2026
   - growthunhinged-replit-100m-arr-2025
   - shadcn-ui-tailwind-v4-changelog-2025
-  - shadcn-ui-core-principles-deepwiki
-  - karpathy-vibe-coding-x-post-2025
-  - thenewstack-karpathy-agentic-engineering-2026
+  - karpathy-sequoia-ascent-2026
   - willison-ai-assisted-programming-tag
   - cherny-claude-code-lennys-2025
   - venturebeat-vercel-v0-90-percent-problem
   - vercel-agentic-infrastructure-2026
-  - figma-config-2025-make-announcement
+  - anthropic-claude-design-2026
+  - anthropic-fable-5-mythos-5-2026
+  - anthropic-sonnet-5-2026
+  - figma-make-model-selection-2026
   - venturebeat-43pct-ai-code-debugging
   - ieee-spectrum-ai-coding-silent-failures
   - coderabbit-ai-vs-human-code-report
-  - bolt-blog-claude-sonnet-4-partnership
   - devouring-details-rauno-freiberg
-last_verified: 2026-04-17
+last_verified: 2026-07-17
 word_count_target: 6000
 ---
 

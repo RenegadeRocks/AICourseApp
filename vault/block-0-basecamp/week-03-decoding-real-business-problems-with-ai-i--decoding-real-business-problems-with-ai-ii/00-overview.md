@@ -7,7 +7,7 @@ live_sessions:
   - '2026-05-16 — Decoding Real Business Problems with AI — I'
   - '2026-05-17 — Decoding Real Business Problems with AI — II'
 study_window: 2026-05-11 to 2026-05-17
-last_verified: 2026-04-15
+last_verified: 2026-07-17
 ---
 
 # Week 3 — Decoding real business problems with AI
@@ -16,7 +16,7 @@ last_verified: 2026-04-15
 
 By Week 3 you can build. The question is no longer *"can I ship an AI thing"* — it is *"should this AI thing exist, and if so, scoped how, priced how, and evaluated against what?"* Most AI projects fail here, before a single token is generated, because someone picked a problem AI was a bad fit for, or scoped it too wide, or priced it by the hour, or shipped without kill criteria.
 
-This week walks through the decision-making that turns AI capability into an AI business. Problem discovery, fit evaluation, scoping, pricing, and two case-study teardowns — customer support agents (Klarna, Intercom, Decagon) and coding agents (Cursor, Claude Code, Cognition Devin) — with real numbers.
+This week walks through the decision-making that turns AI capability into an AI business. Problem discovery, fit evaluation, scoping, pricing, and two case-study teardowns with real numbers: customer support agents (Klarna, Fin — the company formerly Intercom, now being acquired by Salesforce — Decagon, Sierra) and coding agents (Cursor under SpaceX ownership, Claude Code, Copilot, Cognition Devin, OpenAI Codex). The mid-2026 consolidation wave is itself course material: both teardowns now study a market where the strategic options turned out to be own the model, own the distribution, or get acquired.
 
 ## Who this week is for
 
@@ -31,7 +31,7 @@ You can operate Claude Code, you understand the substrate (Week 0), you have int
 | Wed | Scoping AI projects — MVP, kill criteria, eval gates, cost models, agile-eval framework | Deep-dive + scoping workshop |
 | Thu | Pricing AI services — value-based vs time-based, cost pass-through, margin math | Deep-dive + pricing exercise |
 | Fri | Case study: customer support agent — Klarna, Intercom, Decagon numbers, unit economics | Deep-dive teardown |
-| Sat | Case study: coding agent — Cursor, Claude Code, Cognition Devin, SWE-bench in production | Deep-dive teardown |
+| Sat | Case study: coding agent — Cursor (SpaceX), Claude Code, Copilot, Devin, Codex, SWE-bench in production | Deep-dive teardown |
 | Sun | Synthesis, quiz, flashcards | Review |
 
 ## Why these topics belong together

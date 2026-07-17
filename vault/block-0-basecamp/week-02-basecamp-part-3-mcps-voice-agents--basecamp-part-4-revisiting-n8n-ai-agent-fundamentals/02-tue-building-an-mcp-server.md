@@ -22,7 +22,8 @@ sources:
   - practical-devsecops-mcp-vulnerabilities-2026
   - mcpcat-error-handling-mcp
   - anthropic-opus-4-5
-last_verified: 2026-04-15
+  - mcp-spec-2025-11-25-changelog
+last_verified: 2026-07-17
 word_count_target: 6000
 ---
 
@@ -38,7 +39,7 @@ This is a hands-on lesson for AI catalyst leads, not a spec recap. If you want t
 
 ## Prerequisites
 
-- You've read Monday's lesson [[01-mon-mcp-fundamentals]] (pending) on the MCP wire format, host/client/server roles, and the Primitives (tools, resources, prompts, sampling).
+- You've read Monday's lesson [[01-mon-mcp-as-a-protocol]] on the MCP wire format, host/client/server roles, and the Primitives (tools, resources, prompts, sampling).
 - Claude Code and Claude Desktop both installed. We'll connect a locally-running server to one of them.
 - Node 20+ or Python 3.11+ on your machine. You will not write code by hand — Claude Code will scaffold the server — but the runtime has to be installed.
 - A working mental model of JSON Schema. If you've written one OpenAPI spec in your career, you have enough.
@@ -51,7 +52,7 @@ There are two schools. Know both.
 
 **Position A: Fewer, coarser tools. ("Fat tools.")** Expose one `search_and_read_notion_pages` instead of separate `search_notion`, `get_page`, `get_page_children`, `get_block`. The claim is that LLM agents select tools from their context window, and each tool description eats real tokens; when you have dozens of servers mounted, the selection problem gets worse nonlinearly. Anthropic's own engineering guide on tool design pushes this direction explicitly: when too many servers are connected, tool definitions and results consume excessive tokens, and a handful of coarse tools routinely outperform dozens of fine-grained ones on real tasks.[^1] The "Tool Search Tool" and "Code Execution with MCP" work from Anthropic in late 2025 is essentially an admission that the default MCP design — load every tool into context on every turn — scales catastrophically past ~5 servers.[^2]
 
-**Position B: Thin, composable tools. ("Unix philosophy.")** Expose small single-purpose tools and let the agent compose them. The claim is that composability gives you reusability, transparent failure modes, testability, and agents that don't have to learn a bespoke coarse vocabulary for every server. Jannik Reinhard's widely-cited "Why CLI Tools Are Beating MCP for AI Agents" (Feb 2026) reports a 28% higher task-completion score at roughly the same total token count when agents use a set of small CLI tools in a bash shell instead of a monolithic MCP server for the same domain; the comparison was run on a set of developer browser-automation and repo-navigation tasks scored pass/fail per task, not a standardized public benchmark — treat as an operator's finding, not a peer-reviewed number.[^3] The thin-tools camp also points to the token math: Playwright MCP ships 21 tools at ~13.7k tokens of descriptions, Chrome DevTools MCP ships 26 at ~18.0k tokens. Stack two or three of those and a 200k-context model is spending a third of its window on tools it mostly won't call.[^3]
+**Position B: Thin, composable tools. ("Unix philosophy.")** Expose small single-purpose tools and let the agent compose them. The claim is that composability gives you reusability, transparent failure modes, testability, and agents that don't have to learn a bespoke coarse vocabulary for every server. But note the sharpest version of this camp actually argues *against* MCP for many local tasks in favor of plain CLIs: Jannik Reinhard's widely-cited "CLI Tools vs MCP: Better AI Agents With Less Context" (Feb 2026) reports that the GitHub MCP server ships **93 tools costing roughly 55,000 tokens of context before you ask a single question** — about half a 128k window gone to plumbing — and that swapping to `mgc`/`az`/PowerShell CLIs for the same enterprise task (listing non-compliant Intune devices via Microsoft Graph) freed most of that budget. His comparison is an enterprise-IT operator's report, not a standardized public benchmark — treat the direction as sound and the exact numbers as one practitioner's measurement.[^3] The general token math is what makes the point stick: every tool description is loaded into context eagerly, so stacking a few dozen-tool servers can burn a third of even a large context window on tools the agent mostly won't call.[^3]
 
 **Where I land, and why:** the debate is miscast. The right decomposition isn't "fat vs thin" — it's *at what level of abstraction does a single LLM-useful task live?* The test I use in practice: can the agent accomplish the 80% use case of your server in *one to three tool calls*? If not, your tools are too thin (look-and-click-and-read-and-interpret-and-summarize as four calls is wrong) *or* too thin in a different way (you've exposed the REST API verbatim and the agent has to replicate a stateful workflow that the API owner already built a shortcut for). If yes, you're roughly right regardless of whether the count is 6 or 60.
 
@@ -157,7 +158,7 @@ Four patterns in the wild, each with a specific failure mode:
 - Clients must use **Resource Indicators (RFC 8707)** when requesting tokens, so a malicious MCP server can't silently accept a token scoped for a different resource.
 - **Dynamic Client Registration (RFC 7591)** is the recommended path for clients to obtain OAuth client IDs without a human in the loop.
 
-If you're building a remote MCP server and you haven't read the June 2025 authorization revision, read it before you ship.[^7] The spec is tight — maybe 30 minutes. Every prior MCP auth guide on the internet is wrong in at least one material way relative to this revision.
+If you're building a remote MCP server and you haven't read the June 2025 authorization revision, read it before you ship.[^7] The spec is tight — maybe 30 minutes. Every prior MCP auth guide on the internet is wrong in at least one material way relative to this revision. And read the **2025-11-25** revision right after it: that release layered on OpenID Connect Discovery 1.0 support, OAuth **Client ID Metadata Documents** (registration-free clients), a **client-credentials M2M flow** for no-human-in-the-loop server-to-server auth, RFC 9728 alignment that makes the `WWW-Authenticate` header optional with a `.well-known` fallback, and incremental scope consent. If your server needs machine-to-machine auth, that M2M flow is the shipped, spec-blessed path as of mid-2026.[^17]
 
 **Per-tool auth scoping.** Independent of the above: inside the server, each tool should be able to require a distinct OAuth scope (or a distinct API capability). A read-only `search_notion` tool requiring only `notion:read` and a write-heavy `create_page` tool requiring `notion:write` is table stakes. Notion's hosted MCP enforces this server-side: the OAuth consent flow surfaces the exact scope set your agent will receive, per-tool.[^4] Servers that grant blanket scope on connect are inviting the exact class of exploit we're about to discuss.
 
@@ -235,7 +236,7 @@ The worst-case failure mode — and it is common in MCP servers in the wild — 
 
 ## Layer 5 — Teardown: Notion's hosted MCP, what they did right, what's still open
 
-The best MCP server I've read end-to-end as of April 2026 is Notion's hosted one, both because the code is public[^13] and because Notion wrote a post-mortem on their own design choices[^4]. Worth dissecting.
+The best MCP server I've read end-to-end as of mid-2026 is Notion's hosted one, both because the code is public[^13] and because Notion wrote a post-mortem on their own design choices[^4]. Worth dissecting.
 
 **Tool surface:** 18 tools across 6 categories. Not 60, not 6. The categories map to user intents, not to Notion's REST API:
 
@@ -306,7 +307,7 @@ Five problems. Each has an observable outcome. Keep answers in `week-02-notes.md
 
 ## Operator war stories — specific failures, specific numbers
 
-**The 67k-token opening state.** A widely-shared operator-community thread in late 2025 (attributed in circulation to Aakash Gupta; treat the specific attribution as composite social-media anecdote, the numbers as representative of what I've personally reproduced in Claude Desktop with 6-8 servers mounted) documented a user who, with 7 MCP servers connected in Claude Desktop, was burning 67,000 tokens of context *before typing a single character* — 33% of Sonnet's 200k window gone to tool definitions. A single Docker MCP server alone consumed ~15k tokens. This is the direct consequence of the fat-vs-thin debate playing out in practice: every MCP author defaulting to thin tools, stacking additively, with no mechanism to lazy-load. Anthropic's "Code Execution with MCP" work is a response to exactly this failure mode — present MCP servers as code APIs the agent can import selectively rather than a flat tool list loaded eagerly.[^2] Until that pattern is mainstream, the practical mitigation is: don't connect more than 3 servers at once in a single client, and audit what you have mounted.
+**The 67k-token opening state.** A widely-shared operator-community thread in late 2025 (attributed in circulation to Aakash Gupta; treat the specific attribution as composite social-media anecdote, the numbers as representative of what I've personally reproduced in Claude Desktop with 6-8 servers mounted) documented a user who, with 7 MCP servers connected in Claude Desktop, was burning 67,000 tokens of context *before typing a single character* — a third of a then-standard 200k window gone to tool definitions. A single Docker MCP server alone consumed ~15k tokens. Default context windows are larger now (the current Claude/GPT/Gemini agent tiers are 1M-token by mid-2026), which shrinks the *proportional* bite — but the absolute waste, the latency of shipping 67k tokens every turn, and the selection-accuracy hit from an overstuffed tool list all remain. This is the direct consequence of the fat-vs-thin debate playing out in practice: every MCP author defaulting to thin tools, stacking additively, with no mechanism to lazy-load. Anthropic's "Code Execution with MCP" work is the response — present MCP servers as code APIs the agent imports selectively rather than a flat tool list loaded eagerly — and by mid-2026 it, plus the Tool Search Tool, has moved from novel to mainstream practitioner advice.[^2] The practical mitigation is still: don't eagerly mount a dozen servers in a single client, prefer code-execution/on-demand tool loading where the client supports it, and audit what you have connected.
 
 **The Supabase incident, again, with numbers.** General Analysis's disclosure showed the attack reliably exfiltrating the entire `integration_tokens` table in a single user turn on the default Supabase MCP configuration with Cursor. The fix — enabling `--read-only` and running the MCP under an RLS-respecting role — had been documented but was not the default. *Defaults are policy.* An MCP server that ships with destructive capability on by default is shipping an exploit by default; the fact that a mitigation exists in the README does not absolve the server author.[^8]
 
@@ -316,7 +317,7 @@ Five problems. Each has an observable outcome. Keep answers in `week-02-notes.md
 
 ## Open questions as of early 2026
 
-**Q1. Fat vs thin — is the answer "code execution"?** Anthropic's late-2025 pivot toward "MCP servers as code APIs the agent imports" reframes the debate: maybe the right unit isn't a tool list at all; maybe it's a typed module the agent can selectively call methods on.[^2] That changes the surface design problem from "how many tools" to "how ergonomic is the SDK surface when an LLM is writing against it." Too early to tell if this supersedes the current tool paradigm or just sits alongside it for power users.
+**Q1. Fat vs thin — the answer increasingly is "code execution."** What was a late-2025 Anthropic pivot — "MCP servers as code APIs the agent imports" — is, by mid-2026, mainstream practitioner discourse rather than an open question. The Skills + code-execution + CLI-tools direction (see Reinhard's May-2026 follow-up mapping the Skills/MCP/CLI/Computer-Use tooling surface) reframes the unit of composition from a tool list to a typed module the agent selectively calls methods on.[^2] The live design question is no longer "will this replace tool lists" but "how ergonomic is the SDK surface when an LLM writes against it, and where does a flat tool list still beat an import." Flat tool lists remain fine for a handful of tools; code execution wins as server count grows.
 
 **Q2. Stateless vs stateful.** Should MCP servers maintain per-user session state (pagination cursors, draft documents, transaction scopes), or stay pure and return full state per call? The spec doesn't mandate either. Stateless is easier to operate and scale; stateful enables workflows (`start_draft` → `append_to_draft` → `finalize_draft`) that are awkward to express as independent tool calls. Most 2025 servers are stateless with client-managed cursors; expect the next wave to experiment with scoped session state once the authorization model (now sane) is fully absorbed.
 
@@ -324,7 +325,7 @@ Five problems. Each has an observable outcome. Keep answers in `week-02-notes.md
 
 ## Reviewer lens — named technical disagreements
 
-- **Anthropic engineering, on the fat-tools framing in Layer 1.** I wrote *"the right decomposition is at what level of abstraction does a single LLM-useful task live"* and leaned fat. Anthropic's own writing on code execution with MCP would push harder: *the unit of composition should be executable code, not a tool list at all.*[^2] My framing is still tool-centric; theirs is post-tool. I stand by fat tools as the right default for April-2026 hosted MCP servers, but the next paradigm is visibly on approach, and readers building for 12-month horizons should be tracking it.
+- **Anthropic engineering, on the fat-tools framing in Layer 1.** I wrote *"the right decomposition is at what level of abstraction does a single LLM-useful task live"* and leaned fat. Anthropic's own writing on code execution with MCP pushes harder: *the unit of composition should be executable code, not a tool list at all.*[^2] My framing is tool-centric; theirs is post-tool — and by mid-2026 theirs is winning the discourse. Fat tools are still a fine default for a hosted server with a handful of tools; but for anything that will be mounted alongside several other servers, design the surface assuming the agent may reach it through a code-execution sandbox, not an eagerly-loaded flat list.
 
 - **Simon Willison, on the Supabase section.** I framed the incident as "elevated privilege + untrusted data + exfiltration." Willison would push back that the framing *also* needs to name the specific architectural failure mode: an LLM acting as a confused deputy with credentials it never should have had in the first place.[^8] The fix isn't "add a flag"; it's "never hand the agent credentials that span tenants or privilege levels the agent cannot reason about." I gestured at this with "defaults are policy"; Willison would want the claim sharper.
 
@@ -332,7 +333,7 @@ Five problems. Each has an observable outcome. Keep answers in `week-02-notes.md
 
 - **A security engineer, on the auth section.** I wrote *"read the June 2025 spec revision before you ship"* and linked it. A security reviewer would push back: *"and red-team it."* The MCPTox benchmark and the Palo Alto sampling-attack work show the spec is necessary but not sufficient; implementation bugs in how servers handle tokens, sampling callbacks, and tool descriptions are where real exploits live.[^10][^11] My section is correct as a starting point; it is not a sufficient security review of any real server. No catalyst-level lesson should leave the reader thinking otherwise.
 
-- **An honest uncertainty on the Notion teardown.** I called Notion's hosted MCP "the best I've read end-to-end." That's a defensible opinion based on public artifacts as of April 2026. It's not a claim I can rigorously rank against servers I haven't seen the source of (many enterprise MCPs are private). Take "best" as "best-documented production MCP I've had access to read," not as a comparative benchmark.
+- **An honest uncertainty on the Notion teardown.** I called Notion's hosted MCP "the best I've read end-to-end." That's a defensible opinion based on public artifacts as of mid-2026. It's not a claim I can rigorously rank against servers I haven't seen the source of (many enterprise MCPs are private). Take "best" as "best-documented production MCP I've had access to read," not as a comparative benchmark.
 
 ## Further reading
 
@@ -364,7 +365,7 @@ Five problems. Each has an observable outcome. Keep answers in `week-02-notes.md
 
 [^2]: Anthropic (2025). *Code execution with MCP: building more efficient AI agents.* Anthropic Engineering. https://www.anthropic.com/engineering/code-execution-with-mcp — argues that presenting MCP servers as code APIs the agent imports selectively outperforms eager-loaded tool lists as server count grows.
 
-[^3]: Jannik Reinhard (2026-02-22). *Why CLI Tools Are Beating MCP for AI Agents.* https://jannikreinhard.com/2026/02/22/why-cli-tools-are-beating-mcp-for-ai-agents/ — reports 28% higher task-completion score for well-designed CLI tools vs monolithic MCP servers at matched token counts; token accounting for Playwright MCP (21 tools, ~13.7k tokens) and Chrome DevTools MCP (26 tools, ~18.0k tokens).
+[^3]: Jannik Reinhard (2026-02-22). *CLI Tools vs MCP: Better AI Agents With Less Context* (URL slug still reads "why-cli-tools-are-beating-mcp-for-ai-agents"). https://jannikreinhard.com/2026/02/22/why-cli-tools-are-beating-mcp-for-ai-agents/ — the article's actual headline figures are that the GitHub MCP server ships ~93 tools costing ~55,000 tokens of context before any query (about half a 128k window), and that CLI tools (`mgc`/`az`/PowerShell for a Microsoft Graph Intune task) reclaim most of that budget. Reinhard is an enterprise IT architect/Microsoft MVP; treat as an operator report, not a peer-reviewed benchmark. (Note: the April version of this lesson misattributed a "28% higher task-completion" figure and per-tool Playwright/Chrome-DevTools token counts to this post; those specific numbers do not appear in it and have been removed.)
 
 [^4]: Notion (2025). *Notion's hosted MCP server: an inside look.* https://www.notion.com/blog/notions-hosted-mcp-server-an-inside-look — 18 tools across 6 categories, OpenAPI-to-Zod codegen pipeline, Markdown-as-input design rationale, OAuth consent flow.
 
@@ -390,6 +391,8 @@ Five problems. Each has an observable outcome. Keep answers in `week-02-notes.md
 
 [^15]: Mario Zechner (2025-11-02). *What if you don't need MCP at all?* https://mariozechner.at/posts/2025-11-02-what-if-you-dont-need-mcp/ — the CLI-first counter-argument for local-trust developer tooling.
 
-[^16]: Anthropic (2025-11-24). *Introducing Claude Opus 4.5.* https://www.anthropic.com/news/claude-opus-4-5 — model referenced for default agent context-window math in the "67k-token opening state" war story.
+[^16]: Anthropic (2025-11-24). *Introducing Claude Opus 4.5.* https://www.anthropic.com/news/claude-opus-4-5 — the ~200k-window model generation the original "67k-token opening state" war story was measured against. By mid-2026 the default agent tiers (Claude Sonnet 5, GPT-5.6, Gemini 3.5 Flash) ship 1M-token context, which shrinks the proportional cost but not the absolute waste.
 
-_last_verified: 2026-04-15_
+[^17]: Model Context Protocol. *Key Changes — spec revision 2025-11-25.* https://modelcontextprotocol.io/specification/2025-11-25/changelog — OAuth additions layered onto the 2025-06-18 baseline: OIDC Discovery 1.0, Client ID Metadata Documents, client-credentials M2M flow (SEP-1046), RFC 9728 alignment, incremental scope consent; plus experimental Tasks and JSON Schema 2020-12. Corroborated by WorkOS, https://workos.com/blog/mcp-2025-11-25-spec-update .
+
+_last_verified: 2026-07-17_

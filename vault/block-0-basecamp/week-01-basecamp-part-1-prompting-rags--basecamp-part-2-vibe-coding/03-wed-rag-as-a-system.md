@@ -69,7 +69,7 @@ There are five reasons a practitioner reaches for a RAG architecture rather than
 
 **Corpus scale.** The parametric memory of any model is a lossy compression of its training data. Facts that appear rarely in training are encoded weakly. For domain-specific corpora — niche regulatory texts, company-internal documentation, specialized scientific literature — retrieval outperforms parametric recall because the documents are present verbatim, not approximated through a compressed encoding.
 
-None of this means RAG is always the right answer. For truly general Q&A across a broad and stable knowledge domain, a well-prompted frontier model with parametric memory often outperforms a poorly designed RAG system. The failure mode that gets teams in trouble is not choosing RAG incorrectly — it's choosing RAG and then under-investing in the retrieval quality while over-investing in the generation prompt.
+None of this means RAG is always the right answer. For truly general Q&A across a broad and stable knowledge domain, a well-prompted frontier model with parametric memory often outperforms a poorly designed RAG system. The failure mode that gets teams in trouble: choosing RAG, then under-investing in retrieval quality while over-investing in the generation prompt.
 
 ---
 
@@ -97,7 +97,7 @@ The empirical result: in Jason Liu's May 2024 comparison testing against large e
 
 The practical answer is not BM25 or embeddings. It's both, merged via Reciprocal Rank Fusion (RRF). RRF takes the ranked lists from each retrieval method and combines them by summing reciprocal ranks, so a document that appears at rank 3 in BM25 and rank 7 in semantic search outscores a document that only appears in one list.
 
-The empirical argument for hybrid over either alone is not subtle. On Natural Questions (open-domain QA), BM25 passage recall was approximately 22%; dense retrieval reached approximately 49%; hybrid pipelines achieved up to 53%.[^3] On the BEIR benchmark suite (diverse retrieval tasks), BM25 nDCG@10 of 43.4 improved to over 52.6 via hybrid reranking.
+The empirical argument for hybrid over either alone is not subtle. On Natural Questions (open-domain QA), BM25 passage recall was approximately 22%; dense retrieval reached approximately 49%; hybrid pipelines achieved up to 53%. On the BEIR benchmark suite (diverse retrieval tasks), BM25 nDCG@10 of 43.4 improved to over 52.6 via hybrid reranking.[^3] A sourcing caveat: those specific percentages come from a practitioner synthesis of the dense-passage-retrieval (Karpukhin et al. 2020) and BEIR literatures, not from one controlled study — treat the ordering (hybrid > dense > BM25 on vocabulary-gapped QA) as the robust finding and the exact numbers as illustrative.
 
 Anthropic's Contextual Retrieval results show the same dynamic. Their hybrid of Contextual Embeddings plus Contextual BM25 reduces top-20 chunk failure rate from 5.7% to 2.9% — a 49% relative improvement — while Contextual Embeddings alone only reach 3.7% failure rate, a 35% improvement.[^4] The lexical signal is doing meaningful work even on top of semantically enriched embeddings. More on exactly what "contextual" means in Part 4.
 
@@ -117,7 +117,7 @@ The tension: smaller chunks retrieve more precisely but give the LLM less contex
 
 The most common approach. Split at a fixed character or token count, with some overlap window. You can index ten million documents in an hour. The failure mode is that chunk boundaries slice across semantic units — a sentence is split mid-clause, a code snippet is severed from its docstring, a financial table is separated from the text that interprets it.
 
-Jason Liu's January 2024 inversion analysis is useful here: *"If I wanted to build the worst RAG system, I would chunk all my documents at arbitrary fixed sizes and not think about whether the chunks are semantically coherent."*[^5] The key failure mode he identifies is not that the retrieval misses documents — it's that it retrieves the right document but the wrong chunk, so the answer is technically adjacent to the context but not present within it.
+Jason Liu's January 2024 inversion analysis is useful here: *"If I wanted to build the worst RAG system, I would chunk all my documents at arbitrary fixed sizes and not think about whether the chunks are semantically coherent."*[^5] The key failure mode he identifies: the system retrieves the right document but the wrong chunk, so the answer is technically adjacent to the context but not present within it.
 
 Fixed-size chunking is appropriate when your documents have a natural fixed-size structure (e.g., individual customer support tickets, short product descriptions, standardized regulatory filings with consistent paragraph lengths). It fails on long-form documents with heterogeneous structure: technical documentation, legal briefs, narrative research reports.
 
@@ -190,13 +190,13 @@ The two-stage architecture emerges from this tradeoff: first stage retrieves k=5
 
 ### Cohere Rerank 4
 
-Cohere's Rerank API is a mature commercial cross-encoder product. As of December 2025, Cohere released Rerank 4, purpose-built for enterprise search. In independent benchmarks it outperforms MongoDB's Voyage models and Elasticsearch's Jina rerankers in overall search relevance, with improved latency, flexible deployment, and robust multilingual support. Latency for Cohere's API reranking: 150–400ms plus network, on a candidate pool of 50 documents. For applications requiring sub-100ms end-to-end latency, Cohere Rerank is typically deployed on a pre-filtered candidate pool of 30–50, not 200.
+Cohere's Rerank API is a mature commercial cross-encoder product. Rerank 4, released December 11, 2025, is the current flagship, shipped in two variants — rerank-4-pro (accuracy-first) and rerank-4-fast (latency-first) — with a 32K-token context window, four times Rerank 3.5's, plus support for 100+ languages and a self-learning mechanism that adapts relevance scoring to enterprise domains.[^13] The longer context matters for exactly the corpora where reranking earns its keep: legal and financial documents where the relevant passage plus its surrounding context exceeds the old 8K limits. Latency for Cohere's API reranking runs 150–400ms plus network on a candidate pool of 50 documents; for applications requiring sub-100ms end-to-end latency, deploy the fast variant on a pre-filtered candidate pool of 30–50, not 200.
 
-### Voyage AI rerank-2 and rerank-2-lite
+### Voyage AI rerankers (now MongoDB)
 
-Voyage AI's September 2024 rerankers are worth knowing specifically because they're the rerankers Anthropic uses in their Contextual Retrieval stack. Voyage rerank-2 adds an average of 13.89% accuracy improvement on top of OpenAI's text-embedding-3-large across 93 retrieval datasets — 2.3x the improvement of Cohere's rerank-english-v3 on the same benchmark.[^7] Context length: 16K for rerank-2, 8K for rerank-2-lite. For legal and financial documents where relevant context can span many paragraphs, the 16K context is meaningful.
+Voyage AI — acquired by MongoDB in 2025 — is worth knowing specifically because Voyage rerankers are what Anthropic used in the Contextual Retrieval stack. The September 2024 generation, rerank-2, added an average 13.89% accuracy improvement on top of OpenAI's text-embedding-3-large across 93 retrieval datasets, with a 16K context window.[^7] The current generation, rerank-2.5 and rerank-2.5-lite (August 2025), doubles context to 32K and introduces instruction-following — you can steer relevance scoring with natural language ("prefer primary sources over commentary"), which MongoDB reports adds an average 11.48% accuracy on instruction-following retrieval datasets.[^14]
 
-The practical question for a reranker choice: what is your candidate pool size, what is your latency budget, and do you need multi-language support? For most English-language production systems with 50–100 candidates and a few hundred milliseconds of budget, Cohere Rerank 3 or Voyage rerank-2-lite are both solid. For multilingual enterprise search with complex query-document interaction, Voyage rerank-2's context length advantage becomes relevant.
+The practical question for a reranker choice: what is your candidate pool size, what is your latency budget, and do you need multi-language support or instruction-steered relevance? For most English-language production systems with 50–100 candidates and a few hundred milliseconds of budget, Cohere rerank-4-fast and Voyage rerank-2.5-lite are both solid. Head-to-head numbers between the two current flagships are mostly vendor-published (each claims wins on its own benchmark suite), so treat cross-vendor comparisons as marketing until you've measured on your own corpus.
 
 ---
 
@@ -230,7 +230,7 @@ For attribution-sensitive applications — legal research, financial analysis, m
 Answer the user's question. Cite sources using [1], [2], [3] notation.
 ```
 
-This is not optional decoration. Without explicit citation scaffolding, LLMs will paraphrase retrieved content without attribution, and the provenance advantage of RAG over parametric memory is lost. More concretely: in a legal research application, an answer without a source citation is not an answer — it's a liability.
+Skip this scaffolding and LLMs will paraphrase retrieved content without attribution, and the provenance advantage of RAG over parametric memory is lost. More concretely: in a legal research application, an answer without a source citation is not an answer — it's a liability.
 
 ### Chunk deduplication and overlap management
 
@@ -283,7 +283,7 @@ Hsieh et al.'s RULER benchmark (NVIDIA, COLM 2024) was designed specifically to 
 
 ### NoLiMa and the non-lexical gap
 
-Adobe Research's NoLiMa benchmark (ICML 2025) went further.[^11] NoLiMa specifically minimizes lexical overlap between the query and the needle. The question and the relevant passage use different words — the model must infer the connection, not match tokens. Results: while LLMs perform well in short contexts (under 1K tokens), performance degrades significantly as context length increases. At 32K tokens, 11 out of the evaluated models dropped below 50% of their strong short-length baseline. Even GPT-4o dropped from 99.3% at short context to 69.7% at longer context.
+Adobe Research's NoLiMa benchmark (ICML 2025) went further.[^11] NoLiMa specifically minimizes lexical overlap between the query and the needle. The question and the relevant passage use different words — the model must infer the connection, not match tokens. Results: while LLMs perform well in short contexts (under 1K tokens), performance degrades significantly as context length increases. Of the 12 models evaluated — all claiming at least 128K context — 10 dropped below 50% of their strong short-length baseline at 32K tokens. Even GPT-4o dropped from 99.3% at short context to 69.7% at longer context.
 
 The interpretation from the NoLiMa authors: performance drops stem from attention mechanisms facing increased difficulty with non-lexical retrieval in longer contexts. Adding chain-of-thought prompting did not reliably fix the problem.
 
@@ -293,13 +293,15 @@ Chroma Research's July 2025 study "Context Rot"[^12] evaluated 18 LLMs, includin
 
 ### Taking a position
 
+The debate re-erupted in January 2026, when a viral "RAG is DEAD" wave swept LinkedIn, Reddit, and Hacker News on the strength of 1M-token windows becoming table stakes. The wave resolved into a consensus worth stating precisely: **naive RAG is dead; sophisticated, agentic RAG is thriving.**[^15] Vanilla 2023-style RAG — chunk, embed, top-k, hope — is no longer a defensible production default. Retrieval itself is not going anywhere. Thursday's lesson ([[04-thu-rag-failure-modes-and-long-context-debate]]) takes this argument apart in full.
+
 The correct position, supported by these results, is not "RAG is obsolete" and not "RAG always beats long context." It is:
 
 Long context wins when: your corpus fits comfortably within the context window, your task requires reasoning across the full document rather than finding specific passages, you can afford the token cost per query, and the query pattern is stable enough that loading the full document is efficient.
 
 RAG wins when: your corpus is too large for the context window (even at 1M tokens, a 10-million-document support archive doesn't fit), freshness requirements mean daily or hourly index updates, query patterns are sparse relative to corpus size (you don't need to read all 500 pages of the filing for every question about it), and multi-hop reasoning over large corpora must be reliable rather than "usually works."
 
-The nuanced position: long context and retrieval are complementary, not alternatives. The best production systems in 2025 use a retrieval stage to narrow the candidate set, then a long-context model to reason over the narrowed context. The Gemini 1.5 and Claude Opus architectures are better at long-context reasoning than their predecessors — which makes them better RAG *generation* models, not replacements for RAG retrieval.
+The 2026 synthesis of the two: **use long context to reason over a bounded evidence set; use retrieval to decide what that evidence set should be.** The best production systems use a retrieval stage to narrow the candidate set, then a long-context model to reason over the narrowed context. Current frontier models are much better at long-context reasoning than their predecessors — which makes them better RAG *generation* models, not replacements for RAG retrieval.
 
 The benchmark evidence (RULER, NoLiMa, Context Rot) consistently shows that the models claiming 1M-token context windows cannot reliably find and reason over non-lexical needles as context length grows. Production systems that rely on "just load everything" for multi-hop reasoning tasks will find this empirically.
 
@@ -399,7 +401,7 @@ A team built a RAG system for a marketing agency's client intelligence database.
 
 **Disagreement 1 — The BM25 vs. embeddings empirical comparison is not clean.** This lesson cites Jason Liu's observation that "full text search and embeddings basically performed the same, except full text search was about 10 times faster" on his essay corpus.[^2] Liu himself acknowledges the corpus is his own writing, which has relatively consistent vocabulary and style. On corpora with high vocabulary mismatch between queries and documents (jargon-heavy technical docs, domain-specific abbreviations), embedding retrieval consistently outperforms BM25. Citing this number as a general result is a generalization the original text doesn't support. A more careful framing: for query-to-document vocabulary match, BM25 is competitive; for vocabulary gap, embeddings are necessary; for production systems, measure both.
 
-**Disagreement 2 — The "Lost in the Middle" result is dated relative to current frontier models.** Liu et al. 2023 documented degradation in models available in 2023 — GPT-3.5, GPT-4, and Claude 2 variants. Anthropic and Google have trained subsequent models with explicit long-context attention modifications. The lesson applies the lost-in-the-middle heuristic as a current design constraint, which may be over-conservative for Claude 3.5+ or Gemini 1.5+. The honest position: Context Rot (Chroma, July 2025) suggests the phenomenon persists in 2025 frontier models, but the degree of degradation is model-specific. Treat the context placement heuristic as a reasonable default, not an iron law — and measure it on your target model.
+**Disagreement 2 — The "Lost in the Middle" result is dated relative to current frontier models.** Liu et al. 2023 documented degradation in models available in 2023 — GPT-3.5, GPT-4, and Claude 2 variants. Anthropic and Google have trained subsequent models with explicit long-context attention modifications. The lesson applies the lost-in-the-middle heuristic as a current design constraint, which may be over-conservative for the current frontier generation (Claude Sonnet 5 / Fable 5, Gemini 3.x). The honest position: Context Rot (Chroma, July 2025) showed the phenomenon persisting well after the original 2023 study, but the degree of degradation is model-specific and no equivalent public study covers the mid-2026 frontier. Treat the context placement heuristic as a reasonable default, not an iron law — and measure it on your target model.
 
 **Disagreement 3 — The RAGAS faithfulness metric has a documented gaming problem this lesson underplays.** The lesson's "common failure modes" section mentions faithfulness gaming, but the framing makes it sound like an edge case. In practice, RAGAS faithfulness scores are routinely inflated by LLMs that are trained to sound grounded. Hamel Husain, in his evaluation-driven development work with production teams, has consistently flagged RAGAS faithfulness as a weak signal that requires supplementation with LLM-as-judge on adversarial claim sets, not a number to be reported without qualification. A lesson teaching RAGAS as a primary eval framework should name this limitation more centrally, not in the failure modes section.
 
@@ -420,7 +422,8 @@ A team built a RAG system for a marketing agency's client intelligence database.
 - NoLiMa, "Long-Context Evaluation Beyond Literal Matching" (Adobe Research / ICML 2025). Read the abstract and Figure 3 (performance by context length). [https://arxiv.org/abs/2502.05167](https://arxiv.org/abs/2502.05167)
 - Chroma Research, "Context Rot" (July 2025). Empirical degradation across 18 models. Essential if you're deciding between RAG and long-context for a new system. [https://research.trychroma.com/context-rot](https://research.trychroma.com/context-rot)
 - Jason Liu, "How to Build a Terrible RAG System" (January 2024). Read this for the anti-patterns. [https://jxnl.co/writing/2024/01/07/inverted-thinking-rag/](https://jxnl.co/writing/2024/01/07/inverted-thinking-rag/)
-- Voyage AI blog, "rerank-2 and rerank-2-lite" (September 2024). If you're choosing a reranker, this gives you the benchmark numbers to evaluate against. [https://blog.voyageai.com/2024/09/30/rerank-2/](https://blog.voyageai.com/2024/09/30/rerank-2/)
+- Cohere, "Introducing Rerank 4" (December 2025). The current Cohere flagship: variants, 32K context, deployment options. [https://cohere.com/blog/rerank-4](https://cohere.com/blog/rerank-4)
+- MongoDB / Voyage AI, "rerank-2.5 and rerank-2.5-lite: Instruction-Following Rerankers" (August 2025). The current Voyage generation and what instruction-steered relevance buys. [https://www.mongodb.com/company/blog/product-release-announcements/rerank-2-5-and-rerank-2-5-lite-instruction-following-rerankers](https://www.mongodb.com/company/blog/product-release-announcements/rerank-2-5-and-rerank-2-5-lite-instruction-following-rerankers)
 
 **Optional (historical grounding):**
 
@@ -454,3 +457,9 @@ A team built a RAG system for a marketing agency's client intelligence database.
 [^11]: Adobe Research. (2025, February). NoLiMa: Long-Context Evaluation Beyond Literal Matching. *ICML 2025*. https://arxiv.org/abs/2502.05167 — Supports: performance degradation on non-lexical retrieval at 32K tokens; 11 models dropping below 50% of short-context baseline; CoT prompting failing to close the gap; the attention-mechanism explanation for the degradation.
 
 [^12]: Chroma Research. (2025, July). Context Rot: How Increasing Input Tokens Impacts LLM Performance. *research.trychroma.com*. https://research.trychroma.com/context-rot — Supports: context rot empirically confirmed in 2025 frontier models (Claude 4, GPT-4.1, Gemini 2.5); three contributing mechanisms (lost-in-the-middle, attention dilution, distractor interference); degradation observed before context window saturation.
+
+[^13]: Cohere. (2025, December 11). Introducing Rerank 4. *cohere.com/blog*. https://cohere.com/blog/rerank-4 — Supports: Rerank 4 release date, rerank-4-pro / rerank-4-fast variants, 32K context window (4x Rerank 3.5), 100+ languages, self-learning relevance adaptation. See also https://venturebeat.com/ai/coheres-rerank-4-quadruples-the-context-window-to-cut-agent-errors-and-boost. Verified 2026-07-17.
+
+[^14]: MongoDB / Voyage AI. (2025, August 11). rerank-2.5 and rerank-2.5-lite: Instruction-Following Rerankers. https://www.mongodb.com/company/blog/product-release-announcements/rerank-2-5-and-rerank-2-5-lite-instruction-following-rerankers — Supports: 32K context (2x rerank-2), first instruction-following rerankers, +11.48% average accuracy from instructions (rerank-2.5), accuracy gains over Cohere Rerank v3.5; MongoDB acquisition context. Verified 2026-07-17.
+
+[^15]: byteiota. (2026). RAG vs Long Context 2026: Is Retrieval Really Dead? https://byteiota.com/rag-vs-long-context-2026-retrieval-debate/ — Supports: the January 2026 viral "RAG is dead" wave and the resolution into "naive RAG is dead; sophisticated/agentic RAG is thriving." See also LightOn, "RAG is Dead, Long Live RAG: Retrieval in the Age of Agents," https://lighton.ai/lighton-blogs/rag-is-dead-long-live-rag-retrieval-in-the-age-of-agents. Verified 2026-07-17.

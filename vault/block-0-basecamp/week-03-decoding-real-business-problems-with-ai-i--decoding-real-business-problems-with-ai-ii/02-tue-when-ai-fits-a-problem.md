@@ -23,7 +23,7 @@ sources:
   - bcg-ai-at-work-2025
   - stanford-aicoop-prediction-machines-updated-2022
   - simon-willison-lethal-trifecta
-last_verified: 2026-04-15
+last_verified: 2026-07-17
 word_count_target: 6000
 ---
 
@@ -38,7 +38,7 @@ This lesson is about the decision that happens before any prompt is written. Two
 ## Prerequisites
 
 - [[week-01-basecamp-part-1-prompting-rags--basecamp-part-2-vibe-coding/01-mon-prompting-first-principles|Prompting from first principles]] — because the fit question and the prompting question interact.
-- [[week-03-decoding-real-business-problems-with-ai-i--decoding-real-business-problems-with-ai-ii/01-mon-real-business-problems-vs-ai-native-problems|Mon's lesson on identifying real business problems]] (pending).
+- [[01-mon-problem-discovery-frameworks|Monday's lesson on problem discovery]] — the fit question assumes a validated job.
 - Working knowledge of at least one shipped deterministic system you own, and at least one AI feature you've shipped or seriously prototyped. If both are zero, this lesson will feel theoretical; go build something small first.
 
 ---
@@ -146,7 +146,7 @@ Run the rubric on what Klarna actually shipped:
 - **Auditability**: moderate — post-hoc review matters for repeat offenders.
 - **Volume**: massive. This is why AI looked good.
 
-The mistake was not "use AI." It was **skipping the partition**. The right system is: AI handles the 80% head, deterministic routing handles the unambiguous slice, humans own the 20% tail *where failure is expensive and ambiguity is highest*. Klarna's public narrative "AI replaces agents" forced a monolithic deployment that violated axes 1, 3, and 5. Siemiatkowski's 2025 walk-back is not an indictment of AI in customer service; it is an indictment of *unpartitioned* AI in customer service.
+The mistake was **skipping the partition**. The right system is: AI handles the 80% head, deterministic routing handles the unambiguous slice, humans own the 20% tail *where failure is expensive and ambiguity is highest*. Klarna's public narrative "AI replaces agents" forced a monolithic deployment that violated axes 1, 3, and 5. Siemiatkowski's 2025 walk-back is not an indictment of AI in customer service; it is an indictment of *unpartitioned* AI in customer service.
 
 ### Case: the unintuitive-but-right answer — long legal-document summarization
 
@@ -284,9 +284,11 @@ Simon Willison's *lethal trifecta* problem (private data + untrusted content + e
 2. Is every step reversible or cheaply undoable if wrong?
 3. Do you control the tools the agent calls, or does the agent call an untrusted external surface?
 4. Can you express a *per-step* success criterion, testable independently?
-5. What is the compound reliability? (0.9 per step × 5 steps = 0.59 overall.) This is not just arithmetic: METR's March 2025 task-length study shows end-to-end success rates collapsing in exactly this pattern as agent horizons stretch from minutes to hours[^13], and Anthropic's computer-use evals reported in the Claude 3.5 "New" model card show multi-step browser agents in the 14–22% end-to-end success range on OSWorld/WebArena — the compound-loss pattern, measured.[^osworld-webarena]
+5. What is the compound reliability? (0.9 per step × 5 steps = 0.59 overall.) This is not just arithmetic: METR's March 2025 task-length study shows end-to-end success rates collapsing in exactly this pattern as agent horizons stretch from minutes to hours[^13], and 2024-era multi-step browser-agent evals landed in the 14–22% end-to-end range on OSWorld/WebArena — the compound-loss pattern, measured.[^osworld-webarena] (Frontier computer-use scores have climbed substantially since; treat those figures as the shape of the effect, not current state of the art, and re-pull the leaderboard before quoting them to a client.)
 
-If any of 2-5 fails, you are not ready to deploy an agent on this problem; you are ready to deploy a *workflow* (deterministic orchestration with AI steps) that looks agent-like from the outside. Most "agentic" wins in 2025 that actually shipped at scale are, on inspection, scripted workflows with AI inside the steps — not autonomous planners. The marketing term and the architecture do not match. The McKinsey-Deloitte-Gartner adoption numbers are measuring the former dressed as the latter.
+If any of 2-5 fails, you are not ready to deploy an agent on this problem; you are ready to deploy a *workflow* (deterministic orchestration with AI steps) that looks agent-like from the outside. Most "agentic" wins that shipped at scale in 2025 were, on inspection, scripted workflows with AI inside the steps — not autonomous planners — and the McKinsey-Deloitte-Gartner adoption numbers were measuring the former dressed as the latter.
+
+One important 2026 amendment: **this claim is now domain-scoped, not general.** In the coding domain specifically, genuinely autonomous production agents graduated — OpenAI's Codex passed 5 million weekly users by June 2026 (roughly one in five of them not developers), Gartner published its first Magic Quadrant for Enterprise AI Coding Agents, and OpenAI reports 97.9% of its own employees now use agents (a self-reported number from the vendor, but directionally hard to dismiss).[^codex-2026] Delegated-ticket agents like Devin and headless Claude Code run real backlogs autonomously. Outside coding — customer operations, finance, general knowledge work — the workflow-in-a-trenchcoat diagnosis still holds for most shipped deployments. The fit-rubric consequence: score agent-compatibility against your domain's demonstrated ceiling, not against coding's.
 
 The recommendation: **in the fit rubric, add "agent-compatibility" as a sixth axis, not a replacement for the first five.** Agents do not change whether AI fits the problem; they change *what shape* the AI system takes once it fits.
 
@@ -316,7 +318,7 @@ Five specific disagreements you should hold as the AI-catalyst lead:
 
 4. **Against RICE-A's single-multiplier fix.** RICE-A adds "AI Complexity" as a fifth term, which is neat but wrong-shaped.[^8] AI risk is not one complexity number; it is a probability distribution over shipping. The eval-confidence split captures that better. If you must keep a single-multiplier frame for stakeholder simplicity, compute it *from* eval-confidence + estimate-confidence, don't invent a new vibes-based number.
 
-5. **Against the McKinsey agentic-AI thesis as stated.** The *Seizing the Agentic AI Advantage* paper is a useful strategic frame but overstates how much of the "agentic" category is actually agentic as opposed to scripted workflow.[^12] Named instance: Salesforce Agentforce 1.0's 2024 launch was marketed as autonomous agents, but the production pattern shipping with most early customers is deterministic flow orchestration with LLM steps at classification/drafting nodes — Salesforce's own Agentforce 2dx/3 materials and the cautionary reporting around Gartner's "over 40% of agentic AI projects will be cancelled by end of 2027" forecast describe this gap directly.[^agentic-reality] Read alongside the METR reliability data.[^13] The honest 2026 posture is: *scripted workflows with AI steps* is the default; true autonomous agents are a forward bet on a capability that is improving fast but is not yet production-grade for most enterprise risk profiles.
+5. **Against the McKinsey agentic-AI thesis as stated.** The *Seizing the Agentic AI Advantage* paper is a useful strategic frame but overstates how much of the "agentic" category is actually agentic as opposed to scripted workflow.[^12] Named instance: Salesforce Agentforce 1.0's 2024 launch was marketed as autonomous agents, but the production pattern shipping with most early customers is deterministic flow orchestration with LLM steps at classification/drafting nodes — Salesforce's own Agentforce 2dx/3 materials and the cautionary reporting around Gartner's June 2025 forecast that "over 40% of agentic AI projects will be cancelled by end of 2027" (still the operative Gartner forecast as of mid-2026) describe this gap directly.[^agentic-reality] Read alongside the METR reliability data.[^13] The honest mid-2026 posture: *scripted workflows with AI steps* remains the default for most enterprise risk profiles — with coding agents as the demonstrated exception (see Layer 5's 2026 amendment) and the leading indicator of where other domains may follow.
 
 ---
 
@@ -439,4 +441,6 @@ Three bullets, specific:
 [^osworld-webarena]: OSWorld (Xie et al., NeurIPS 2024) https://arxiv.org/abs/2404.07972 and WebArena (Zhou et al., ICLR 2024) https://arxiv.org/abs/2307.13854 are the standard multi-step computer-use / web-agent benchmarks. Frontier models reported sub-25% end-to-end success in 2024–2025 evaluations — a measured instance of compound-reliability collapse across a multi-step trajectory rather than a per-step accuracy ceiling.
 [^agentic-reality]: Salesforce, Agentforce product materials (2024–2025). https://www.salesforce.com/agentforce/ — Agentforce 2dx/3 release notes document the shift from "autonomous agent" marketing toward explicit flow-orchestration with human-in-loop hand-offs. Gartner, "Over 40% of Agentic AI Projects Will Be Canceled by End of 2027" (Jun 25, 2025). https://www.gartner.com/en/newsroom/press-releases/2025-06-25-gartner-predicts-over-40-percent-of-agentic-ai-projects-will-be-canceled-by-end-of-2027 — the "agent-washing" thesis cites the mismatch between marketed autonomy and shipped workflow.
 
-_last_verified: 2026-04-15_
+[^codex-2026]: TechJack Solutions, *OpenAI Codex Passes 5 Million Weekly Users, and 1 in 5 Aren't Developers* (June 2026). https://techjacksolutions.com/ai-brief/openai-codex-passes-5-million-weekly-users-and-1-in-5-arent/ ; OpenAI, *OpenAI named a Leader in enterprise coding agents by Gartner* (2026 Gartner Magic Quadrant for Enterprise AI Coding Agents). https://openai.com/index/gartner-2026-agentic-coding-leader/ ; The Register, *OpenAI says 97.9 percent of its employees are now using agents* (Jun 25, 2026 — all figures self-reported by OpenAI). https://www.theregister.com/ai-and-ml/2026/06/25/openai-says-979-percent-of-its-employees-are-now-using-agents/5262499 All verified 2026-07-17.
+
+_last_verified: 2026-07-17_

@@ -18,7 +18,7 @@ sources:
   - anthropic-multi-agent-research-2025
   - databricks-long-context-rag-2024
   - factum-citation-hallucination-2026
-last_verified: 2026-04-15
+last_verified: 2026-07-17
 word_count_target: 6500
 ---
 
@@ -36,7 +36,7 @@ Specifically: after today you can walk into a product decision with a legal team
 
 ## Prerequisites
 
-- Wednesday's lesson (RAG as a system — chunking, embedding, retrieval, generation loop) or equivalent mental model. This lesson takes the pipeline as a known starting point and attacks its failure modes.
+- [[03-wed-rag-as-a-system]] (RAG as a system — chunking, embedding, retrieval, generation loop) or equivalent mental model. This lesson takes the pipeline as a known starting point and attacks its failure modes. Wednesday is also the canonical home for the Contextual Retrieval numbers; this lesson references them rather than re-deriving them.
 - Familiarity with what context windows are and what "tokens" means at the operational level.
 
 ---
@@ -53,7 +53,7 @@ The right chunk is not in the top-k results. The query embedding is too semantic
 
 This is the **query-document mismatch** failure. It is exacerbated by asymmetric training data: most embedding models were trained on web text where queries and documents are written in similar registers. Legal, medical, and internal company language routinely violates this assumption.
 
-Anthropic's Contextual Retrieval paper (September 2024) reports that context-blind chunking — chunks that omit their document-level context — causes retrieval failures in approximately 35–40% of queries on technical corpora.[^1] The fix they propose (prepending a short LLM-generated context blurb to each chunk before embedding) reduces top-20 retrieval failures by 49%, and by 67% when combined with a reranker. **But note the caveat buried in their methodology:** the eval corpus is five domains of moderate-size technical documents. The result almost certainly does not transfer directly to 100M-token legal archives, where document diversity and query specificity both increase dramatically, and where the cost of generating contextual blurbs at indexing time becomes non-trivial.
+Anthropic's Contextual Retrieval post (September 2024) measured a **5.7% baseline top-20 retrieval failure rate** on its eval corpora with standard context-blind chunking. Prepending a short LLM-generated context blurb to each chunk before embedding cut that failure rate by 35% *relative* (to 3.7%); adding contextual BM25 cut it 49% relative (to 2.9%); adding a reranker, 67% relative (to 1.9%).[^1] Be careful with these numbers in the wild — the relative reductions (35%, 49%) are routinely misquoted as absolute failure rates, which inflates the problem by an order of magnitude. [[03-wed-rag-as-a-system]] Part 4 walks the full ladder and methodology. **And note the caveat buried in that methodology:** the eval corpus is five domains of moderate-size technical documents. The result almost certainly does not transfer directly to 100M-token legal archives, where document diversity and query specificity both increase dramatically, and where the cost of generating contextual blurbs at indexing time becomes non-trivial.
 
 ### 2. Chunk boundary loss
 
@@ -85,7 +85,7 @@ The generator cites a source that does not exist or cites a real source for a cl
 
 This failure is often treated as a hallucination problem, separate from retrieval. It is not. It is a *grounding failure* at the generation stage: the model has the retrieved chunks in context, but it is not attending to them faithfully when generating the citation. Instead, it is pattern-completing to the expected output format of "answer + citation."
 
-The numbers here are alarming and domain-specific. A 2025 study published in the *Journal of Empirical Legal Studies* found hallucination rates of 17% for Lexis+ AI, 33% for Westlaw AI-Assisted Research, and 43% for GPT-4 on legal research tasks — all of these are RAG-enabled systems.[^3] A 2025 paper on reference hallucination in commercial LLMs and deep research agents found that even search-grounded systems fabricate 3–13% of URLs cited.[^4] FACTUM (2026), a mechanistic study of citation hallucination in long-form RAG, found that 57% of citations in a RAG-optimized model showed unfaithful behavior — the cited source did not actually support the claim made.[^5]
+The numbers here are alarming and domain-specific. A 2025 study published in the *Journal of Empirical Legal Studies* found hallucination rates of 17% for Lexis+ AI, 33% for Westlaw AI-Assisted Research, and 43% for GPT-4 on legal research tasks — all of these are RAG-enabled systems.[^3] An April 2026 paper on reference hallucination in commercial LLMs and deep research agents found that even search-grounded systems fabricate 3–13% of URLs cited.[^4] FACTUM (2026), a mechanistic study of citation hallucination in long-form RAG, traces unfaithful citation — a real source cited for a claim it does not support — to a coordination failure between the model's attention and feed-forward pathways, and shows the failure is mechanistically detectable, with its detector beating prior baselines by up to 37.5% AUC.[^5]
 
 The clean-corpus assumption that underlies most RAG evals ("if we give the model the right chunks, it will cite them correctly") breaks down in production because generators are not perfect copiers. They compress, paraphrase, and when paraphrasing fails, they hallucinate the citation anchor rather than admit they cannot ground the claim.
 
@@ -133,7 +133,7 @@ Key finding: **models that score near-perfect on vanilla NIAH show large degrada
 
 NoLiMa constructs needle/query pairs with **minimal lexical overlap** — the model must infer a latent association to answer. For example, the needle might describe a historical figure's role without using their name, and the query asks about that person by name. The model cannot exploit literal matching; it must reason about the connection.
 
-Results: **13 popular LLMs tested, all claiming 128K+ context support. At 32K tokens, 11 of 13 dropped below 50% of their short-context baseline.** GPT-4o, the top performer, fell from 99.3% accuracy at short contexts to 69.7% at longer ones. Models with chain-of-thought reasoning struggled equally.
+Results: **12 popular LLMs evaluated, all claiming 128K+ context support. At 32K tokens, 10 of the 12 dropped below 50% of their strong short-context baseline** (per the paper's abstract; counts vary slightly across paper versions and secondary coverage). GPT-4o, the top performer, fell from 99.3% accuracy at short contexts to 69.7% at longer ones. Models with chain-of-thought reasoning struggled equally.
 
 The mechanism the authors identify: the attention mechanism, when scanning a long context, finds literal matches as shortcuts. When those shortcuts are absent, it must do actual semantic inference across distance — and this gets harder as the haystack grows, because the signal-to-noise ratio in the attention computation decreases. This is not a prompt engineering problem. It is a fundamental property of how transformers attend.
 
@@ -143,22 +143,24 @@ The mechanism the authors identify: the attention mechanism, when scanning a lon
 
 ## Part 3: The long-context models — what they actually do and where they break
 
-### Current specs (April 2026)
+### Current specs (July 2026)
 
 | Model | Max context | Notes |
 |---|---|---|
-| Claude Opus 4.6 | 1M tokens GA | $5/$25 per M tokens in/out; 78.3% MRCR v2 |
-| Claude Sonnet 4.6 | 1M tokens GA | $3/$15 per M tokens in/out |
-| Gemini 2.5 Pro | 1M tokens (2M forthcoming) | 99.7% recall at 1M on NIAH; 100% recall to 530K |
-| GPT-4.1 | 1M tokens | $2/$8 per M tokens in/out; released April 2025 |
+| Claude Fable 5 (Mythos-class) | 1M tokens, 128K output | $10/$50 per M tokens in/out; released 2026-06-09, GA July 1 |
+| Claude Opus 4.8 | 1M tokens GA | $5/$25 per M tokens in/out; released 2026-05-28 |
+| Claude Sonnet 5 | 1M tokens native | $2/$10 intro through 2026-08-31, then $3/$15; released 2026-06-30 |
+| GPT-5.5 | 1,050,000 tokens, 128K output | $5/$30 per M tokens in/out; released 2026-04-23 |
+| GPT-5.6 (Sol / Terra / Luna) | 1M-class | GA 2026-07-09; Terra ≈ GPT-5.5 performance at ~2x cheaper |
+| Gemini 3.1 Pro | 1M tokens | Current Google flagship; Gemini 3.5 Pro is announced but **not shipped** as of 2026-07-17 |
 
 [^10] [^11] [^12]
 
-All four models now support 1M tokens at standard pricing. This is a real milestone — twelve months ago, 1M context was a beta feature with a price multiplier. The question is not whether these models *can* hold 1M tokens. They can. The question is whether they *use* that context well on real tasks.
+A 1M-token context window is now table stakes at every major lab, at standard per-token pricing with no long-context surcharge — Anthropic made 1M GA at standard rates in March 2026,[^10] and every frontier release since has shipped with it. That is a real milestone: eighteen months ago, 1M context was a beta feature with a price multiplier. The question is not whether these models *can* hold 1M tokens. They can. The question is whether they *use* that context well on real tasks. (Pricing tables in this lesson are date-stamped 2026-07-17; the cheap-agentic tier in particular is moving fast.)
 
 ### What long-context models do well
 
-**Single-document comprehension.** Ask Gemini 2.5 Pro or Claude Opus 4.6 to summarize, extract, or reason about a single 200-page document — it performs excellently. The full document is in context; there is no retrieval miss, no chunk boundary loss, no distractor. This is the use case where long context genuinely replaces RAG.
+**Single-document comprehension.** Ask Gemini 3.1 Pro or Claude Opus 4.8 to summarize, extract, or reason about a single 200-page document — it performs excellently. The full document is in context; there is no retrieval miss, no chunk boundary loss, no distractor. This is the use case where long context genuinely replaces RAG.
 
 **Literal recall.** NIAH-style "find me the specific clause that says X" across a 500K-token contract. High recall, fast, no retrieval pipeline to maintain.
 
@@ -180,7 +182,7 @@ All four models now support 1M tokens at standard pricing. This is a real milest
 
 This is not a theoretical tradeoff. Here are the numbers.
 
-**Setup:** You have a corpus of 100K tokens (roughly 200 pages of dense text — a medium-size legal brief, a quarter of technical documentation, three months of customer support tickets). A user asks one question. Claude Sonnet 4.6 at $3/M input tokens.
+**Setup:** You have a corpus of 100K tokens (roughly 200 pages of dense text — a medium-size legal brief, a quarter of technical documentation, three months of customer support tickets). A user asks one question. Claude Sonnet 5 at its standard $3/M input rate (intro pricing is $2/$10 through 2026-08-31; the math below uses the standard rate, so it holds after the promo ends).[^19]
 
 | Approach | Input tokens | Cost per query |
 |---|---|---|
@@ -199,7 +201,7 @@ For an internal chatbot serving 1,000 queries per day against a 1M-token corpus:
 
 The latency gap is equally stark. 1M-token context requests can exceed 20–30 seconds for the first token response on current infrastructure. A RAG pipeline retrieving 5 chunks and calling the API with a 2,500-token prompt runs in 1–3 seconds.
 
-**The escape clause:** These numbers assume you are paying per-token via API. Some enterprise deployments license models at flat rates, which changes the math. Anthropic has moved toward flat-rate long-context pricing for enterprise tiers, which makes context-stuffing more attractive if you already have a license commitment.[^14] But at API rates — which is what most builders face — the cost argument for RAG remains strong.
+**The escape clause:** These numbers assume you are paying per-token via API, and one thing that *has* changed is the long-context surcharge: since March 2026, the full 1M window is billed at standard per-token rates with no multiplier — a 900K-token request costs the same per token as a 9K one.[^14] That removes the old "long context costs extra per token" penalty, but it does not remove the linear token bill itself: stuffing 100K tokens still costs ~37x more than retrieving 2,500. At API rates — which is what most builders face — the cost argument for RAG remains strong.
 
 **The hybrid point:** LlamaIndex's Jerry Liu, in the March 2024 "Towards Long Context RAG" post, argued that the right frame is not RAG-vs-long-context but *which architecture for which query type*.[^15] Simple factual lookups ("what does clause 4.2 say?") are well served by long-context stuffing if you can afford it. Complex synthesis queries ("compare the indemnification provisions across these 30 contracts") require agentic multi-step retrieval regardless of context window size, because no single retrieval pass surfaces everything relevant. This is the position that held up best as the field evolved through 2024–2025.
 
@@ -243,6 +245,8 @@ The debate as it stood in 2024: Jerry Liu and the LlamaIndex position vs. the "j
 
 **The "RAG is not dead" rebuttal (strongest version):** NIAH is the wrong benchmark. NoLiMa and RULER show that real task performance degrades at 32K–64K tokens even on frontier models, far below the context limit. The "model can hold 1M tokens" claim is not the same as "model reasons accurately over 1M tokens." Cost at scale makes context-stuffing economically unviable for corpora that change or systems that see high query volume. And agentic RAG — when properly architected — outperforms naive context-stuffing on complex synthesis queries because it can target retrieval to exactly what is needed.
 
+**The January 2026 flare-up.** The debate re-erupted in January 2026 when a "RAG is DEAD" essay went viral across LinkedIn, Reddit, and Hacker News, riding the fact that 1M-token windows had become table stakes. The wave split practitioners roughly in half before resolving into the consensus this lesson's position anticipates: **naive RAG is dead; sophisticated, agentic RAG is thriving.** The 2026 framing worth memorizing: *use long context to reason over a bounded evidence set; use retrieval to decide what that evidence set should be.*[^20] Long context and retrieval divide the labor — neither replaces the other.
+
 **My position:** Agentic RAG wins in 2025 and 2026 for almost all enterprise use cases. Context-stuffing is appropriate for exactly two narrow cases: (1) fixed, small-to-medium corpora (under ~100K tokens) where per-query cost is not a constraint and queries are primarily factual recall; (2) asynchronous one-shot analysis tasks where you want the model to reason over the entire document set at once. For everything else — large corpora, high query volume, complex synthesis, frequently-updated knowledge — the architecture is agentic RAG with dynamic multi-step retrieval, not context-stuffing.
 
 The mechanism that drives this conclusion: the NoLiMa result is a fundamental attention property, not a prompt engineering gap. No instruction to "pay careful attention to the full context" overrides the fact that semantic inference over long distances degrades as context grows. Fixing this requires *retrieval* — bringing the relevant material close to the generation step — not just a bigger window.
@@ -271,11 +275,11 @@ Review the questions. Confirm they represent both query types before continuing.
 
 **Step 2 — Run the context-stuffing condition.**
 
-> "Now, for each of the 10 questions, call Claude Sonnet 4.6 with the full corpus in context plus the question. Record: (1) the answer, (2) the time taken, (3) the approximate input token count. Save all results to a file called `results_stuffing.json`."
+> "Now, for each of the 10 questions, call the current Claude Sonnet model (Sonnet 5 as of July 2026 — check the model ID on Anthropic's docs) with the full corpus in context plus the question. Record: (1) the answer, (2) the time taken, (3) the approximate input token count. Save all results to a file called `results_stuffing.json`."
 
 **Step 3 — Run the RAG condition.**
 
-> "Now implement a simple RAG pipeline: chunk the corpus into 512-token chunks with 128-token overlap, embed each chunk using the `text-embedding-3-small` model from OpenAI, store the embeddings locally. For each of the 10 questions, retrieve the top-5 chunks by cosine similarity, then call Claude Sonnet 4.6 with only those chunks in context. Record: (1) the answer, (2) the time taken, (3) the approximate input token count. Save all results to `results_rag.json`."
+> "Now implement a simple RAG pipeline: chunk the corpus into 512-token chunks with 128-token overlap, embed each chunk using the `text-embedding-3-small` model from OpenAI, store the embeddings locally. For each of the 10 questions, retrieve the top-5 chunks by cosine similarity, then call the same Sonnet model with only those chunks in context. Record: (1) the answer, (2) the time taken, (3) the approximate input token count. Save all results to `results_rag.json`."
 
 **Step 4 — Score and compare.**
 

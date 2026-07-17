@@ -22,7 +22,12 @@ sources:
   - docker-mcp-horror-stories-github
   - parecki-oauth-for-mcp-2025
   - arxiv-securing-mcp-2511-20920
-last_verified: 2026-04-15
+  - ox-security-mother-of-all-ai-supply-chains-2026
+  - practical-devsecops-mcp-security-statistics-2026
+  - cve-2026-30615-windsurf-zero-click
+  - arxiv-unicode-tag-block-mcp-2607-05744
+  - owasp-agentic-top-10-2026
+last_verified: 2026-07-17
 word_count_target: 6000
 ---
 
@@ -42,13 +47,13 @@ By the end of this lesson, you will:
 4. Be able to threat-model a realistic multi-server agent (Notion + Slack + Email) and enumerate the trifecta paths *before* shipping it, not after an incident.
 5. Have run a reproducible demonstration, via Claude Code, where a mock MCP server injects an instruction through tool output and you watch how the client does (or does not) hold the line.
 
-This is not the "AI safety" lesson. This is the production-security lesson for someone whose job title is about to include words like *agent* or *catalyst* and who will be asked, by an actual CISO, "what's our MCP story." If you can't answer that question in April 2026, your org isn't shipping agents — or worse, it is shipping them and hoping nobody notices.
+This is not the "AI safety" lesson. This is the production-security lesson for someone whose job title is about to include words like *agent* or *catalyst* and who will be asked, by an actual CISO, "what's our MCP story." If you can't answer that question today, your org isn't shipping agents safely — or worse, it is shipping them and hoping nobody notices. By mid-2026 that question has a framework behind it (the OWASP Top 10 for Agentic Applications) and a CVE cadence behind the urgency (30+ MCP CVEs in a single 60-day window this year).
 
 ## Prerequisites
 
 - Claude Code installed and working. You've hit the permission prompt at least once.
 - You've added one MCP server to Claude Code or Claude Desktop (Notion, filesystem, GitHub — any one). If you haven't, do that before starting; this lesson assumes you've seen the shape of `.mcp.json` and `~/.claude/mcp.json`.
-- You've read [[02-tue-mcp-architecture]] *(pending)* — the lesson immediately preceding this one, covering MCP's three primitives (tools, resources, prompts) and transport layers (STDIO, HTTP with SSE). This lesson assumes that mechanics context and goes straight to adversarial thinking.
+- You've read [[02-tue-building-an-mcp-server]] — the lesson immediately preceding this one, covering MCP's primitives (tools, resources, prompts, sampling), schema-as-prompt design, and transport/auth layers. This lesson assumes that mechanics context and goes straight to adversarial thinking.
 - Skim Simon Willison's June 2025 *"Lethal Trifecta"* post[^1] and his April 2025 *"MCP has prompt injection security problems"* post[^2] before starting. Each is a 10-minute read.
 
 ## Layer 1 — What the lethal trifecta actually is, and what MCP does to it
@@ -75,7 +80,7 @@ Add a second MCP server and the trifecta compounds. This is the cross-server att
 
 ### Why the model can't just "be careful"
 
-If you find yourself thinking *"can't we just prompt the model to ignore suspicious instructions in tool output,"* read the faithfulness research from [[01-mon-prompting-first-principles]] again. Post-training alignment is a statistical pressure on a next-token predictor. Willison has been running a public bounty-style challenge — find a system prompt that reliably rejects injection, across a wide attack distribution, without destroying tool utility — since 2023. As of April 2026 no one has won it. The only defenses that work at the protocol level treat every token the model can be shown as potentially adversarial. That is the frame this lesson will stay in for the rest of the text.
+If you find yourself thinking *"can't we just prompt the model to ignore suspicious instructions in tool output,"* read the faithfulness research from [[01-mon-prompting-first-principles]] again. Post-training alignment is a statistical pressure on a next-token predictor. Willison has been running a public bounty-style challenge — find a system prompt that reliably rejects injection, across a wide attack distribution, without destroying tool utility — since 2023. As of mid-2026 no one has won it. The only defenses that work at the protocol level treat every token the model can be shown as potentially adversarial. That is the frame this lesson will stay in for the rest of the text.
 
 ## Layer 2 — Prompt injection via tool output, in production
 
@@ -101,7 +106,21 @@ The vulnerability: an attacker publishes a normal-looking open-source repo on Gi
 
 The follow-on CVE (CVE-2026-21852) extended this to API key exfiltration: malicious hook configurations could read Anthropic API keys out of environment variables or config files and exfiltrate them via the same mechanism. Anthropic shipped fixes on 2025-09-22 (hook bypass) and 2025-12-28 (API key exfil). Timeline is in the Check Point disclosure.[^4]
 
-The generalizable lesson — cite this to any colleague who says *"it's fine, it's just a config file"*: **every project-scoped config file an agent reads is an attack surface equivalent to a shell script.** Claude Code's project trust model (now "folder trust" prompts at startup) is the fix. Every other agentic coding tool has the same class of bug unless it solves it. Cursor, Windsurf, Zed — all audit-worthy.
+The generalizable lesson — cite this to any colleague who says *"it's fine, it's just a config file"*: **every project-scoped config file an agent reads is an attack surface equivalent to a shell script.** Claude Code's project trust model (now "folder trust" prompts at startup) is the fix. Every other agentic coding tool has the same class of bug unless it solves it. Cursor, Zed, and Cognition's Devin Desktop (the tool formerly shipped as Windsurf, renamed June 2026) — all audit-worthy, and as the next section shows, one of them shipped a zero-click version of exactly this bug.
+
+### The 2026 escalation — systemic-by-design, quantified, and worse than the 2025 incidents
+
+Everything above is 2025. Between the writing of this lesson and its mid-2026 refresh, the MCP threat picture stopped being a list of individual incidents and became a *measured* systemic problem. Four developments a July-2026 operator has to know:
+
+**1. OX Security's "Mother of All AI Supply Chains" (advisory April 15, 2026).** OX Security disclosed that the command-execution behavior at the heart of every officially-supported MCP SDK — Python, TypeScript, Java, Rust — lets any process command passed to the STDIO interface execute on the host, *whether or not it ever initializes a valid MCP server*. They frame it as one architectural design decision inherited by every downstream project, rippling through a supply chain of **150M+ SDK downloads, 7,000+ publicly reachable servers, and up to ~200,000 vulnerable instances**, with 30+ disclosures and 10+ CVEs spun out of the one root cause. Anthropic's response is the uncomfortable part: they confirmed the behavior as **intentional** and declined to change the protocol architecture.[^16] That is the sharpest possible vindication of this lesson's thesis — the platform vendor considers "a config string can run a command" a feature, so the trust boundary is *yours* to enforce, not theirs.
+
+**2. Thirty CVEs in sixty days.** An early-2026 tally counted **30+ CVEs filed against MCP servers in a single 60-day window, ~43% of them command-injection** (13 of 30). Independent scans put ~82% of surveyed implementations at risk of path traversal, ~37% of 7,000+ servers exposed to SSRF, and 38–41% of officially-registered servers offering no meaningful authentication at all.[^17] The 2025 line "MCP security is live, not theoretical" is now backed by a CVE cadence you can graph.
+
+**3. Windsurf's zero-click RCE — CVE-2026-30615.** The most severe case in OX's disclosure. When Windsurf (v1.9544.26) processed attacker-controlled HTML, malicious instructions could rewrite the local MCP config and auto-register a malicious STDIO server, yielding arbitrary command execution **with no user interaction at all** (CVSS 8.0). OX filed the CVE specifically against Windsurf because it was the *only* IDE where the attack chain needed zero clicks — Cursor, Claude Code, and Gemini-CLI required some user involvement.[^18] Patch: update past 1.9544.26. Generalizable lesson: a prompt-injection surface plus a config file the agent can write is a remote-code-execution primitive.
+
+**4. A new concealment class — Unicode TAG-block tool-metadata payloads (arXiv 2607.05744, July 2026).** The tool-poisoning attack from Layer 2 got a delivery mechanism that defeats human review. The Unicode TAG block (U+E0000–U+E007F) has no glyph in any mainstream terminal, chat, or IDE renderer, so a payload written in it is **absent from the one-time approval dialog a human sees while surviving byte-for-byte into the model's tokenizer** on every subsequent turn. The paper demonstrates the "approval-view fidelity gap" across three independent server implementations; a related CVE (CVE-2026-13341, Kong Konnect MCP) instantiates it in shipping software.[^19] The mitigation "review every tool description before you install" — which this lesson already recommends — is necessary but no longer *sufficient*, because the malicious bytes can be invisible in the view you're reviewing. You now also need to normalize/strip disallowed Unicode ranges from tool metadata before rendering or ingesting it.
+
+The field also got a shared vocabulary in 2026: the **OWASP Top 10 for Agentic Applications (2026 edition)** codifies the risk classes this lesson teaches — Agent Goal Hijack (ASI01), Tool Misuse & Exploitation (ASI02), Agent Identity & Privilege Abuse (ASI03), Agentic Supply Chain Compromise (ASI04), Unexpected Code Execution (ASI05), Memory & Context Poisoning (ASI06) — around two core principles, *least-agency* and *strong observability*, that map cleanly onto Layer 4's mitigation stack.[^20] If a CISO asks for a framework to structure the MCP conversation, this is the one to hand them.
 
 ### Live controversy: MCP spec or client responsibility?
 
@@ -311,7 +330,7 @@ This is the format of the artifact you'd bring to a real CISO review.
 
 *Willison would push back on:* framing mitigations as a stack that "reduces" the trifecta. He's been consistent that *the only reliable defense is removing one of the three corners entirely*, most often the exfiltration channel. He'd argue the table in Layer 4 overstates how much OS sandboxing helps against a clever attacker who turns an allowed tool into an exfiltration channel (e.g., a permitted "create GitHub issue" tool where the issue body is the exfil payload). He is right. The honest framing: sandboxing raises the bar; it does not remove the trifecta. If you can remove the exfil corner, do that first.
 
-*An MCP working-group member would push back on:* Position A in Layer 2's controversy. Their reasonable counter: mandating client-side behavior in a protocol spec is how you get a dead spec. The 2025-06-18 auth revision[^3] is already a lot of surface for a protocol this young. Pushing sanitization into the protocol would force every server and every client to implement the same stripping logic, which fractures immediately in practice. Fair counter. My residual disagreement: tool-description integrity (signing, checksum, or at minimum content-addressability of server-published tool metadata) is cheap, protocol-scoped, and would kill a clean category of supply-chain attacks. I'd bet on it arriving by end-2026.
+*An MCP working-group member would push back on:* Position A in Layer 2's controversy. Their reasonable counter: mandating client-side behavior in a protocol spec is how you get a dead spec. The 2025-06-18 auth revision[^3] — and the 2025-11-25 additions on top of it — are already a lot of surface for a protocol this young. Pushing sanitization into the protocol would force every server and every client to implement the same stripping logic, which fractures immediately in practice. Fair counter. My residual disagreement got *stronger* in 2026: the Unicode TAG-block concealment work[^19] shows that tool metadata can carry payloads invisible to human review, which means tool-description integrity (signing, checksum, content-addressability, and at minimum disallowed-Unicode normalization of server-published metadata) is no longer a nice-to-have — it's the cheap, protocol-scoped fix for a supply-chain category the OX Security disclosure proved is systemic.[^16] I'd still bet on some form of it arriving, and the 2026-07-28 RC's formal deprecation policy and Extensions framework are the plausible vehicle.
 
 *A Trail of Bits engineer would push back on:* the confidence in `sandbox-runtime` and Seatbelt profiles. Real answer: OS-level sandboxing has a long history of bypass CVEs, Apple's Seatbelt included. "OS-enforced" is not "cryptographically enforced." Treat it as strong defense-in-depth, not a guarantee. Design the rest of the system as if the sandbox could fail.
 
@@ -335,11 +354,18 @@ This is the format of the artifact you'd bring to a real CISO review.
 - Anthropic, *Code execution with MCP* (2025).[^9]
 - Parecki, *Let's fix OAuth in MCP* (April 2025).[^13]
 
+**Must-read (2026 additions):**
+- OX Security, *The Mother of All AI Supply Chains* (April 2026).[^16]
+- Practical DevSecOps, *MCP Security Statistics 2026: 30 CVEs in 60 Days* (2026).[^17]
+- OWASP, *Top 10 for Agentic Applications (2026 edition).*[^20]
+
 **Optional:**
 - Authzed, *A Timeline of MCP Security Breaches* (2025, maintained).[^11]
 - AgentSeal, *We Scanned 1,808 MCP Servers* (November 2025).[^14]
 - arXiv 2511.20920, *Securing the Model Context Protocol: Risks, Controls, Governance* (November 2025).[^15]
 - Docker, *MCP Horror Stories: The GitHub Prompt Injection Data Heist* (2025).[^7]
+- CVE-2026-30615, *Windsurf Zero-Click MCP Prompt Injection RCE.*[^18]
+- arXiv 2607.05744, *Unicode TAG-Block Concealment of Tool-Metadata Payloads in MCP* (July 2026).[^19]
 
 ## Citations
 
@@ -373,4 +399,14 @@ This is the format of the artifact you'd bring to a real CISO review.
 
 [^15]: "Securing the Model Context Protocol (MCP): Risks, Controls, and Governance," arXiv:2511.20920, November 2025. https://arxiv.org/html/2511.20920v1
 
-_last_verified: 2026-04-15_
+[^16]: OX Security, "The Mother of All AI Supply Chains: Critical, Systemic Vulnerability at the Core of Anthropic's MCP," advisory April 15, 2026. https://www.ox.security/blog/the-mother-of-all-ai-supply-chains-critical-systemic-vulnerability-at-the-core-of-the-mcp/ — command execution inherited by every official MCP SDK (Python/TS/Java/Rust); 150M+ downloads, 7,000+ reachable servers, up to ~200,000 vulnerable instances; Anthropic confirmed the behavior as intentional. Secondary coverage: The Hacker News, https://thehackernews.com/2026/04/anthropic-mcp-design-vulnerability.html .
+
+[^17]: Practical DevSecOps, "MCP Security Statistics 2026: CVEs, Vulnerabilities & Breach Data," 2026. https://www.practical-devsecops.com/mcp-security-statistics-2026-report/ — 30+ CVEs filed against MCP servers in a single 60-day window (~43% command-injection), path-traversal/SSRF/no-auth prevalence figures. Corroborated by Cycode, "OWASP MCP Top 10," https://cycode.com/blog/owasp-mcp-top-10/ .
+
+[^18]: CVE-2026-30615, "Windsurf Zero-Click MCP Prompt Injection RCE." NVD: https://nvd.nist.gov/vuln/detail/CVE-2026-30615 — Windsurf 1.9544.26 processes attacker-controlled HTML to rewrite the local MCP config and auto-register a malicious STDIO server, arbitrary command execution with zero user interaction (CVSS 8.0); the only IDE in OX's disclosure requiring no clicks. GitHub advisory: https://github.com/advisories/GHSA-wj2m-jvpr-64cq .
+
+[^19]: Mohammadreza Rashidi, "Unicode TAG-Block Concealment of Tool-Metadata Payloads in the Model Context Protocol: An Approval-View Fidelity Gap Across Three Independent Server Implementations," arXiv:2607.05744, July 2026. https://arxiv.org/abs/2607.05744 — U+E0000–U+E007F payloads invisible in the human approval dialog but reaching the model's tokenizer verbatim; related shipping CVE-2026-13341 (Kong Konnect MCP).
+
+[^20]: OWASP Gen AI Security Project, "OWASP Top 10 for Agentic Applications (2026)." https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/ — ASI01 Agent Goal Hijack through ASI10 Rogue Agents; core principles of least-agency and strong observability.
+
+_last_verified: 2026-07-17_

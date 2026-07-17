@@ -23,7 +23,9 @@ sources:
   - simbian-strawberry-bpe
   - morphllm-inference-guide
   - hallucination-survey-2025
-last_verified: 2026-04-15
+  - anthropic-pricing-docs
+  - anthropic-fable-5-mythos-5
+last_verified: 2026-07-17
 word_count_target: 6000
 ---
 
@@ -31,7 +33,7 @@ word_count_target: 6000
 
 ## Why this matters
 
-You are about to spend six months building production AI systems inside Claude Code, against Anthropic's API, and inside agent pipelines that chain tools, retrieval, and extended reasoning. The difference between an AI-catalyst lead who ships and one who spins is not volume of prompting tricks. It is *the mental model of what the artefact actually is* — a lossy, frozen, probabilistic document simulator with a thin post-training overlay, serving tokens through a very specific inference loop with very specific cost and latency mechanics.
+You are about to spend six months building production AI systems inside Claude Code, against Anthropic's API, and inside agent pipelines that chain tools, retrieval, and extended reasoning. The difference between an AI-pro lead who ships and one who spins is not volume of prompting tricks. It is *the mental model of what the artefact actually is* — a lossy, frozen, probabilistic document simulator with a thin post-training overlay, serving tokens through a very specific inference loop with very specific cost and latency mechanics.
 
 If that mental model is accurate, every downstream decision — which model to choose, when to trust the output, how to price an API call, when to reach for extended thinking, why an eval regressed, why your agent looped, why your "confidence score" is a fiction — becomes a consequence, not a guess.
 
@@ -42,7 +44,7 @@ By the end of today you will be able to answer, without looking anything up:
 1. What does the pretraining objective *actually* leave in the weights, and what does SFT/RLHF/RLAIF sit on top of it as?
 2. Why does `temperature=0` not mean "deterministic," and when does that bite you?
 3. What are the three distinct failure modes usually flattened into the word "hallucination," and which fix applies to which?
-4. Is o1 / DeepSeek-R1 / Opus 4.6 extended thinking *qualitatively* a new thing, or the same substrate sampled differently and post-trained on reasoning traces — and what hangs on the answer?
+4. Is o1 / DeepSeek-R1 / Claude extended thinking *qualitatively* a new thing, or the same substrate sampled differently and post-trained on reasoning traces — and what hangs on the answer?
 5. Where does a token in your prompt cost you, and where does a token in the generation cost you ten times as much?
 
 You will have watched, on your own screen, a deterministic-answer question produce a distribution of answers across sampling temperatures, and you will have diffed extended-thinking-on against extended-thinking-off on a fact question.
@@ -50,10 +52,10 @@ You will have watched, on your own screen, a deterministic-answer question produ
 ## Prerequisites
 
 - Claude Code installed and working.
-- Claude.ai Max (or API access to Sonnet 4.5 / Opus 4.6).
+- Claude.ai Max (or API access to Sonnet 5 / Opus 4.8; Sonnet 5 is the current default model).
 - Optional but high-ROI before Tuesday: hours 0–2 of Karpathy's *Deep Dive into LLMs like ChatGPT* (3h31m, Feb 2025).[^1] You do not need to watch it before this lesson; this lesson composes with it.
 
-This lesson is standalone. It is not a primer for a Saturday live session. It is the Monday core of the onboarding week; Tuesday–Friday build on its primitives.
+This lesson is standalone and is the Monday core of the onboarding week; [[02-tue-ai-native-builder-stack|Tuesday's tool-stack lesson]] and [[05-fri-context-window-economics|Friday's context-economics lesson]] build directly on its primitives.
 
 ## Layer 1 — The four training phases are different things, and you need to keep them separate
 
@@ -87,11 +89,13 @@ Four consequences that you will bump into every week this course.
 
 **Word-level tasks break in predictable ways.** The canonical "how many r's in strawberry" failure happens because GPT-4 tokenizes "strawberry" as `str`, `aw`, `berry` — three tokens.[^6] The model is asked to count instances of a sub-sub-token pattern that is never materialized in its input. The fix that works in prompting is inserting spaces (`s t r a w b e r r y` tokenizes each letter separately). The fix that works in production is a tool call. Reasoning models trained with chain-of-thought RL can get to the right answer by reasoning around the limitation, but they didn't remove it — they routed around it.[^3]
 
-**Non-English and code pay a token tax.** Anthropic and OpenAI charge per token. A sentence in English averages ~0.75 words per token. The same meaning in Hindi or Tamil can tokenize at 2–3x the token count. A piece of Python is denser (one token per ~4 characters) than the equivalent in a less-represented language. If your application is multilingual, you are silently paying a tokenizer-driven multiplier that compounds across every call. Pricing spreadsheets that assume "500 words = 700 tokens" understate non-English cost by factors that matter at scale.
+**Non-English and code pay a token tax.** Anthropic and OpenAI charge per token. A sentence in English averages ~0.75 words per token on the classic tokenizers. The same meaning in Hindi or Tamil can tokenize at 2–3x the token count. A piece of Python is denser (one token per ~4 characters) than the equivalent in a less-represented language. If your application is multilingual, you are silently paying a tokenizer-driven multiplier that compounds across every call. Pricing spreadsheets that assume "500 words = 700 tokens" understate non-English cost by factors that matter at scale.
 
-**The context window is in tokens, not characters.** Opus 4.6's 1M-token input window sounds huge — ~750k English words — but a codebase of equivalent lines of code will consume considerably more tokens than the equivalent weight of prose.[^7] Know what your dominant input type is.
+**Tokenizers change between model generations — and that is now a live pricing variable.** In 2026 Anthropic switched tokenizers: Claude Opus 4.7 and later Opus models, Claude Sonnet 5, and Claude Fable 5 / Mythos 5 use a new tokenizer that produces **approximately 30% more tokens for the same text** than Sonnet 4.6 and earlier models (Anthropic's pricing docs state this explicitly).[^21] The per-Mtok price of Opus did not change between 4.6 and 4.8 — but the same document costs ~30% more tokens to process, so effective per-document cost rose even at a "flat" price. Every rule-of-thumb in this section (0.75 words/token, ~4 chars/token) is a per-tokenizer fact, not a universal constant: on the new tokenizer, budget closer to ~0.58 words per token for English. Count tokens with the vendor's counting endpoint before you build a cost model.
 
-The operational habit this creates: any time a failure looks "weirdly stupid for such a smart model" — arithmetic, letter counting, spelling, reversing a word, counting items, simple counting across a long list — suspect tokenization first. Karpathy's Feb 2025 deep dive spends a full section of his hour 2 revisiting tokenization precisely because it's the layer most students skip and the one most production failures trace back to.[^1]
+**The context window is in tokens, not characters.** A 1M-token input window (now standard on Fable 5, Opus 4.8, and Sonnet 5) sounds huge — roughly 750k English words on the old tokenizer, closer to ~575k on the new one — and a codebase of equivalent lines of code will consume considerably more tokens than the equivalent weight of prose.[^7][^21] Know what your dominant input type is, and which tokenizer counts it.
+
+The operational habit this creates: any time a failure looks "weirdly stupid for such a smart model" — arithmetic, letter counting, spelling, reversing a word, counting items, simple counting across a long list — suspect tokenization first. And any time a cost model drifts between model generations of the *same vendor*, suspect the tokenizer before you suspect the price sheet. Karpathy's Feb 2025 deep dive spends a full section of his hour 2 revisiting tokenization precisely because it's the layer most students skip and the one most production failures trace back to.[^1]
 
 ## Layer 3 — Logits, sampling, temperature, and why "`temperature=0` is deterministic" is a lie you've probably been told
 
@@ -121,7 +125,7 @@ Inference is not one operation. It is two, with very different cost/latency prof
 
 The consequences are sharp:
 
-- Output tokens cost roughly **5x more per token** than input tokens in published pricing (e.g., Claude Opus 4.6 at the time of writing charges about 5x more per output token than input token below 200k context). This is not margin grabbing — it reflects the underlying compute/memory asymmetry.
+- Output tokens cost roughly **5x more per token** than input tokens in published pricing. The 5x ratio holds across the entire current Claude lineup — Fable 5 ($10/$50), Opus 4.8 ($5/$25), Sonnet 5 ($2/$10 intro through Aug 31, 2026, then $3/$15), Haiku 4.5 ($1/$5) — and the full 1M window is billed at standard rates with no long-context surcharge.[^21] This reflects the underlying compute/memory asymmetry, not margin grabbing.
 - A 2,000-token response costs you far more wallclock and money than a 20,000-token input that yields a 200-token answer — even though total token volume favours the long-input case.
 - Prompt caching (Anthropic) / prefix caching (OpenAI, vLLM) avoids re-prefilling the same prefix across calls by persisting the KV cache — so a system prompt you use thousands of times per day is charged at the reduced cache-read rate after the first fill. For any repeated prefix of >1024 tokens, this is a first-class optimisation; for systems that don't use it, it's often a straight 4–10x cost reduction.[^10]
 - A 128K-token prompt on Llama 3.1-70B burns ~40GB of HBM just for the KV cache. Long-context inference is expensive in exactly the way "just put everything in context" tutorials don't mention.
@@ -146,13 +150,13 @@ Under Position A, the right mental model is: reasoning models are the same thing
 
 The position from OpenAI's o1 system card[^13] and Anthropic's adaptive-thinking documentation[^14] runs differently. When you train with RL on reasoning traces at scale, qualitatively new behaviours emerge that were not present in the base model. DeepSeek-R1's paper is explicit about this: "advanced reasoning patterns such as self-reflection, verification, and dynamic strategy adaptation" emerge without being explicitly programmed in.[^3] The o1 system card documents this as a capability change big enough to require a new safety review: o1 is the "most robust to jailbreaks" because it can now reason about safety policies *in context* — a behaviour earlier models couldn't stably exhibit.[^13]
 
-Anthropic's Opus 4.6 release doubled down on this by exposing `/effort` as a first-class parameter with four levels (low, medium, high, max) and describing the model as deciding *when* extended thinking will help.[^7][^15] If reasoning were "just more sampling," you wouldn't need a product surface for budgeted reasoning — you'd just charge for tokens.
+Anthropic's Opus 4.6 release doubled down on this by exposing `/effort` as a first-class parameter with four levels (low, medium, high, max) and describing the model as deciding *when* extended thinking will help.[^7][^15] If reasoning were "just more sampling," you wouldn't need a product surface for budgeted reasoning — you'd just charge for tokens. By mid-2026 budgeted reasoning is no longer a debate but a product default: Opus 4.7 added an `xhigh` effort level, Opus 4.8 defaults to high effort, and Sonnet 5 ships with adaptive thinking on by default.
 
 Under Position B, the right mental model is: reasoning models are a capability step, and evals that were calibrated for non-reasoning models can over- or under-estimate them badly. You need new harnesses specifically for reasoning quality (not just answer correctness), and you need to consider that giving more thinking budget changes not just accuracy but also *failure modes* — a reasoning model with high effort can produce sophisticated-looking wrong answers that look far more authoritative than a non-reasoning model's guess.
 
 ### My position (take it, disagree with it, stake your own)
 
-The empirical evidence as of April 2026 supports a compressed synthesis: *the substrate is the same, but the behavioural envelope under RL-on-traces is genuinely larger than pure scaling of the base plus SFT predicts.* Position A is right that no new architecture appeared. Position B is right that the capability surface changed enough to need new evals. The practical call: for any production task, A/B extended thinking against non-thinking with your actual eval harness and your actual cost profile. Don't let either position substitute for the measurement.
+The empirical evidence as of mid-2026 supports a compressed synthesis: *the substrate is the same, but the behavioural envelope under RL-on-traces is genuinely larger than pure scaling of the base plus SFT predicts.* Position A is right that no new architecture appeared. Position B is right that the capability surface changed enough to need new evals — and the Claude 5 family sharpened B's case in June 2026: Anthropic shipped **Claude Fable 5** (the first Mythos-class model, a tier *above* Opus) days after publicly warning that frontier capability was becoming dangerous, gated its less-safeguarded sibling **Mythos 5** behind Project Glasswing, and built a fallback where high-risk queries are answered by Opus 4.8 instead.[^22] A capability step big enough to require access-policy-differentiated releases is hard to describe as "the same thing, sampled more." The practical call is unchanged: for any production task, A/B extended thinking against non-thinking with your actual eval harness and your actual cost profile. Don't let either position substitute for the measurement.
 
 ## Layer 5 — Three failure modes flattened into one word: hallucination, confabulation, refusal
 
@@ -180,7 +184,7 @@ Do this before moving on. You are not writing Python by hand. You direct Claude 
 
 **Step 1.** Open Claude Code in any scratch folder. Paste:
 
-> Write a small Python script that calls Claude Sonnet 4.5 (confirm the current model ID via the Anthropic docs if unsure) and asks this question:
+> Write a small Python script that calls Claude Sonnet 5 (confirm the current model ID via the Anthropic docs if unsure) and asks this question:
 >
 >     "A train leaves City A at 9:00am travelling at 60mph toward City B, which is 180 miles away. Another train leaves City B at 9:30am travelling at 40mph toward City A. At what time, to the nearest minute, do they meet? Reply with ONLY the time in HH:MM am/pm format — no explanation."
 >
@@ -200,9 +204,9 @@ Manual fallback: open 10 fresh Claude.ai chats, paste the question, record the a
 
 ### Experiment B — Extended thinking on vs off, on a fact question
 
-**Step 2.** In Claude Code:
+**Step 2.** In Claude Code (note: "extended thinking on/off" here is a natural-language instruction to Claude Code, which will translate it into the actual API shape — a `thinking: {"type": ..., "budget_tokens": ...}` request parameter; there is no literal `extended_thinking` flag):
 
-> Using the Claude API, ask Opus 4.6 the following question twice: once with `extended_thinking=off` and once with `extended_thinking=on` at a 10K-token budget.
+> Using the Claude API, ask Opus 4.8 the following question twice: once with extended thinking disabled and once with extended thinking enabled at a 10K-token budget.
 >
 >     "Who discovered Neptune, in what year, and what was the key evidence that led to the search?"
 >
@@ -218,15 +222,15 @@ Either way, you have now watched the mechanism and paid the cost. Put that numbe
 
 Five problems. Each has an observable outcome or requires taking a position on a paper. Record answers in `week-00-notes.md` in this folder.
 
-**P1 — Tokenize your own work.** Take a real piece of your work-in-progress (a brief, an email thread, a pitch deck outline, a spec) of about 2,000 English words, and a structurally equivalent piece in your second-best language if you have one. Use `tiktoken` (for GPT) or Anthropic's tokenizer (via `anthropic` SDK `count_tokens`) and report the token counts and the token-per-word ratio for each. Direct Claude Code to write the script. Report: the ratio, the implied cost multiplier at Opus 4.6's current pricing, and one decision you'd change if this were a production pipeline.
+**P1 — Tokenize your own work.** Take a real piece of your work-in-progress (a brief, an email thread, a pitch deck outline, a spec) of about 2,000 English words, and a structurally equivalent piece in your second-best language if you have one. Use `tiktoken` (for GPT) or Anthropic's tokenizer (via `anthropic` SDK `count_tokens`) and report the token counts and the token-per-word ratio for each. Count against a current model (Sonnet 5 or Opus 4.8) so you get the new tokenizer, and — if you want to see the +30% shift directly — count the same text against Sonnet 4.6 too. Direct Claude Code to write the script. Report: the ratio, the implied cost multiplier at current pricing, and one decision you'd change if this were a production pipeline.
 
 **P2 — Take a position on reasoning models.** Read: (a) Willison's *Seven replies to the viral Apple reasoning paper* (Jun 2025)[^18]; (b) the DeepSeek-R1 paper's abstract and §3 on training methodology[^3]; (c) the Opus 4.6 release post's adaptive-thinking section.[^7] In ≤400 words in your notes, take a stance on whether reasoning models are Position A (same substrate) or Position B (new capability regime), citing a specific claim from each source. No hedged both-siding.
 
 **P3 — Three-mode failure diagnosis.** Pick three real failures of an AI system in your own work or public reporting (e.g., Moffatt v. Air Canada[^16] plus two more). For each, classify it as hallucination, confabulation, or false-positive refusal, and name the fix category (grounding / calibration / prompt-framing-or-model-swap). One sentence each, defensible, specific.
 
-**P4 — Cost mechanics on a real workload.** Take a realistic future use case from Week 2 onward (e.g., *"summarize 1000 customer-support emails per day with Opus 4.6"*). Compute: input token volume, output token volume, prefill vs decode cost split, and the multiplier you'd get from prompt caching on a shared system prompt. Direct Claude Code to pull current Anthropic pricing from the docs (confirm model IDs live). Output: a one-paragraph cost estimate and the single biggest cost lever you found.
+**P4 — Cost mechanics on a real workload.** Take a realistic future use case from Week 2 onward (e.g., *"summarize 1000 customer-support emails per day with Sonnet 5"*). Compute: input token volume, output token volume, prefill vs decode cost split, and the multiplier you'd get from prompt caching on a shared system prompt. Direct Claude Code to pull current Anthropic pricing from the docs (confirm model IDs live — and note Sonnet 5's intro pricing ends 2026-08-31). Output: a one-paragraph cost estimate and the single biggest cost lever you found.
 
-**P5 — Extended-thinking on a task from your domain.** Pick one analytical task from your domain that has a clear right-or-wrong answer (a dated fact, a calculation, a question with a definitive answer). Run it on Opus 4.6 with extended thinking off and at a 10K-token budget. Report: did the answer change? Did the confidence/hedging change? Was the cost delta justified by the quality delta? Keep the receipts — you'll reuse this in Week 1.
+**P5 — Extended-thinking on a task from your domain.** Pick one analytical task from your domain that has a clear right-or-wrong answer (a dated fact, a calculation, a question with a definitive answer). Run it on Opus 4.8 with extended thinking off and at a 10K-token budget. Report: did the answer change? Did the confidence/hedging change? Was the cost delta justified by the quality delta? Keep the receipts — you'll reuse this in Week 1.
 
 ## Reviewer lens — named technical disagreements with this lesson's claims
 
@@ -272,7 +276,7 @@ Each bullet names the paragraph it's objecting to and what a specific named crit
 [^3]: DeepSeek-AI (2025-01-22). *DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning.* https://arxiv.org/abs/2501.12948 — DeepSeek-R1-Zero AIME pass@1 15.6% → 71.0% (86.7% with majority voting), matching OpenAI-o1-0912; emergent "advanced reasoning patterns such as self-reflection, verification, and dynamic strategy adaptation." Nature version: https://www.nature.com/articles/s41586-025-09422-z
 [^4]: Hubinger, E., et al. (2024). *Sleeper Agents: Training Deceptive LLMs that Persist Through Safety Training.* Anthropic. https://arxiv.org/abs/2401.05566 — backdoor behaviours trained to fire on year-trigger survive RLHF, SFT, and adversarial red-teaming; deepest evidence that post-training conditions rather than overwrites.
 [^5]: Byte-pair encoding — Wikipedia summary. https://en.wikipedia.org/wiki/Byte-pair_encoding — GPT-4 uses 100,277 tokens; tokens generated by BPE merging frequent byte pairs.
-[^6]: Simbian (2024). *Getting GPT-4 to Count R in Strawberry.* https://simbian.ai/blog/getting-gpt-4-to-count-r-in-strawberry — GPT-4 tokenizes "strawberry" as [str, aw, berry]; the r-counting failure is a tokenization-level limitation, not a reasoning failure.
+[^6]: Andrej Karpathy (2025-02-05). *Deep Dive into LLMs like ChatGPT*, hour 2 (tokenization section) — the strawberry r-counting failure as a tokenization-level limitation ("str"/"aw"/"berry" sub-word segmentation), not a reasoning failure. Same video as [^1]. Verify interactively against any BPE visualizer, e.g. https://tiktokenizer.vercel.app. (A previously cited simbian.ai blog post could not be re-verified in the 2026-07 refresh and was replaced.)
 [^7]: Anthropic (2026-02-05). *Introducing Claude Opus 4.6.* https://www.anthropic.com/news/claude-opus-4-6 — 1M input tokens, 128k output tokens, `/effort` parameter with four levels (low, medium, high default, max), adaptive thinking; 65.4% Terminal-Bench 2.0, 72.7% OSWorld.
 [^8]: Holtzman, A., et al. (2019). *The Curious Case of Neural Text Degeneration* (nucleus sampling, top-p). https://arxiv.org/abs/1904.09751 — plus practical sampling guide, e.g. https://www.promptingguide.ai/introduction/settings
 [^9]: Simon Willison (2025). *llm-reasoning* tag index and *AI assisted search-based research actually works now.* https://simonwillison.net/tags/llm-reasoning/ and https://simonw.substack.com/p/ai-assisted-search-based-research — pragmatic stance on reasoning models: "They're already useful to me today, whether or not they can reliably solve the Tower of Hanoi."
@@ -281,7 +285,7 @@ Each bullet names the paragraph it's objecting to and what a specific named crit
 [^12]: Simon Willison (2025-01-22). *Trading Inference-Time Compute for Adversarial Robustness.* https://simonwillison.net/2025/Jan/22/trading-inference-time-compute/ — summarises OpenAI research showing that adversarial-attack success on o1 tends to zero as inference-time compute grows.
 [^13]: OpenAI (2024-09-12; arXiv 2024-12-21). *OpenAI o1 System Card.* https://arxiv.org/abs/2412.16720 (PDF: https://cdn.openai.com/o1-system-card.pdf) — "o1 models are trained with large-scale reinforcement learning to reason using chain of thought"; most robust model to jailbreaks at time of release; deliberative alignment.
 [^14]: Anthropic. *Building with extended thinking* and *Adaptive thinking.* Claude API Docs. https://docs.claude.com/en/docs/build-with-claude/extended-thinking and https://platform.claude.com/docs/en/build-with-claude/adaptive-thinking — thinking budgets (minimum 1,024 tokens, up to 128K), interleaved thinking (`interleaved-thinking-2025-05-14` header), summarized-thinking for Claude 4 models.
-[^15]: Anthropic (2026-02). *Claude Opus 4.6 System Card* / *Sabotage Risk Report.* https://anthropic.com/claude-opus-4-6-risk-report — low rates of deception, sycophancy, confabulation under pressure; reduced refusal rates on legitimate queries. Contextual commentary: https://thezvi.wordpress.com/2026/02/10/claude-opus-4-6-system-card-part-2-frontier-alignment/
+[^15]: Anthropic (2026-02). *Claude Opus 4.6 System Card.* PDF: https://www-cdn.anthropic.com/c788cbc0a3da9135112f97cdf6dcd06f2c16cee2.pdf — low rates of misaligned behaviors (deception, sycophancy, encouragement of user delusions) on the automated behavioral audit; lowest over-refusal rate of any recent Claude model. Contextual commentary: Zvi Mowshowitz, https://thezvi.wordpress.com/2026/02/10/claude-opus-4-6-system-card-part-2-frontier-alignment/ (both URLs re-verified 2026-07-17).
 [^16]: *Moffatt v. Air Canada*, 2024 BCCRT 149 (BC Civil Resolution Tribunal, 2024-02-14). Case summary: https://www.cbc.ca/news/canada/british-columbia/air-canada-chatbot-lawsuit-1.7116416 — chatbot fabricated a 90-day retroactive bereavement-fare policy; tribunal awarded $812.02, rejected "chatbot is a separate entity" defence. Canonical tier-1 hallucination-proper case.
 [^17]: Bai, Y., et al. (2025). *Large Language Models Hallucination: A Comprehensive Survey.* https://arxiv.org/abs/2510.06265 — taxonomy of hallucination types and root causes across the LLM development lifecycle (data, architecture, training, inference); covers detection approaches, mitigation strategies, and evaluation benchmarks. (The specific framing of autoregressive-objective-driven calibration failure is the present author's synthesis of the survey's root-cause analysis, not a direct quote from the abstract.)
 [^18]: Simon Willison (2025-06-15). *Seven replies to the viral Apple reasoning paper — and why they fall short.* https://simonwillison.net/2025/Jun/15/viral-apple-reasoning-paper/ — substantive engagement with the Apple *Illusion of Thinking* paper's claims about reasoning-model limits.
