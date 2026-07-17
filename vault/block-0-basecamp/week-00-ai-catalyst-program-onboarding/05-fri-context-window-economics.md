@@ -10,7 +10,6 @@ tags: [context-window, tokens, pricing, prompt-caching, kv-cache, long-context, 
 sources:
   - anthropic-prompt-caching-2024-08
   - anthropic-pricing-docs
-  - anthropic-1m-context-ga
   - anthropic-contextual-retrieval-2024-09
   - anthropic-extended-thinking-docs
   - google-gemini-pricing
@@ -339,7 +338,7 @@ Each bullet below names a paragraph and a specific critic who would push back.
 - Liu et al. (2023). *Lost in the Middle.* Read §§3-4 and Figure 1.[^4]
 - Hsieh et al. (2024). *RULER.* Read §§2-3 and the task-taxonomy table.[^1]
 - Anthropic (2024-09-19). *Introducing Contextual Retrieval.*[^6]
-- Anthropic (2026-03-13). *1M context is now GA for Opus 4.6 and Sonnet 4.6.*[^3]
+- Anthropic. *Pricing* (long-context section) — the full 1M window is billed at standard rates for all current models; no >200K surcharge.[^3]
 
 **Recommended (before Week 2):**
 
@@ -368,16 +367,16 @@ Each bullet below names a paragraph and a specific critic who would push back.
 
 [^7]: Jason Liu (2025-08-27). *Beyond Chunks: Why Context Engineering is the Future of RAG.* https://jxnl.co/writing/2025/08/27/facets-context-engineering/ — framing shift from "retrieve the right chunk" to "design tool responses that give agents situational awareness across the information landscape." See also index: https://jxnl.co/writing/2025/08/28/context-engineering-index/
 
-[^8]: Anthropic. *Pricing.* Claude API Docs, retrieved 2026-04-15. https://platform.claude.com/docs/en/about-claude/pricing — Opus 4.6 $5/$25; Sonnet 4.6 $3/$15; Haiku 4.5 $1/$5 per MTok input/output.
+[^8]: Anthropic. *Pricing.* Claude Platform Docs, fetched 2026-07-17. https://platform.claude.com/docs/en/about-claude/pricing — Fable 5 / Mythos 5 $10/$50; Opus 4.8/4.7/4.6 $5/$25; Sonnet 5 $2/$10 intro through 2026-08-31 then $3/$15; Haiku 4.5 $1/$5. Cache multipliers 1.25× (5-min write), 2× (1-hour write), 0.10× (read); "caching pays off after just one cache read for the 5-minute duration, or after two cache reads for the 1-hour duration." New tokenizer (Opus 4.7+/Sonnet 5/Fable) ≈ +30% tokens vs Sonnet 4.6.
 
-[^9]: OpenAI. *API Pricing*, retrieved 2026-04-15. https://openai.com/api/pricing/ — GPT-5 (high) $1.25/$10; GPT-5.4 $2.50/$15; GPT-5.4-nano $0.20/$1.25 per MTok.
+[^9]: OpenAI pricing, fetched 2026-07-17. https://openai.com/index/gpt-5-6/ and https://www.aipricing.guru/openai-pricing/ — GPT-5.6 Sol $5/$30, Terra $2.50/$15, Luna $1/$6, all ~1.05M context; GPT-5.5 (April 2026, first OpenAI 1M-context model) $5/$30. GPT-5.6 caching: 1.25× cache write, 90% cache-read discount, 30-minute minimum cache life.
 
-[^10]: Google. *Gemini Developer API pricing*, retrieved 2026-04-15. https://ai.google.dev/gemini-api/docs/pricing — Gemini 2.5 Pro (Standard tier): $1.25/$10.00 per MTok for prompts ≤200K; $2.50/$15.00 per MTok for prompts >200K. (The higher $3.60/$21.60 or $4.00/$18.00 figures circulating in older posts correspond to the Priority tier of Gemini 3.1 Pro Preview, not Gemini 2.5 Pro Standard.) Context caching at ~0.5× input rate.
+[^10]: Google. *Gemini Developer API pricing*, fetched 2026-07-17. https://ai.google.dev/gemini-api/docs/pricing — Gemini 3.1 Pro Preview: $2.00/$12.00 per MTok for prompts ≤200K; **$4.00/$18.00 above 200K**. Gemini 3.5 Flash $1.50/$9.00. Context caching charges cache reads at ~0.10× input (≈$0.20/MTok on 3.1 Pro) **plus a per-hour storage fee** (~$1–4.50/MTok/hr depending on model) — not the flat 0.5× the April draft claimed. (Note: Gemini 3.5 Pro was still unreleased as of 2026-07-17.)
 
 [^11]: Anthropic. *Context windows* + *Building with extended thinking.* Claude API Docs, retrieved 2026-04-15. https://platform.claude.com/docs/en/build-with-claude/context-windows and https://docs.claude.com/en/docs/build-with-claude/extended-thinking — thinking tokens count toward max_tokens, are billed as output, count against context window within a turn; prior-turn thinking blocks are auto-stripped across turns.
 
 [^12]: Google DeepMind (2024-02-15, updated across 2024). *Gemini 1.5 Technical Report.* https://storage.googleapis.com/deepmind-media/gemini/gemini_v1_5_report.pdf — near-perfect NIAH recall at 1M tokens, passable recall at 10M; subsequent benchmarks (RULER, NoLiMa) sharpened the gap between NIAH recall and task-weighted long-context quality.
 
-[^13]: LightOn (2025). *RAG is Dead, Long Live RAG: Retrieval in the Age of Agents.* https://lighton.ai/lighton-blogs/rag-is-dead-long-live-rag-retrieval-in-the-age-of-agents — second-voice summary of the 2025 retrieval-in-agents debate; aligns with the Jason-Liu context-engineering frame.
+[^13]: LightOn (2025). *RAG is Dead, Long Live RAG: Retrieval in the Age of Agents.* https://lighton.ai/lighton-blogs/rag-is-dead-long-live-rag-retrieval-in-the-age-of-agents — second-voice summary of the 2025 retrieval-in-agents debate; aligns with the Jason-Liu context-engineering frame. By mid-2026 the consensus has hardened into "naive RAG is dead; retrieval lives inside agents (agentic RAG)."
 
-_last_verified: 2026-04-15_
+_last_verified: 2026-07-17_

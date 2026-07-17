@@ -32,13 +32,13 @@ Six paired deep-dives plus a synthesis day. Each day is ~90–120 minutes of rea
 
 | Day | Topic | One-line payoff |
 |-----|-------|-----------------|
-| Mon | The landing page as a conversion machine | Read any landing page as seven elements and four layers; compute the revenue ceiling of a 0.5-point lift before writing a line of copy. |
-| Tue | How v0, Lovable, Bolt, and Replit actually work | Pick a tool in under 60 seconds on the evidence of four architectural bets — not four flavors of the same thing. |
-| Wed | Design-system literacy for operators who don't draw | Compress "make it look like Linear" into a seven-variable brief that survives cross-tool handoff, OKLCH included. |
-| Thu | The micro-prototype ladder | Name your rung — smoke, fake-door, concierge, Wizard-of-Oz, MVP — and size the sample with a Wilson interval, not a feeling. |
-| Fri | The 4–8 hour shippable-prototype pipeline | Use Claude Code as orchestrator, v0/Lovable as UI shop, Figma Make for assets, n8n for glue, PostHog for truth — with three verbatim-pasteable prompts. |
-| Sat | Validation instrumentation | Define the event model, CI threshold, session-replay legal envelope, and AI-moderated-interview script *before* traffic arrives. |
-| Sun | Synthesis, quiz, flashcards | Four collapse modes, thirteen mental moves, twenty questions, fifty-plus cards. |
+| [[01-mon-landing-page-as-conversion-machine\|Mon]] | The landing page as a conversion machine | Read any landing page as seven elements and four layers; compute the revenue ceiling of a 0.5-point lift before writing a line of copy. |
+| [[02-tue-how-ai-code-gen-tools-work\|Tue]] | How v0, Lovable, Bolt, and Replit actually work | Pick a tool in under 60 seconds on the evidence of four architectural bets — not four flavors of the same thing. |
+| [[03-wed-design-system-literacy\|Wed]] | Design-system literacy for operators who don't draw | Compress "make it look like Linear" into a seven-variable brief that survives cross-tool handoff, OKLCH included. |
+| [[04-thu-micro-prototype-ladder\|Thu]] | The micro-prototype ladder | Name your rung — smoke, fake-door, concierge, Wizard-of-Oz, MVP — and size the sample with a Wilson interval, not a feeling. |
+| [[05-fri-prototype-pipeline\|Fri]] | The 4–8 hour shippable-prototype pipeline | Use Claude Code as orchestrator, v0/Lovable as UI shop, Figma Make for assets, n8n for glue, PostHog for truth — with three verbatim-pasteable prompts. |
+| [[06-sat-validation-instrumentation\|Sat]] | Validation instrumentation | Define the event model, CI threshold, session-replay legal envelope, and AI-moderated-interview script *before* traffic arrives. |
+| [[07-sun-synthesis-quiz-flashcards\|Sun]] | Synthesis, quiz, flashcards | Four collapse modes, thirteen mental moves, twenty questions, fifty-plus cards. |
 
 ## Why these six topics belong together
 

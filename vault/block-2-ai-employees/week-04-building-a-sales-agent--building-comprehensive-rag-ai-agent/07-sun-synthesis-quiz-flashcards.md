@@ -77,7 +77,7 @@ Thirteen highest-leverage moves from the six lessons. Each row: the move, the me
 |---|------|-----------|------------|-------------------|
 | 1 | Map every sales-agent sub-task to one of Anthropic's five workflow patterns before writing code | [Anthropic's Dec 2024 post](https://www.anthropic.com/research/building-effective-agents) argues most "agent" work is a workflow composition. Reply classification = routing; research-and-draft = orchestrator-workers; personalization QA = evaluator-optimizer. Only the highest-agency edge case is truly autonomous | Designing any new agent with ≥3 distinct steps | A 1-shot transform where a single well-specified prompt does the job |
 | 2 | Default to workflows over autonomous agents; earn the autonomy | Anthropic explicit: "When building applications with LLMs, we recommend finding the simplest solution possible, and only increasing complexity when needed." Cost, latency, and failure modes all compound with autonomy. Sierra + Cognition demos don't change the math for your deployment | Any production agent | A research / exploratory agent where the value is the unconstrained exploration |
-| 3 | Write tool schemas with ≤6 tools per agent scope; decompose when you exceed it | Berkeley Function Calling Leaderboard 2024/25 shows function-call accuracy degrades as N tools grows; beyond ~6 even frontier models miss the right tool >5% of the time. Decompose into sub-agents with narrow tool sets | Agent spec with 7+ tools | Genuinely tight coupling where splitting creates worse cross-agent coordination failures |
+| 3 | Write tool schemas with ≤6 tools per agent scope; decompose when you exceed it | Multi-turn tool-use reliability degrades as N tools grows (BFCL-V4 multi-turn scores are far below single-turn; the board is led by Qwen3.7 Max at 0.750 and churns quarterly). The "~6–8 tools" number is an *operator heuristic*, not a published BFCL result — Anthropic's tool_search_tool / programmatic tool calling relax it further. Decompose into sub-agents with narrow tool sets | Agent spec with 7+ tools in one decision scope | Genuinely tight coupling where splitting creates worse cross-agent coordination failures, or a >100-tool surface where tool_search_tool is the better fix |
 | 4 | Treat MCP as the default connector when you'll reuse a tool across agents or sessions | [MCP](https://modelcontextprotocol.io/) solves the MxN integration problem. When you'll wire CRM / email / calendar / docs to N different agents, MCP amortizes. For a single-agent bespoke integration, direct API is often cheaper | Multi-agent or long-lived platform | One-off agent, single tool, throwaway prototype |
 | 5 | Configure SPF + DKIM + DMARC + one-click unsubscribe before sending a single cold email | Post-Feb-2024 Google + Yahoo rules: 5000+/day senders must authenticate, must offer one-click unsubscribe, must keep complaint rate <0.3%. Missing any single one = bulk rejection. Postmaster Tools is the feedback loop | Any new outbound domain | A warm-intro or referral channel where you're sending to <10/day from a reputed-domain account |
 | 6 | Warm a new sending domain 0 → 500/day over 4–6 weeks; cap ramp at 2× prior-week volume | Deliverability research (GlockApps, MailGenius, Smartlead 2024/25) shows domain reputation is built on volume gradient, not absolute volume. Spike from 0 → 500 in week one = spam folder for 90 days | Any fresh-domain outbound launch | Pooled-reputation send via Instantly/Smartlead where you inherit the pool's reputation |
@@ -87,7 +87,7 @@ Thirteen highest-leverage moves from the six lessons. Each row: the move, the me
 | 10 | Apply Anthropic Contextual Retrieval for corpora where chunks lose meaning out-of-context | [Anthropic 2024](https://www.anthropic.com/news/contextual-retrieval): 49% top-20 failure-rate reduction (5.7% → 2.9%) from prepending Claude-Haiku-generated 50–100 token context to each chunk before embedding and BM25 indexing. 67% with rerank. Tested on codebases, fiction, ArXiv, science papers — transfer to legal/financial corpora unproven | Technical docs, codebases, multi-document reports where "which company / which period / which section" is ambiguous | Narrative corpora where each chunk is self-contained; ultra-high-volume low-margin deployments where preprocessing cost exceeds retrieval-quality value |
 | 11 | Add a reranker (Cohere rerank-v3, Voyage rerank-2) when retrieval is your bottleneck AND latency budget has headroom | Rerankers rescore top-N candidates with a cross-encoder — higher quality, ~100–300ms added latency. [Jason Liu's position](https://jxnl.co/writing/2024/08/20/rag-flywheel/): add reranker by default. [Ben Hylak counter](https://raindrop.ai/): in agent loops, latency dominates user-perceived quality | Batch / single-shot RAG with >200ms budget | Sub-200ms user-facing loops; high-QPS deployments where rerank cost dominates unit economics |
 | 12 | Route global/synthesis queries to GraphRAG or long-context; route local/factoid to vanilla RAG | [Microsoft GraphRAG](https://microsoft.github.io/graphrag/) wins on global sensemaking ("what are the 5 themes across these 100 earnings calls?") at 10–100× ingestion cost. Long-context (Claude / Gemini 1M tokens) is $10–100× more expensive per query than RAG. Vanilla RAG still wins for local-answer queries at cost-per-correct-answer | Heterogeneous query distribution with both local and global needs | Homogeneous local-QA workload — GraphRAG overhead is dead weight |
-| 13 | Ship no RAG to production without a 30-query eval set + rubric-grounded LLM-judge validated against 20 human labels to >85% agreement | Hamel Husain's core thesis at [parlance-labs.com](https://parlance-labs.com/): start with 20 real-user queries, hand-label, scale via LLM-judge validated against human labels, regression-gate every change. Without this, "it looks good" is your quality bar | Any production RAG deployment | A throwaway internal tool with one user (you) |
+| 13 | Ship no RAG to production without a rubric-grounded LLM-judge validated against ≥20 human labels to **≥90% agreement** (the week's canonical bar), gated on a **significance test over a ≥100-query set**, not a raw point-drop on 30 | Hamel Husain's core thesis at [parlance-labs.com](https://parlance-labs.com/): start with 20 real-user queries, hand-label, scale via a judge calibrated to ≥90% (Hamel's published Honeycomb number), and gate deploys on a bootstrapped-CI significance test — a 2pp move on N=30 is inside the ±9pp noise band. Without this, "it looks good" is your quality bar | Any production RAG deployment | A throwaway internal tool with one user (you) |
 
 ---
 
@@ -126,17 +126,17 @@ Thirteen highest-leverage moves from the six lessons. Each row: the move, the me
 
 **Q10 (Short-written, Wed)** — Name the 4 legal regimes a US-based sales agent targeting US + EU + India + Canada recipients must comply with, and for each name the one clause that differs most sharply from the US default.
 
-**Q11 (Multiple choice, Thu)** — Anthropic's Contextual Retrieval reports a 49% reduction in top-20 retrieval failure rate. What is the reported failure-rate delta in absolute terms?
-(a) 10.5% → 5.3%
-(b) 5.7% → 2.9%
-(c) 15.2% → 7.8%
-(d) 3.1% → 1.6%
+**Q11 (Multiple choice, Thu — this week's own MTEB material)** — As of July 2026, which statement about the top of the MTEB embedding leaderboard is correct?
+(a) Google Gemini Embedding is the clear English #1
+(b) OpenAI text-embedding-3-large holds the top spot
+(c) Open-weight models (QZhou-Embedding, KaLM-Embedding-Gemma3, Qwen3-Embedding) now lead both the English and multilingual boards
+(d) Cohere embed-v4 leads on the multilingual board
 
-**Q12 (Number-specific, Thu)** — State the four knowledge domains Anthropic used to evaluate Contextual Retrieval, and the reranker used in the best-performing configuration.
+**Q12 (Number-specific, Thu — this week's cost-math trap)** — Anthropic quotes Contextual Retrieval preprocessing at "$1.02 per million document tokens." On which model was that figure computed, and what happens to the number if you run the preprocessing on Claude Haiku 4.5 instead? (This is the silent-model-swap the Thursday cost math warns about.)
 
 **Q13 (Short-written, Thu)** — Define reciprocal rank fusion (RRF) in one sentence and state the k-value default most implementations use.
 
-**Q14 (Schema completion, Thu)** — Write the pseudocode for a Contextual Retrieval preprocessing prompt: given `whole_document` and `chunk`, produce a 50–100 token context string that situates the chunk. Show the prompt structure, not the full implementation.
+**Q14 (Short-written, Thu — this week's reranker generation)** — Name the current-generation reranker capability (shipped Aug 2025 on Voyage rerank-2.5, and on Cohere Rerank 4) that a 2024-era "Cohere Rerank 3.5" pipeline lacks, and give one sales-agent-relevant use for it.
 
 **Q15 (Multiple choice, Fri)** — [Microsoft GraphRAG](https://arxiv.org/abs/2404.16130) is strictly better than vanilla RAG on which query class?
 (a) Factoid lookup ("what was Q3 revenue?")
@@ -144,7 +144,7 @@ Thirteen highest-leverage moves from the six lessons. Each row: the move, the me
 (c) Multi-hop factual reasoning ("who funded the company whose CEO went to Stanford?")
 (d) Latency-sensitive single-shot QA
 
-**Q16 (Number-specific, Fri)** — State the approximate cost multiplier per query for pure long-context (Claude / Gemini 1M tokens) vs a well-tuned RAG pipeline for a 500K-token corpus, and the accuracy evidence for Lost-in-the-Middle degradation.
+**Q16 (Number-specific, Fri)** — State the approximate cost multiplier per query for pure long-context (Claude Opus 4.8 / Fable 5 / Gemini, 1M-token window) vs a well-tuned RAG pipeline over a ~500K-token corpus, and name the two July-2026 pricing/tokenizer changes that widen the gap. Also state the accuracy evidence for Lost-in-the-Middle degradation.
 
 **Q17 (Short-written, Fri)** — Define agentic retrieval in one sentence. Name one paper from 2023–24 that formalizes a variant.
 
