@@ -51,7 +51,7 @@ This is an architectural lesson. You will direct Claude Code; you will not hand-
 
 The single most important mental model: `CLAUDE.md` is a convention, not a data structure. The Claude Code harness reads files from disk at specific paths and inlines them into the system prompt before your first message. That is the whole mechanism. Everything else — precedence, imports, nested loading — is policy layered on top.
 
-There are **four scope tiers** where `CLAUDE.md` can live, plus a documented *local* tier and per-directory *nested* files.[^1]
+There are **four scope tiers** where `CLAUDE.md` can live, plus per-directory *nested* files below them.[^1]
 
 1. **Managed-policy (enterprise).** A single file, installed by IT at an OS-specific path — `/Library/Application Support/ClaudeCode/CLAUDE.md` on macOS, **`C:\Program Files\ClaudeCode\CLAUDE.md`** on Windows, `/etc/claude-code/CLAUDE.md` on Linux/WSL. (The April draft gave the Windows path as `C:\ProgramData\...`; current docs say `C:\Program Files\...`.) It can also be embedded directly via a `claudeMd` key in `managed-settings.json`. This tier is designed for regulated environments and **cannot be excluded** by individual settings. Most individual operators never see it; in a regulated org you will.
 2. **User tier — `~/.claude/CLAUDE.md`.** This is *you*: voice, permanent preferences, things true in every repo. "I write in British English." "Never use emojis in committed code unless I explicitly ask." Edit it with `/memory` or your editor — [Simon Willison prefers editing `CLAUDE.md` directly rather than the `#`-prefix shortcut, because the shortcut can produce sloppy phrasing the model then internalizes](https://simonwillison.net/tags/claude-code/).[^9]
