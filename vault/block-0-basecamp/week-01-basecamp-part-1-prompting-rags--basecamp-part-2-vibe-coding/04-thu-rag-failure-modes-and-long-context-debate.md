@@ -77,7 +77,7 @@ The top-k is too high. You retrieve 20 chunks trying to cover edge cases. But 14
 
 This is the mechanism behind Liu et al.'s "Lost in the Middle" (2023, published in TACL 2024): performance on multi-document question answering is highest when the relevant document is at the beginning or end of the context window, and degrades significantly when it is in the middle — even with models explicitly designed for long contexts.[^2] The finding generalizes: more context is not always better context. Precision matters more than recall once you cross the "enough relevant signal" threshold.
 
-The practical consequence: systems that default to top-20 retrieval trying to be safe are often outperformed by well-tuned top-5 retrieval. More chunks is not more information — it is more distraction.
+The practical consequence: systems that default to top-20 retrieval trying to be safe are often outperformed by well-tuned top-5 retrieval. Past the "enough relevant signal" threshold, extra chunks add distraction, not information.
 
 ### 5. Citation fabrication
 
@@ -93,7 +93,7 @@ The clean-corpus assumption that underlies most RAG evals ("if we give the model
 
 The retrieval index reflects the state of your knowledge base at indexing time. If the corpus changes — new contracts filed, updated policies, revised drug interaction data — the index is stale until reindexed.
 
-**Mechanism:** This is not a model failure. It is a systems failure. But it surfaces as a model failure when users ask queries that depend on recent updates. The more frequently your corpus changes and the higher the stakes of stale information (legal, regulatory, medical), the more critical your reindexing cadence becomes. Most production systems underinvest in this.
+**Mechanism:** This is a systems failure, not a model failure — though it surfaces as a model failure when users ask queries that depend on recent updates. The more frequently your corpus changes and the higher the stakes of stale information (legal, regulatory, medical), the more critical your reindexing cadence becomes. Most production systems underinvest in this.
 
 The operational fix is incremental indexing with clear freshness metadata, and routing queries about "current" or "latest" state through a freshness filter that boosts recently indexed chunks. The deeper fix is surfacing staleness risk explicitly in the generated answer: "This answer is based on documents indexed as of [date]."
 
@@ -101,7 +101,7 @@ The operational fix is incremental indexing with clear freshness metadata, and r
 
 Covered partially under retrieval miss, but worth naming separately: the user writes a query in conversational language; the corpus is written in formal, domain-specific, or technical language. The embedding model was trained on a distribution that underrepresents either the query register or the document register.
 
-**Production example:** Customer support logs are written in CRM shorthand ("cust reported 404 on /checkout per order #12345"). A user asking "why do customers get errors at checkout?" in natural language may not retrieve those logs effectively, even though they contain exactly the relevant information. The mismatch is not at the semantic level — it is at the register and format level.
+**Production example:** Customer support logs are written in CRM shorthand ("cust reported 404 on /checkout per order #12345"). A user asking "why do customers get errors at checkout?" in natural language may not retrieve those logs effectively, even though they contain exactly the relevant information. The mismatch lives at the register and format level, not the semantic level.
 
 Query rewriting (generating multiple query variants before retrieval) and HyDE (Hypothetical Document Embeddings — generate what the ideal answer document would look like, then embed that for retrieval) are the two most commonly deployed mitigations.[^6]
 
@@ -209,7 +209,7 @@ The latency gap is equally stark. 1M-token context requests can exceed 20–30 s
 
 ## Part 5: Agentic RAG — what it is, why it matters, where it breaks
 
-By mid-2025, the dominant pattern at the frontier was neither naive RAG nor raw context-stuffing. It was **agentic RAG**: a multi-step process where the retrieval strategy is itself controlled by a reasoning agent.
+By mid-2025, the dominant pattern at the frontier was neither naive RAG nor raw context-stuffing. It was **agentic RAG**: a multi-step process where the retrieval strategy is itself controlled by a reasoning agent — the same observe→plan→act loop you'll dissect in [[05-fri-vibe-coding-part-1-mechanics]], with retrieval as the tool.
 
 LlamaIndex published "RAG is dead, long live agentic retrieval" (2025), marking the explicit end of naive top-k RAG as the production default.[^16] Anthropic published a detailed engineering post on their own multi-agent research system (June 2025), describing an orchestrator-worker architecture where a Lead Researcher agent directs subagents to perform targeted retrieval, synthesize partial results, and re-query when gaps are identified.[^17] The result: 90% reduction in research time for complex queries; 90.2% better than a single Opus 4 on internal benchmarks.
 
@@ -349,7 +349,7 @@ RAFT (Zhang et al. 2024, *RAFT: Adapting Language Model to Domain Specific RAG*,
 
 ## Reviewer lens
 
-**Karpathy would push back on the cost table in Part 4.** Specifically: the numbers assume a query-by-query API pricing model, but Karpathy has argued (in his 2025 commentary on AI infrastructure) that the relevant comparison for serious products is total system cost including engineering time, maintenance, and reliability — not per-query API cost. A context-stuffing approach has near-zero retrieval infrastructure to maintain. A RAG pipeline with evaluation harnesses, index freshness monitoring, embedding model management, and reranking requires ongoing engineering. At small to medium scale, the engineering cost of RAG might exceed the API cost of context-stuffing. The lesson should be clearer that the cost comparison is API-cost-only and that total system cost tilts differently at different scales.
+**Karpathy would push back on the cost table in Part 4.** Specifically: the numbers assume a query-by-query API pricing model, but the relevant comparison for a serious product is total system cost — engineering time, maintenance, reliability — not per-query API cost. A context-stuffing approach has near-zero retrieval infrastructure to maintain. A RAG pipeline with evaluation harnesses, index freshness monitoring, embedding model management, and reranking requires ongoing engineering. At small to medium scale, the engineering cost of RAG might exceed the API cost of context-stuffing. The lesson should be clearer that the cost comparison is API-cost-only and that total system cost tilts differently at different scales.
 
 **Chip Huyen would push back on the experiment design in the Runnable Experiment section.** Specifically: the 10-question test set is N=10, which is statistically meaningless. Huyen's *AI Engineering* book argues that production eval sets need N≥100 with structured labeling to distinguish signal from noise. Running N=10 and drawing conclusions about which architecture is "better" is exactly the kind of premature evaluation that leads to wrong architectural decisions. The lesson should frame the runnable experiment as a *diagnostic* that reveals failure modes, not as a conclusive architectural comparison.
 
@@ -409,7 +409,7 @@ RAFT (Zhang et al. 2024, *RAFT: Adapting Language Model to Domain Specific RAG*,
 
 [^13]: Jue Wang, Bhavnick Minhas, Purva Patel, Chirag Gokul, et al. (Databricks), "Long Context RAG Performance of LLMs," arXiv:2411.03538 (November 2024). https://www.databricks.com/blog/long-context-rag-performance-llms — Benchmarks 20+ models on DocsQA, FinanceBench, NaturalQuestions at 2K–2M token context; finds per-model performance peaks far below advertised context limits.
 
-[^14]: MindStudio, "What Is Flat-Rate Long-Context Pricing? How Anthropic Changed the Economics of RAG." https://www.mindstudio.ai/blog/flat-rate-long-context-pricing-anthropic-claude — Discusses Anthropic's enterprise pricing model and its implications for context-stuffing economics.
+[^14]: Anthropic, "1M context is now generally available" (2026-03-13). https://claude.com/blog/1m-context-ga — Verified fact replacing the earlier flat-rate-enterprise claim: the full 1M window is billed at standard per-token rates with no long-context multiplier. Verified 2026-07-17.
 
 [^15]: Jerry Liu / LlamaIndex, "Towards Long Context RAG" (March 1, 2024). https://www.llamaindex.ai/blog/towards-long-context-rag — Proposes that query type determines whether long-context or RAG is appropriate; introduces Small-to-Big Retrieval and Intelligent Routing architectures.
 
@@ -417,4 +417,8 @@ RAFT (Zhang et al. 2024, *RAFT: Adapting Language Model to Domain Specific RAG*,
 
 [^17]: Anthropic Engineering, "How we built our multi-agent research system" (June 2025). https://www.anthropic.com/engineering/multi-agent-research-system — Orchestrator-worker architecture; 90% research time reduction; 90.2% improvement over single Opus 4 on internal benchmarks.
 
-[^18]: Lim et al., "Agentic Retrieval-Augmented Generation: A Survey on Agentic RAG," arXiv:2501.09136 (January 2025). https://arxiv.org/abs/2501.09136 — Taxonomy of agentic RAG architectures; failure modes including planning failures, tool loop explosion, latency compounding.
+[^18]: Aditi Singh, Abul Ehtesham, Saket Kumar, Tala Talaei Khoei, Athanasios V. Vasilakos, "Agentic Retrieval-Augmented Generation: A Survey on Agentic RAG," arXiv:2501.09136 (January 2025). https://arxiv.org/abs/2501.09136 — Taxonomy of agentic RAG architectures; failure modes including planning failures, tool loop explosion, latency compounding. Authors re-verified 2026-07-17.
+
+[^19]: Anthropic, "Introducing Claude Sonnet 5" (2026-06-30). https://www.anthropic.com/news/claude-sonnet-5 — 1M-token native context; intro pricing $2/$10 per M tokens through 2026-08-31, then $3/$15; default model in Claude Code and on Free/Pro. Verified 2026-07-17.
+
+[^20]: byteiota, "RAG vs Long Context 2026: Is Retrieval Really Dead?" https://byteiota.com/rag-vs-long-context-2026-retrieval-debate/ — Documents the January 2026 viral "RAG is dead" wave and the resolution into "naive RAG is dead; sophisticated/agentic RAG is thriving." See also LightOn, https://lighton.ai/lighton-blogs/rag-is-dead-long-live-rag-retrieval-in-the-age-of-agents. Verified 2026-07-17.

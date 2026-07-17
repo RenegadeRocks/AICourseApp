@@ -23,7 +23,9 @@ sources:
   - promptshelf-cursorrules-vs-claudemd
   - checkpoint-cve-2025-59536-hooks
   - infoq-claude-code-subagents
-last_verified: 2026-04-15
+  - anthropic-claude-code-hooks-guide
+  - aaif-linux-foundation
+last_verified: 2026-07-17
 word_count_target: 6000
 ---
 
@@ -39,9 +41,9 @@ By the end of this lesson you will be able to (1) draw the full four-tier `CLAUD
 
 ## Prerequisites
 
-- Claude Code installed (v2.1.59 or later, for auto-memory).[^6]
+- Claude Code installed (a current v2.1.x; auto-memory shipped in late 2025 and is on by default).[^6]
 - A scratch directory on your machine where we can create nested folders without breaking a real project.
-- Rough mental model of what a context window is — if you sat through [[01-mon-prompting-first-principles|Monday's prompting lesson]] you have it. The memory architecture is, at bottom, a set of policies for *what goes into the context window and when*.
+- Rough mental model of what a context window is — if you sat through [[01-mon-mental-model-of-llms|Monday's mental model of LLMs]] you have it. The memory architecture is, at bottom, a set of policies for *what goes into the context window and when*. It sits underneath [[06-sat-git-worktrees-for-ai-builders|Saturday's worktree lesson]] too: auto-memory is keyed per git repository and shared across all its worktrees.
 
 This is an architectural lesson. You will direct Claude Code; you will not hand-write Python.
 

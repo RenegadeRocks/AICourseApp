@@ -206,7 +206,7 @@ In May 2025, Invariant Labs published a working exploit against GitHub's officia
 
 The GitHub team responded with Lockdown mode and content sanitization, but the researchers' own public position is that the architectural issue has *no easy fix*; mitigation is per-session scoping, least-privilege tokens, and human review of cross-repo writes.[^11] This is not a bug to be patched; it is an inherent property of "models follow instructions in their input, and MCP puts more input in front of the model."
 
-For anyone shipping an MCP-backed agent in 2026, this is the first thing on the threat model: *what's the worst a malicious document flowing through a tool response can do, given the authorities the agent has?* If the answer is "exfiltrate private code via a PR comment" or "send email as the user" or "charge a card," you need explicit human-in-the-loop approval for those classes of action. Protocol-layer auth fixes (2025-06-18) help by tightening token scope. They do not fix the confused-deputy-at-the-model-level problem, because that problem is not at the protocol layer.
+For anyone shipping an MCP-backed agent in 2026, this is the first thing on the threat model: *what's the worst a malicious document flowing through a tool response can do, given the authorities the agent has?* If the answer is "exfiltrate private code via a PR comment" or "send email as the user" or "charge a card," you need explicit human-in-the-loop approval for those classes of action. Wednesday's [[03-wed-mcp-security]] lesson is the full treatment — the lethal trifecta, the 2026 CVE wave, and the mitigation stack. Protocol-layer auth fixes (2025-06-18) help by tightening token scope. They do not fix the confused-deputy-at-the-model-level problem, because that problem is not at the protocol layer.
 
 ## Layer 5 — The live controversy (and how it resolved differently than April predicted)
 
@@ -361,7 +361,7 @@ Three places this lesson is soft and one counter-lens on each, so you can argue 
 
 ## Citations
 
-[^1]: Model Context Protocol specification site, landing page. https://modelcontextprotocol.io — accessed 2026-04-15. Phrase "the USB-C of AI" appears in Anthropic's own launch communications.
+[^1]: Model Context Protocol specification site, landing page. https://modelcontextprotocol.io — accessed 2026-07-17. Phrase "the USB-C of AI" appears in Anthropic's own launch communications.
 
 [^2]: Anthropic. "Introducing the Model Context Protocol." https://www.anthropic.com/news/model-context-protocol — November 25, 2024. The launch thesis: "an open standard for connecting AI assistants to the systems where data lives."
 

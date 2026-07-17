@@ -55,7 +55,7 @@ The goal is not to turn you into an n8n enthusiast. It is to get you to the poin
 - n8n installed somewhere you can reach a browser UI: self-hosted Docker container on your laptop (`docker run -it --rm -p 5678:5678 docker.n8n.io/n8nio/n8n` is the canonical one-liner from n8n's docs), or a free n8n Cloud trial.
 - Anthropic API key with credit (any tier), and a Claude Code install on the same machine.
 - A GitHub account with a sandbox repo you are willing to fire test issues at, and a Slack workspace where you can add an incoming webhook or install a Slack app.
-- You have read or skimmed [[../week-01-basecamp-part-1-prompting-rags--basecamp-part-2-vibe-coding/01-mon-prompting-first-principles|Monday Week 1 (prompting mechanics)]] and [[02-tue-mcp-deep-dive|Tuesday's MCP deep dive]]. MCP shows up directly today because n8n's MCP nodes are what let Claude Code drive an n8n instance from the outside.
+- You have read or skimmed [[../week-01-basecamp-part-1-prompting-rags--basecamp-part-2-vibe-coding/01-mon-prompting-first-principles|Monday Week 1 (prompting mechanics)]] and [[02-tue-building-an-mcp-server|Tuesday's MCP server build]]. MCP shows up directly today because n8n's MCP nodes are what let Claude Code drive an n8n instance from the outside.
 
 ## Layer 1 — The workflow-engine category, demystified
 
@@ -81,9 +81,9 @@ Three things made n8n the runaway shelf-B story in the AI era, and none of them 
 
 1. **Fair-code, self-hostable license.** n8n uses the Sustainable Use License, which is not OSI-open-source but is close enough that a security-conscious enterprise can run it inside their own VPC with their own data. This single fact is why I see n8n deployed in regulated industries where Zapier is a non-starter.
 2. **Node-level code escape hatch.** Any time the UI runs out of expressiveness, you drop into a Code node and write JavaScript or Python. Unlike Zapier's Formatter-and-Filter grammar, n8n does not force you back onto a vendor-specific mini-language; you write the language you already know.
-3. **An integrations directory now past 1,000 nodes** (it was ~500 in 2025), including an AI and LangChain cluster that ships dozens of LLM, embedding, vector-store, and agent nodes as first-class primitives.[^7][^1]
+3. **An integrations directory well past 500 nodes** (n8n's own 2026 materials put it at 1,000+), including an AI and LangChain cluster that ships dozens of LLM, embedding, vector-store, and agent nodes as first-class primitives.[^7][^1]
 
-Add to that the AI-first product arc — from the 2025 release train (the v1.113.3 release alone shipped 70+ AI-related nodes across LLMs, embeddings, vector databases, speech, OCR, and image models[^8]) through **n8n 2.0**, which shipped early 2026 with native AI Agent nodes, multi-agent orchestration and RAG out of the box, and a June-2026 execution-replay debugging engine. A May-19-2026 release added **no-setup MCP-server connections** for a curated set of servers (Notion, Linear, monday.com, Apify, PostHog). The commercial signal underneath it: SAP took a strategic investment in n8n at a **$5.2B valuation** (May 2026, up from $2.5B in Oct 2025), embedding n8n into SAP Joule Studio.[^17] n8n has credibly repositioned itself from "SaaS glue" to "the workflow engine you use to ship agents your operations team can actually maintain."
+Add to that the AI-first product arc — from the 2025 release train (the v1.113.3 release alone shipped 70+ AI-related nodes across LLMs, embeddings, vector databases, speech, OCR, and image models[^8]) through the **n8n 2.x** line, which added native AI Agent nodes, multi-agent orchestration and RAG out of the box, and a June-2026 execution-replay debugging engine. Version **2.19 (released 2026-05-19)** added **no-setup MCP-server connections** for a curated set — Apify, Linear, monday.com, Notion, PostHog — that you attach from the nodes panel without hand-configuring an MCP Client node. The commercial signal underneath it: SAP took a strategic investment in n8n at a **$5.2B valuation** (May 2026, up from $2.5B in Oct 2025), embedding n8n into SAP Joule Studio.[^17] n8n has credibly repositioned itself from "SaaS glue" to "the workflow engine you use to ship agents your operations team can actually maintain."
 
 That repositioning is also the source of the most interesting live controversy in this space, which we will hit in Layer 4.
 
@@ -276,7 +276,7 @@ The regulator did not shut them down, but the remediation was painful. The team:
 
 1. Moved execution history to a mandatory-retention Postgres instance with seven-year retention.
 2. Turned on verbose agent-step logging for every AI Agent node, capturing every tool call's inputs and outputs with content hashes.
-3. Pinned specific model snapshots (`claude-sonnet-4-5-20260315` style identifiers) and added a version-check step that fails the workflow if the deployed model ID drifts.
+3. Pinned specific model snapshots (dated `claude-sonnet-5-YYYYMMDD` style identifiers, never the bare alias) and added a version-check step that fails the workflow if the deployed model ID drifts.
 4. Wrapped the actual decision in a separate LangGraph service that emits a structured, replayable trace to an immutable audit log in S3, so the *decision* was auditable even if the n8n orchestration layer was not.
 
 The war-story lesson is not *"n8n is bad for regulated workloads."* It is *"n8n's defaults are tuned for ops-team maintainability, not for regulatory auditability, and if your workload is on the regulated side of that line you have to change defaults explicitly."* The specific failure mode — a visual workflow engine that does not retain full agent-step traces by default — is the single most underrated production risk of the shelf-B choice. Find it before the regulator does.
@@ -352,5 +352,6 @@ Where **a senior n8n engineer** would push back, which is the disagreement most 
 [^14]: OrangeLoops, *Building AI Agents with LangGraph vs n8n: A Hands-On Comparison* (June 2025). https://orangeloops.com/2025/06/building-ai-agents-with-langgraph-vs-n8n-a-hands-on-comparison/
 [^15]: n8n Blog, *15 best practices for deploying AI agents in production*. https://blog.n8n.io/best-practices-for-deploying-ai-agents-in-production/
 [^16]: Latenode Blog, *N8N AI Agents 2025: Complete Capabilities Review + Implementation Reality Check*. https://latenode.com/blog/low-code-no-code-platforms/n8n-setup-workflows-self-hosting-templates/n8n-ai-agents-2025-complete-capabilities-review-implementation-reality-check
+[^17]: n8n no-setup MCP-server connections landed in **v2.19 (released 2026-05-19)** for Apify, Linear, monday.com, Notion, PostHog — per n8n Docs, *Connect to n8n MCP server* / *Release notes 2.x*, https://docs.n8n.io/connect/connect-to-n8n-mcp-server and https://docs.n8n.io/changelog/release-notes-2.x . Node-count (1,000+), multi-agent/RAG, and execution-replay debugging per Nodesify, *n8n Workflow Automation Guide 2026*, https://nodesify.com/blog/n8n-workflow-automation-guide-2026 . SAP strategic investment at $5.2B valuation (May 12 2026, up from $2.5B Oct 2025) per Bloomberg, https://www.bloomberg.com/news/articles/2026-05-12/sap-invests-in-ai-automation-startup-n8n-at-5-2-billion-value .
 
-_last_verified: 2026-04-15_
+_last_verified: 2026-07-17_

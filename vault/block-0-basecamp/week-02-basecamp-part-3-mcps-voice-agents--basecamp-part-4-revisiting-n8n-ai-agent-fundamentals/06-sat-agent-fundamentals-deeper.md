@@ -23,7 +23,9 @@ sources:
   - hamel-husain-llm-judge
   - alan-benchmark-tradeoffs
   - swe-bench-pro-2025
-last_verified: 2026-04-15
+  - anthropic-claude-fable-5-mythos-5-2026
+  - anthropic-claude-sonnet-5-2026
+last_verified: 2026-07-17
 word_count_target: 6000
 ---
 
@@ -43,7 +45,7 @@ By the end of this lesson you will have run the same bug-fix task through Claude
 ## Prerequisites
 
 - [[01-mon-prompting-first-principles]] — the distribution-shifting mental model. Everything an agent does is still next-token prediction; tools are just tokens that cause side effects.
-- [[week-02/01-mon-mcps-deep-dive]] (pending) — MCP as the standard way to expose tools. We assume you've wired at least one.
+- [[01-mon-mcp-as-a-protocol]] — MCP as the standard way to expose tools. We assume you've wired at least one. (The [[03-wed-mcp-security]] lethal-trifecta frame is the security counterpart.)
 - Claude Code installed and working on a real repo. Not a toy. You need a codebase with at least one open bug or TODO for the experiment.
 - Read the first five pages of Anthropic's *Building Effective Agents* (Dec 2024)[^1] before the experiment. 15 minutes.
 
@@ -72,7 +74,7 @@ Operationally: treat `Thought:` as useful for debugging token-level behavior, no
 ### What 2025-era ReAct loops add
 
 - **Structured tool calls.** Every major provider now trains the model to emit tool calls as JSON matching a declared schema, not as free text the framework regexes out. This alone eliminates a class of parsing failures that plagued LangChain 0.0.x.
-- **Parallel tool calls in one turn.** GPT-5, Claude Opus 4.5/4.6, and Gemini 3 all emit arrays of tool calls per step. For read-heavy investigation (e.g., "check these 8 files"), this collapses 8 round-trips into 1.
+- **Parallel tool calls in one turn.** Every current frontier model emits arrays of tool calls per step. For read-heavy investigation (e.g., "check these 8 files"), this collapses 8 round-trips into 1.
 - **Result truncation and summarization.** Tool outputs that blow context (a 50MB log file, a full DB dump) are truncated or summarized by a smaller model before being fed back. Cognition's SWE-bench technical report and Anthropic's agent engineering posts both cite context explosion as the #1 cause of multi-turn agent failures.[^3]
 - **Explicit stop conditions.** The naive ReAct loop runs until the model says "done." Production loops add max-steps, max-tool-calls-per-type, budget caps, and loop-detection (is the model calling the same tool with the same args three times in a row?).
 
@@ -140,9 +142,11 @@ Arguments for:
 
 ### What the 2025-2026 data actually says
 
-- **SWE-bench Verified and SWE-bench Pro** reward long-horizon planning. Claude Opus 4.5 hit 80.9% on Verified; Opus 4.6 pushed higher; on SWE-bench Pro (real enterprise repos, harder tasks) all frontier models drop 20+ points.[^6][^7] Plan-heavy agents dominate the top of these leaderboards.
-- **TAU-bench / τ²-bench** (airline, retail, telecom) reward *local adaptation to a simulated user*. Claude Opus 4.6 hits 99.3% on telecom and 91.9% on retail — but airline, which has more edge-case policy rules, stays harder.[^8] GPT-5 reaches 96.7% on telecom with 45% fewer tool calls than prior models.[^9] Crucially, these scores are pass^1. Pass^8 on the airline domain stays below 40% for everyone — *reliability* under repeated trials is where everyone fails.[^10]
-- **Gemini 3.1 Pro** optimized a separate `gemini-3.1-pro-preview-customtools` endpoint for autonomous agent behavior, and took the overall Artificial Analysis Intelligence Index crown in late 2025.[^11] The fact that Google shipped a *tool-specialized endpoint* separate from the reasoning model is itself a data point: at the frontier, planning and tool-use benefit from different training signals.
+> **A note on model names before the numbers.** The benchmark figures below are attached to the models that *set* them at the time — Opus 4.5/4.6, GPT-5, Gemini 3.1 Pro. Read them as historical high-water marks, not the current frontier. As of mid-2026 the lineup has moved several generations: Anthropic ships **Claude Fable 5 / Mythos 5** (Jun 2026, a new Mythos-class tier above Opus, $10/$50 per Mtok, 1M context), **Opus 4.8** (May 2026), and **Sonnet 5** (Jun 2026, the new default agent tier); OpenAI ships **GPT-5.6** (Sol/Terra/Luna, GA Jul 2026); the open-weight frontier essentially closed with **Kimi K3** (Jul 2026). The *shape* of the findings — plan-heavy agents topping SWE-bench, pass^k collapse on TAU-bench — is what generalizes; the leaderboard numbers churn monthly, so check a live source (e.g. metr.org/time-horizons, Artificial Analysis) before quoting one.
+
+- **SWE-bench Verified and SWE-bench Pro** reward long-horizon planning. Claude Opus 4.5 hit 80.9% on Verified; Opus 4.6 pushed higher, and the current Fable-5/Sonnet-5 generation higher still; on SWE-bench Pro (real enterprise repos, harder tasks) all frontier models drop 20+ points.[^6][^7] Plan-heavy agents dominate the top of these leaderboards.
+- **TAU-bench / τ²-bench** (airline, retail, telecom) reward *local adaptation to a simulated user*. Claude Opus 4.6 hit 99.3% on telecom and 91.9% on retail — but airline, which has more edge-case policy rules, stays harder.[^8] GPT-5 reached 96.7% on telecom with 45% fewer tool calls than prior models.[^9] Crucially, these scores are pass^1. Pass^8 on the airline domain stays below 40% for everyone, generation after generation — *reliability* under repeated trials is where everyone fails.[^10]
+- **Tool-specialized endpoints are now a pattern, not a one-off.** Gemini 3.1 Pro shipped a separate `gemini-3.1-pro-preview-customtools` endpoint tuned for autonomous agent behavior and briefly took the Artificial Analysis Intelligence Index crown in late 2025.[^11] The generalizable data point survives the model churn: at the frontier, planning and tool-use benefit from different training signals, which is why vendors keep shipping agent-tuned variants alongside the base reasoning model.
 
 ### My operational take
 
@@ -195,7 +199,7 @@ But — parallel tool calls also amplify failure modes. If the model fans out 10
 JSON Schema validation on tool inputs is mandatory, not optional. The model will, at non-trivial rates, hallucinate:
 
 - Wrong types (string where int expected)
-- Missing required fields (Opus 4.6 has largely fixed this; smaller models haven't)
+- Missing required fields (the current frontier tier has largely fixed this; smaller/cheaper models haven't)
 - Extra fields that you silently ignore but shouldn't
 - Enum values outside the allowed set
 - Schema-valid but semantically nonsense combinations (start_date > end_date)
@@ -240,7 +244,7 @@ Use BFCL to answer: does model X emit syntactically valid, semantically appropri
 
 Real GitHub issues from popular Python repos; agent must produce a patch that passes the hidden test suite. Verified = 500 human-validated tasks. Pro = 2025's harder, enterprise-repo variant.[^7]
 
-Claude Opus 4.5 hit 80.9% on Verified, Opus 4.6 exceeded it; GPT-5 sits around 74.9%; all frontier models drop 20+ points on Pro.[^6][^9][^7] The plateau is informative: either the remaining 20% needs a capability qualitatively different from scaling, or the benchmark has hit a ceiling imposed by test-suite brittleness. Probably both.
+Claude Opus 4.5 hit 80.9% on Verified and Opus 4.6 exceeded it (GPT-5 sat around 74.9%); the current Fable-5/Sonnet-5/GPT-5.6 generation is higher still, yet all frontier models continue to drop 20+ points on Pro.[^6][^9][^7] The plateau is informative and durable across generations: either the remaining gap needs a capability qualitatively different from scaling, or the benchmark has hit a ceiling imposed by test-suite brittleness. Probably both.
 
 ### The live controversy — are these good proxies for production?
 
@@ -326,6 +330,7 @@ Where this lesson cuts corners, in case you're reading critically:
 - Sierra, τ²-bench repository for reproduction[^8]
 - SWE-bench Pro paper (arXiv 2509.16941)[^7]
 - Gemini 3.1 Pro model card[^11]
+- Current model lineup (mid-2026): Anthropic Fable 5 / Mythos 5 and Sonnet 5[^15]; and METR's living time-horizon chart (metr.org/time-horizons) as the source that survives model churn
 
 ## Citations
 
@@ -357,4 +362,6 @@ Where this lesson cuts corners, in case you're reading critically:
 
 [^14]: Yao, S. et al., "τ-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains," arXiv:2406.12045, June 2024. https://arxiv.org/abs/2406.12045
 
-_last_verified: 2026-04-15_
+[^15]: Anthropic (Jun 2026). *Introducing Claude Fable 5 and Mythos 5.* https://www.anthropic.com/news/claude-fable-5-mythos-5 — new Mythos-class tier above Opus, $10/$50 per Mtok, 1M-token default context. *Introducing Claude Sonnet 5* (Jun 30 2026), https://www.anthropic.com/news/claude-sonnet-5 — new default agent tier, intro pricing $2/$10 through 2026-08-31 then $3/$15. Cited to mark the current lineup against which the Opus-4.5/4.6/GPT-5/Gemini-3.1 benchmark numbers in this lesson are historical.
+
+_last_verified: 2026-07-17_

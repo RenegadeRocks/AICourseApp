@@ -27,13 +27,18 @@ sources:
   - llamahub-registry
   - motherduck-prompt-sql-docs
   - presidio-microsoft-github
-  - simonwillison-mcp-prompt-injection-2025-04
+  - simonwillison-lethal-trifecta-2025-06
+  - datadog-postgres-mcp-sqli-2025
+  - mcp-servers-archived-repo
+  - crystaldba-postgres-mcp
+  - mcp-registry-aaif-2025
+  - owasp-agentic-top-10-2026
   - edpb-opinion-28-2024-ai-models
   - pci-dss-v4-0-1-pcisec
   - hhs-hti-1-final-rule-2024
-  - ramp-intelligence-announcement
+  - ramp-procurement-agents-2026
   - postgresql-rls-docs-18
-last_verified: 2026-04-17
+last_verified: 2026-07-17
 word_count_target: 6000
 ---
 
@@ -43,19 +48,19 @@ word_count_target: 6000
 
 Most AI analyst workers that get demoed on a Tuesday never ship to a Monday. They die in the gap between "Claude can read the ledger when I paste it into the chat" and "Claude can read the ledger every week, on a schedule, without a human in the loop, without a PII incident, and without tripping the SOC 2 audit in six months." That gap is not an LLM problem. It is a data-connectivity and governance problem, and it is the single most underestimated layer of the report-generator stack.
 
-After this lesson, three things should be true of you that are not true of a sharp generalist:
+After this lesson, three things should be true of you that a reader who has only skimmed vendor docs cannot claim:
 
 1. You can pick between MCP servers, first-party SDK integrations, LangChain/LlamaHub loaders, and iPaaS connectors for a specific data source — and defend the pick on cost, speed-to-ship, and governance surface.
 2. You can sketch the read-only, row-level-secured, PII-masked, audit-logged access path for an LLM touching customer data tables, and you know which controls are day-1 must-haves versus which can land in month 3.
-3. You know the three most common governance breakdowns that kill production AI-analyst builds — prompt-injection via tool responses (the Willison "lethal trifecta"), silent MCP-tool redefinition ("rug pulls"), and over-broad service-account scopes — and the architectural fix for each.
+3. You know the three most common governance breakdowns that kill production AI-analyst builds — prompt-injection via tool responses (Willison's [[03-wed-mcp-security|lethal trifecta]]), silent MCP-tool redefinition ("rug pulls"), and over-broad service-account scopes — and the architectural fix for each. You also know why "just install the reference server" is the single most dangerous shortcut in this space, from a documented real case.
 
-If you have not read Tuesday's lesson on document understanding, the parsing layer here assumes you know how Claude Vision, LlamaParse, and Unstructured differ. If you have not done Week 4 on RAG and agent architectures, the tool-calling loop referenced in the experiment assumes that scaffolding.
+If you have not read [[02-tue-document-understanding-stack|Tuesday's lesson]] on document understanding, the parsing layer here assumes you know how Claude Vision, LlamaParse, and Unstructured differ. If you have not done [[04-thu-rag-fundamentals|Week 4]] on RAG and agent architectures, the tool-calling loop referenced in the experiment assumes that scaffolding.
 
 ## Prerequisites
 
-- Working knowledge of OAuth2 client-credentials flow and service-account patterns (Block 0 Week 2 touched this; if it is hazy, spend 20 minutes on the Google Cloud IAM overview before continuing).
+- Working knowledge of OAuth2 client-credentials flow and service-account patterns ([[01-mon-mcp-as-a-protocol|Block 0 Week 2]] touched this; if it is hazy, spend 20 minutes on the Google Cloud IAM overview before continuing).
 - A Postgres or BigQuery instance you can hit with read-only credentials, even if it's a local Docker container.
-- Claude Code installed with at least one MCP server configured from a previous week — the reference Postgres or Filesystem server is fine.
+- Claude Code installed with at least one MCP server configured from a previous week — the Filesystem server, or a **maintained** Postgres MCP server such as `crystaldba/postgres-mcp` run in `--access-mode=restricted`, is fine. **Do not use the archived `@modelcontextprotocol/server-postgres` reference server** — Wednesday's Layer 2 explains why, and it is the object lesson of this week.
 
 If more than two of those are missing, do the Monday and Tuesday lessons first, then come back.
 
@@ -81,13 +86,13 @@ Every AI analyst worker picks one of four strategies per source, sometimes mixed
 
 ### MCP servers
 
-Anthropic released the Model Context Protocol on November 25, 2024, as an open specification for how AI clients (Claude Desktop, Claude Code, Cursor, Zed, Replit) discover and invoke tools exposed by servers.[^1] The reference implementations at launch included servers for Google Drive, Slack, GitHub, Git, Postgres, and Puppeteer, with Block and Apollo cited as initial enterprise adopters.[^2] By late 2025, the community repo at `github.com/modelcontextprotocol/servers` plus third-party registries (Glama, Smithery, mcp.run) had accumulated several thousand servers, most of them thin wrappers around a SaaS REST API or a local database driver.[^3]
+MCP is not new to you — [[01-mon-mcp-as-a-protocol|Block 0 Week 2]] taught the protocol end to end (launch, primitives, clients, security), so this is a one-paragraph recap, not a re-introduction. The Model Context Protocol is the open standard for how AI clients (Claude Desktop, Claude Code, Cursor, Zed, Replit) discover and invoke tools exposed by servers; the ecosystem has since numbered in the thousands of servers across the official Registry and third-party indexes (Glama, Smithery, mcp.run).[^1] What has changed since this course began, and matters for connector choice: MCP now has an **official, community-run Registry** (launched Sept 2025) as the canonical index; the **2025-11-25 spec release** shipped the largest change-set since launch (async tasks, extensions framework, client security requirements); on **Dec 9, 2025 Anthropic donated MCP to the Linux Foundation's Agentic AI Foundation** (AAIF), co-founded with Block and OpenAI and backed by Google, Microsoft, AWS, Cloudflare and Bloomberg — MCP is now multi-vendor infrastructure under neutral governance, not "Anthropic's protocol"; and a **2026-07-28 spec release candidate** is in flight, moving the protocol core to a *stateless* design (no `initialize` handshake, `.well-known` capability discovery) with a formal deprecation policy.[^15] Frame the open question below against that reality.
 
 The *mechanical* win of MCP is that a single Claude Code session can discover and invoke tools across Postgres, Stripe, HubSpot, and S3 without any of those integrations being hand-coded into the orchestrator. Tools expose a JSON schema for inputs and a typed return shape; the LLM sees them the same way it sees any other tool call; auth is pushed down into the MCP server, so the LLM never touches the Stripe secret key directly.
 
 The *governance* win is that tools live outside the agent binary. Your security team can version and audit the Stripe MCP server independently of the agent code that calls it.[^4] When the auditor asks "what can this agent do against our Stripe account," you hand them the server's `tools/list` output and the OAuth scope it holds, and the answer is exact rather than "whatever Claude decides to call." That separation of concerns is the feature the analogous LangChain-loader model cannot cleanly offer.
 
-The honest counter is that MCP is one year old. Simon Willison published a detailed breakdown in April 2025 of prompt-injection risks in MCP tool responses — a malicious email body returned by a Gmail MCP tool can contain instructions the LLM then executes — and the "rug pull" class of attacks where an MCP server silently mutates its tool definitions after a user has approved them.[^5] Willison coined "the lethal trifecta" (access to private data, exposure to untrusted content, ability to communicate externally) as the condition under which an MCP-equipped agent is exploitable. The mitigations exist (gateways, signed tool manifests, diff-on-change alerts) but they are not uniformly adopted.
+The honest counter is that the governance win is only as good as the server you install. The canonical MCP security failure modes — prompt-injection via tool responses, the "rug pull" (a server silently mutating its tool definitions after approval), and Willison's [[03-wed-mcp-security|lethal trifecta]] (private data + untrusted content + external communication) — are covered in depth in the Block 0 security lesson; the trifecta was coined in Willison's **June 16, 2025** post, not the earlier April prompt-injection write-up.[^5] What this week adds is a *named, documented* instance of the "just install the reference server" failure, in Layer 2 below. The mitigations exist (gateways, signed tool manifests, diff-on-change alerts) but they are not uniformly adopted, and the security literature has moved from theoretical to measured: the **OWASP Top 10 for Agentic Applications (2026)** now catalogues these risk classes formally, and real incidents — **CVE-2025-6514** (RCE in `mcp-remote`, CVSS 9.6, triggered by connecting to an untrusted MCP server) and the **postmark-mcp supply-chain attack** (15 clean npm versions, then a one-line BCC-exfiltration payload) — are the "rug pull" and untrusted-server classes made real.[^16]
 
 ### First-party SDKs
 
@@ -113,7 +118,7 @@ For a solo operator or two-person team shipping a first AI-analyst worker in 30 
 
 | Source class | First pick | Second pick | Avoid |
 |---|---|---|---|
-| OLTP (Postgres replica) | MCP Postgres reference server | SDK + hand-written tool | iPaaS (too opaque for SQL) |
+| OLTP (Postgres replica) | Maintained Postgres MCP server (`crystaldba/postgres-mcp`, `--access-mode=restricted`) | SDK + hand-written tool | The archived `@modelcontextprotocol/server-postgres` reference server (SQLi bypass, see below); iPaaS (too opaque for SQL) |
 | OLAP (BigQuery, Snowflake) | Native SDK with read-only service account | Motherduck MCP for natural-language SQL | iPaaS (cost + opacity) |
 | SaaS API with official MCP | Community MCP server, audited | Vendor SDK | Zapier (unless already in use) |
 | SaaS API without MCP | Vendor SDK | LangChain loader if read-only batch | — |
@@ -121,6 +126,16 @@ For a solo operator or two-person team shipping a first AI-analyst worker in 30 
 | File-based (S3/GDrive) | MCP filesystem / GDrive server | Boto3 + tool wrapper | — |
 
 For a 10-200 person team with a platform team, the second pick often wins on day one: SDK-first gives you full control of retries, rate-limits, and error reporting; MCP becomes the interface layer you expose to the agent once the SDK is battle-tested. For enterprise (>200) the governance question flips — you want everything behind a gateway (MCP gateway, or internal service mesh) with centralized auth, and the choice of "MCP vs SDK" is mostly about which team owns the tool.
+
+#### The reference-server object lesson (why the first-pick row changed)
+
+Until mid-2025 the obvious "first pick" for Postgres was Anthropic's own reference server, `@modelcontextprotocol/server-postgres`. It is now the wrong answer, and the story of *why* is the most important security lesson in this week — it makes the governance ladder below concrete rather than abstract.
+
+- **It was deprecated and archived.** Anthropic moved `server-postgres` (and other reference servers "deemed not ready for production use") into `modelcontextprotocol/servers-archived` on May 29, 2025, where it now carries an explicit "NO SECURITY GUARANTEES" notice.[^17]
+- **Its read-only mode is bypassable.** Datadog Security Labs published a case study showing the server's read-only restriction can be circumvented by *stacked queries* — appending additional SQL statements after a semicolon lets an attacker commit transactions and run arbitrary writes (up to and including `DROP TABLE`) despite the "read-only" framing.[^17] In a lesson whose entire point is read-only governance, that is the exact failure the architecture is supposed to prevent.
+- **People still install it anyway.** The archived npm package still pulls ~21,000 downloads a week and the Docker image ~1,000 pulls a week — meaning many production AI-analyst builds are wired to a deprecated, SQL-injectable server *right now*, because "install the reference server" is the path of least resistance.[^17]
+
+The lesson is not "Postgres MCP is unsafe." Maintained alternatives are safe when configured correctly: `crystaldba/postgres-mcp` (Postgres MCP Pro, actively maintained through 2026, ~3k GitHub stars) offers an explicit **restricted mode** that enforces read-only transactions at the database level and parses SQL with `pglast` to reject `COMMIT`/`ROLLBACK` statements that would escape those protections — run it with `--access-mode=restricted` in production.[^18] The lesson is that *provenance and maintenance status are load-bearing security properties*: a deprecated server with a published bypass is a governance liability no amount of downstream RLS fully repairs, and the "canonical reference implementation" is not automatically the safe choice. This is the ladder's day-1 rung applied to the connector itself, before you even reach the database.
 
 ## Layer 3 — The read-path / write-path distinction and the governance layer
 
@@ -143,9 +158,9 @@ The architectural fix, in order of sophistication:
 
 There are legitimate reasons for an AI analyst worker to write: posting the final report to a Confluence page, emailing the PDF to a stakeholder list, updating a status row in a `reports_ledger` table for idempotency. Each of these should have an explicit human or system gate.
 
-Ramp's public posture in their 2024-2025 product announcements is instructive: their policy-enforcement agents auto-approve only low-risk spend and route everything else to human judgment; their AP agents produce coded line items that still land in an approval queue before cash moves.[^11] The pattern is the same for analyst workers — writes are scoped, logged, and gated.
+Ramp's public posture in their 2025-2026 product announcements is instructive: their procurement and policy-enforcement agents auto-approve only low-risk spend and route everything else to human judgment; their AP agents produce coded line items that still land in an approval queue before cash moves.[^11] The pattern is the same for analyst workers — writes are scoped, logged, and gated.
 
-Barry McCardel of Hex has a sharper position, public on the Hex blog and in podcasts: "AI without analysts produces confidently-wrong reports at rates that survive casual review but fail audit." In his framing, the write gate is not a temporary safety measure while the tech matures; it is a permanent architectural choice that says "the AI is the drafter, a human is the publisher." For any report that will be cited in a regulatory filing, a board document, or an external communication, that framing is correct in 2026.
+Barry McCardel of Hex has a sharper position, public on the Hex blog ("We're not building 'AI data scientists'", April 16, 2024). His actual framing is an analogy, not the paraphrase this lesson used to put in quotation marks: *"Imagine, for a moment, you worked with a Data Scientist who, while knowledgable and sharp, was well-known for hallucinating, making up facts, and completely refusing to explain how they reached conclusions."*[^19] The operator takeaway — call it a paraphrase, because it is one — is that AI without analyst oversight produces confidently-wrong reports that survive casual review but fail audit. In McCardel's framing the write gate is not a temporary safety measure while the tech matures; it is a permanent architectural choice that says "the AI is the drafter, a human is the publisher." For any report that will be cited in a regulatory filing, a board document, or an external communication, that framing holds in 2026.
 
 ### Compliance surfaces: SOC 2, GDPR, HIPAA, PCI
 
@@ -169,11 +184,11 @@ It becomes theater when: (a) the LLM is re-ingesting aggregate tables where PII 
 
 ## Operator case studies / war stories
 
-**Ramp and the spend-intelligence read-path.** Ramp's publicly-disclosed architecture around their AI Reporting and AI token-spend intelligence features is a read-path-first design against their own customers' transaction corpora. The January-2025 blog describing 13x growth in monthly AI token spend across Ramp customers — and the observation that "a single prompt template change can triple your bill overnight, a junior engineer experimenting on a Friday can blow through a quarterly budget by Monday" — is itself an artifact of an AI worker (Ramp's own) reading a structured warehouse (Ramp's transaction store) and writing a narrative output.[^11] The governance pattern visible in their disclosures: tenant isolation at the warehouse layer, service-account scoping, write gates for anything that touches cash movement. The principle generalizes: read-path produces the insight; write-path is always gated.
+**Ramp and the read-path-first design.** Ramp's publicly-disclosed architecture around their AI reporting, spend-intelligence, and 2026 procurement agents is a read-path-first design against their own customers' transaction corpora. Their spend-intelligence blog describing 13x growth in monthly AI token spend across Ramp customers — and the observation that "a single prompt template change can triple your bill overnight" — is itself an artifact of an AI worker (Ramp's own) reading a structured warehouse and writing a narrative output; the April 2026 procurement-agent fleet (16% average vendor-cost savings, 46 hours/month eliminated) sits behind the same governance shape.[^11] The pattern visible in their disclosures: tenant isolation at the warehouse layer, service-account scoping, write gates for anything that touches cash movement. The principle generalizes: read-path produces the insight; write-path is always gated.
 
-**The Simon Willison "lethal trifecta" case.** In April 2025 Willison documented a class of attacks where a Gmail MCP server returning an email body containing adversarial instructions caused an agent to take unintended actions — the classic confused-deputy.[^5] The specific fix patterns that emerged in the 2025 MCP community: (a) MCP gateways that intermediate tool calls and apply policies, (b) signed tool manifests with pinned versions, (c) client-side UI that shows tool definitions on every invocation so silent rug-pulls become visible. For any AI analyst worker reading email, Slack messages, or Zendesk tickets — any source where an adversary can plant tokens — one of these mitigations is required. The cost is real (gateway introduces ~50ms latency; UI prompts degrade autonomy) and worth it.
+**The reference-server case, as a war story.** The single sharpest real-world case in this whole section is the one in Layer 2: the archived `@modelcontextprotocol/server-postgres` with Datadog's documented read-only bypass, still pulling ~21k weekly npm downloads.[^17] It is the confused-deputy and untrusted-server failure classes made concrete against the exact database an AI analyst worker reads. The trifecta mechanics themselves — private data + untrusted content + external communication — are taught in full in [[03-wed-mcp-security|Block 0 Week 2]]; the mitigations that matter here (MCP gateways, signed tool manifests, diff-on-change alerts, and *not installing deprecated servers*) apply to any analyst worker reading email, Slack, or Zendesk tickets where an adversary can plant tokens.
 
-**The over-scoped service account that survived three audits.** A recurring pattern in postmortems and SOC 2 observations: an analyst-worker ships with `postgres_ro` permissioned to `USAGE` on the whole schema because that was convenient in dev. The report works. Three quarters later an auditor samples the service-account scope and finds read access to a `user_auth_tokens` table that contains refresh tokens. Nothing has been exploited — but the finding is a major nonconformity because least-privilege was violated. The fix costs a week (build views, migrate queries, rotate the account, retest). The lesson: provision the scope correctly on day one; retrofitting least-privilege under audit pressure is 10x more expensive than designing it in. Vanta's public trust center and case studies have multiple variants of this exact narrative pattern.
+**The over-scoped service account that survived three audits.** A recurring pattern in postmortems and SOC 2 observations: an analyst-worker ships with `postgres_ro` permissioned to `USAGE` on the whole schema because that was convenient in dev. The report works. Three quarters later an auditor samples the service-account scope and finds read access to a `user_auth_tokens` table that contains refresh tokens. Nothing has been exploited — but the finding is a major nonconformity because least-privilege was violated. The fix costs a week (build views, migrate queries, rotate the account, retest). The lesson: provision the scope correctly on day one; retrofitting least-privilege under audit pressure is 10x more expensive than designing it in. This is exactly the class of least-privilege finding Vanta documents in its access-control guidance and SOC 2 trust-center material.[^20]
 
 ## Runnable experiment
 
@@ -187,7 +202,7 @@ Four phases. The goal is to produce a defended connector matrix for one real use
 
 Read the output critically. Where does it pick MCP because MCP is fashionable rather than because it wins? Where does the enterprise column propose iPaaS where you'd actually want an internal service?
 
-**Phase 3 — Stand up ONE connector for real.** The Postgres MCP server is the right target because it's the canonical reference and the lessons generalize. Concretely: spin up a local Postgres in Docker, load 500 rows of synthetic orders data, create two roles — `report_agent_ro` with `SELECT` on a view that hides PII columns, and `report_agent_rw` which you do not give to the agent. Configure the Postgres MCP server in your Claude Code config pointing to the read-only role. Then issue three natural-language queries through Claude Code:
+**Phase 3 — Stand up ONE connector for real.** A Postgres MCP server is the right target because the governance lessons generalize — but use a **maintained** one, not the archived reference server (Layer 2). Install `crystaldba/postgres-mcp` (Postgres MCP Pro) and run it with `--access-mode=restricted` so read-only is enforced at the database level and stacked-query bypasses are rejected. Concretely: spin up a local Postgres in Docker, load 500 rows of synthetic orders data, create two roles — `report_agent_ro` with `SELECT` on a view that hides PII columns, and `report_agent_rw` which you do not give to the agent. Configure the restricted-mode Postgres MCP server in your Claude Code config pointing to the read-only role. Then issue three natural-language queries through Claude Code:
 
 1. "What was total revenue last week by region?"
 2. "Which 5 customers had the biggest week-over-week revenue drop?"
@@ -239,7 +254,7 @@ Expected observations: the MCP abstraction hides query plans (you don't see EXPL
 
 - **Harrison Chase (LangChain)** would push back on the binary "loaders vs MCP" framing in Layer 2. His public position (LangChain blog posts on the MCP adapter, and the `langchain-mcp-adapters` package) is that loaders and MCP solve different problems — loaders are for batch ingestion into a retrieval index, MCP is for runtime tool invocation — and a production system usually has both.[^6] His counter: the lesson should separate "how do I get data into a RAG index" from "how does my agent call tools at inference time" and not force a single-connector choice.
 
-- **Barry McCardel (Hex)** would push back on the Ramp write-gate framing in Layer 3. His position, repeated in Hex blog posts and podcast appearances throughout 2024-2025, is that "AI without analysts" — even with careful write gates — produces confidently-wrong outputs that survive casual human review but fail audit. His counter: the write-path section understates the problem. Even read-path, if the analyst-in-the-loop is a junior who trusts the narrative, the failure mode recurs. The architectural fix isn't "write gate"; it's "expert-in-the-loop on the published product."
+- **Barry McCardel (Hex)** would push back on the Ramp write-gate framing in Layer 3. His position, anchored in the April 16, 2024 Hex post (the "hallucinating Data Scientist" analogy quoted above, [^19]) and repeated in podcast appearances, is that AI without analyst oversight — even with careful write gates — produces confidently-wrong outputs that survive casual human review but fail audit. His counter: the write-path section understates the problem. Even read-path, if the analyst-in-the-loop is a junior who trusts the narrative, the failure mode recurs. The architectural fix isn't "write gate"; it's "expert-in-the-loop on the published product."
 
 - **David Soria Parra and Justin Spahr-Summers (Anthropic, MCP authors)** would push back on the lesson's casual treatment of MCP as "mostly REST API wrappers." Their public framing in the MCP specification and the associated engineering posts is that MCP's real innovation is the *bidirectional* primitive set (resources, prompts, tools, roots, sampling) — and treating it as just tool discovery misses the architectural win.[^1] Their counter: teaching MCP as "fancy OpenAPI" underplays the client-side primitives (sampling, roots) that are exactly what enables governance-by-default.
 

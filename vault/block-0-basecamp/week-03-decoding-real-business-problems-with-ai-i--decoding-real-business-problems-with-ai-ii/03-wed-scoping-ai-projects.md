@@ -22,7 +22,7 @@ sources:
   - zylos-token-economics-2026
   - microsoft-foundry-fine-tuning-ignite-2025
   - anthropic-applied-ai-engineering
-last_verified: 2026-04-15
+last_verified: 2026-07-17
 word_count_target: 6000
 ---
 
@@ -41,7 +41,7 @@ This lesson gives you the scoping pattern, the eval-gate thresholds to wire into
 ## Prerequisites
 
 - [[01-mon-prompting-first-principles]] — you need the mechanical model of what a prompt is doing, or your evals will measure the wrong thing.
-- [[week-02]] exercises on problem decomposition (pending) — the problem has to be decomposable before it's scopable.
+- [[02-tue-when-ai-fits-a-problem|Tuesday's fit rubric]] — you scope only what has already passed the fit test; the partition you drew there is the input to the walking skeleton here.
 - Operational exposure to at least one production AI system you or your team have shipped or tried to ship. The examples in this lesson will land differently if you've watched a project limp through eval drift in real time.
 
 ## Part 1 — The AI-MVP frame vs classic lean-startup MVP
@@ -195,7 +195,7 @@ The combined cost surface is the number the scope doc needs. *"This project is v
 
 Three scope-creep phrases, each of which sounds innocent and each of which detonates the cost model.
 
-**"Just add RAG."** Naïve framing: it's a retrieval call, it's fast. Real cost: you now have a retrieval system to evaluate (retrieval precision@k is a whole eval regime), a chunking strategy to maintain, an embedding model that silently deprecates, ingestion pipelines for ongoing document updates, stale-data invalidation, per-query retrieval cost, and a new failure mode (the retriever pulls the wrong chunk and the model confabulates confidently). RAG is never "just" anything. If you're scoping RAG, assume 30–50% of the engineering cost of the project will be retrieval quality, not generation quality. The 80% RAG failure stat is real and it's dominated by teams who under-scoped the retrieval problem.[^9]
+**"Just add RAG."** Naïve framing: it's a retrieval call, it's fast. Real cost: you now have a retrieval system to evaluate (retrieval precision@k is a whole eval regime), a chunking strategy to maintain, an embedding model that silently deprecates, ingestion pipelines for ongoing document updates, stale-data invalidation, per-query retrieval cost, and a new failure mode (the retriever pulls the wrong chunk and the model confabulates confidently). RAG is never "just" anything. If you're scoping RAG, assume 30–50% of the engineering cost of the project will be retrieval quality, not generation quality — because retrieval quality, not generation quality, is where under-scoped RAG projects die (see Part 3 on chunk-level gating, and the caution there against inventing a single "80% RAG failure rate" statistic).[^9]
 
 **"Add multi-modal."** Naïve framing: the model now supports images, we just pass images in. Real cost: your eval set triples (you now need image-input test cases, OCR test cases, chart-reading test cases, screenshot test cases). Input token counts for images can be 1000–3000 per image; cost per query can 5–10×. Your judge has to be re-calibrated for vision outputs. Your annotation cost doubles because reviewers need longer to grade image-grounded outputs. Multi-modal is a new project, not an increment.
 
@@ -269,7 +269,7 @@ Self-check when done: can a smart stranger read your scope doc and predict withi
 3. A stakeholder asks you to add multi-modal support "since the new models all do it." Your MVP is 6 weeks in, week 10 checkpoint is in 4 weeks. How do you respond in writing?
 4. Your week-8 checkpoint misses the kill criterion by a small margin (82% vs 85% threshold). The team has a plausible theory about a fix that would take 2 more weeks. Do you extend, rescope, or kill? What would a rigid Husain-style discipline say; what would a capability-optimist say; which do you side with and why?
 5. You're advising a team whose scope doc has one eval gate: "overall user satisfaction >4.0/5." What do you change, in order of priority, and why?
-6. Walk through the cost model for an agentic coding assistant that averages 50k tokens input / 10k output per task at Opus pricing, used 200 times/day by a 30-person engineering team. At what monthly spend does the project need to show productivity gains, and how would you measure those gains as a kill criterion?
+6. Walk through the cost model for an agentic coding assistant that averages 50k tokens input / 10k output per task at **current Opus 4.8 pricing ($5/M input, $25/M output — verify the live card first)**, used 200 times/day by a 30-person engineering team. Per-task cost is (50k × $5/M) + (10k × $25/M) = $0.25 + $0.25 = **$0.50/task raw**; before you present that number, (a) apply the ~30% new-tokenizer inflation to the token counts, and (b) redo it once at Sonnet 5 intro pricing ($2/$10) to show the model-choice sensitivity. At 200 tasks/day × ~21 working days that's ~$2,100/month raw at Opus, ~$840 at Sonnet 5 — before caching, retries, and the 2× safety factor. At what monthly spend does the project need to show productivity gains, and how would you measure those gains as a kill criterion?
 
 ## Reviewer lens — where specific experts would push back
 
@@ -327,14 +327,14 @@ Self-check when done: can a smart stranger read your scope doc and predict withi
 
 [^10]: MIT NANDA / "State of AI in Business 2025" — widely cited 95% pilot-failure figure. Primary report summary via Fortune, "MIT report: 95% of generative AI pilots at companies are failing" (Aug 18 2025): <https://fortune.com/2025/08/18/mit-report-95-percent-generative-ai-pilots-at-companies-failing-cfo/>. See also HBR, "Beware the AI Experimentation Trap" (Aug 2025): <https://hbr.org/2025/08/beware-the-ai-experimentation-trap>.
 
-[^11]: *LLM API Pricing Comparison (2025): OpenAI, Gemini, Claude*, IntuitionLabs. <https://intuitionlabs.ai/articles/llm-api-pricing-comparison-2025>
+[^11]: Anthropic, *Pricing — Claude Developer Platform*, https://platform.claude.com/docs/en/about-claude/pricing (fetched 2026-07-17): Opus 4.5–4.8 at $5/$25 per MTok (Fast Mode $10/$50); Opus 4.1 deprecated at $15/$75; Fable 5 / Mythos 5 at $10/$50; Sonnet 5 at $2/$10 intro through Aug 31 2026, then $3/$15; Haiku 4.5 at $1/$5. Same page's tokenizer note: "Claude Opus 4.7 and later Opus models, Claude Fable 5, Claude Mythos 5, Claude Mythos Preview, and Claude Sonnet 5 use a newer tokenizer … approximately 30% more tokens for the same text." Cross-ref: CloudZero, *Claude Opus 4.8 pricing* https://www.cloudzero.com/blog/claude-opus-4-8-pricing/.
 
 [^12]: *AI Agent Cost Optimization: Token Economics and FinOps in Production*, Zylos Research, February 2026. <https://zylos.ai/research/2026-02-19-ai-agent-cost-optimization-token-economics>
 
-[^13]: *Fine-tuning at Ignite 2025: new models, new tools, new experience*, Microsoft Tech Community, 2025. <https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/fine-tuning-at-ignite-2025-new-models-new-tools-new-experience/4476642>
+[^13]: OpenAI fine-tuning wind-down (announced May 7 2026; new-org access blocked immediately, all new job creation ending January 2027): OpenAI Deprecations, https://developers.openai.com/api/docs/deprecations ; coverage: ExplainX, *OpenAI Winds Down Fine-Tuning API* https://explainx.ai/blog/openai-gpt-55-pricing-fine-tuning-api-wind-down-2026 and Tessl, *OpenAI is shutting down self-serve fine-tuning* https://tessl.io/blog/openai-shutting-fine-tuning-signals-for-enterprise-ai/. Historical Microsoft Foundry fine-tuning context: *Fine-tuning at Ignite 2025*, Microsoft Tech Community, 2025, https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/fine-tuning-at-ignite-2025-new-models-new-tools-new-experience/4476642. All verified 2026-07-17.
 
 [^14]: Anthropic Engineering blog and Applied AI public materials. <https://www.anthropic.com/engineering> — the Applied AI team's scoping pattern is inferred from engineering talks and public engagement case material; as of April 2026 there is no single canonical published scoping methodology document.
 
 [^ret-gate]: Thresholds are operator-level defaults, not a published benchmark. Anthropic's *Introducing Contextual Retrieval* (2024) https://www.anthropic.com/news/contextual-retrieval reports failure-rate reductions via chunk-level retrieval eval; Hamel Husain and Shreya Shankar, *LLM Evals* and related 2024–2025 writing https://hamel.dev/blog/posts/evals/ argue for retrieval-quality gating as the prerequisite to generation-quality measurement.
 
-_last_verified: 2026-04-15_
+_last_verified: 2026-07-17_
