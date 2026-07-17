@@ -282,7 +282,11 @@ Expected vs observed: on most corpora the reranker intervention will Pareto-impr
 
 [^18]: Helicone AI Gateway and features documentation, helicone.ai (accessed April 2026). Proxy-model observability with caching, rate limiting, prompt management, and self-host option; YC W23. https://www.helicone.ai/
 
-[^19]: DeepEval, confident-ai/deepeval GitHub repository (Apache 2.0). Pytest-style LLM eval framework with 50+ research-backed metrics. https://github.com/confident-ai/deepeval
+[^19]: DeepEval, confident-ai/deepeval GitHub repository (Apache 2.0). Pytest-style LLM eval framework with 50+ research-backed metrics. https://github.com/confident-ai/deepeval — **DeepEval 4.0 (2026)** adds an agent-native, coding-agent-driven eval workflow (patch → eval → retry loops for Cursor/Claude Code/Codex, terminal trace TUI); changelog https://deepeval.com/changelog/changelog-2026. Verified 2026-07-17.
+
+[^ragasver]: RAGAS version and org state (mid-2026). Repo moved to `github.com/vibrantlabsai/ragas` (was `explodinggradients`): https://github.com/vibrantlabsai/ragas/releases. Current line v0.3.x → v0.4 (experiment-based architecture); v0.1→v0.2 renamed metric imports (`faithfulness` → `Faithfulness` class, `SingleTurnSample`/`EvaluationDataset` schema, `ascore` deprecated) — migration guide https://docs.ragas.io/en/stable/howtos/migrations/migrate_from_v01_to_v02/. Pin the version in `requirements.txt`. Verified 2026-07-17.
+
+[^evalsbook]: Hamel Husain & Shreya Shankar, *Evals for AI Engineers: Systematically Measuring and Improving AI Applications* (O'Reilly). Publishes **October 31, 2026**. https://www.oreilly.com/library/view/evals-for-ai/9798341660717/ ; companion course https://maven.com/parlance-labs/evals. Verified 2026-07-17.
 
 [^20]: Anthropic, *Progress from our Frontier Red Team*, anthropic.com/news (2024–2025). Expert-graded capability evals including the CTF "high schooler to undergraduate" cybersecurity progression. https://www.anthropic.com/news/strategic-warning-for-ai-risk-progress-and-insights-from-our-frontier-red-team
 
@@ -290,4 +294,4 @@ Expected vs observed: on most corpora the reranker intervention will Pareto-impr
 
 [^22]: Jason Liu, *The RAG Playbook*, jxnl.co, August 19, 2024. Synthetic-question generation for retrieval eval, precision and recall decomposition. https://jxnl.co/writing/2024/08/19/rag-flywheel/
 
-_last_verified: 2026-04-17_
+_last_verified: 2026-07-17_

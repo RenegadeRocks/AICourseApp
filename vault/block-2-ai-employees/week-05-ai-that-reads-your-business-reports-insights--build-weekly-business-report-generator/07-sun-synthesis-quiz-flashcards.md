@@ -281,11 +281,13 @@ The `units` field catches the failure class "margin expansion of 4 points" where
 
 2. **Does the Contextual Retrieval 49% retrieval-miss reduction transfer to financial-document QA?** Anthropic's five test domains did not include financial filings. No published FinanceBench-with-Contextual-Retrieval head-to-head. If you run one, publish it.
 
-3. **How long does the category-4 weekly-report lane stay open?** Depends on whether BI incumbents (Tableau Pulse, Looker AI, Metabase AI) ship narrative generation at mid-market insight density by 2028. Current trajectory: 24–36 months.
+3. **How long does the category-4 weekly-report lane stay open?** Now threatened from two sides: BI incumbents (Tableau Pulse, Looker AI, Metabase AI) shipping mid-market narrative generation, *and* horizontal frontier-lab agent templates (Claude for Financial Services, May 2026) plus the buy-over-build tide (Menlo 2025: 76% bought). The defensible lane narrowed to cross-functional, source-specific, client-voiced reporting the templates can't reach — call it 18–36 months, not open-ended.
 
-4. **Does MCP win the connector-layer war, or get absorbed?** Pro: adoption extraordinary in first 12 months; enterprise-grade gateways (Gopher, Glama, Smithery) shipped. Anti: security model maturing; real integration work (auth refresh, rate limiting) still lives in each server. Possible 2027 outcome: MCP becomes discovery/metadata layer; tool implementations migrate to more opinionated frameworks.
+4. **Does MCP win the connector-layer war, or get absorbed?** Partially *resolved* since April: MCP became multi-vendor infrastructure under the Linux Foundation's Agentic AI Foundation (Dec 2025), with an official Registry and a 2026-07-28 stateless-core RC. Residual open questions are narrower — the security model is still maturing (measured incidents now exist: CVE-2025-6514, postmark-mcp), and the real integration work (auth refresh, rate limiting) still lives in each server, which is why server provenance is a governance property. Possible 2027: MCP stays the discovery/metadata layer; heavy tool implementations migrate to opinionated frameworks.
 
 5. **Is read-only posture durable or transient?** Read-only is the right default today. Ramp CEO's three-year autonomous-finance horizon implies writes eventually. Likely 2027 shape: "AI drafts proposed write → deterministic validator → structured approval queue" — workflow Brex and Ramp already implement.
+
+6. **Does AI flatten the analyst headcount curve, or bend it upward (demand unlock)?** No longer data-free: the Stanford×ADP "Canaries" series (Brynjolfsson/Chandar/Chen) shows ~16% *relative* employment decline for 22–25-year-olds in the most AI-exposed occupations through late 2025, cutting against demand-unlock for junior roles specifically. Open at the senior/insight tier. Monday's "no public longitudinal data yet" claim is now false — the live dashboard is the data.
 
 ---
 
@@ -360,15 +362,15 @@ The spec is the artifact. The commitment is the Week 5 test. Come back in 30 day
 
 [^1]: Brex, "Agents on Brex: Welcome to intelligent finance." https://www.brex.com/platform/intelligent-finance. Verified 2026-04-17. Supports the 70% expenses-automated, 3x faster close, 6x faster expense review figures.
 
-[^2]: Ramp, "Ramp Intelligence: the future of finance is finally here," May 17, 2023. https://ramp.com/blog/announcing-ramp-intelligence. Verified 2026-04-17. Supports $163M annualized salary dollars freed, 208,000 hours/month saved.
+[^2]: Ramp, "Ramp Launches Fleet of AI Agents Across Its Procurement Platform," April 29, 2026. https://www.prnewswire.com/news-releases/ramp-launches-fleet-of-ai-agents-across-its-procurement-platform-302756657.html; plus "Ramp Raises Series F at $44 Billion Valuation," June 4, 2026, https://www.prnewswire.com/news-releases/ramp-raises-series-f-at-44-billion-valuation-302791103.html. Verified 2026-07-17. Supports: 16% average annual vendor-spend savings, 46 hours/month of purchasing work eliminated, $44B valuation. (Replaces the April draft's unverifiable "$163M / 208,000 hours" pair.)
 
 [^3]: Islam, P., Kannappan, A., Kiela, D., Qian, R., Scherrer, N., Vidgen, B. (2023). *FinanceBench: A New Benchmark for Financial Question Answering.* arXiv:2311.11944. https://arxiv.org/abs/2311.11944. Verified 2026-04-17. Supports the 10,231-question scope, 150-question open subset, and the GPT-4-Turbo-with-retrieval 81% refuse-or-wrong headline.
 
 [^4]: Unstructured.io, "Introducing SCORE-Bench: An Open Benchmark for Document Parsing" (2025). https://unstructured.io/blog/introducing-score-bench-an-open-benchmark-for-document-parsing. Verified 2026-04-17. Supports TEDS/NED/GriTS ranking instability across corpora.
 
-[^5]: Simon Willison, "Model Context Protocol has prompt injection security problems," April 9, 2025. https://simonwillison.net/2025/Apr/9/mcp-prompt-injection/. Verified 2026-04-17. Supports the prompt-injection-via-tool-response class, rug-pull silent-redefinition, and the lethal-trifecta framing.
+[^5]: Simon Willison, "The lethal trifecta for AI agents," June 16, 2025, https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/ (where the term is coined — not the earlier April 9, 2025 MCP prompt-injection post, https://simonwillison.net/2025/Apr/9/mcp-prompt-injection/). Verified 2026-07-17. Supports the prompt-injection-via-tool-response class, rug-pull silent-redefinition, and the lethal-trifecta framing (coined June 16, 2025).
 
-[^6]: Anthropic, "Introducing the Model Context Protocol," Nov 25, 2024. https://www.anthropic.com/news/model-context-protocol. Verified 2026-04-17. Supports launch date, reference servers (GDrive, Slack, GitHub, Git, Postgres, Puppeteer), initial enterprise adopters (Block, Apollo).
+[^6]: Anthropic, "Introducing the Model Context Protocol," Nov 25, 2024, https://www.anthropic.com/news/model-context-protocol; plus "Donating the Model Context Protocol and establishing the Agentic AI Foundation," Dec 9, 2025, https://www.anthropic.com/news/donating-the-model-context-protocol-and-establishing-of-the-agentic-ai-foundation; and the 2026-07-28 release candidate, https://blog.modelcontextprotocol.io/posts/2026-07-28-release-candidate/. Verified 2026-07-17. Supports launch date and reference servers, plus the official Registry (Sept 2025), 2025-11-25 spec release, Dec 9 2025 AAIF donation, and 2026-07-28 stateless-core RC.
 
 [^7]: European Data Protection Board, "Opinion 28/2024 on certain data protection aspects related to the processing of personal data in the context of AI models," Dec 2024. https://www.edpb.europa.eu/system/files/2024-12/edpb_opinion_202428_ai-models_en.pdf. Verified 2026-04-17. Supports Article 5 GDPR principles applied to AI model deployment.
 
@@ -376,7 +378,7 @@ The spec is the artifact. The commitment is the Week 5 test. Come back in 30 day
 
 [^9]: Gao, L. et al. (2023). *PAL: Program-Aided Language Models.* arXiv:2211.10435, ICML 2023. https://arxiv.org/abs/2211.10435. Verified 2026-04-17. Supports the PAL-Codex 72.0% vs CoT 65.6% GSM8K comparison.
 
-[^10]: Anthropic, *Code Execution Tool* docs, https://docs.claude.com/en/docs/agents-and-tools/tool-use/code-execution-tool, and Anthropic Engineering *Advanced Tool Use* (Oct 2025), https://www.anthropic.com/engineering/advanced-tool-use. Verified 2026-04-17. Supports the Python sandbox, the `code-execution-2025-08-25` upgrade, 50 free hours/org/day + $0.05/hour pricing, bundled-free with web_search/web_fetch.
+[^10]: Anthropic, *Code Execution Tool* docs, https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool, and pricing, https://platform.claude.com/docs/en/about-claude/pricing. Verified 2026-07-17. Supports the Python/bash/multi-language sandbox (current tool types `code_execution_20260521` / `code_execution_20260120`), $0.05/container-hour after a free monthly allowance (~1,550 container-hours/month per org), and bundled-free with the current `web_search_20260209` / `web_fetch_20260209` tool versions.
 
 [^11]: Huang, J. et al. (2024). *Large Language Models Cannot Self-Correct Reasoning Yet.* arXiv:2310.01798, ICLR 2024. Verified 2026-04-17. Supports intrinsic-self-correction-fails claim and external-feedback-works caveat.
 

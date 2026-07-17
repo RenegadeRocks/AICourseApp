@@ -252,7 +252,7 @@ Write the commitment somewhere visible to your week. At the end of 30 days, re-r
 - BCG, *From Potential to Profit: Closing the AI Impact Gap* (2025) — the 5% / 60% / 35% distribution that defines the lemons equilibrium AI services operates inside.[^3]
 
 **Recommended**
-- Justin Welsh, *The Saturday Solopreneur* archive — read three months of it, not one; the pattern is in the repetition, not the individual piece.[^10]
+- Justin Welsh, *The Saturday Essay* archive (rebranded from "The Saturday Solopreneur" in 2026) — read three months of it, not one; the pattern is in the repetition, not the individual piece.[^10]
 - Arvid Kahl, *The Bootstrapped Founder* podcast and 2024 year-in-review post — specifically the admission that personal brand alone is insufficient for Podscan lead generation.[^21]
 - Khe Hy, "The paradox of self-employment burnout" and "Why I'm taking a 2 month break" — the publicly disclosed brand ledger, including costs.[^17][^18]
 

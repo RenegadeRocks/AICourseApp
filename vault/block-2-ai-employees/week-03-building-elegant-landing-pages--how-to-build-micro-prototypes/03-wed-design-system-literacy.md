@@ -29,7 +29,7 @@ sources:
   - stripe-elements-appearance-api-docs-2024
   - raycast-developers-ui-2024
   - lexington-themes-andreuzza-tailwind-2025
-last_verified: 2026-04-17
+last_verified: 2026-07-17
 word_count_target: 6000
 ---
 
@@ -37,7 +37,7 @@ word_count_target: 6000
 
 ## Why this matters
 
-You ship conversion surfaces through Claude Code, v0, Lovable, Bolt. Yesterday you learned how those tools translate a prompt into a page; Monday you learned what makes a page convert. Today closes a gap that silently kills both: you cannot brief an AI code-gen tool toward a specific aesthetic without the vocabulary. You type "make it clean and modern," the tool gives you a Vercel template because Vercel templates are what the model has seen most, and you iterate in the dark — "more minimal," "more premium," "more like Linear" — while the model guesses. You lose hours. The page ends up looking like every other AI-generated SaaS page in 2026.
+You ship conversion surfaces through Claude Code, v0, Lovable, Bolt. [[02-tue-how-ai-code-gen-tools-work|Yesterday]] you learned how those tools translate a prompt into a page; [[01-mon-landing-page-as-conversion-machine|Monday]] you learned what makes a page convert. Today closes a gap that silently kills both: you cannot brief an AI code-gen tool toward a specific aesthetic without the vocabulary. You type "make it clean and modern," the tool gives you a Vercel template because Vercel templates are what the model has seen most, and you iterate in the dark — "more minimal," "more premium," "more like Linear" — while the model guesses. You lose hours. The page ends up looking like every other AI-generated SaaS page in 2026.
 
 Goal today: design-system **literacy**, not design. Enough vocabulary and variable-level control that you can (a) name the seven decisions that made any page look the way it does, (b) write a Claude Code brief that hits your intended aesthetic on the first or second pass, (c) identify exactly which variable is wrong when an AI-generated page looks off. A senior marketing director briefing a contractor can do this. A senior finance lead specifying a dashboard can do this. A 20-year creative director who ships via Claude Code absolutely can — provided the variables are named.
 
@@ -52,7 +52,7 @@ By the end you will be able to (1) audit any page on the seven load-bearing vari
 
 The default 2026 AI code-gen output for a "modern SaaS landing page" is predictable. Inter or Geist Sans, a slate-900-to-zinc-50 neutral ramp, one accent at hue 240–260 (indigo or violet), rounded-xl cards, shadow-sm elevation, lucide icons, 24-32px section padding, prefers-reduced-motion fade-ins, a stock hero illustration or gradient mesh, copy that says "Build better products, faster." Every YC W25 batch has eighty of these.
 
-That page is not bad. It is *generic* — a weighted average of the ten thousand pages that trained the model. To push a generated page toward a specific aesthetic — Linear's opinionated sharpness, Rauno's motion-rich restraint, Raycast's chromatic density, Stripe's quiet consistency — name the knobs the generator is turning. Those knobs are the same seven variables every design system, explicit or implicit, encodes. Refactoring UI names five of them explicitly (hierarchy, layout and spacing, typography, color, imagery) and two more implicitly under personality and detail; we treat all seven as first-class because each produces an override prompt you can paste.[^1]
+That page reads fine and signals *generic* — a weighted average of the ten thousand pages that trained the model. To push a generated page toward a specific aesthetic — Linear's opinionated sharpness, Rauno's motion-rich restraint, Raycast's chromatic density, Stripe's quiet consistency — name the knobs the generator is turning. Those knobs are the same seven variables every design system, explicit or implicit, encodes. Refactoring UI names five of them explicitly (hierarchy, layout and spacing, typography, color, imagery) and two more implicitly under personality and detail; we treat all seven as first-class because each produces an override prompt you can paste.[^1]
 
 ### Variable 1 — Typography
 
@@ -401,7 +401,7 @@ Score honestly — the point is to find which variable your brief is under-speci
 
 [^27]: Design Systems Collective, "Why Shadcn/ui Struggles at Enterprise Scale." designsystemscollective.com/why-shadcn-ui-struggles-at-enterprise-scale-9f7416f3af3f. 2025. Sourced for the drift / merge-cost critique. Also shadcn-ui/ui GitHub Issue #6417 "MORE MAINTAINERS" and Discussion #1374. Verified 2026-04-17.
 
-[^28]: Mashuk Tamim, "Is Your Shadcn UI Project at Risk? A Deep Dive into Radix's Future." mashuktamim.medium.com/is-your-shadcn-ui-project-at-risk-a-deep-dive-into-radixs-future-91af267c4bec. Sourced for the Radix / Modulz / WorkOS maintainership timeline. Verified 2026-04-17.
+[^28]: Mashuk Tamim, "Is Your Shadcn UI Project at Risk? A Deep Dive into Radix's Future." mashuktamim.medium.com/is-your-shadcn-ui-project-at-risk-a-deep-dive-into-radixs-future-91af267c4bec; Modulz, "Modulz has been acquired by WorkOS" (modulz.app/blog/modulz-acquired-by-workos). Sourced for the Radix / Modulz / WorkOS timeline (acquisition June 2022, original maintainers departing, contributions slowing, several founding Base UI at MUI) and shadcn's subsequent shift of its default primitive toward Base UI. Verified via WebSearch 2026-07-17.
 
 [^29]: Michael Andreuzza, Lexington Themes blog. lexingtonthemes.com/blog. 2025 posts on Tailwind v4 gradients, multi-theme toggles, and accessible carousels. Sourced as the shadcn-adjacent plunder alternative. Verified 2026-04-17.
 

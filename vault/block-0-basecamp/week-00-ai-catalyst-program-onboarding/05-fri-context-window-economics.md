@@ -245,13 +245,13 @@ Open Claude Code in any scratch folder and paste:
 > I want to run a prompt-caching economics experiment. Please:
 >
 > 1. Pick a real 50K-token Python project (FastAPI source, Flask, the requests library, anything on disk ≥200KB of source). Concatenate all its `.py` files into one string. Confirm the token count is between 45K and 60K using Anthropic's token counting endpoint; trim or pad until it is.
-> 2. Write a script that uses the Anthropic Python SDK against `claude-sonnet-4-6` (confirm the exact model ID against Anthropic's docs). The script should run two phases:
+> 2. Write a script that uses the Anthropic Python SDK against the current Sonnet (`claude-sonnet-5`; confirm the exact model ID against Anthropic's docs). The script should run two phases:
 >    - **Phase 1 (uncached):** Send 10 diverse questions about the codebase in sequence, each as a fresh request, with the full 50K-token codebase in the user message every time. No `cache_control`. Record `usage.input_tokens`, `usage.output_tokens`, and wall time per call.
 >    - **Phase 2 (cached):** Same 10 questions, same codebase prefix, but include a `cache_control: {"type": "ephemeral"}` breakpoint after the codebase block and before the question. 5-min TTL. Record `usage.input_tokens`, `usage.cache_creation_input_tokens`, `usage.cache_read_input_tokens`, `usage.output_tokens`, wall time.
-> 3. Compute and print: (a) total input tokens, cache-write tokens, cache-read tokens, output tokens across all 10 calls, per phase; (b) dollar cost per phase at current pricing ($3/$15 input/output, $3.75 cache-write-5m, $0.30 cache-read); (c) wall-time-per-call averaged across calls 2-10 per phase (ignore call 1, which is the write).
+> 3. Compute and print: (a) total input tokens, cache-write tokens, cache-read tokens, output tokens across all 10 calls, per phase; (b) dollar cost per phase at current Sonnet 5 intro pricing ($2/$10 input/output, $2.50 cache-write-5m, $0.20 cache-read — confirm on the pricing page, and note these revert to $3/$15 after 2026-08-31); (c) wall-time-per-call averaged across calls 2-10 per phase (ignore call 1, which is the write).
 > 4. Explain the result in plain English in 3-5 sentences. In particular, comment on whether the savings you saw match the theoretical ~87% reduction on input cost.
 
-Expected shape: Phase 1 input cost ~$1.50. Phase 2 cache-write on call 1, then 9 cache reads. Total input cost ~$0.30. Output cost same in both. Wall time per call typically drops 20-40% on cached calls because the server skips prefill compute.
+Expected shape: Phase 1 input cost ~$1.00 (10 × 50K × $2/MTok on Sonnet 5 intro). Phase 2 cache-write on call 1, then 9 cache reads at 0.10× — total input cost ~$0.20. Output cost same in both. Wall time per call typically drops 20-40% on cached calls because the server skips prefill compute.
 
 The number you want to commit to long-term memory is the one Claude Code prints for your own run — not mine.
 
@@ -265,13 +265,13 @@ Paste into Claude Code:
 >
 > 1. Generate or fetch ~200K tokens of distractor text (e.g., concatenated Wikipedia articles on geography, or arXiv abstracts — anything semantically distant from the fact I'll insert). Confirm token count.
 > 2. Insert this exact sentence into the distractor text: `"The secret code for this experiment is PURPLE-ELEVEN-HORIZON."` Place it at three positions: 5% into the distractors, 50%, and 95%. Generate three versions of the 200K prompt.
-> 3. For each position, run 20 samples against `claude-sonnet-4-6` at temperature=1.0 with the question `"What is the secret code for this experiment? Respond with only the code."` Record whether the response contains `PURPLE-ELEVEN-HORIZON` (case-insensitive).
+> 3. For each position, run 20 samples against `claude-sonnet-5` at temperature=1.0 with the question `"What is the secret code for this experiment? Respond with only the code."` Record whether the response contains `PURPLE-ELEVEN-HORIZON` (case-insensitive).
 > 4. Print the recall rate per position, along with the distribution of failure modes (hallucinated codes, refusals, answers citing distractor text).
-> 5. Comment on whether you see the U-shape Liu predicts, and how stark it is on Sonnet 4.6 relative to the GPT-3.5-Turbo curves in the original paper.
+> 5. Comment on whether you see the U-shape Liu predicts, and how stark it is on Sonnet 5 relative to the GPT-3.5-Turbo curves in the original paper.
 
-Expected shape on Sonnet 4.6 mid-2026: end positions (5% and 95%) near 95-100% recall; 50% position somewhere between 70% and 95% depending on the exact prompt and distractor set. The U is shallower than Liu 2023 reported on 2023 models, but it still exists. Running this is the way you convert the benchmark citation into a felt fact about the model you are about to ship on.
+Expected shape on Sonnet 5 mid-2026: end positions (5% and 95%) near 95-100% recall; 50% position somewhere between 70% and 95% depending on the exact prompt and distractor set. The U is shallower than Liu 2023 reported on 2023 models, but it still exists. Running this is the way you convert the benchmark citation into a felt fact about the model you are about to ship on.
 
-Cost estimate for option B: 3 positions × 20 samples × 200K input × $3/MTok ≈ $36 of Sonnet 4.6 spend. Run it only if you have the budget; otherwise reduce to N=5 per position for a ~$9 version that still shows the effect directionally.
+Cost estimate for option B: 3 positions × 20 samples × 200K input × $2/MTok (Sonnet 5 intro) ≈ $24 of spend. Run it only if you have the budget; otherwise reduce to N=5 per position for a ~$6 version that still shows the effect directionally.
 
 ## Problem set — five operator-shaped problems
 
@@ -303,9 +303,9 @@ Cost estimate for option B: 3 positions × 20 samples × 200K input × $3/MTok �
 
 4. **Treating prompt caching as free money without measuring it.** Caching writes cost 1.25× or 2× input rate. If your usage pattern has 1.1 reads per write on average (i.e., you rewrite the cache almost every request because your "stable" prefix keeps shifting), caching costs you money. Measure cache-hit rate as a first-class operational metric.
 
-5. **Ignoring the extended-thinking budget in context math.** Opus 4.6 with a 32K extended-thinking budget and a 900K prompt leaves no headroom for output — the generation will truncate or error. The thinking tokens are real context consumption within the turn.[^11]
+5. **Ignoring the extended-thinking budget in context math.** A current Claude model with a 32K extended-thinking budget and a 900K prompt leaves no headroom for output — the generation will truncate or error. The thinking tokens are real context consumption within the turn.[^11]
 
-6. **Assuming one provider's cache semantics generalize.** Anthropic cache reads cost 0.10× of input; Gemini's context caching is billed at half input rate (0.5×), not 10%; OpenAI's automatic prompt caching kicks in at different thresholds with different discount structures.[^5][^10] Cross-provider architectures need per-provider cache math.
+6. **Assuming one provider's cache semantics generalize.** Anthropic cache reads cost 0.10× of input; Gemini 3.x context caching also charges cache reads at ~0.10× of input (≈$0.20/MTok read on Gemini 3.1 Pro against a $2.00 base) *plus* a per-hour storage fee that Anthropic doesn't have; OpenAI's automatic caching kicks in at different thresholds with a 30-minute minimum cache life on GPT-5.6.[^5][^10] The old "Gemini caching is 0.5× input" figure is wrong for 3.x. Cross-provider architectures need per-provider cache math — including storage fees.
 
 7. **Shipping a long-context pipeline without a NoLiMa-style eval.** If your workload requires association across long distances without literal match, and you have not tested it with an eval that probes that, you are going to lose silently in production. Build a 50-item synthetic NoLiMa for your own task shape as part of the pipeline.
 

@@ -30,7 +30,7 @@ sources:
   - jina-late-chunking-2024
   - cohere-rerank-v3-2024
   - voyage-rerank-2-2024
-last_verified: 2026-04-17
+last_verified: 2026-07-17
 word_count_target: 3800
 ---
 
