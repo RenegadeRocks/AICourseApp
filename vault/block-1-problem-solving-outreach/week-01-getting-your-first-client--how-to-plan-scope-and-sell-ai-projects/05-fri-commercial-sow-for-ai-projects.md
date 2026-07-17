@@ -20,7 +20,7 @@ sources:
   - mckinsey-outcome-based-fees-2025
   - bcg-rethinking-b2b-pricing-ai-2025
   - sirion-pass-through-cost-clause
-last_verified: 2026-04-16
+last_verified: 2026-07-17
 word_count_target: 6000
 ---
 

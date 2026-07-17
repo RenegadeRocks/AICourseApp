@@ -358,7 +358,7 @@ Each bullet below names a paragraph and a specific critic who would push back.
 
 [^2]: Modarressi, A., et al. (2025-02-07). *NoLiMa: Long-Context Evaluation Beyond Literal Matching.* Adobe Research / LMU Munich. arXiv:2502.05167. https://arxiv.org/abs/2502.05167 — at 32K, 11 of the tested frontier models fell below 50% of their short-context baseline; GPT-4o fell from 99.3% to 69.7%. ICML 2025. Code: https://github.com/adobe-research/NoLiMa
 
-[^3]: Anthropic (2026-03-13). *1M context is now generally available for Opus 4.6 and Sonnet 4.6.* https://claude.com/blog/1m-context-ga — GA removes the previous >200K tier step; standard input/output pricing applies across the full 1M window.
+[^3]: Anthropic. *Pricing* (long-context section), fetched 2026-07-17. https://platform.claude.com/docs/en/about-claude/pricing — "Claude Fable 5, Claude Mythos 5 … Opus 4.8, Opus 4.7, Opus 4.6, Sonnet 5, and Sonnet 4.6 include the full 1M token context window at standard pricing. (A 900k-token request is billed at the same per-token rate as a 9k-token request.)" (The April draft cited a `claude.com/blog/1m-context-ga` URL that could not be verified in the 2026-07 refresh; the load-bearing claim is confirmed by the pricing page directly.)
 
 [^4]: Liu, N. F., Lin, K., Hewitt, J., Paranjape, A., Bevilacqua, M., Petroni, F., Liang, P. (2023-07-06). *Lost in the Middle: How Language Models Use Long Contexts.* Stanford / Berkeley / Samaya / UW. arXiv:2307.03172. https://arxiv.org/abs/2307.03172 — U-shaped accuracy curve over document position; GPT-3.5-Turbo drops ~25 points between position 1 and position 10 on 20-doc QA. TACL 2024. Code: https://github.com/nelson-liu/lost-in-the-middle
 

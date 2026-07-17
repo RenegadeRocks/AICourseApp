@@ -23,7 +23,7 @@ sources:
   - pclub-discovery-masterclass-2025
   - menlo-state-of-ai-enterprise-2025
   - mit-nanda-genai-divide-2025
-last_verified: 2026-04-16
+last_verified: 2026-07-17
 word_count_target: 6000
 ---
 

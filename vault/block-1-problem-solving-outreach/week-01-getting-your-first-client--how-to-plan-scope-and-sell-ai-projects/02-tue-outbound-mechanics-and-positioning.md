@@ -23,7 +23,7 @@ sources:
   - justin-welsh-linkedin-os-2025
   - patio11-first-consulting-client
   - hamel-husain-parlance-positioning
-last_verified: 2026-04-16
+last_verified: 2026-07-17
 word_count_target: 6000
 ---
 

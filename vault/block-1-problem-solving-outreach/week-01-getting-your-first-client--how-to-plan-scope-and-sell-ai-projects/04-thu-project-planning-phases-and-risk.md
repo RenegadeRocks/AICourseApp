@@ -28,7 +28,7 @@ sources:
   - stark-value-pricing-phase-delivery-2024
   - patio11-consulting-greatest-hits
   - planet-a-pilot-hell-2024
-last_verified: 2026-04-16
+last_verified: 2026-07-17
 word_count_target: 6000
 ---
 
