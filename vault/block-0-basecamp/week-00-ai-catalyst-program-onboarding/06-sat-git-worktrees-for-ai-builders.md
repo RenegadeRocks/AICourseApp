@@ -33,7 +33,7 @@ word_count_target: 6000
 
 Every time you hand a coding task to an agent, you are authorizing a process with write access to your filesystem to make changes you will only partially review. If the agent is right, you ship. If it is wrong, you either notice and revert, or you don't notice and the defect lives in main until a user finds it. The difference between "I ship fast with AI" and "I have been shipping broken code for three weeks and didn't know" is almost entirely determined by two things: how your git history is structured, and how you look at diffs.
 
-This is not a metaphor. Every AI-catalyst lead I know who has had a genuinely bad incident — silently broken payments, a deleted migration, a regenerated file that overwrote a colleague's unmerged work — can trace the blast radius to one of three failures: (1) the agent ran against a working tree that already had uncommitted changes, (2) the agent did something "and a few other small cleanups," which the operator approved without reading the diff line by line, or (3) multiple agents were writing to the same directory and one stomped on the other's `node_modules` or `.next` cache mid-build.
+This is not a metaphor. Every AI-pro lead I know who has had a genuinely bad incident — silently broken payments, a deleted migration, a regenerated file that overwrote a colleague's unmerged work — can trace the blast radius to one of three failures: (1) the agent ran against a working tree that already had uncommitted changes, (2) the agent did something "and a few other small cleanups," which the operator approved without reading the diff line by line, or (3) multiple agents were writing to the same directory and one stomped on the other's `node_modules` or `.next` cache mid-build.
 
 Your test suite is half a safety net. `git reflog` is the other half. If you remember one sentence from this lesson, make it that one.
 
@@ -152,9 +152,11 @@ You would not do this for ordinary human coding — the parallel cost is three t
 
 Claude Code v2.1.50 (October 2025) added first-class worktree support across CLI, Desktop, and custom agents.[^3] The two entry points:
 
-**CLI flag.** `claude --worktree my-feature` (or `-w`) spawns a Claude Code session in a freshly created worktree at `.claude/worktrees/my-feature`, on a branch of the same name. If you omit the name, Claude generates a random one. Useful for interactive sessions.
+**CLI flag.** `claude --worktree my-feature` (or `-w`) spawns a Claude Code session in a freshly created worktree at `.claude/worktrees/my-feature`, on a branch of the same name. If you omit the name, Claude generates a random one. Boris Cherny's setup thread confirms the paired `--worktree`/`--tmux` flags for launching parallel sessions in separate panes.[^4] Useful for interactive sessions.
 
-**Agent frontmatter.** In a custom agent definition (`.claude/agents/<name>.md`), adding `isolation: worktree` to the YAML frontmatter causes *every invocation of that agent* to run in its own worktree. This is the parameter the assignment brief names, and it's the mechanism by which a parent Claude Code session dispatching three subagents gets three parallel worktrees automatically.[^2]
+**Agent frontmatter.** In a custom agent definition (`.claude/agents/<name>.md`), adding `isolation: worktree` to the YAML frontmatter causes *every invocation of that agent* to run in its own worktree — the mechanism by which a parent Claude Code session dispatching three subagents gets three parallel worktrees automatically.[^2]
+
+The primitive is no longer Claude-Code-specific: **Cursor 3.0 (April 2026) shipped a native `/worktree` command** that creates an isolated worktree per agent in its Agents Window, and Claude Code's **dynamic workflows** (May 2026) can orchestrate hundreds of parallel subagents, each isolatable, from a single script — which turns the "dispatch two agents in isolated worktrees" experiment below from a manual pattern into a one-line instruction.[^16]
 
 ### What it does under the hood
 
@@ -366,7 +368,7 @@ git log --oneline -5
 
 The pattern generalizes: **any artifact you care about, stored as text, benefits from the same commit-per-iteration + diff-review + reflog-safety-net discipline**. Code is the most obvious case. It's not the only one.
 
-## Common mistakes I see AI-catalyst leads make
+## Common mistakes I see AI-pro leads make
 
 1. **Dismissing worktrees as "too much overhead" without trying them.** Two commands, `add` and `remove`. The cognitive overhead is a one-time 30-minute learning cost. People who skip this stay stuck in serial agent workflows for months.
 2. **Auto-committing the agent's summary text verbatim as the commit message.** The agent wrote "Updated several files" or "Added the feature". Your future self deserves better. Either compose the message yourself or, if you insist on AI-generated messages, use Aider's commit-message model (a different, smaller model tuned for it) rather than the main coding agent's end-of-turn prose.
@@ -429,5 +431,6 @@ Where a stricter reviewer would push back on this lesson:
 [^13]: Git documentation, *git-reflog*, https://git-scm.com/docs/git-reflog (stable reference; 90-day default expiry, configurable via `gc.reflogExpire`).
 [^14]: Gergely Orosz, *Building Claude Code with Boris Cherny*, Pragmatic Engineer newsletter, https://newsletter.pragmaticengineer.com/p/building-claude-code-with-boris-cherny (2025).
 [^15]: InfoQ, *Inside the Development Workflow of Claude Code's Creator*, https://www.infoq.com/news/2026/01/claude-code-creator-workflow/ (Jan 2026).
+[^16]: Cursor (2026-04-02). *Changelog 3.0* — native `/worktree` command that creates an isolated worktree per agent. https://cursor.com/changelog/3-0. Anthropic (2026-05-28). *Introducing dynamic workflows in Claude Code* — hundreds of parallel subagents from a Claude-written orchestration script (capped at 1,000). https://claude.com/blog/introducing-dynamic-workflows-in-claude-code. Both verified 2026-07-17.
 
-_last_verified: 2026-04-15_
+_last_verified: 2026-07-17_

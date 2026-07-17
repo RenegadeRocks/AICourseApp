@@ -7,7 +7,7 @@ day_name: sun
 title: 'Week 0 Synthesis — The substrate under every later week'
 date_due: 2026-04-26
 tags: [synthesis, quiz, flashcards, mental-model, builder-stack, memory-architecture, model-specs, context-economics, git-worktrees]
-last_verified: 2026-04-15
+last_verified: 2026-07-17
 word_count_target: 3800
 ---
 
