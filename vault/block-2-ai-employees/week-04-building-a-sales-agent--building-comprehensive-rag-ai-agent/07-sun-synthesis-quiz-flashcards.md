@@ -154,7 +154,7 @@ Thirteen highest-leverage moves from the six lessons. Each row: the move, the me
 (c) Whether the retrieval ranks the relevant chunk in top-k
 (d) Whether the answer is factually correct against ground truth
 
-**Q19 (Number-specific, Sat)** — State [Zheng et al.'s MT-Bench 2023](https://arxiv.org/abs/2306.05685) reported agreement rate between LLM-as-judge (GPT-4) and human raters on pairwise tasks, and the Hamel Husain counter-claim about narrow rubric-grounded judges.
+**Q19 (Number-specific, Sat)** — State [Zheng et al.'s MT-Bench 2023](https://arxiv.org/abs/2306.05685) reported agreement rate between LLM-as-judge (GPT-4) and human raters on pairwise tasks, and the canonical narrow-rubric-grounded judge-agreement bar this week adopts (Hamel Husain's published Honeycomb figure). Bonus: why is a 30-query regression set the wrong thing to gate a deploy on?
 
 **Q20 (Controversy-defense)** — Take a position: "In 2026 at enterprise scale (>10M tokens of docs, multi-tenant, regulated industry), long-context obsoletes RAG." Defend or refute with ≥4 citations including ≥1 benchmark number per side.
 

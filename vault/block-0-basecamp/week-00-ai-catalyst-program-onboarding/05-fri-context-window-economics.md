@@ -213,7 +213,7 @@ Two things worth flagging about this worked example:
 
 ## Layer 5 — The live controversy: long context vs RAG in 2025
 
-Position A — **long context is making RAG obsolete** — is the loud position in late-2024 and early-2025 discourse. Proponents point to three things: (1) Gemini 1.5's technical report demonstrating near-perfect recall on needle-in-haystack at 1M-10M tokens, (2) the arrival of Opus 4.6 and Sonnet 4.6 at 1M GA pricing, and (3) the operational simplicity of "just paste the whole knowledge base into the prompt" versus maintaining a vector store, embedding pipeline, chunk strategy, and reranker. The argument: if the model can attend to a 1M-token knowledge base directly, every retrieval pipeline is strictly worse than a 1M-token prompt.
+Position A — **long context is making RAG obsolete** — was the loud position in late-2024 and early-2025 discourse. Proponents point to three things: (1) Gemini 1.5's technical report demonstrating near-perfect recall on needle-in-haystack at 1M-10M tokens, (2) the arrival of 1M-token windows as table stakes at every lab (Fable 5, Opus 4.8, Sonnet 5, GPT-5.5/5.6, Gemini 3.1 Pro), and (3) the operational simplicity of "just paste the whole knowledge base into the prompt" versus maintaining a vector store, embedding pipeline, chunk strategy, and reranker. The argument: if the model can attend to a 1M-token knowledge base directly, every retrieval pipeline is strictly worse than a 1M-token prompt.
 
 Position B — **RAG (or its successor, context engineering) is alive, and long context alone loses** — is the operator position, associated most visibly with Jason Liu and implicitly with Anthropic's own Contextual Retrieval release.[^7][^6] Three pieces of evidence:
 
