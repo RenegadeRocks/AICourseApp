@@ -43,3 +43,4 @@ Thumbs.db
 # Playwright screenshot artifacts from dev auditing
 .playwright-mcp/
 /*.png
+exports/

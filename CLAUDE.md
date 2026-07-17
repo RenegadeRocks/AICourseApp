@@ -5,7 +5,7 @@ Rocks, instructed by Claude Opus 4.6/4.7). It's a hybrid:
 
 - `vault/` — plain markdown, one file per lesson (the source of truth)
 - `app/` — Next.js 15 reader at `http://localhost:3000`
-- `scripts/` — Python utilities (curriculum parser, Anki/NotebookLM exports)
+- `scripts/` — Python utilities (curriculum parser, Anki/NotebookLM/EPUB exports)
 - `.claude/commands/` — slash commands for lesson generation
 - `curriculum.json` — parsed 9-block / 26-week schedule
 
@@ -64,7 +64,24 @@ soft targets — longer is fine if tight.
 
 Content pipeline (proven across Weeks 1-5): parallel generation →
 multi-persona review → surgical polish → citation verification. Each phase
-gets its own subagent dispatch.
+gets its own subagent dispatch. Reviewer roster as of July 2026: Karpathy,
+Chip Huyen, Jerry Liu, Hamel Husain, Simon Willison, Seibel, Boris Cherny,
+cohort peer + Mira Murati, swyx, Ethan Mollick, Lilian Weng, Jeremy Howard
+(see `vault/00-program/_refresh-2026-07-master-report.md`).
+
+## EPUB output (replaces the old Notion mirror)
+
+The course's read-elsewhere output is a single Kindle-ready EPUB, not Notion.
+After generating or refreshing content, rebuild it:
+
+```
+> /export-epub            # all blocks -> exports/ai-pro-level-course.epub
+python scripts/export_epub.py [--block <block-dir-name>]
+```
+
+Send the resulting file to the user (they load it via Send-to-Kindle).
+`exports/` is gitignored — the EPUB is a build artifact, regenerated from the
+vault. Do not push course content to Notion.
 
 ## Chat feature
 
