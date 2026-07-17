@@ -22,7 +22,8 @@ sources:
   - damian-galarza-db-isolation
   - git-scm-reflog
   - infoq-cherny-workflow
-last_verified: 2026-04-15
+  - claude-code-dynamic-workflows
+last_verified: 2026-07-17
 word_count_target: 6000
 ---
 
@@ -53,7 +54,7 @@ No toy examples. Every pattern in this lesson comes from an incident someone on 
 - A scratch repo you are willing to break. Fork anything small. Do not rehearse `reflog` recovery on a repo you care about.
 - Familiarity with `git log`, `git diff`, `git checkout`. Everything else in the lesson is built up from first principles.
 
-Referenced lessons: [[01-mon-prompting-first-principles]], [[04-thu-claude-code-agents-and-subagents]] (pending), [[05-fri-evals-and-quality-gates]] (pending).
+Referenced lessons: [[03-wed-claude-md-memory-architecture|Wednesday's memory lesson]] (subagents as context isolation, and how auto-memory is shared across a repo's worktrees), and [[02-tue-ai-native-builder-stack|Tuesday's tool-stack lesson]] (Cursor 3.0's native `/worktree` and Claude Code's dynamic workflows both build on the primitive taught here).
 
 ## Layer 1 — Why git matters *more* when an agent writes code
 
