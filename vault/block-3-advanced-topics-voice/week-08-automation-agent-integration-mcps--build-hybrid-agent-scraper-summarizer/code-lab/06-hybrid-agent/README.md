@@ -16,7 +16,7 @@ Claude Code build prompts.
 
 ## Why it's shaped this way
 
-- **Deterministic spine, two judgment islands** (relevance, synthesis) — see
+- **Deterministic spine, two judgment islands** (relevance, synthesis); see
   `04-thu-hybrid-agent-design-pipeline-plus-judgment.md`.
 - **Checkpoint per stage** so a re-run resumes instead of restarting and never
   re-pays for (non-idempotent) LLM stages.
@@ -36,14 +36,14 @@ pip freeze > requirements.lock                       # pin your actual solve
 cp config.example.yaml config.yaml                   # then edit sources/schedule/budget
 ```
 
-Environment variables (never commit keys — `.env` is gitignored):
+Environment variables (never commit keys; `.env` is gitignored):
 
 | Var | Required | Purpose |
 |---|---|---|
 | `ANTHROPIC_API_KEY` | yes | synthesis + judging |
 | `ANTHROPIC_SYNTH_MODEL` | no | synthesis model (default `claude-sonnet-5`; verify the current ID on the pricing docs before a long run) |
 | `ANTHROPIC_JUDGE_MODEL` | no | relevance + faithfulness judge (default a Haiku-class tier; PIN it) |
-| `PIPELINE_ENABLED` | no | kill switch — set `false` to make every run log-and-exit |
+| `PIPELINE_ENABLED` | no | kill switch: set `false` to make every run log-and-exit |
 | `ALERT_WEBHOOK` | no | Slack/Discord/email-relay URL for failure alerts (stub logs if unset) |
 | `FIRECRAWL_API_KEY` | no | enables the Firecrawl fetch/extract path for hard sources |
 
@@ -114,8 +114,8 @@ python -m stages.monitor --check runs/2026-07-11/run.log
 `eval/rubric.py` is binary-per-criterion (Hamel's discipline): cited claims,
 no fabricated sources, sections present, length in bounds, no duplicated items,
 faithfulness ≥ threshold. `eval/run.py --gate` runs the relevance golden set and
-the synthesis rubric against your frozen snapshots — every checkpointed brief in
-`runs/<date>/` — and **exits non-zero if anything fails at threshold** — wire it
+the synthesis rubric against your frozen snapshots (every checkpointed brief in
+`runs/<date>/`) and **exits non-zero if anything fails at threshold**; wire it
 into your change process so no prompt/model change ships without a green gate.
 (Before your first pipeline run there are no snapshots; the gate says so and
 covers the relevance set only.) Your day-one golden set is a hypothesis; rebuild it
@@ -132,14 +132,14 @@ a 5-source / ~40-item daily run is on the order of $0.45 (~$0.68 after Aug 31)
 plus ~$5/mo infra. The pipeline prints a per-run token/dollar estimate and
 enforces `config.yaml`'s `budget.run_dollar_ceiling` with a controlled stop.
 Measure real token counts from the checkpoints and put them in your client's
-cost table — at post-August prices, not intro ones.
+cost table, at post-August prices, not intro ones.
 
 ## Going live safely
 
 1. **Shadow** (`--shadow`) for several days; read every brief; log what's wrong.
-2. **Canary** — deliver to you + a couple of tolerant users.
-3. **Full** — only after clean days and a golden set rebuilt from real failures.
-4. Document the schedule (cron/systemd timer) in this README — **do not commit a
+2. **Canary**: deliver to you + a couple of tolerant users.
+3. **Full**: only after clean days and a golden set rebuilt from real failures.
+4. Document the schedule (cron/systemd timer) in this README. **Do not commit a
    live crontab**. Local cron stops when the machine sleeps; graduate to a VPS +
    systemd timer, a managed cron, or Claude Code Routines (if all sources are
    connector-reachable) for durable operation.

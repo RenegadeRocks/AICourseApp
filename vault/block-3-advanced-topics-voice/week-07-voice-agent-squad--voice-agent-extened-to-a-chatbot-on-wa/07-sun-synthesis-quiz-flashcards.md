@@ -105,7 +105,7 @@ Frame it that way and the week snaps together: every day added a surface to the 
 
 **A1:** (1) Do you need a durable text transcript as system of record? (2) Is voice quality the product rather than a means? (3) Will median call length exceed ~5 minutes? Tie-break: two-or-more "cascade" answers (yes-transcript, no-voice-as-product, yes->5min) → cascade. [Mon, Layer 2]
 
-**A2:** Semantic (LiveKit): reads the partial *transcript*; weakness — inherits STT latency/errors, blind to prosody. Acoustic (Pipecat smart-turn): reads the raw *waveform*; weakness — no semantics, can't tell an incomplete list from a complete sentence. Joint (Deepgram Flux): one model reads *both* acoustics and text; weakness — vendor lock to Deepgram STT. [Tue, Layer 1]
+**A2:** Semantic (LiveKit): reads the partial *transcript*; weakness: inherits STT latency/errors, blind to prosody. Acoustic (Pipecat smart-turn): reads the raw *waveform*; weakness: no semantics, can't tell an incomplete list from a complete sentence. Joint (Deepgram Flux): one model reads *both* acoustics and text; weakness: vendor lock to Deepgram STT. [Tue, Layer 1]
 
 **A3:** `StartOfTurn`, `EagerEndOfTurn`, `TurnResumed`, `EndOfTurn`. `EagerEndOfTurn` ("probably done") enables speculative execution — begin LLM inference eagerly, discard and re-run if `TurnResumed` fires. [Tue, Layer 1 & 3]
 
@@ -123,9 +123,9 @@ Frame it that way and the week snaps together: every day added a surface to the 
 
 **A10:** e.g. `{intent, phone (sacred), guest_name (sacred once known), dates_confirmed, party_size, loyalty_status}`. Sacred = phone, guest_name, and any confirmed entity — never re-asked by a downstream specialist or the WA channel. Metric: **re-ask rate per handoff** (target 0). [Wed, Layer 3; Sat build]
 
-**A11** — Refute-with-nuance. Cognition's original critique targets *collaborative* multi-agent systems where agents negotiate and writes are dispersed — real fragility. But Cognition itself later conceded a working pattern: multiple agents contributing intelligence *with single-threaded writes*. The voice router squad IS that pattern — one agent owns the call at any moment, specialists never run concurrently, context transfers through a typed contract at discrete seams (literally `session.update` in the Agents SDK). So: the critique fully applies to a squad whose agents talk to each other mid-call (collapse it), and is real-but-bounded for a router squad (manage the seam with structured state + a re-ask metric). Blanket "always single agent" ignores that below-threshold intents *should* collapse but genuinely blocked matrices *should* split. [Wed, Layer 4]
+**A11:** Refute-with-nuance. Cognition's original critique targets *collaborative* multi-agent systems where agents negotiate and writes are dispersed — real fragility. But Cognition itself later conceded a working pattern: multiple agents contributing intelligence *with single-threaded writes*. The voice router squad IS that pattern — one agent owns the call at any moment, specialists never run concurrently, context transfers through a typed contract at discrete seams (literally `session.update` in the Agents SDK). So: the critique fully applies to a squad whose agents talk to each other mid-call (collapse it), and is real-but-bounded for a router squad (manage the seam with structured state + a re-ask metric). Blanket "always single agent" ignores that below-threshold intents *should* collapse but genuinely blocked matrices *should* split. [Wed, Layer 4]
 
-**A12** — Disclose anyway, but not naively. The law increasingly requires it (EU Article 50 interaction-disclosure; TCPA identification for outbound; state deception/companion statutes), so ambiguity is legal exposure, not just an ethics call. Mollick's research point is real — disclosure can lower satisfaction — but it argues for *front-loading* the trust cost, not hiding it: the discovery-cost when a user later learns they were deceived is higher than the disclosure-cost paid up front, and it poisons the brand in exactly the WA-first, high-fraud markets where trust is the moat. Design the agent so its *competence* carries the interaction; disclosure then costs little. The honest line: disclose always; make disclosure cheap by being good. [Thu, Layer 1 + reviewer lens]
+**A12:** Disclose anyway, but not naively. The law increasingly requires it (EU Article 50 interaction-disclosure; TCPA identification for outbound; state deception/companion statutes), so ambiguity is legal exposure, not just an ethics call. Mollick's research point is real — disclosure can lower satisfaction — but it argues for *front-loading* the trust cost, not hiding it: the discovery-cost when a user later learns they were deceived is higher than the disclosure-cost paid up front, and it poisons the brand in exactly the WA-first, high-fraud markets where trust is the moat. Design the agent so its *competence* carries the interaction; disclosure then costs little. The honest line: disclose always; make disclosure cheap by being good. [Thu, Layer 1 + reviewer lens]
 
 ---
 
@@ -141,10 +141,10 @@ Frame it that way and the week snaps together: every day added a surface to the 
 **A:** Each turn re-processes accumulated audio context as input tokens; turn N includes turns 1..N−1. (Cached-audio pricing blunts but doesn't remove it.)
 
 **Q:** The platform fee (Vapi/Retell ~$0.05–0.07/min) is really what?
-**A:** Salary for an ops engineer you don't hire — cheaper than raw-stack maintenance until ~50k min/month.
+**A:** Salary for an ops engineer you don't hire; cheaper than raw-stack maintenance until ~50k min/month.
 
 **Q:** The deepest, unpriced voice-platform lock-in?
-**A:** Your measurement history — months of per-intent containment data don't export cleanly.
+**A:** Your measurement history: months of per-intent containment data don't export cleanly.
 
 **Q:** Vapi all-in cost vs its base fee?
 **A:** Base $0.05/min; real all-in ~$0.13–0.31+/min once STT+LLM+TTS+telephony stack up (from separate invoices).
@@ -153,7 +153,7 @@ Frame it that way and the week snaps together: every day added a surface to the 
 **A:** Semantic (LiveKit, transcript), acoustic (Pipecat smart-turn, waveform), joint (Deepgram Flux, both).
 
 **Q:** What does `EagerEndOfTurn` enable?
-**A:** Speculative LLM execution — start inference eagerly, cancel on `TurnResumed`.
+**A:** Speculative LLM execution: start inference eagerly, cancel on `TurnResumed`.
 
 **Q:** The four interruption-policy questions?
 **A:** What counts as interruption? What happens to the abandoned utterance? How fast does cancellation propagate? What happens after (recovery)?
@@ -162,13 +162,13 @@ Frame it that way and the week snaps together: every day added a surface to the 
 **A:** "Mm-hmm"/"okay" signal listening, not turn-taking; stopping for them feels more broken than talking over.
 
 **Q:** The latency-masking ladder, top rung?
-**A:** Acknowledge-then-work: say "let me check that for you" *before* dispatching the tool — buys ~1.5s legitimately.
+**A:** Acknowledge-then-work: say "let me check that for you" *before* dispatching the tool; buys ~1.5s legitimately.
 
 **Q:** The five conversation metrics that predict callbacks?
 **A:** First-audio p50/p95; interruption rate (split by direction); post-interruption recovery; containment (with resolution, per intent); escalation quality.
 
 **Q:** When is a squad ceremony?
-**A:** When specialists share the same tools and posture — collapse to one conversation-flow agent.
+**A:** When specialists share the same tools and posture; collapse to one conversation-flow agent.
 
 **Q:** When does a squad earn its seams?
 **A:** When the intent tool/posture matrix is genuinely blocked (different tools, verification, language, or escalation).
@@ -177,7 +177,7 @@ Frame it that way and the week snaps together: every day added a surface to the 
 **A:** Router: control moves to a specialist that owns the call. Orchestrator: a primary delegates to workers via tools and speaks all results.
 
 **Q:** Cognition's conceded working multi-agent pattern?
-**A:** Multiple agents contribute intelligence with *single-threaded writes* — which is exactly the router squad (one agent owns the call at a time).
+**A:** Multiple agents contribute intelligence with *single-threaded writes*, which is exactly the router squad (one agent owns the call at a time).
 
 **Q:** Transfer raw transcript or structured state at a handoff?
 **A:** Structured state (typed payload) with sacred never-re-ask fields; raw transcript drowns the specialist's context.
