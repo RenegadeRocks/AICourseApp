@@ -18,7 +18,7 @@ sources:
   - aws-agents-tools-launch-2025
   - mavenagi-ai-sla-glossary
 last_verified: 2026-07-17
-word_count_target: 5000
+word_count_target: 4000
 ---
 
 # Build day — your first sellable agent package, end to end, with the calculator to prove the margins

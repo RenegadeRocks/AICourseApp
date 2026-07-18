@@ -23,7 +23,7 @@ sources:
   - n8n-community-marketplace
   - futurumgroup-agentexchange-2026
 last_verified: 2026-07-17
-word_count_target: 5200
+word_count_target: 4500
 ---
 
 # Distribution surfaces for agent products in 2026 — marketplaces, take rates, and what actually drives installs

@@ -22,7 +22,7 @@ sources:
   - anthropic-sonnet-5-pricing
   - getmonetizely-agentic-pricing-2026
 last_verified: 2026-07-17
-word_count_target: 5300
+word_count_target: 4500
 ---
 
 # Pricing the package — value metrics, the labor-line anchor, the $250 collapse, and surviving the usage-based backlash

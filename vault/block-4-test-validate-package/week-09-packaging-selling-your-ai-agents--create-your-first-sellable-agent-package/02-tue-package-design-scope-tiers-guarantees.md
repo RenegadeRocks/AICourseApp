@@ -20,7 +20,7 @@ sources:
   - artisan-ava-2-launch-2026
   - quickchat-pricing-models-2026
 last_verified: 2026-07-17
-word_count_target: 5200
+word_count_target: 4500
 ---
 
 # Package design — outcome, scope fences, tier ladders, and how to guarantee a probabilistic system

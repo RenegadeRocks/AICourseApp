@@ -21,7 +21,7 @@ sources:
   - trillet-white-label-voice-2026
   - aiforanything-deprecation-migration-2026
 last_verified: 2026-07-17
-word_count_target: 5200
+word_count_target: 4500
 ---
 
 # Delivery engineering — one build, many customers: tenancy, config-over-code, white-labeling, COGS, and the deprecation wave as a revenue line
