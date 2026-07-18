@@ -1,0 +1,12 @@
+# Code-lab 06 — hybrid scraper + summarizer
+# Pin versions after your first clean solve: pip freeze > requirements.lock
+anthropic>=0.69,<1.0        # Claude API: structured outputs (output_format), messages
+feedparser>=6.0,<7.0        # RSS/Atom parsing — the front-door fetch path
+httpx>=0.27,<1.0            # polite HTTP with conditional requests / timeouts
+selectolax>=0.3,<0.4        # fast HTML parsing for stable-selector extraction
+PyYAML>=6.0,<7.0            # config.yaml
+python-dotenv>=1.0,<2.0     # load .env (keys never in code)
+tenacity>=8.2,<10.0         # retry with exponential backoff + jitter (TRANSIENT)
+# Optional — uncomment if you use them:
+# firecrawl-py>=2.0          # Firecrawl fetch/extract + change-tracking for hard sources
+# rapidfuzz>=3.0             # near-duplicate similarity in dedup.py

@@ -1,0 +1,33 @@
+{
+  "_comment": "Retell equivalent: a single agent with a conversation-flow-style multi-prompt tree (Wednesday: Retell often wants ONE agent with a node graph rather than N agents). Create the LLM + agent via the Retell API; see SETUP.md. Retell's real schema uses states/edges — this file captures the same LOGICAL design so you can diff it against the Vapi version and see they encode the same brain.",
+  "agent_name": "week7-clinic-flow",
+  "voice_id": "cartesia-sonic",
+  "language": "en-US",
+  "response_engine": { "type": "retell-llm" },
+  "begin_message": "Hi, I'm the AI assistant for the clinic. Calls are recorded. How can I help?",
+  "general_prompt": "You handle a clinic phone line. Classify the caller as booking or billing, then move to the matching state. Never re-ask a fact already collected. Keep turns to one short sentence. Disclose you are an AI (already in the greeting).",
+  "states": [
+    {
+      "name": "triage",
+      "state_prompt": "Determine if this is about an appointment (booking) or a bill (billing). Transition accordingly. Do not collect anything twice.",
+      "edges": [
+        { "destination_state_name": "booking", "description": "Caller wants to book, reschedule, or ask about an appointment." },
+        { "destination_state_name": "billing", "description": "Caller asks about a balance, invoice, or payment." }
+      ]
+    },
+    {
+      "name": "booking",
+      "state_prompt": "Booking specialist. Identity/intent already known — do not re-ask. Say a short latency-masking line, then call lookup_appointment, then read back details.",
+      "tools": [
+        { "type": "custom", "name": "lookup_appointment", "url": "https://<NGROK>/tools", "description": "Look up next appointment by phone." }
+      ]
+    },
+    {
+      "name": "billing",
+      "state_prompt": "Billing specialist. Stricter verification posture: announce you'll confirm identity before discussing balances. Do not re-ask known facts. Mask latency then call lookup_balance.",
+      "tools": [
+        { "type": "custom", "name": "lookup_balance", "url": "https://<NGROK>/tools", "description": "Look up balance due by phone." }
+      ]
+    }
+  ]
+}

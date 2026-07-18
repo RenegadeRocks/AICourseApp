@@ -1,0 +1,10 @@
+{"title": "New open-weight model beats GPT-class flagship on coding benchmark", "summary": "A 2.8T-parameter MoE was released with 1M context; developers preferred it for front-end tasks in blind testing.", "url": "https://example.com/a", "label": true}
+{"title": "Local coffee shop introduces new oat-milk latte", "summary": "Seasonal menu update at a cafe chain.", "url": "https://example.com/b", "label": false}
+{"title": "MCP spec goes stateless in July 2026 release candidate", "summary": "The protocol drops the handshake and session id; any request can hit any server instance.", "url": "https://example.com/c", "label": true}
+{"title": "Celebrity spotted at airport", "summary": "Paparazzi photos of a public figure travelling.", "url": "https://example.com/d", "label": false}
+{"title": "Cloudflare to block mixed-use AI crawlers by default from September 15", "summary": "New edge defaults classify crawlers as search/agent/training and block agent+training on ad pages.", "url": "https://example.com/e", "label": true}
+{"title": "Stock market closes slightly higher", "summary": "General market wrap with no AI angle.", "url": "https://example.com/f", "label": false}
+{"title": "Anthropic ships structured outputs GA on the Claude API", "summary": "Grammar-constrained JSON via output_format guarantees schema conformance.", "url": "https://example.com/g", "label": true}
+{"title": "Weather forecast: rain expected this weekend", "summary": "Regional weather outlook.", "url": "https://example.com/h", "label": false}
+{"title": "n8n valuation doubles to $5.2B as SAP invests", "summary": "Workflow-automation platform embedded into SAP Joule Studio; GA planned Q3 2026.", "url": "https://example.com/i", "label": true}
+{"title": "Recipe: how to make sourdough at home", "summary": "Baking tutorial.", "url": "https://example.com/j", "label": false}

@@ -1,0 +1,58 @@
+# Code-lab 06 — copy to config.yaml and edit. Never commit config.yaml if it
+# holds anything sensitive; keys live in .env regardless.
+
+# --- Sources: honor your Wednesday scraping policy per source ---------------
+# access: rss | api | html | firecrawl   (prefer rss/api; html only when needed)
+sources:
+  - name: example-blog
+    access: rss
+    url: https://example.com/feed.xml
+    expected_min_items: 3        # zero from a source that usually yields >=3 => drift alert
+  - name: example-news
+    access: html
+    url: https://news.example.com/latest
+    item_selector: "article.post"      # selectolax CSS; stable HTML only
+    contact_url: https://you.example/bot   # sent in User-Agent; be truthful
+    expected_min_items: 5
+  # - name: hard-source
+  #   access: firecrawl            # needs FIRECRAWL_API_KEY; uses change-tracking
+  #   url: https://spa.example.com/feed
+
+# --- Niche framing: drives relevance + synthesis prompts --------------------
+niche:
+  description: >
+    Daily brief for [your audience]. Keep items about [topics]; drop [noise].
+  relevance_threshold: 0.5       # judge score below this => drop
+
+# --- Delivery ---------------------------------------------------------------
+delivery:
+  mode: file                     # file | email | webhook
+  file_path: runs/latest-brief.md
+  # email:
+  #   smtp_host: smtp.example.com
+  #   from: brief@you.example
+  #   to: [you@you.example]
+  # webhook:
+  #   url_env: ALERT_WEBHOOK      # reuse the alert webhook or set a delivery one
+
+# --- Scheduling (documented here; wire cron/systemd from README) ------------
+schedule:
+  cron: "3 7 * * *"              # 07:03 local — avoid :00 to dodge scheduler jitter
+  timezone: local
+
+# --- Budget: enforced, not estimated ---------------------------------------
+budget:
+  run_dollar_ceiling: 2.00       # controlled stop if a run approaches this
+  per_stage_token_cap:
+    extract: 60000
+    judge: 40000
+    synthesize: 30000
+  synth_model: claude-sonnet-5   # verify current ID before a long run
+  judge_model: claude-haiku-4-5  # cheap tier for classification
+
+# --- Reliability ------------------------------------------------------------
+reliability:
+  max_retries: 4                 # TRANSIENT only; PERMANENT never retries
+  backoff_base_seconds: 2
+  heartbeat: true
+  alert_on: [missing_heartbeat, zero_from_productive_source, cost_anomaly, contract_failure, keep_rate_shift]
