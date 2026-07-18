@@ -41,6 +41,25 @@ HTML_TAGS = {
 TAG_RE = re.compile(r"""<(/?)([a-zA-Z][a-zA-Z0-9-]*)((?:"[^"]*"|'[^']*'|[^>"'])*)(/?)>""")
 
 
+XML_ENTITIES = {"amp", "lt", "gt", "quot", "apos"}
+ENTITY_RE = re.compile(r"&([a-zA-Z][a-zA-Z0-9]*);")
+
+
+def numeric_entities(body: str) -> str:
+    # XML defines only 5 named entities; convert HTML names (&mdash; etc.) to
+    # numeric refs, escape unknown names literally.
+    from html.entities import name2codepoint
+
+    def sub(m: re.Match) -> str:
+        name = m.group(1)
+        if name in XML_ENTITIES:
+            return m.group(0)
+        cp = name2codepoint.get(name)
+        return f"&#{cp};" if cp else f"&amp;{name};"
+
+    return ENTITY_RE.sub(sub, body)
+
+
 def escape_pseudo_tags(body: str) -> str:
     # Prose placeholders like <city> or <example of X> read as tags to the XML
     # parser; escape anything that isn't a real XHTML tag.
@@ -134,7 +153,7 @@ def convert_lesson(path: Path, href_map: dict[str, str]) -> tuple[str, str]:
     # minidom chokes on bare & and named entities; markdown emits &amp; already,
     # but raw HTML passthrough in lessons may not. Fix the common offenders.
     body = re.sub(r"&(?!(?:[a-zA-Z]+|#\d+|#x[0-9a-fA-F]+);)", "&amp;", body)
-    body = body.replace("&nbsp;", "&#160;")
+    body = numeric_entities(body)
     body = escape_pseudo_tags(body)
     return title, xhtml_page(title, body)
 
