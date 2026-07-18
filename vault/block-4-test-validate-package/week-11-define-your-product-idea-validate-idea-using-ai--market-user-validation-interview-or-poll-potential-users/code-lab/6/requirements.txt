@@ -1,0 +1,2 @@
+# Standard library only — nothing to install.
+# Python >= 3.10 required (see README.md).

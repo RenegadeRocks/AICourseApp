@@ -1,0 +1,63 @@
+{
+  "package": {
+    "name": "Dispatch",
+    "one_liner": "A maintenance-request agent for mid-size property managers",
+    "scoped_promise": "Every maintenance request answered in 60 seconds. The 1 in 5 that needs a human gets one, with context."
+  },
+  "claims_file": "claims.json",
+  "brand": {
+    "stance": "invisible assistance: AI throughout production, human direction and QA, no aesthetic signaling either way",
+    "palette": ["#0F172A", "#38BDF8", "#F8FAFC"],
+    "aesthetic": "calm infrastructure; isometric workflow illustration",
+    "style_anchor": "anchor set A (3 exemplar images in /brand/anchors)",
+    "negative_list": [
+      "photorealistic humans",
+      "robot imagery",
+      "blue-gradient brains",
+      "text rendered inside the model image"
+    ]
+  },
+  "assets": [
+    {
+      "id": "hero_main",
+      "kind": "hero",
+      "purpose": "Hero background for the launch page: establishes the calm-infrastructure aesthetic behind the scoped promise.",
+      "subject": "Isometric illustration of maintenance requests flowing through a triage pipeline, one route branching to a human",
+      "copy_side": "left",
+      "ai_generated": true,
+      "photorealistic_people": false
+    },
+    {
+      "id": "og_card",
+      "kind": "og",
+      "purpose": "Link-preview card for every share of the launch post.",
+      "subject": "Minimal card motif from the hero pipeline, single element, high contrast",
+      "ai_generated": true,
+      "photorealistic_people": false
+    },
+    {
+      "id": "ad_proof",
+      "kind": "ad",
+      "hook": "proof",
+      "purpose": "Feed ad leading with the substantiated resolution number.",
+      "subject": "Single pipeline node with a completion checkmark, large negative space for the claim",
+      "ai_generated": true,
+      "photorealistic_people": false
+    },
+    {
+      "id": "ad_objection",
+      "kind": "ad",
+      "hook": "objection",
+      "purpose": "Feed ad leading with 'what happens when it's wrong' and the escalation answer.",
+      "subject": "The escalation branch of the pipeline, human node highlighted",
+      "ai_generated": true,
+      "photorealistic_people": false
+    },
+    {
+      "id": "demo_storyboard",
+      "kind": "video_storyboard",
+      "purpose": "90-second demo video: pain artifact / real run / guardrail beat / scoped claim + CTA.",
+      "ai_generated": false
+    }
+  ]
+}

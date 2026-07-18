@@ -1,0 +1,4 @@
+62% of maintenance requests resolved end-to-end.
+Measured on a 500-request golden set, March-June 2026.
+'Resolved' = tenant confirmed or no reopen within 72h.
+The rest reach your team in under 30 seconds, with context.

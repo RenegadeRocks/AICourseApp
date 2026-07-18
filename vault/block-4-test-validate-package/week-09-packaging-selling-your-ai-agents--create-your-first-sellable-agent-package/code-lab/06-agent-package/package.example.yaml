@@ -1,0 +1,103 @@
+# Worked example: the "Niche Radar" package from Week 9's running example.
+# Copy to package.yaml and change every value marked CHANGE-ME.
+
+package:
+  name: "Niche Radar"                                   # CHANGE-ME
+  niche: "DTC skincare brands"                          # CHANGE-ME
+  outcome_statement: >                                  # CHANGE-ME — Layer 1, Tuesday
+    DTC skincare brands get a daily competitor-and-trend brief in Slack by
+    7am, covering your 12 nominated sources, with every claim linked to its
+    source; first brief live within 10 business days.
+  labor_line:
+    description: "Analyst assembling the same brief manually"
+    hours_per_month: 16.5          # 45 min x 22 business days
+    loaded_hourly_rate_usd: 60
+
+economics:
+  model_tier: "sonnet-5-intro"     # key into models.py RATE_CARD
+  tokenizer_factor: 1.0            # counts below measured on new tokenizer
+  input_tokens_per_run: 220000
+  output_tokens_per_run: 18000
+  runs_per_month: 22
+  hosting_usd_per_month_fleet: 40  # scheduler + DB + monitoring, whole fleet
+  eval_usd_per_month_per_niche_pack: 2
+  expected_fleet_size_for_hosting_split: 10
+  delivery_infra_usd_per_tenant: 1
+  support_hours_per_customer_per_month: 0.75   # CHANGE-ME, then double it
+  loaded_support_rate_usd: 150
+  onboarding_fee_usd: 750
+  onboarding_hours: 5
+
+tiers:
+  - name: Starter
+    price_usd_month: 750
+    sources: 6
+    run_scale: 0.6                # fraction of the baseline per-run tokens
+    delivery: "Slack or email"
+    eval_deliverable: "Claim-level source links"
+    support: "Email, 2 business days"
+    terms: "Monthly"
+  - name: Standard
+    price_usd_month: 1500
+    sources: 12
+    run_scale: 1.0
+    delivery: "Slack + email + searchable archive"
+    eval_deliverable: "Monthly eval report (golden-set pass rate, drift, incidents)"
+    support: "Email 2 biz days + monthly config call"
+    terms: "Monthly"
+  - name: Enterprise
+    price_usd_month: 3500
+    sources: 25
+    run_scale: 2.1
+    delivery: "All channels + API + custom webhook"
+    eval_deliverable: "Quarterly re-baseline on your labeled sample"
+    support: "Named contact, next-day changes"
+    terms: "Annual, 60-day break clause"
+
+exclusions:                        # Tuesday's fence — each has a route
+  - item: "Paywalled or login-required sources"
+    route: "Not offered (legal + reliability); see supported-source list"
+  - item: "Custom output formats"
+    route: "Enterprise tier (API lets you re-render)"
+  - item: "Ad-hoc queries against the archive"
+    route: "Standard tier archive search"
+  - item: "CRM writes / Notion / custom webhooks"
+    route: "Enterprise tier"
+  - item: "Same-day config changes"
+    route: "Enterprise tier support SLA"
+
+guarantee:
+  position: "C"                    # A = per-outcome, B = error-budget SLA, C = process
+  promises:
+    - "Brief delivered by 7:00 local on ≥99% of business days, measured monthly"
+    - "Monthly eval report delivered by the 5th (Standard+), incl. golden-set provenance"
+    - "Incidents disclosed within 48h with cause and remediation"
+    - "Model-tier changes disclosed; golden set re-run across every swap"
+    - "Cancel monthly (Starter/Standard); full data handback within 30 days"
+  consequence: "Missed delivery SLO in a month = 25% credit on that month"
+
+onboarding_checklist:
+  - {step: "Kickoff: nominate sources from supported list, name Slack channel", owner: "Customer", days: "1-2"}
+  - {step: "Tenant config + credential setup (webhook secret to vault)", owner: "You", days: "3"}
+  - {step: "First calibration brief delivered (marked DRAFT)", owner: "You", days: "3"}
+  - {step: "Golden-set calibration: customer marks 10 claims right/wrong/meh", owner: "Both", days: "4-6"}
+  - {step: "Prompt-pack tuning against calibration marks", owner: "You", days: "6-8"}
+  - {step: "Acceptance review against outcome statement; go-live", owner: "Both", days: "9-10"}
+
+runbook_stages:
+  - "Sale closed → send onboarding form + invoice onboarding fee"
+  - "Generate tenant YAML from intake; store secrets by reference"
+  - "Calibration run; deliver DRAFT brief day 3"
+  - "Golden-set calibration + tuning loop (cap: 2 iterations)"
+  - "Acceptance + go-live; add tenant to monitoring + eval schedule"
+  - "Monthly: eval report (Standard+), COGS telemetry review, config-change window"
+  - "Quarterly: value report (labor-hours covered, SLO, incidents), renewal touch"
+  - "Model migration (on deprecation notice): candidate tiers → per-pack regression → COGS recompute → customer notice → staged rollout → rollback condition"
+  - "Offboarding: data handback ≤30 days, credential revocation, tenant archive"
+
+demo:
+  minutes: 5
+  pricing_sentence: >               # say this out loud, verbatim, in the demo
+    Standard is fifteen hundred a month, which covers about fifty-four
+    analyst-hours of monitoring; onboarding is a one-time seven-fifty and
+    you're live within ten business days.
