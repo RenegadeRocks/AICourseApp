@@ -49,7 +49,9 @@ def run_lane(lane: str, queries: list[dict], repeats: int, out: Path) -> None:
         for _ in range(repeats):
             for p in range(passes):
                 res = fn(q["query"], idx)
-            ctx = "\n".join(f"[{c}] {idx.by_id[c]['text'][:400]}" for c in res.chunk_ids)
+            # Judge must see the same context the generator saw — truncating
+            # here would produce false faithfulness failures.
+            ctx = "\n".join(f"[{c}] {idx.by_id[c]['text']}" for c in res.chunk_ids)
             verdict = judge_one(q["query"], res.answer, ctx,
                                 q.get("gold_answer"), q.get("answerable", True))
             runs.append({

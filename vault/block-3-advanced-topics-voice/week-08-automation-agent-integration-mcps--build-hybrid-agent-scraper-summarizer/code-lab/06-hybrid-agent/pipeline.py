@@ -84,7 +84,10 @@ def run(config_path: str, resume_date: str | None = None, shadow: bool = False) 
                 all_items.extend(extract.extract(res, src_cfg, client, cfg["budget"]["synth_model"]))
             return all_items
         items = store.run_or_resume("02-items.json", _extract, resume=resume)
-        metrics["items_per_source"] = _count_by_source(items)
+        # Seed every configured source at 0 so the zero-from-productive-source
+        # drift alert (stages/monitor.py) can actually fire — a source that
+        # yielded nothing must appear in the counts, not be absent from them.
+        metrics["items_per_source"] = _count_by_source(items, cfg["sources"])
 
         # Stage 3 — dedup (deterministic)
         deduped = store.run_or_resume("03-deduped.json", lambda: dedup.dedup(items), resume=resume)
@@ -96,7 +99,8 @@ def run(config_path: str, resume_date: str | None = None, shadow: bool = False) 
         @transient_retry(cfg)
         def _judge():
             return judge.judge_all(client, cfg["budget"]["judge_model"], niche,
-                                   kept_pool, cfg["niche"]["relevance_threshold"])
+                                   kept_pool, cfg["niche"]["relevance_threshold"],
+                                   budget=budget)
         judged = store.run_or_resume("04-judged.json", _judge, resume=resume)
         kept = [it for it in judged if it.get("keep")]
         metrics["keep_rate"] = round(len(kept) / max(len(judged), 1), 3)
@@ -104,7 +108,7 @@ def run(config_path: str, resume_date: str | None = None, shadow: bool = False) 
         # Stage 5 — synthesize (judgment; REUSED on resume)
         @transient_retry(cfg)
         def _synth():
-            return {"brief": synthesize.synthesize(client, cfg["budget"]["synth_model"], niche, kept, date)}
+            return {"brief": synthesize.synthesize(client, cfg["budget"]["synth_model"], niche, kept, date, budget=budget)}
         brief_md = store.run_or_resume("05-brief.json", _synth, resume=resume)["brief"]
         store.save_text("05-brief.md", brief_md)
 
@@ -141,8 +145,8 @@ def run(config_path: str, resume_date: str | None = None, shadow: bool = False) 
     return metrics
 
 
-def _count_by_source(items: list[dict]) -> dict:
-    out: dict[str, int] = {}
+def _count_by_source(items: list[dict], sources_cfg: list[dict]) -> dict:
+    out: dict[str, int] = {s["name"]: 0 for s in sources_cfg}
     for it in items:
         out[it["source"]] = out.get(it["source"], 0) + 1
     return out

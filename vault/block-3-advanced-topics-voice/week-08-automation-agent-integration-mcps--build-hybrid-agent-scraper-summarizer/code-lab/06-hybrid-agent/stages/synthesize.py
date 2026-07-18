@@ -25,8 +25,11 @@ def build_source_list(kept: list[dict]) -> str:
     return "\n".join(f"[{i+1}] {it['title']} — {it['url']}" for i, it in enumerate(kept))
 
 
-def synthesize(client, model: str, niche: str, kept: list[dict], date: str) -> str:
-    """Return the brief as Markdown. Raises TransientError on overload."""
+def synthesize(client, model: str, niche: str, kept: list[dict], date: str,
+               budget=None) -> str:
+    """Return the brief as Markdown. Raises TransientError on overload. If a
+    RunBudget is passed, real token usage is charged against the run's dollar
+    ceiling (BudgetExceeded propagates to the orchestrator's controlled stop)."""
     sources = build_source_list(kept)
     bodies = "\n\n".join(
         f"[{i+1}] {it['title']}\n{it.get('summary', '')[:1500]}"
@@ -35,7 +38,7 @@ def synthesize(client, model: str, niche: str, kept: list[dict], date: str) -> s
     try:
         resp = client.messages.create(
             model=model,
-            max_tokens=2000,
+            max_tokens=4000,  # a ~2,500-word brief (01-mon L3) needs ~3.3K tokens
             system=SYNTH_SYSTEM,
             messages=[{
                 "role": "user",
@@ -50,4 +53,6 @@ def synthesize(client, model: str, niche: str, kept: list[dict], date: str) -> s
         )
     except Exception as e:
         raise TransientError(f"TRANSIENT: synthesis call failed — {e}")
+    if budget is not None:
+        budget.charge("synthesize", model, resp.usage.input_tokens, resp.usage.output_tokens)
     return resp.content[0].text

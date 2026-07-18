@@ -14,11 +14,14 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-# USD per input / output token, per model id. UPDATE before relying on these.
+# USD per input / output token, per model id. UPDATE before relying on these —
+# check the current pricing page (platform.claude.com/docs) at run time; an
+# unknown model id falls through to (0, 0) below, which silently disables the
+# ceiling, so add every model you use here.
 # Sonnet 5 shown at intro pricing; flip to (3.0, 15.0) after 2026-08-31.
 PRICES = {
     "claude-sonnet-5":  (2.0 / 1_000_000, 10.0 / 1_000_000),
-    "claude-haiku-4-5": (1.0 / 1_000_000,  5.0 / 1_000_000),  # verify current
+    "claude-haiku-4-5": (1.0 / 1_000_000,  5.0 / 1_000_000),  # UNVERIFIED — confirm against the pricing docs before trusting the ceiling
 }
 
 

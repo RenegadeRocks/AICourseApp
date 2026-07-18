@@ -19,9 +19,10 @@ JUDGE_SYSTEM = (
 )
 
 
-def judge_item(client, model: str, niche: str, item: dict) -> dict:
+def judge_item(client, model: str, niche: str, item: dict, budget=None) -> dict:
     """Return a JUDGMENT_SCHEMA dict. Raises TransientError on model overload so
-    the orchestrator can back off."""
+    the orchestrator can back off. If a RunBudget is passed, real token usage is
+    charged against the run's dollar ceiling (BudgetExceeded propagates)."""
     try:
         resp = client.messages.create(
             model=model,
@@ -40,15 +41,18 @@ def judge_item(client, model: str, niche: str, item: dict) -> dict:
         )
     except Exception as e:  # narrow to your SDK's overload/rate types in practice
         raise TransientError(f"TRANSIENT: judge call failed — {e}")
+    if budget is not None:
+        budget.charge("judge", model, resp.usage.input_tokens, resp.usage.output_tokens)
     return json.loads(resp.content[0].text)
 
 
-def judge_all(client, model: str, niche: str, items: list[dict], threshold: float) -> list[dict]:
+def judge_all(client, model: str, niche: str, items: list[dict], threshold: float,
+              budget=None) -> list[dict]:
     """Attach judgment to each item; keep = model.keep AND score >= threshold.
     Returns items enriched with `_judgment` and a top-level `keep` bool."""
     out = []
     for it in items:
-        j = judge_item(client, model, niche, it)
+        j = judge_item(client, model, niche, it, budget=budget)
         it = dict(it)
         it["_judgment"] = j
         it["keep"] = bool(j["keep"]) and float(j["score"]) >= threshold

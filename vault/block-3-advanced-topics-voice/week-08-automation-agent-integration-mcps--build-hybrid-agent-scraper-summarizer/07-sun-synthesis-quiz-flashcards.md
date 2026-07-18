@@ -26,9 +26,9 @@ Block 2 taught you to build AI workers you supervised. Block 3 Week 8 removes th
 
 - **Mon — the automation spectrum.** The decision is not "n8n or agents" but *which runtime lets me engineer reliability at all*, chosen per workload by determinism-vs-judgment, priced honestly at July-2026 rates.
 - **Tue — MCP integration.** The decision is not "use MCP" but *how do I wire an agent to real systems without a human at the consent screen* — service identities, least privilege, idempotency, and the stateless-core RC that makes serverless MCP natural.
-- **Wed — the scraping stack.** The decision is not "which scraper" but *how do I build a data supply that's clean legally and technically* against a web that now meters AI access by default (Cloudflare's Sept 15 block) and courts that turned robots.txt into evidence.
-- **Thu — hybrid design.** The decision is not "prompt it better" but *where do the deterministic stages end and the judgment islands begin*, with checkpoints, retries, contracts, and budgets as the plumbing between them.
-- **Fri — reliability engineering.** The decision is not "does it work" but *how do I know it keeps working unwatched* — golden-set gates, canaries, drift metrics, hallucination containment, kill switches, and the human at the irreversible actions only.
+- **Wed — the scraping stack.** *How do I build a data supply that's clean legally and technically* against a web that now meters AI access by default (Cloudflare's Sept 15 block) and courts that turned robots.txt into evidence.
+- **Thu — hybrid design.** *Where do the deterministic stages end and the judgment islands begin*, with checkpoints, retries, contracts, and budgets as the plumbing between them.
+- **Fri — reliability engineering.** *How do I know it keeps working unwatched* — golden-set gates, canaries, drift metrics, hallucination containment, kill switches, and the human at the irreversible actions only.
 - **Sat — the build.** All five, made real: a scheduled, monitored, evaluated scraper→summarizer you'd put your name on.
 
 Frame it this way and the week is one system: **trust is not a property of the model; it's a property of the machinery you build around it.**

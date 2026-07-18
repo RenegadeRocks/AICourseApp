@@ -27,8 +27,8 @@ You shipped the Block 2 builds: a RAG pipeline with an eval harness ([[04-thu-ra
 | Day | Topic | Shape |
 |-----|-------|-------|
 | Mon | Context engineering: the finite-budget discipline — context rot, advertised vs effective windows, system-prompt altitude, tool-token costs, just-in-time context | Deep-dive + context-audit experiment |
-| Tue | Memory and compaction architectures — compaction, structured notes, sub-agent isolation, memory tools across vendors, when memory contaminates | Deep-dive + memory-tool experiment |
-| Wed | Retrieval beyond naive RAG — hybrid+rerank (current leaderboard), late interaction, GraphRAG's 2026 verdict, structured/SQL retrieval | Deep-dive + reranker ablation |
+| Tue | Memory and compaction architectures: compaction, structured notes, sub-agent isolation, memory tools across vendors, when memory contaminates | Deep-dive + memory-tool experiment |
+| Wed | Retrieval beyond naive RAG: hybrid+rerank (current leaderboard), late interaction, GraphRAG's 2026 verdict, structured/SQL retrieval | Deep-dive + reranker ablation |
 | Thu | Agentic retrieval — retrieval as a tool-use loop, query planning, deep-research patterns, the cost math for when agents are overkill | Deep-dive + agentic-vs-single-shot experiment |
 | Fri | Evaluating context strategies — beyond hit-rate, long-context evals, ablation methodology | Deep-dive + eval-design problem set |
 | Sat | BUILD: upgrade the Week-4 RAG agent to context-engineered v2, with an ablation harness | Full build, `code-lab/6/` |

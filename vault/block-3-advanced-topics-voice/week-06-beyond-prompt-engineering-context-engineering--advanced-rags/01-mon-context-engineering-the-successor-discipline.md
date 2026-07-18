@@ -25,7 +25,7 @@ word_count_target: 5500
 
 ## Why this matters
 
-For two years the industry's model of skill was the clever prompt: the magic phrase, the "act as a world-class copywriter," the chain-of-thought incantation. That game — call it prompt golf — is over as the differentiating skill, and the people who ended it are not bloggers but the builders of the most-used agent products in the world. What replaced it is a budgeting discipline. Every production agent you ship from this week forward — the Week-4 RAG agent, the Week-5 report generator, the voice agents coming in Week 7 — lives or dies on a single recurring decision: *of everything you could put in front of the model right now, what earns its place?* Get this right and the same model, at the same price, behaves like a better model. Get it wrong and your agent degrades in exactly the ways clients notice: forgets instructions mid-task, latches onto stale tool output, burns $40 of tokens doing $2 of work.
+For two years the industry's model of skill was the clever prompt: the magic phrase, the "act as a world-class copywriter," the chain-of-thought incantation. That game (call it prompt golf) is over as the differentiating skill, and the people who ended it are not bloggers but the builders of the most-used agent products in the world. What replaced it is a budgeting discipline. Every production agent you ship from this week forward — the Week-4 RAG agent, the Week-5 report generator, the voice agents coming in Week 7 — lives or dies on a single recurring decision: *of everything you could put in front of the model right now, what earns its place?* Get this right and the same model, at the same price, behaves like a better model. Get it wrong and your agent degrades in exactly the ways clients notice: forgets instructions mid-task, latches onto stale tool output, burns $40 of tokens doing $2 of work.
 
 By the end of today you will be able to (1) define context engineering precisely and defend the distinction from prompt engineering against a skeptic, (2) explain context rot mechanistically and cite the three benchmark families that measure it, (3) audit a real agent's context window and price each component, (4) choose between just-in-time and pre-loaded context for a given workload, and (5) hold a defensible position on the live controversy: is this a genuine discipline or a rebrand?
 
@@ -58,7 +58,7 @@ Prompt engineering optimizes one row. Context engineering owns the table. That i
 
 ## Layer 2 — The finite budget: context rot, and why 1M tokens does not repeal it
 
-The naive mid-2026 objection: "Sonnet 5, Fable 5, GPT-5.5, Gemini 3.5 Flash, and Kimi K3 all ship 1M-token windows.[^8] Why budget at all?" Because the window is advertised capacity, not effective capacity, and the gap between the two is measured, replicated, and large.
+The naive mid-2026 objection: "Sonnet 5, Fable 5, and GPT-5.5 all ship 1M-token windows.[^8] Why budget at all?" Because the window is advertised capacity, not effective capacity, and the gap between the two is measured, replicated, and large.
 
 **The mechanism.** Transformer attention computes pairwise relationships between tokens. As the window grows, every token's relevance signal competes with more neighbors; the model was also trained on far more short sequences than long ones. Anthropic's essay names the consequence an "attention budget": models have a finite budget of usable attention, and every token you add depletes it.[^2] The observable symptom is what Chroma's July 2025 technical report named **context rot**.
 
@@ -70,7 +70,7 @@ The naive mid-2026 objection: "Sonnet 5, Fable 5, GPT-5.5, Gemini 3.5 Flash, and
 
 The 2026 state of play: the frontier moved, the shape of the curve did not. Community leaderboards tracking RULER/MRCR/NoLiMa-class evals through 2026 continue to show a substantial divergence between advertised and effective windows for multi-fact retrieval past ~200K tokens (one mid-2026 analysis puts the gap at 30–60 points depending on model and task; treat the exact number as indicative, the direction as settled).[^7] The operational rule this licenses:
 
-> **Rule of thumb: treat your effective budget as a fraction of the advertised window, and treat everything past it as a paid liability.** You are paying $2–$10 per million input tokens (Sonnet 5 intro pricing, through 2026-08-31)[^8] for tokens that may actively make answers worse. Long context is a capability you invoke deliberately, not a default you fill.
+> **Rule of thumb: treat your effective budget as a fraction of the advertised window, and treat everything past it as a paid liability.** You are paying $2 per million input tokens at Sonnet 5 intro pricing ($3 after 2026-08-31)[^8] for tokens that may actively make answers worse. Long context is a capability you invoke deliberately, not a default you fill.
 
 Note what this does *not* say. It does not say long windows are useless — loading a 300K-token codebase for a one-shot architectural review is a legitimate, deliberate spend. It says the window is not free real estate, in either dollars or accuracy.
 

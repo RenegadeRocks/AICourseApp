@@ -80,8 +80,9 @@ Then wire the two surfaces (full walkthrough in `SETUP.md`):
 
 # 3. Compute the numbers:
 python eval.py events.jsonl
-#   -> first-audio p50/p95, interruption split, re-ask rate,
+#   -> tool latency p50/p95 per channel, re-ask rate, reroute handling,
 #      per-intent containment, per-channel behavior delta
+#   (first-audio p50/p95 is client-side: paste it from the platform dashboard)
 ```
 
 ## What "done" looks like

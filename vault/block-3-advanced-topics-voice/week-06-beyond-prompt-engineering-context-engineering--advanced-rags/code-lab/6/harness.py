@@ -226,7 +226,8 @@ AGENT_SYSTEM = (
 
 
 @_timed
-def lane_tiered(query: str, idx: Indexes, max_calls: int = 6, **_) -> LaneResult:
+def lane_tiered(query: str, idx: Indexes, max_calls: int = 6,
+                max_tokens_cap: int = 40_000, max_seconds: float = 30.0, **_) -> LaneResult:
     u = Usage()
     # fast lane
     ids = idx.hybrid(query, k=5)
@@ -234,11 +235,14 @@ def lane_tiered(query: str, idx: Indexes, max_calls: int = 6, **_) -> LaneResult
     trigger = "NOT_IN_CORPUS" in answer or len(set(ids[:5])) < 3
     if not trigger:
         return LaneResult(answer, ids, u, 0, escalated=False)
-    # agentic lane, hard-capped
+    # agentic lane, hard-capped (calls / tokens / wall-clock)
+    t0 = time.time()
     evidence: list[str] = []
     trace = []
     q = query
     for _ in range(max_calls):
+        if u.input_tokens + u.output_tokens > max_tokens_cap or time.time() - t0 > max_seconds:
+            break
         found = idx.hybrid(q, k=5)
         evidence = list(dict.fromkeys(evidence + found))[:12]
         preview = "\n".join(f"[{c}] {idx.by_id[c]['text'][:200]}" for c in found)
@@ -279,7 +283,12 @@ def lane_v2_composed(query: str, idx: Indexes, **_) -> LaneResult:
         ids = budget_filter(ids, idx)
     answer = generate(query, ids, idx, u)
     if V2_STACK["tiered"] and "NOT_IN_CORPUS" in answer:
-        return lane_tiered(query, idx)
+        res = lane_tiered(query, idx)
+        # fold the pre-escalation spend into the reported usage
+        res.usage.input_tokens += u.input_tokens
+        res.usage.output_tokens += u.output_tokens
+        res.usage.calls += u.calls
+        return res
     return LaneResult(answer, ids, u, 0)
 
 

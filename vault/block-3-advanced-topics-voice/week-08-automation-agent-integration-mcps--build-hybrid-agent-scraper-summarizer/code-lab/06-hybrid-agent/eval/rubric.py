@@ -19,7 +19,7 @@ def score_brief(brief_md: str, kept: list[dict]) -> dict:
     criteria = {
         "has_citations": bool(cited),
         "no_fabricated_citations": all(1 <= c <= n for c in cited),
-        "within_length": len(brief_md) <= 8000,
+        "within_length": len(brief_md) <= 20000,  # keep in sync with validate_contract max_chars
         "has_footer": "item" in brief_md.lower() and "brief" in brief_md.lower(),
         "min_items_present": n >= 1,
     }

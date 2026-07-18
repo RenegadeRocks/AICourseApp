@@ -24,7 +24,7 @@ word_count_target: 5000
 
 ## Why this matters
 
-Today you convert a week of concepts into a system and — the part that separates this build from every RAG tutorial on the internet — into an *evidence table*. The deliverable is not "my RAG got better." The deliverable is a filled ablation matrix showing, per intervention, what it cost and what it bought on your corpus, plus a v2 pipeline composed only of the interventions that cleared their pre-registered gates. That artifact is worth more than the pipeline itself: it is the thing you show a client to justify an architecture, the thing you re-run when a model swap lands, and the working demonstration that you practice context engineering as measurement rather than as vibes. Everything runs from Claude Code orchestrating the harness in `code-lab/6/`; plan for a 3–5 hour block.
+Today you convert a week of concepts into a system and (the part that separates this build from every RAG tutorial on the internet) into an *evidence table*. The deliverable is not "my RAG got better." The deliverable is a filled ablation matrix showing, per intervention, what it cost and what it bought on your corpus, plus a v2 pipeline composed only of the interventions that cleared their pre-registered gates. That artifact is worth more than the pipeline itself: it is the thing you show a client to justify an architecture, the thing you re-run when a model swap lands, and the working demonstration that you practice context engineering as measurement rather than as vibes. Everything runs from Claude Code orchestrating the harness in `code-lab/6/`; plan for a 3–5 hour block.
 
 ## Prerequisites
 
@@ -45,7 +45,7 @@ Today you convert a week of concepts into a system and — the part that separat
 
 ### Stage 0 — Freeze and re-score the baseline (30 min)
 
-Pin everything: model ID, prompts, chunking, index contents, regression-set version. Then re-score the Week-4 baseline with today's *fuller* panel (the harness adds answerability and cost/latency columns your Week-4 harness may not have had). Do not skip the re-score even though "Week 4 already measured it" — the panel changed, the model landscape changed since April, and a baseline measured under different instrumentation is not a baseline, it's a memory.
+Pin everything: model ID, prompts, chunking, index contents, regression-set version. Then re-score the Week-4 baseline with today's *fuller* panel (the harness adds answerability and cost/latency columns your Week-4 harness may not have had). Do not skip the re-score even though "Week 4 already measured it": the panel changed, the model landscape changed since April, and a baseline measured under different instrumentation is not a baseline, it's a memory.
 
 Run, from Claude Code:
 
@@ -57,11 +57,11 @@ Sanity checks before proceeding: answerability on the unanswerable slice should 
 
 Your Week-4 pipeline already runs hybrid BM25+dense with RRF ([[04-thu-rag-fundamentals|not re-taught]]). The v2 work: (a) re-verify the fusion is actually earning its keep on the *current* regression set (the harness's `--lane hybrid_tuned` sweeps the RRF constant and k per retriever); (b) add the reranker lane over hybrid top-50, using whichever API you chose Wednesday (the harness ships Cohere wiring; swapping in Voyage is a ten-line change Claude Code will do on request).
 
-Gate check, per your plan. The typical pattern on a few-hundred-document corpus: reranking buys its biggest wins on context *precision* (it concentrates relevance in the top 5, which shrinks the window you need — a context-budget win that compounds with every later stage), at 300–700ms and a per-query fee. If your measured lift is inside your noise band, the honest move is the one nobody makes: *don't ship it*, and write down why. An ablation harness that has never rejected an intervention is a rubber stamp.
+Gate check, per your plan. The typical pattern on a few-hundred-document corpus: reranking buys its biggest wins on context *precision* (it concentrates relevance in the top 5, which shrinks the window you need, a context-budget win that compounds with every later stage), at 300–700ms and a per-query fee. If your measured lift is inside your noise band, the honest move is the one nobody makes: *don't ship it*, and write down why. An ablation harness that has never rejected an intervention is a rubber stamp.
 
 ### Stage 2 — Context-budget discipline: retrieval-side compaction (30–45 min)
 
-Apply Monday and Tuesday to the pipeline itself. The `--lane budgeted` run enforces: retrieved context capped by *token budget* rather than chunk count (tight top-k after reranking); duplicate/near-duplicate chunk suppression; and stale-context hygiene in the agentic lane (older tool results cleared once superseded — the microcompact insight at pipeline scale, and the same shape as Anthropic's context-editing result, which was, remember, an 84% *deletion* that improved outcomes on their harness[^2]). Also run the **deletion row** from Monday's audit: whatever component had the worst signal-per-token (that MCP server, that bloated prompt section) gets a run without it.
+Apply Monday and Tuesday to the pipeline itself. The `--lane budgeted` run enforces: retrieved context capped by *token budget* rather than chunk count (tight top-k after reranking); duplicate/near-duplicate chunk suppression; and stale-context hygiene in the agentic lane (older tool results cleared once superseded: the microcompact insight at pipeline scale, and the same shape as Anthropic's context-editing result, which was, remember, an 84% *deletion* that improved outcomes on their harness[^2]). Also run the **deletion row** from Monday's audit: whatever component had the worst signal-per-token (that MCP server, that bloated prompt section) gets a run without it.
 
 This stage is where Chroma's finding becomes practical: fewer, better tokens frequently outscore more tokens, because the distractors you declined to include were going to tax attention.[^3] Expect small accuracy deltas and large cost deltas; the gate that matters here is usually cost-at-equal-quality.
 
@@ -69,11 +69,11 @@ This stage is where Chroma's finding becomes practical: fewer, better tokens fre
 
 The v2 memory is deliberately modest and legible (Tuesday's position, enacted; the structured note-taking pattern from Anthropic's context-engineering essay[^8]): a single `RETRIEVAL_MEMORY.md` per corpus, schema'd as `## Vocabulary` (user-term → corpus-term mappings discovered during agentic runs), `## Known gaps` (queries the corpus cannot answer), and `## Judge feedback` (recurring failure notes). The agentic lane reads it before planning queries and appends to it after runs; the single-shot lane injects only the Vocabulary section into query rewriting. Caps: 150 lines, dated entries, gaps expire after 60 days (the invalidation rule you designed Tuesday).
 
-Measure it honestly: memory helps *repeat* traffic, so the harness scores it by running the regression set twice and comparing second-pass metrics. If your regression set has no repeat-structure, expect ≈0 and say so — a null result recorded is a result; it tells you memory belongs in your production loop (where traffic repeats) rather than in your eval headline.
+Measure it honestly: memory helps *repeat* traffic, so the harness scores it by running the regression set twice and comparing second-pass metrics. If your regression set has no repeat-structure, expect ≈0 and say so; a null result recorded is a result, and it tells you memory belongs in your production loop (where traffic repeats) rather than in your eval headline.
 
 ### Stage 4 — Agentic fallback lane (45–60 min)
 
-Wire Thursday's tiered architecture: single-shot answers everything; the escalation trigger (your Phase-4 design from Thursday — the harness ships two: retrieval-confidence floor and judge-flagged insufficiency) promotes to the agentic lane; the loop carries hard caps (default: 6 tool calls, 40K tokens, 30s) and an evidence log that feeds the citation pass. Run `--lane tiered`.
+Wire Thursday's tiered architecture: single-shot answers everything; the escalation trigger (your Phase-4 design from Thursday — the harness ships two: a generation-declared insufficiency signal, NOT_IN_CORPUS, and a retrieval-diversity floor) promotes to the agentic lane; the loop carries hard caps (default: 6 tool calls, 40K tokens, 30s) and an evidence log that feeds the citation pass. Run `--lane tiered`.
 
 Score three things separately, because they fail separately: hard-lane quality lift (the point of the lane), false-promotion rate on easy queries (the cost leak), and cap-hit rate (a high one means your caps are the de-facto stop condition — Thursday's "sufficiency judgment is unsolved" made concrete[^4]).
 

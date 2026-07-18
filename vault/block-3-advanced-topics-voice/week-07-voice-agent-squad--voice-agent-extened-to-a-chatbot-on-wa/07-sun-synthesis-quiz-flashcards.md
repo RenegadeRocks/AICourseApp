@@ -129,7 +129,7 @@ Frame it that way and the week snaps together: every day added a surface to the 
 
 ---
 
-## 24 flashcards
+## 25 flashcards
 
 **Q:** In one line, what is a production voice agent?
 **A:** One channel-agnostic brain (prompt/tools/context/evals/guardrails) wrapped in channel-specific adapters.
@@ -202,6 +202,9 @@ Frame it that way and the week snaps together: every day added a surface to the 
 
 **Q:** The one-brain/many-channels split?
 **A:** Brain = prompt/tools/router/memory/evals (channel-agnostic); adapters = window state, modality rendering, identity bridge, media/STT (channel-specific).
+
+**Q:** 2026 voice-containment benchmarks (cross-industry average, and the healthy target ranges)?
+**A:** ~41% average (Deloitte Digital survey; financial services ~52%, healthcare ~29%); healthy targets 20–40% early-stage, 40–70% mature — always paired with resolution, per intent.
 
 ---
 

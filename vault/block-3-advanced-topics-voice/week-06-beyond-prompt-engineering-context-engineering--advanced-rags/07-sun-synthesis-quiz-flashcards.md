@@ -22,13 +22,13 @@ word_count_target: 4000
 
 ## The one-sentence thesis of this week
 
-Every capability this week — memory, compaction, hybrid retrieval, rerankers, graphs, SQL, agentic loops — is a different answer to one budgeting question, *which tokens deserve the window for this step*, and the only trustworthy referee for any answer is an ablation you pre-registered and ran on your own corpus.
+Every capability this week (memory, compaction, hybrid retrieval, rerankers, graphs, SQL, agentic loops) is a different answer to one budgeting question, *which tokens deserve the window for this step*, and the only trustworthy referee for any answer is an ablation you pre-registered and ran on your own corpus.
 
 ## The unifying frame: one budget, seven days
 
 **Monday** named the discipline and its constraint. Context engineering is curating and maintaining the optimal token set at inference time (Anthropic's definition; Karpathy's "delicate art and science" framing[^1]), and the constraint is real: attention degrades with length in measured, non-uniform ways (Chroma's context rot, 18 models[^2]), and effective context lands far below advertised context on every model tested (NoLiMa's ≥85%-of-base-score definition; RULER's task-category finding that aggregation dies before retrieval does). The 1M-token era changes prices and options; it repeals nothing.
 
-**Tuesday** managed the budget across time with four primitives — compaction (lossy, needs a loss-function you chose on purpose), structured notes (agent-curated durable state), sub-agent isolation (fresh windows bought with money: 90.2% better research at ~15× tokens[^3]), and cross-session memory (retrieval plus write-policy, wearing marketing). The controversy that organizes the vendor landscape: memory as moat vs memory as contamination, with Willison's dossier critique — control, staleness, context collapse — as the engineering case for legible, scoped, erasable memory.[^4]
+**Tuesday** managed the budget across time with four primitives: compaction (lossy, needs a loss-function you chose on purpose), structured notes (agent-curated durable state), sub-agent isolation (fresh windows bought with money: 90.2% better research at ~15× tokens[^3]), and cross-session memory (retrieval plus write-policy, wearing marketing). The controversy that organizes the vendor landscape: memory as moat vs memory as contamination, with Willison's dossier critique (control, staleness, context collapse) as the engineering case for legible, scoped, erasable memory.[^4]
 
 **Wednesday** spent the budget well: five retrieval families (lexical, dense, late-interaction, structural, rerankers), a reranker market with new leaders worth re-checking per project, LazyGraphRAG collapsing GraphRAG's cost story (0.1% indexing cost, 700× cheaper global queries[^5]) without collapsing the triage — graphs only for genuinely structural questions — and text-to-SQL's benchmark-to-production cliff proving that the system around the model outscores the model.
 

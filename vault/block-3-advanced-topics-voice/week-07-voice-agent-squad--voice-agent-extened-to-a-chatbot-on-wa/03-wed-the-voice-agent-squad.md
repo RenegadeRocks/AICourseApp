@@ -39,7 +39,7 @@ But there is a serious, named counter-position — Cognition's "Don't Build Mult
 
 The argument for splitting is not organizational tidiness; it is three measurable failure curves.
 
-**Prompt interference.** A single prompt serving N intents carries instructions that conflict at the margins ("always verify identity before account details" vs "never delay an emergency booking"). As N grows, the model's per-intent instruction-following degrades — the same context-competition problem context engineering addresses ([[../week-06-beyond-prompt-engineering-context-engineering--advanced-rags/_week|Week 6 (pending)]]), except on a voice call you also pay the reliability tax in real time, with no retry button the user can see.
+**Prompt interference.** A single prompt serving N intents carries instructions that conflict at the margins ("always verify identity before account details" vs "never delay an emergency booking"). As N grows, the model's per-intent instruction-following degrades — the same context-competition problem context engineering addresses ([[01-mon-context-engineering-the-successor-discipline|Week 6 Mon]]), except on a voice call you also pay the reliability tax in real time, with no retry button the user can see.
 
 **Tool-selection dilution.** An agent choosing among 22 tools mis-selects more than an agent choosing among 5. Anthropic's *Building Effective Agents* names routing as the canonical fix: classify the input, then hand to a downstream configuration with a focused toolset — "separation of concerns" for prompts.[^7] A squad is that routing pattern with audio attached.
 

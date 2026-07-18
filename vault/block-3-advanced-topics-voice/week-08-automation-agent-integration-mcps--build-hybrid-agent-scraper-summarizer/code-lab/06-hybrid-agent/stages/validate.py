@@ -18,7 +18,7 @@ CITATION_RE = re.compile(r"\[(\d+)\]")
 
 
 def validate_contract(brief_md: str, kept: list[dict], min_items: int = 1,
-                      max_chars: int = 8000) -> dict:
+                      max_chars: int = 20000) -> dict:  # ~2,500-word brief fits; tune per niche
     """Deterministic checks. Returns {ok, failures[]}. Never raises — the caller
     decides whether a failure is a hard stop for this run."""
     failures = []
