@@ -163,6 +163,14 @@ A folder that is, functionally, a business: the same seven artifacts that Artisa
 
 And one deliberate echo: you have now productized *yourself* through the same pipeline you productized the agent. Scope collapsed, promise written, delivery runbooked, price defended. The uncomfortable question Monday asked — "what does a package stop selling?" — has today's answer: nothing, if the package is the floor and your judgment is the Enterprise tier.
 
+## Problem set
+
+1. **The margin autopsy.** From your calculator output, write three sentences: which tier has the best margin and why; which scenario hurts most and why; which single YAML value, if you were wrong about it by 2×, changes your pricing decision. (For the example package the answers are Enterprise, doubled support, and `support_hours_per_customer_per_month`; yours may differ, and knowing *why* yours differ is the point.)
+2. **The hostile diff.** Diff your one-pager against Artisan's pricing page and Fin's outcomes page.[^1][^2] For each, name one thing their page does that yours should steal, and one thing yours does that theirs cannot afford to (hint: it involves the eval report and being small enough to be accountable).
+3. **Second-shape speed run.** Take a different Weeks 4–8 build and produce a *minimum* `package.yaml` for it in 30 minutes: outcome statement, three tiers, five exclusions, Position-C guarantee. Run the calculator. You are not shipping this one; you are proving the method transfers and finding out which sections you now write from understanding rather than by copying.
+4. **The contractor test, on paper.** Write the job post for the person who would deliver customer #6 using your runbook: what skills does the runbook *assume* that the post must screen for? Every assumed skill is either fine (screen for it) or a runbook gap (document it). Classify all of them.
+5. **The kill memo.** Write the memo to yourself, dated six months out, that would justify killing this package: the three numbers (customers, margin, support hours) below which continuing is sunk-cost theater, and what you would salvage (config schema, eval harness, niche knowledge, the calculator). Packages with pre-written kill criteria pivot faster and hurt less; Week 11's validation discipline starts here.
+
 ## Common failure modes on build day
 
 - **Polishing the agent instead of the package.** The urge to refactor the pipeline "before it's sellable" is procrastination in an engineer costume. Today's artifacts sell the build you have; the buyer for whom it isn't good enough yet is a persona in your head, not a document in the folder.
