@@ -51,7 +51,6 @@ def _handle(text: str, phone: str, conversation_id: str, channel: str) -> dict:
 
     # A barge-in correction ('actually it's billing') re-routes WITHOUT losing
     # sacred fields — this is the seam Wednesday warns about; test #3 hits it.
-    reask = False
     tool_result: dict = {}
     if state.intent == "booking":
         tool_result = gateway.call_tool(
@@ -61,6 +60,17 @@ def _handle(text: str, phone: str, conversation_id: str, channel: str) -> dict:
         tool_result = gateway.call_tool(
             "lookup_balance", {"phone": phone},
             conversation_id=conversation_id, channel=channel, log=log_event)
+
+    # Re-ask detection: when a lookup against the sacred phone field fails,
+    # BOTH adapters render the fallback that asks the user to re-supply "the
+    # number on file". That is a re-ask of a sacred field the brain already
+    # holds (router.HandoffState), so it counts against the target-0 metric
+    # eval.py reports. Intent=unknown asks nothing, so it does not count.
+    reask = (
+        state.intent in ("booking", "billing")
+        and bool(state.phone)
+        and not tool_result.get("found", False)
+    )
 
     # containment = handled without asking for a human
     contained = tool_result.get("found", False)
@@ -123,6 +133,13 @@ async def wa_incoming(req: Request) -> dict:
 
     phone = msg["from"]
     conv = f"wa-{phone}"
+    # Meta sends the user-message timestamp as epoch seconds (string). This is
+    # what starts/refreshes the 24h window; fall back to now for sandbox tools
+    # that omit it.
+    try:
+        msg_ts = float(msg.get("timestamp", time.time()))
+    except (TypeError, ValueError):
+        msg_ts = time.time()
 
     if msg["type"] == "text":
         text = msg["text"]["body"]
@@ -141,11 +158,21 @@ async def wa_incoming(req: Request) -> dict:
     body_text, options = wa.render(out["intent"], out["tool_result"])
 
     # Adapter decides HOW to render: buttons if options exist (fewer billed
-    # messages after Oct 1 — Friday, Layer 2), else plain text.
-    if options:
-        await wa.send_buttons(phone, body_text, options, WA_TOKEN, WA_PHONE_ID)
-    else:
-        await wa.send_text(phone, body_text, WA_TOKEN, WA_PHONE_ID)
+    # messages after Oct 1 — Friday, Layer 2), else plain text. Every send goes
+    # through the adapter's 24h-window check; a closed window (e.g. a delayed
+    # replay of an old webhook) is a logged, non-retried event, not a send.
+    try:
+        if options:
+            await wa.send_buttons(phone, body_text, options, WA_TOKEN,
+                                  WA_PHONE_ID, last_user_msg_ts=msg_ts)
+        else:
+            await wa.send_text(phone, body_text, WA_TOKEN, WA_PHONE_ID,
+                               last_user_msg_ts=msg_ts)
+    except wa.WindowClosedError as e:
+        log_event({"type": "window_closed_block", "conversation_id": conv,
+                   "channel": "whatsapp", "detail": str(e)})
+        return {"status": "window_closed", "intent": out["intent"],
+                "error": "24h window closed; template message required"}
     return {"status": "ok", "intent": out["intent"]}
 
 

@@ -143,13 +143,19 @@ Two camps, both loud, both partly right.
 
 Grade its answers against Layer 2. Items 2 and 5 should surface Routines' GitHub and API triggers specifically;[^2] item 3 should provoke a scraping-legality flag you'll be equipped to evaluate on Wednesday. Argue with anything you disagree with — the argument is the exercise.
 
+**Pass bar:** ≥4 of the 5 lane recommendations match your own Layer-2 grading (a disagreement counts as a match only if you can defend it in two sentences citing a specific Layer-2 constraint). Hard requirements regardless of score: items 2 and 5 name Routines' GitHub/API triggers, and item 3 raises the legality flag. Miss either and the drill is a fail — reread Layer 2 and re-run.
+
 **Part 2 (20 min): touch all three scheduling tiers.**
 
 1. In a Claude Code session: `/loop 2m summarize what changed in this directory` — then ask *"what scheduled tasks do I have?"* and watch `CronList` return the job with its 8-character ID and jittered schedule. Delete it.
 2. Run `/schedule` and walk the conversational flow for a daily 9 a.m. routine (you can cancel before saving if you don't want it live). Note what it asks for — repos, connectors, environment — versus what `/loop` asked for (nothing). That delta *is* the unattended-operation checklist.
 3. Ask Claude Code: *"Compare /loop, Desktop scheduled tasks, and Routines for a daily scraper that needs to hit arbitrary websites and write local files. Which constraint kills which option?"* Correct answer: Routines' network allowlist and no-local-files posture both bite; local scheduling or a VPS wins for Saturday's build — which is exactly what the code-lab does.
 
+**Pass bar:** all three tiers touched hands-on (CronList showed the job; /schedule flow walked to the save/cancel decision), and the step-3 answer names both killing constraints — the network allowlist *and* the no-local-files posture. Naming only one is a fail; it means the unattended-operation checklist hasn't landed.
+
 **Part 3 (10 min): the cost table.** Have Claude Code produce the Layer 3 table for *your* niche's version of the Saturday build (your sources, your frequency), at both intro and post-August Sonnet 5 pricing. Keep the artifact; you will reuse it in the Saturday README and with clients.
+
+**Pass bar:** recompute one row of the table by hand (tokens × price, per Layer 3's method) and match Claude's figure within 10%. The table must show both price regimes; a table quoting only intro pricing is an automatic fail — that's the "silent margin bomb" from the mistakes list below.
 
 ## Common mistakes experts see
 

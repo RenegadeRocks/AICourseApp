@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import json
 import os
 from pathlib import Path
 
@@ -33,6 +34,25 @@ def _client():
     don't require a key."""
     from anthropic import Anthropic
     return Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+
+
+# Persisted across runs, alongside the per-run checkpoints, so conditional
+# requests actually get 304s tomorrow instead of rebuilding the cache cold.
+ETAG_CACHE_PATH = Path("runs") / "etag-cache.json"
+
+
+def _load_etag_cache() -> dict[str, str]:
+    try:
+        return json.loads(ETAG_CACHE_PATH.read_text())
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {}
+
+
+def _save_etag_cache(cache: dict[str, str]) -> None:
+    ETAG_CACHE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    tmp = ETAG_CACHE_PATH.with_suffix(".json.tmp")
+    tmp.write_text(json.dumps(cache, indent=2, sort_keys=True))
+    tmp.replace(ETAG_CACHE_PATH)
 
 
 def transient_retry(cfg):
@@ -67,10 +87,15 @@ def run(config_path: str, resume_date: str | None = None, shadow: bool = False) 
     client = None  # constructed on first stage that needs it
 
     try:
-        # Stage 1 — fetch (deterministic; TRANSIENT retried, PERMANENT skips source)
-        @transient_retry(cfg)
+        # Stage 1 — fetch (deterministic; TRANSIENT retried PER SOURCE with
+        # backoff, PERMANENT skips source). The etag cache is loaded from the
+        # last run and persisted after fetch, so conditional requests are real.
         def _fetch():
-            return fetch.fetch_all(cfg["sources"], etag_cache={})
+            etag_cache = _load_etag_cache()
+            out = fetch.fetch_all(cfg["sources"], etag_cache=etag_cache,
+                                  retryer=transient_retry(cfg))
+            _save_etag_cache(etag_cache)
+            return out
         fetched = store.run_or_resume("01-fetch.json", _fetch, resume=resume)
 
         # Stage 2 — extract (each source -> Item schema)

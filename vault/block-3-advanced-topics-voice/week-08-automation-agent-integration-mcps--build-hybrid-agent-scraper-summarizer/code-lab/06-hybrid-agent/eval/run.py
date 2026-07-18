@@ -1,7 +1,9 @@
-"""The eval gate. `python -m eval.run --gate` exits non-zero if any golden set
-fails at threshold — wire it so no prompt/model change ships without a green
-gate. This is your model-drift defense (05-fri): model drift is invisible in a
-single output and only shows against a fixed reference.
+"""The eval gate. `python -m eval.run --gate` runs (a) the relevance golden set
+against your hand labels and (b) the binary synthesis rubric against every
+checkpointed brief in runs/<date>/, and exits non-zero if either fails at
+threshold — wire it so no prompt/model change ships without a green gate. This
+is your model-drift defense (05-fri): model drift is invisible in a single
+output and only shows against a fixed reference.
 
   python -m eval.run --gate --config config.yaml
   python -m eval.run --validate-judge eval/golden_relevance.jsonl
@@ -17,7 +19,7 @@ from pathlib import Path
 import yaml
 from dotenv import load_dotenv
 
-from eval.rubric import judge_agreement
+from eval.rubric import judge_agreement, score_brief
 from stages import judge as judge_stage
 
 load_dotenv()
@@ -53,6 +55,37 @@ def run_relevance_gate(config_path: str, golden_path: str) -> bool:
     return passed
 
 
+def run_synthesis_rubric(runs_dir: str = "runs") -> bool:
+    """Score every checkpointed brief (runs/<date>/05-brief.md) with the binary
+    synthesis rubric, against that run's kept items (04-judged.json). The
+    checkpoints ARE the frozen snapshots: a rubric failure on a brief that
+    previously shipped means the prompt, model, or rubric drifted. No snapshots
+    yet is a skip, not a pass-by-default — the printout says so."""
+    briefs = sorted(Path(runs_dir).glob("*/05-brief.md"))
+    if not briefs:
+        print("synthesis rubric: no runs/<date>/05-brief.md snapshots yet — "
+              "SKIPPED (gate covered the relevance golden set only)")
+        return True
+    all_pass = True
+    for bp in briefs:
+        run_name = bp.parent.name
+        try:
+            judged = json.loads((bp.parent / "04-judged.json").read_text())
+            kept = [it for it in judged if it.get("keep")]
+        except (FileNotFoundError, json.JSONDecodeError) as e:
+            print(f"synthesis rubric: {run_name}: FAIL (unreadable 04-judged.json — {e})")
+            all_pass = False
+            continue
+        res = score_brief(bp.read_text(), kept)
+        if res["pass"]:
+            print(f"synthesis rubric: {run_name}: PASS")
+        else:
+            failed = [k for k, v in res["criteria"].items() if not v]
+            print(f"synthesis rubric: {run_name}: FAIL ({', '.join(failed)})")
+            all_pass = False
+    return all_pass
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--gate", action="store_true")
@@ -68,8 +101,12 @@ def main() -> int:
 
     if args.gate:
         golden = args.golden if Path(args.golden).exists() else "eval/golden_relevance.example.jsonl"
-        passed = run_relevance_gate(args.config, golden)
-        # Extend here: run the synthesis rubric against frozen end-to-end snapshots.
+        relevance_ok = run_relevance_gate(args.config, golden)
+        rubric_ok = run_synthesis_rubric()
+        passed = relevance_ok and rubric_ok
+        print(f"gate: {'PASS' if passed else 'FAIL'} "
+              f"(relevance {'ok' if relevance_ok else 'FAIL'}, "
+              f"synthesis rubric {'ok' if rubric_ok else 'FAIL'})")
         return 0 if passed else 1
 
     print("nothing to do — pass --gate or --validate-judge")

@@ -114,9 +114,11 @@ python -m stages.monitor --check runs/2026-07-11/run.log
 `eval/rubric.py` is binary-per-criterion (Hamel's discipline): cited claims,
 no fabricated sources, sections present, length in bounds, no duplicated items,
 faithfulness ≥ threshold. `eval/run.py --gate` runs the relevance golden set and
-the synthesis rubric against frozen snapshots and **exits non-zero if anything
-fails at threshold** — wire it into your change process so no prompt/model change
-ships without a green gate. Your day-one golden set is a hypothesis; rebuild it
+the synthesis rubric against your frozen snapshots — every checkpointed brief in
+`runs/<date>/` — and **exits non-zero if anything fails at threshold** — wire it
+into your change process so no prompt/model change ships without a green gate.
+(Before your first pipeline run there are no snapshots; the gate says so and
+covers the relevance set only.) Your day-one golden set is a hypothesis; rebuild it
 after a week of shadow runs from failures you actually observed.
 
 **Validate the judge first.** An unvalidated LLM judge is a second unreviewed
@@ -148,7 +150,8 @@ cost table — at post-August prices, not intro ones.
 
 - Honors your Wednesday scraping policy: RSS/API first, truthful User-Agent with
   contact URL, conditional requests, robots.txt respected, sources that block =
-  handled PERMANENT events, not crashes.
+  handled PERMANENT events, not crashes. ETags persist across runs in
+  `runs/etag-cache.json`, so tomorrow's conditional requests actually get 304s.
 - Nothing persists outside `runs/` and your configured delivery target.
 - This is a teaching implementation. The judgment stages read the local
   checkpoint store directly; wrapping the finished pipeline as an MCP server

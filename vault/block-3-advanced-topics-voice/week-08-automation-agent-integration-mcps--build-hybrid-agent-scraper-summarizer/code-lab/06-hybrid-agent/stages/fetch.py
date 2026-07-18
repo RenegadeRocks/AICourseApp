@@ -74,18 +74,35 @@ def fetch_source(source: dict, etag_cache: dict[str, str]) -> dict[str, Any]:
     raise PermanentError(f"PERMANENT: unknown access mode '{access}' for {name}")
 
 
-def fetch_all(sources: list[dict], etag_cache: dict[str, str], polite_delay: float = 1.0):
+def fetch_all(sources: list[dict], etag_cache: dict[str, str], polite_delay: float = 1.0,
+              retryer=None):
     """Fetch each source politely (jittered delay), collecting per-source results
     and per-source errors. A source that fails PERMANENT is skipped (its error
-    recorded for the alert) so the run degrades to the sources that worked."""
+    recorded for the alert) so the run degrades to the sources that worked.
+
+    TRANSIENT failures are retried PER SOURCE with backoff+jitter: pass the
+    orchestrator's `transient_retry(cfg)` decorator as `retryer`. Retry must be
+    per-source — decorating the whole batch would re-fetch sources that already
+    succeeded. Only after retries exhaust is the source recorded as a TRANSIENT
+    error and skipped for this run.
+
+    Successful responses write their ETag back into `etag_cache` (keyed by URL)
+    so the orchestrator can persist it and the next run's conditional requests
+    actually get 304s.
+    """
+    fetch_one = retryer(fetch_source) if retryer else fetch_source
     results, errors = [], []
     for src in sources:
         try:
-            results.append(fetch_source(src, etag_cache))
+            res = fetch_one(src, etag_cache)
+            results.append(res)
+            if res.get("etag"):
+                etag_cache[src["url"]] = res["etag"]
         except PermanentError as e:
             errors.append({"source": src["name"], "class": "PERMANENT", "detail": str(e)})
         except TransientError as e:
-            # Orchestrator decides retry; here we record for visibility.
+            # Retries (if any) are already exhausted at this point; record and
+            # degrade to the sources that worked.
             errors.append({"source": src["name"], "class": "TRANSIENT", "detail": str(e)})
         time.sleep(polite_delay)  # be a good guest; jitter this in production
     return {"results": results, "errors": errors}

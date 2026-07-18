@@ -18,6 +18,10 @@ import httpx
 GRAPH = "https://graph.facebook.com/v21.0"
 
 
+class WindowClosedError(RuntimeError):
+    """Raised when a free-form send is attempted outside the 24-hour window."""
+
+
 def window_open(last_user_msg_ts: float | None) -> bool:
     """True if the 24-hour customer-service window is open. Outside it, only
     approved template messages may be sent (Friday, Layer 1). The adapter checks
@@ -25,6 +29,17 @@ def window_open(last_user_msg_ts: float | None) -> bool:
     if last_user_msg_ts is None:
         return False
     return (time.time() - last_user_msg_ts) < 24 * 3600
+
+
+def _ensure_window(last_user_msg_ts: float | None) -> None:
+    """Guard called by every free-form send in this adapter. Template sends
+    (not implemented in this lab) are the only exemption."""
+    if not window_open(last_user_msg_ts):
+        raise WindowClosedError(
+            "24h customer-service window is closed: free-form sends are "
+            "blocked by Meta. Re-engage with an approved template message "
+            "(Friday, Layer 1) — do not retry this send."
+        )
 
 
 async def fetch_media_text(media_id: str, token: str, deepgram_key: str | None) -> str:
@@ -57,7 +72,10 @@ async def fetch_media_text(media_id: str, token: str, deepgram_key: str | None) 
     return j["results"]["channels"][0]["alternatives"][0]["transcript"]
 
 
-async def send_text(to: str, body: str, token: str, phone_number_id: str) -> dict:
+async def send_text(to: str, body: str, token: str, phone_number_id: str,
+                    *, last_user_msg_ts: float | None) -> dict:
+    """Free-form text send. Checks the 24h window first — every send does."""
+    _ensure_window(last_user_msg_ts)
     async with httpx.AsyncClient(timeout=30) as c:
         r = await c.post(
             f"{GRAPH}/{phone_number_id}/messages",
@@ -70,10 +88,12 @@ async def send_text(to: str, body: str, token: str, phone_number_id: str) -> dic
 
 
 async def send_buttons(to: str, body: str, options: list[str],
-                       token: str, phone_number_id: str) -> dict:
+                       token: str, phone_number_id: str,
+                       *, last_user_msg_ts: float | None) -> dict:
     """Per-channel rendering: one interactive message replaces several clarifying
     turns. After Oct 1, 2026 this is also a COST lever (Friday, Layer 2) — fewer
-    billed messages per contact."""
+    billed messages per contact. Checks the 24h window first, like every send."""
+    _ensure_window(last_user_msg_ts)
     buttons = [{"type": "reply", "reply": {"id": f"opt_{i}", "title": o[:20]}}
                for i, o in enumerate(options[:3])]
     async with httpx.AsyncClient(timeout=30) as c:

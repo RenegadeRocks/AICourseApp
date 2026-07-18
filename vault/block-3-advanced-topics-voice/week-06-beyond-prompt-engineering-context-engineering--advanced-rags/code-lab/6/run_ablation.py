@@ -32,23 +32,15 @@ def cost(usage: dict) -> float:
     return (usage["input_tokens"] * PRICE_IN + usage["output_tokens"] * PRICE_OUT) / 1e6
 
 
-def run_lane(lane: str, queries: list[dict], repeats: int, out: Path) -> None:
-    import harness
+def _eval_queries(fn, queries: list[dict], repeats: int, idx) -> list[dict]:
+    """Run every query through a lane `repeats` times and judge each run."""
     from judge import judge_one
 
-    idx = harness.Indexes(harness.load_chunks())
-    fn = harness.LANES[lane]
-    est = len(queries) * repeats * (3 if lane in ("tiered", "v2_composed") else 1) * 0.02
-    if est > 5 and input(f"Estimated >= ${est:.2f}. Continue? [y/N] ").lower() != "y":
-        return
-
     per_query = []
-    passes = 2 if lane == "memory" else 1  # memory is scored on the 2nd pass
     for q in queries:
         runs = []
         for _ in range(repeats):
-            for p in range(passes):
-                res = fn(q["query"], idx)
+            res = fn(q["query"], idx)
             # Judge must see the same context the generator saw — truncating
             # here would produce false faithfulness failures.
             ctx = "\n".join(f"[{c}] {idx.by_id[c]['text']}" for c in res.chunk_ids)
@@ -64,13 +56,71 @@ def run_lane(lane: str, queries: list[dict], repeats: int, out: Path) -> None:
             })
         per_query.append({"id": q["id"], "answerable": q.get("answerable", True),
                           "judge": runs[0]["judge"], "runs": runs})
+    return per_query
 
-    agg = aggregate(lane, per_query)
+
+def run_lane(lane: str, queries: list[dict], repeats: int, out: Path) -> None:
+    import harness
+
+    idx = harness.Indexes(harness.load_chunks())
     out.mkdir(parents=True, exist_ok=True)
-    (out / f"{lane}.json").write_text(
-        json.dumps({"lane": lane, "aggregate": agg, "per_query": per_query},
-                   indent=2), encoding="utf-8")
+
+    if lane == "hybrid_tuned":
+        # Sweep the RRF constant and per-retriever candidate depth: one full
+        # judged run per grid combo, one results row per combo. Pick the
+        # winner, then confirm it on a held-out slice you never tuned on.
+        grid = harness.HYBRID_SWEEP_GRID
+        est = len(queries) * repeats * len(grid) * 0.02
+        if est > 5 and input(f"Estimated >= ${est:.2f}. Continue? [y/N] ").lower() != "y":
+            return
+        best = None
+        for combo in grid:
+            tag = f"c{combo['rrf_c']}-lex{combo['k_lex']}-dense{combo['k_dense']}"
+            fn = harness.make_hybrid_lane(**combo)
+            per_query = _eval_queries(fn, queries, repeats, idx)
+            agg = aggregate(f"hybrid_tuned[{tag}]", per_query)
+            (out / f"hybrid_tuned_{tag}.json").write_text(
+                json.dumps({"lane": f"hybrid_tuned[{tag}]", "params": combo,
+                            "aggregate": agg, "per_query": per_query},
+                           indent=2), encoding="utf-8")
+            print(json.dumps(agg, indent=2))
+            score = agg.get("correctness") or agg.get("faithfulness") or 0
+            if best is None or score > best[0]:
+                best = (score, tag)
+        print(f"Sweep winner (by correctness, ties unbroken): {best[1]} — "
+              f"confirm on a held-out slice before shipping.")
+        return
+
+    fn = harness.LANES[lane]
+    mult = 3 if lane in ("tiered", "v2_composed") else (2 if lane == "memory" else 1)
+    est = len(queries) * repeats * mult * 0.02
+    if est > 5 and input(f"Estimated >= ${est:.2f}. Continue? [y/N] ").lower() != "y":
+        return
+
+    first_pass = None
+    if lane == "memory":
+        # Memory is scored on the SECOND pass over the SET: pass 1 runs every
+        # query once so the lane writes RETRIEVAL_MEMORY.md; the judged pass
+        # below then retrieves with that memory. Pass-1 spend is reported
+        # separately, not silently dropped.
+        fp = {"input_tokens": 0, "output_tokens": 0, "calls": 0}
+        for q in queries:
+            res = fn(q["query"], idx)
+            fp["input_tokens"] += res.usage.input_tokens
+            fp["output_tokens"] += res.usage.output_tokens
+            fp["calls"] += res.usage.calls
+        first_pass = {"usage": fp, "cost": round(cost(fp), 5)}
+
+    per_query = _eval_queries(fn, queries, repeats, idx)
+    agg = aggregate(lane, per_query)
+    payload = {"lane": lane, "aggregate": agg, "per_query": per_query}
+    if first_pass is not None:
+        payload["memory_first_pass"] = first_pass
+    (out / f"{lane}.json").write_text(json.dumps(payload, indent=2),
+                                      encoding="utf-8")
     print(json.dumps(agg, indent=2))
+    if first_pass is not None:
+        print(f"memory first (unjudged) pass cost: ${first_pass['cost']}")
 
 
 def aggregate(lane: str, per_query: list[dict]) -> dict:

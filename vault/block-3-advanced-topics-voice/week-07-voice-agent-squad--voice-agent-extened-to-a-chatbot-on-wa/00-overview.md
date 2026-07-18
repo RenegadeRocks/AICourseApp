@@ -14,22 +14,22 @@ last_verified: 2026-07-17
 
 ## The thesis of this week
 
-[[04-thu-voice-agents-architecture|Week 2's voice lesson]] taught you to draw the pipeline on a napkin — VAD, endpointing, STT, LLM, TTS, transport — and to know where the 800-millisecond budget goes. This week you graduate from *architecture* to *production*: you will pick vendors with July-2026 numbers in hand, engineer the conversation itself (turn-taking, interruptions, latency masking), split one agent into a routed squad of specialists, keep the whole thing legal across three jurisdictions, and then extend the same agent brain to the channel where your likely first market actually lives — WhatsApp, with its 24-hour windows, per-message pricing, and half a billion Indian users.
+[[04-thu-voice-agents-architecture|Week 2's voice lesson]] taught you to draw the pipeline on a napkin (VAD, endpointing, STT, LLM, TTS, transport) and to know where the 800-millisecond budget goes. This week you graduate from *architecture* to *production*: you will pick vendors with July-2026 numbers in hand, engineer the conversation itself (turn-taking, interruptions, latency masking), split one agent into a routed squad of specialists, keep the whole thing legal across three jurisdictions, and then extend the same agent brain to the channel where your likely first market actually lives: WhatsApp, with its 24-hour windows, per-message pricing, and half a billion Indian users.
 
-The unifying claim: **a voice agent is not a model, it is a system with one brain and many surfaces.** The brain — prompt, tools, context, evals — is channel-agnostic. The surfaces — a phone call, a web widget, a WhatsApp thread, a WA voice note — each have their own physics, economics, and law. Teams that couple the brain to one surface rebuild everything for the second channel. Teams that separate them ship the second channel in a weekend. Saturday you prove it: a working triage-plus-specialists voice squad, then the same brain answering on WhatsApp, with latency and containment measured against the [[06-sat-rag-evaluation|Week 4 eval discipline]].
+The unifying claim: **a voice agent is not a model, it is a system with one brain and many surfaces.** The brain (prompt, tools, context, evals) is channel-agnostic. The surfaces (a phone call, a web widget, a WhatsApp thread, a WA voice note) each have their own physics, economics, and law. Teams that couple the brain to one surface rebuild everything for the second channel. Teams that separate them ship the second channel in a weekend. Saturday you prove it: a working triage-plus-specialists voice squad, then the same brain answering on WhatsApp, with latency and containment measured against the [[06-sat-rag-evaluation|Week 4 eval discipline]].
 
 ## Who this week is for
 
-You ship agents (Block 2), you know context engineering and retrieval architecture (Week 6), and you understand the voice pipeline's components and failure modes (Week 2 Thursday — required prerequisite, this week does not re-teach it). You are now making *vendor, architecture, and channel* decisions with real per-minute and per-message money attached, possibly for a client, possibly for your own product's first market.
+You ship agents (Block 2), you know context engineering and retrieval architecture (Week 6), and you understand the voice pipeline's components and failure modes (Week 2 Thursday, a required prerequisite; this week does not re-teach it). You are now making *vendor, architecture, and channel* decisions with real per-minute and per-message money attached, possibly for a client, possibly for your own product's first market.
 
 ## Shape of the week
 
 | Day | Topic | Shape |
 |-----|-------|-------|
-| Mon | The 2026 voice stack, vendor by vendor — S2S vs cascaded now, per-minute economics, platform vs parts | Deep-dive + vendor-selection worksheet |
-| Tue | Conversation engineering — turn-taking, endpointing, interruptions, latency budgets, telephony vs web, what kills perceived quality | Deep-dive + instrumented experiment |
-| Wed | The voice agent squad — triage → specialist handoff, squad topologies, shared context, when a squad is ceremony | Deep-dive + squad design exercise |
-| Thu | Voice agent trust & safety — disclosure law (EU AI Act Art. 50, state laws, TCPA), voice cloning, audio injection, recording consent, PII | Deep-dive + compliance checklist |
+| Mon | The 2026 voice stack, vendor by vendor: S2S vs cascaded now, per-minute economics, platform vs parts | Deep-dive + vendor-selection worksheet |
+| Tue | Conversation engineering: turn-taking, endpointing, interruptions, latency budgets, telephony vs web, what kills perceived quality | Deep-dive + instrumented experiment |
+| Wed | The voice agent squad: triage → specialist handoff, squad topologies, shared context, when a squad is ceremony | Deep-dive + squad design exercise |
+| Thu | Voice agent trust & safety: disclosure law (EU AI Act Art. 50, state laws, TCPA), voice cloning, audio injection, recording consent, PII | Deep-dive + compliance checklist |
 | Fri | WhatsApp: the chatbot extension — Cloud API, per-message pricing (and the October 2026 change), 24-hour windows, voice notes, one brain / many channels | Deep-dive + channel economics model |
 | Sat | BUILD: voice squad + WA extension — Vapi squad with tool calls, same brain on WA, measure latency + containment | Build day + `code-lab/6/` |
 | Sun | Synthesis, quiz, flashcards | Review |

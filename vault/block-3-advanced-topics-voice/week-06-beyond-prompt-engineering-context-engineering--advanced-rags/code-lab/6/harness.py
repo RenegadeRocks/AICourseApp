@@ -206,6 +206,10 @@ def lane_budgeted(query: str, idx: Indexes, **_) -> LaneResult:
 
 @_timed
 def lane_memory(query: str, idx: Indexes, **_) -> LaneResult:
+    """Read RETRIEVAL_MEMORY.md to rewrite the query, answer, then WRITE what
+    this pass learned back to the file (Tuesday's write-policy, minimally).
+    The write is what makes run_ablation's second pass a real measurement:
+    pass 1 records vocabulary/gaps, pass 2 retrieves with them."""
     u = Usage()
     vocab = memory_vocab()
     q = query
@@ -213,7 +217,23 @@ def lane_memory(query: str, idx: Indexes, **_) -> LaneResult:
         q = ask("Rewrite the search query using this corpus vocabulary map. "
                 "Return only the rewritten query.\n" + vocab, query, u, max_tokens=100)
     ids = idx.hybrid(q, k=5)
-    return LaneResult(generate(query, ids, idx, u), ids, u, 0)
+    answer = generate(query, ids, idx, u)
+    # Write policy, applied at end of turn: refusals become Known gaps;
+    # otherwise harvest up to 3 query-term -> corpus-term mappings.
+    if "NOT_IN_CORPUS" in answer:
+        memory_append("Known gaps", query[:100])
+    else:
+        preview = "\n".join(idx.by_id[c]["text"][:300] for c in ids[:3])
+        terms = ask(
+            "From these corpus excerpts, list at most 3 corpus-specific terms "
+            "or synonyms that would improve future searches for the question. "
+            "One per line, formatted 'question-term -> corpus-term'. "
+            "Reply NONE if none.",
+            f"Question: {query}\nExcerpts:\n{preview}", u, max_tokens=100)
+        for line in terms.splitlines():
+            if "->" in line:
+                memory_append("Vocabulary", line.strip("- ").strip()[:120])
+    return LaneResult(answer, ids, u, 0)
 
 
 AGENT_SYSTEM = (
@@ -292,9 +312,30 @@ def lane_v2_composed(query: str, idx: Indexes, **_) -> LaneResult:
     return LaneResult(answer, ids, u, 0)
 
 
+def make_hybrid_lane(rrf_c: int, k_lex: int, k_dense: int):
+    """A baseline-shaped lane with fixed hybrid-fusion params. run_ablation's
+    --lane hybrid_tuned builds one of these per HYBRID_SWEEP_GRID combo."""
+    @_timed
+    def lane(query: str, idx: Indexes, k: int = 5, **_) -> LaneResult:
+        u = Usage()
+        ids = idx.hybrid(query, k=k, rrf_c=rrf_c, k_lex=k_lex, k_dense=k_dense)
+        return LaneResult(generate(query, ids, idx, u), ids, u, 0)
+    return lane
+
+
+# Small, honest sweep: 2 RRF constants x 2 candidate depths = 4 combos.
+# Widen only after a first sweep shows the metric moves at all.
+HYBRID_SWEEP_GRID = [
+    {"rrf_c": 20, "k_lex": 20, "k_dense": 20},
+    {"rrf_c": 60, "k_lex": 20, "k_dense": 20},
+    {"rrf_c": 20, "k_lex": 50, "k_dense": 50},
+    {"rrf_c": 60, "k_lex": 50, "k_dense": 50},
+]
+
+
 LANES = {
     "baseline": lane_baseline,
-    "hybrid_tuned": lane_baseline,  # run_ablation sweeps params for this lane
+    "hybrid_tuned": lane_baseline,  # default params; run_ablation sweeps HYBRID_SWEEP_GRID
     "reranked": lane_reranked,
     "budgeted": lane_budgeted,
     "memory": lane_memory,

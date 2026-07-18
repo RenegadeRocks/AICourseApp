@@ -64,10 +64,10 @@ Each lane writes `results/<lane>.json` (per-query traces + aggregates).
 | Lane | What it changes vs baseline |
 |---|---|
 | `baseline` | Week-4 shape: hybrid BM25+dense (RRF), top-k chunks, single-shot generation |
-| `hybrid_tuned` | sweeps RRF constant and per-retriever k, keeps the best on a tuning split |
+| `hybrid_tuned` | sweeps RRF constant and per-retriever candidate depth (4-combo grid in `harness.HYBRID_SWEEP_GRID`), one judged results row per combo; pick the winner, then confirm on a held-out slice you never tuned on |
 | `reranked` | Cohere rerank over hybrid top-50 → top-5 |
 | `budgeted` | token-budget cap on retrieved context + near-duplicate suppression |
-| `memory` | RETRIEVAL_MEMORY.md vocabulary injection; scored on second pass |
+| `memory` | RETRIEVAL_MEMORY.md read + write: vocabulary injected into query rewriting, new vocab/gap notes written after each query; scored on a second pass over the set (pass-1 spend reported separately) |
 | `tiered` | single-shot + escalation trigger + capped agentic loop (6 calls / 40K tokens / 30s) with evidence log |
 | `v2_composed` | your gate-passing subset, composed (edit `V2_STACK` in `harness.py`) |
 
