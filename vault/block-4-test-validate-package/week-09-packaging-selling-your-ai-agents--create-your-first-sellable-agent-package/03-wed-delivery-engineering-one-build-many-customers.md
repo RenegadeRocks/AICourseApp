@@ -108,13 +108,13 @@ Packages die quietly from COGS nobody computed. The worked example below is the 
 **The per-run model.** One daily run per tenant: fetch/parse 12 sources (deterministic, ~free), then LLM stages (extract, dedup-judge, synthesize, critic) consuming roughly 220K input + 18K output tokens per run on realistic mid-2026 source volumes. On **Claude Sonnet 5 at intro pricing ($2/M input, $10/M output, in effect through August 31, 2026)**:[^7][^8]
 
 - Input: 0.22M × $2 = $0.44; output: 0.018M × $10 = $0.18 → **$0.62/run**
-- ~22 business-day runs/month → **$13.60/month** inference per tenant
+- ~22 business-day runs/month → **$13.64/month** inference per tenant
 - Add hosting slice (scheduler, DB, monitoring ~$40/month across, say, 10 tenants → $4), delivery infra ($1), eval regression runs ($2/month per niche pack, amortized): **all-in COGS ≈ $21/tenant/month** against a $1,500 price. Gross margin ≈ 98.6% on paper.
 
 Now the three corrections that separate this course from a YouTube margin fantasy:
 
 1. **The tokenizer correction.** Sonnet 5 (like Opus 4.7+) uses the newer tokenizer producing roughly 30% more tokens for the same text, so April-2026 token estimates understate July-2026 bills; the numbers above already assume post-change counts — if you ported an older estimate, multiply by ~1.3 before trusting it.[^8][^9]
-2. **The date-stamp correction.** Intro pricing ends August 31, 2026: $3/$15 thereafter, a +50% COGS move on the same workload ($13.60 → ~$20.40/month inference).[^7][^8] Your pricing (Friday) must survive that step-change without a renegotiation, which is why the model tier and its rate-card date belong *in the config file*, not in your memory.
+2. **The date-stamp correction.** Intro pricing ends August 31, 2026: $3/$15 thereafter, a +50% COGS move on the same workload ($13.64 → ~$20.46/month inference).[^7][^8] Your pricing (Friday) must survive that step-change without a renegotiation, which is why the model tier and its rate-card date belong *in the config file*, not in your memory.
 3. **The support correction — the real COGS.** At package scale, inference is rarely your biggest cost; *your hours* are. Two support tickets a month at a loaded $150/hour dwarfs $21 of inference. The margin case for packages was never "tokens are cheap"; it is "the runbook amortizes." Which means the runbook's quality is a line item on your P&L, and skimping on it is a COGS decision, not a documentation preference.
 
 Sensitivity habit: recompute COGS at (a) standard pricing, (b) a forced upgrade to a flagship tier (Fable-5-class at $10/$50 doubles-plus the token line), (c) 2× source volume. If any scenario pushes tier COGS above ~30% of tier price, the tier is mispriced or the pipeline needs a cheaper model for its deterministic-adjacent stages.

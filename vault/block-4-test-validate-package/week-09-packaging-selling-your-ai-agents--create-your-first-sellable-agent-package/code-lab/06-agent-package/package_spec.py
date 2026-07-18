@@ -135,6 +135,12 @@ def runbook(cfg: dict) -> str:
 
 def eval_report(cfg: dict) -> str:
     p = cfg["package"]
+    labor = p.get("labor_line")
+    basis = (
+        f"(basis: {labor['description']}, {labor['hours_per_month']}h/mo)."
+        if labor
+        else "(basis: {LABOR-LINE DESCRIPTION}, {H}h/mo — fill in your labor line)."
+    )
     return f"""# {p['name']} — monthly eval report — {{MONTH}}
 
 **Customer:** {{TENANT}}    **Package version:** {{vX.Y.Z}}    **Model tier:** {{TIER (rate date)}}
@@ -161,7 +167,7 @@ def eval_report(cfg: dict) -> str:
 
 ## Value line
 Coverage delivered: ~{{H}} analyst-hours equivalent this month
-(basis: {p['labor_line']['description']}, {p['labor_line']['hours_per_month']}h/mo).
+{basis}
 """
 
 

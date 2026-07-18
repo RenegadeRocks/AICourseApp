@@ -32,7 +32,7 @@ Interviews gave you depth on a handful of humans; today adds breadth and, more i
 
 - Monday's frozen decision rule; Wednesday's tagged atoms; Thursday's synthetic boundary memo.
 - [[01-mon-landing-page-as-conversion-machine|Block 2 Week 3 Mon]] — landing-page conversion mechanics; and [[06-sat-validation-instrumentation|Block 2 Week 3 Sat]] — the canonical home for CI-stats discipline and Wilson intervals. One-line recap here; the derivation lives there.
-- [[../week-10-build-landing-page-with-cta-recap--create-ai-generated-launch-creatives/_week|Week 10]] (pending) — the launch page and creatives you will now repurpose as an instrument.
+- [[../week-10-build-landing-page-with-cta-recap--create-ai-generated-launch-creatives/_week|Week 10]] — the launch page and creatives you will now repurpose as an instrument.
 
 ## Layer 1 — Polls that don't lead the witness
 
@@ -61,7 +61,7 @@ Choosing your rung: start at the highest rung your assets allow. You have interv
 
 ## Layer 3 — The instrument: your Week 10 page, re-aimed
 
-Week 10 built you a landing page with a CTA and AI-generated creatives ([[../week-10-build-landing-page-with-cta-recap--create-ai-generated-launch-creatives/_week|Week 10]] (pending)); Block 2 Week 3 taught the conversion mechanics behind it. Re-aiming it as a validation instrument means three changes:
+Week 10 built you a landing page with a CTA and AI-generated creatives ([[../week-10-build-landing-page-with-cta-recap--create-ai-generated-launch-creatives/_week|Week 10]]); Block 2 Week 3 taught the conversion mechanics behind it. Re-aiming it as a validation instrument means three changes:
 
 1. **One variant per hypothesis.** The page states *one* wedge for *one* customer with *one* price posture. If Thursday's copy pre-screen left you with two live framings, run them as separate variants with split traffic, not as one page hedging both.
 2. **Instrument the decision points, not the vanity points.** Events: qualified visit (past 10s), CTA click, price-page view, form submit, and (rung 3+) checkout start. Traffic source tagged per visit, because 50 visitors from your niche list and 50 from cold ads are different experiments sharing a URL.

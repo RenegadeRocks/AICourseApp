@@ -37,8 +37,8 @@ The week's deepest single lesson hides in the calculator's output: at productize
 
 ## Where each day's content goes forward
 
-- Monday's spectrum reappears in Week 11 when you validate whether the *idea* deserves more product investment — the agency-vs-product fork is re-decided with evidence there.
-- Tuesday's one-pager and tier sheet become Week 10's landing page and pricing section nearly verbatim.
+- Monday's spectrum reappears in [[01-mon-idea-definition-from-itch-to-falsifiable-bet|Week 11]] when you validate whether the *idea* deserves more product investment — the agency-vs-product fork is re-decided with evidence there.
+- Tuesday's one-pager and tier sheet become [[02-tue-the-launch-page-assembled|Week 10]]'s landing page and pricing section nearly verbatim.
 - Wednesday's config schema is the substrate for every future package; the migration runbook fires for real at the next deprecation notice (calendar it).
 - Thursday's channel triggers get their quarterly review; the 10-customer plan starts Monday.
 - Friday's calculator gets re-run on September 1, when the Sonnet 5 intro rate expires and your baseline becomes the `intro_expiry` scenario.
@@ -110,7 +110,7 @@ The week's deepest single lesson hides in the calculator's output: at productize
 
 **A10.** Any two of: Opus 3 retired Jan 5; Claude 3.5 generation retired Feb 19; Claude 3 Haiku retired Apr 20; Opus 4/Sonnet 4 notices Apr 14; Opus 4.1 notified Jun 5, retired Jun 15. Policy: ≥60 days' notice for publicly released models. Justified product: the maintenance contract (model migration + eval re-baseline as a billable line, ~15–25% of annual package value or bundled into Standard+).
 
-**A11.** (0.22M × $2) + (0.018M × $10) = $0.44 + $0.18 = **$0.62/run**; ≈ **$13.60/month** at 22 runs. The dominating line: support hours at a loaded rate (e.g., 45 min at $150/h = $112.50 — ~8× the inference bill).
+**A11.** (0.22M × $2) + (0.018M × $10) = $0.44 + $0.18 = **$0.62/run**; **$13.64/month** at 22 runs. The dominating line: support hours at a loaded rate (e.g., 45 min at $150/h = $112.50 — ~8× the inference bill).
 
 **A12.** Salesforce: 15% Percentage Net Revenue for ISVs (25% OEM). Anthropic: 0% at Claude Marketplace launch. Salesforce monetizes the distribution rail itself; Anthropic monetizes the tokens underneath and uses the marketplace to make Claude the enterprise default.
 
@@ -144,7 +144,7 @@ The week's deepest single lesson hides in the calculator's output: at productize
 20. **Q:** White-label economics (Stammer-class)? **A:** ~$197/month platform; agencies resell at $300–$500/month/agent + 3–5× usage markup.
 21. **Q:** H1-2026 Anthropic deprecation ledger (any three)? **A:** Opus 3 (Jan 5), Claude 3.5 gen (Feb 19), Claude 3 Haiku (Apr 20), Opus 4/Sonnet 4 notices (Apr 14), Opus 4.1 (Jun 15); ≥60-day notice policy.
 22. **Q:** Maintenance-contract split? **A:** Bundle fleet-wide platform work into base price; bill tenant-specific work (custom re-onboarding, customer-labeled re-baselines, pins) as maintenance.
-23. **Q:** "Niche Radar" Standard-tier COGS shape? **A:** ~$13.60/month inference (Sonnet 5 intro) vs ~$112.50 support (45 min loaded) — support dominates.
+23. **Q:** "Niche Radar" Standard-tier COGS shape? **A:** ~$13.64/month inference (Sonnet 5 intro) vs ~$112.50 support (45 min loaded) — support dominates.
 24. **Q:** Sonnet 5 pricing timeline? **A:** $2/$10 per M intro through Aug 31, 2026; then $3/$15; new tokenizer ≈ +30% tokens per text.
 25. **Q:** AgentExchange scale + take rate? **A:** ~14,000 listings after the April 2026 AppExchange/Slack merger; 15% ISV / 25% OEM revenue share.
 26. **Q:** Claude Marketplace's launch model? **A:** March 6, 2026, limited preview; curated partners (Snowflake, GitLab, Harvey…); purchases against Anthropic spend commitments; zero take rate.

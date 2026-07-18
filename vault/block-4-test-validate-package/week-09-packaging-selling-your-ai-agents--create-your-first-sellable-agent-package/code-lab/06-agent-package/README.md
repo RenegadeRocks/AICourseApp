@@ -5,7 +5,7 @@ Two tools that turn Week 9's artifacts into numbers and documents:
 1. **`pricing_calculator.py`** — models your package's COGS (tokens, hosting,
    support hours), computes gross margin per tier, and stress-tests pricing
    against 2026-shaped scenarios (Sonnet 5 intro expiry, flagship-tier
-   migration, price war, outcome-rate bad month).
+   migration, price war, bad month with doubled support burden).
 2. **`package_spec.py`** — reads your `package.yaml` and generates the
    Saturday deliverable set as markdown: one-pager, tier sheet, onboarding
    checklist, delivery runbook skeleton, eval-report template, and a demo

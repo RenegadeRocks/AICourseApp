@@ -86,7 +86,7 @@ Three signal families, in rising order of specificity:
 
 **Money signals.** People already paying adjacent tools (their public pricing pages and case studies), freelancer marketplaces listing the task (Upwork postings for "meeting notes CRM entry" are demand receipts with dollar figures attached), and job postings for roles whose description *is* the task. A job posting is the strongest desk-level demand signal there is: someone budgeted a salary for this pain.
 
-**Pricing comparables** fall out of the same pass: the incumbent feature's tier delta, the freelancer's hourly, the adjacent tool's per-seat price. Log each with its unit (per seat, per usage, per outcome), because Week 9's packaging logic ([[../week-09-packaging-selling-your-ai-agents--create-your-first-sellable-agent-package/_week|Week 9]] (pending)) will want the unit as much as the number.
+**Pricing comparables** fall out of the same pass: the incumbent feature's tier delta, the freelancer's hourly, the adjacent tool's per-seat price. Log each with its unit (per seat, per usage, per outcome), because Week 9's packaging logic ([[../week-09-packaging-selling-your-ai-agents--create-your-first-sellable-agent-package/_week|Week 9]]) will want the unit as much as the number.
 
 ## Layer 6 — Where AI desk research systematically misleads, and the defenses
 

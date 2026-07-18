@@ -15,7 +15,7 @@ last_verified: 2026-07-17
 
 You can build elite agents. Blocks 2 and 3 proved it. This week answers the question your build skills cannot: **should this product exist?** The enemy is no longer technical risk. It is motivated reasoning, your own, about your own idea. [[01-mon-problem-discovery-frameworks|Block 0 Week 3]] taught you to discover problems for *clients*, where you had healthy distance. This week you validate *your* idea, where every instinct you have is compromised. The whole apparatus of the week exists to protect the decision from the person making it: falsifiable assumptions, kill criteria written before evidence arrives, interviews that ask about the past instead of inviting compliments, and an evidence ledger with a pre-registered build/pivot/kill rule.
 
-The 2026 twist: AI now sits on both sides of the validation table. It can compress a week of desk research into an afternoon, pilot your interview guide against simulated respondents, and synthesize forty pages of notes without fatigue. It can also fabricate market statistics, flatter your idea, and simulate "users" whose enthusiasm replicates only about half of real human treatment effects in controlled comparisons. Thursday's lesson takes that controversy head-on. The week's operating rule: **simulate to design studies; use humans to decide.**
+The 2026 twist: AI now sits on both sides of the validation table. It can compress a week of desk research into an afternoon, pilot your interview guide against simulated respondents, and synthesize forty pages of notes without fatigue. It can also fabricate market statistics, flatter your idea, and simulate "users" that replicate only about half of real human treatment effects in controlled comparisons. Thursday's lesson takes that controversy head-on. The week's operating rule: **simulate to design studies; use humans to decide.**
 
 ## The seven days
 
@@ -41,7 +41,7 @@ The 2026 twist: AI now sits on both sides of the validation table. It can compre
 
 ## How this composes with the rest of Block 4
 
-Week 9 packaged the agent; Week 10 built the launch page and creatives; Week 11 tells you whether the package deserves the launch. In practice you will run the loop in the other order for every future idea: validate first, package second, launch third. Sunday's capstone recap assembles the three weeks into that single ship-with-evidence loop. (Week 9 and Week 10 lesson sets: [[../week-09-packaging-selling-your-ai-agents--create-your-first-sellable-agent-package/_week|Week 9]] (pending), [[../week-10-build-landing-page-with-cta-recap--create-ai-generated-launch-creatives/_week|Week 10]] (pending).)
+Week 9 packaged the agent; Week 10 built the launch page and creatives; Week 11 tells you whether the package deserves the launch. In practice you will run the loop in the other order for every future idea: validate first, package second, launch third. Sunday's capstone recap assembles the three weeks into that single ship-with-evidence loop. (Week 9 and Week 10 lesson sets: [[../week-09-packaging-selling-your-ai-agents--create-your-first-sellable-agent-package/_week|Week 9]], [[../week-10-build-landing-page-with-cta-recap--create-ai-generated-launch-creatives/_week|Week 10]].)
 
 ## Time budget
 

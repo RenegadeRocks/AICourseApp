@@ -98,6 +98,6 @@ runbook_stages:
 demo:
   minutes: 5
   pricing_sentence: >               # say this out loud, verbatim, in the demo
-    Standard is fifteen hundred a month, which covers about fifty-four
-    analyst-hours of monitoring; onboarding is a one-time seven-fifty and
-    you're live within ten business days.
+    Standard is fifteen hundred a month, which covers about fifty
+    analyst-hours of monitoring every quarter; onboarding is a one-time
+    seven-fifty and you're live within ten business days.

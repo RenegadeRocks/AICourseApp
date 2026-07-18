@@ -196,6 +196,9 @@ def cmd_import_atoms(args: argparse.Namespace) -> None:
     save_ledger(path, ledger)
     print(f"Imported {imported} atoms; skipped {skipped} "
           f"(unknown assumption id or malformed fields).")
+    if any(a.get("source_class") == "synthetic" for a in atoms):
+        print("Reminder: synthetic atoms carry weight 0.0 — design inputs only; "
+              "they can never trip or rescue a kill criterion.")
 
 
 def assumption_masses(ledger: dict, assumption_id: str) -> dict:
