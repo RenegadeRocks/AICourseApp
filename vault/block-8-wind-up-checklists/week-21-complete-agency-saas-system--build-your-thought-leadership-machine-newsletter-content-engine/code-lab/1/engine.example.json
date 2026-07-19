@@ -1,0 +1,21 @@
+{
+  "start_date": "2026-10-12",
+  "cadence_days": 14,
+  "pillars": [
+    "Why most legal AI pilots fail at the retrieval gate",
+    "The human-in-the-loop review that saved a firm from a bad citation",
+    "How to price an AI knowledge assistant for a law firm",
+    "The one metric that predicts whether a firm keeps its AI tool"
+  ],
+  "derivative_channels": ["linkedin", "x-thread", "short-video", "community"],
+  "channels": ["linkedin", "x-thread", "short-video", "community-note"],
+  "metrics": {
+    "subs_start": 800,
+    "subs_end": 1000,
+    "weeks": 8,
+    "opens": 420,
+    "sent": 1000,
+    "clicks_replies": 35,
+    "downstream_conversions": 6
+  }
+}
