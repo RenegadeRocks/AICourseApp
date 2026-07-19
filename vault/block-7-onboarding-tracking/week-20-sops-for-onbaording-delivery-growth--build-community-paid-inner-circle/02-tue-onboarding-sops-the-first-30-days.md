@@ -23,7 +23,7 @@ sources:
   - gawande-checklist-manifesto
   - assembly-productized-services
 last_verified: 2026-07-17
-word_count_target: 5200
+word_count_target: 3100
 ---
 
 # Onboarding SOPs: the first 30 days decide retention

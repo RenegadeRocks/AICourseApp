@@ -19,7 +19,7 @@ sources:
   - eightx-ltv-cac
   - stickyhive-skool-vs-discord
 last_verified: 2026-07-17
-word_count_target: 3200
+word_count_target: 2700
 ---
 
 # Synthesis + quiz + flashcards + Block 7 capstone

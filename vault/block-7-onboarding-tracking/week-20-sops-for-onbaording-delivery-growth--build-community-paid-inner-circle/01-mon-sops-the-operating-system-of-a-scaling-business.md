@@ -23,7 +23,7 @@ sources:
   - spp-scaling-framework
   - f7i-dynamic-sop
 last_verified: 2026-07-17
-word_count_target: 5200
+word_count_target: 3800
 ---
 
 # SOPs: the operating system of a business that scales

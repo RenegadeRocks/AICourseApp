@@ -24,7 +24,7 @@ sources:
   - spinks-business-of-belonging
   - schoolmaker-circle-pricing
 last_verified: 2026-07-17
-word_count_target: 5300
+word_count_target: 3450
 ---
 
 # The paid inner circle & membership economics

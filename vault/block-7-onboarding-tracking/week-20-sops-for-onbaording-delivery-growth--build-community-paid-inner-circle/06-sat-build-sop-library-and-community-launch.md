@@ -23,7 +23,7 @@ sources:
   - digitalapplied-ttv-2026
   - arxiv-agent-s-sop
 last_verified: 2026-07-17
-word_count_target: 4200
+word_count_target: 2200
 ---
 
 # BUILD: your SOP library + paid-community launch plan

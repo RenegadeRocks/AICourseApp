@@ -23,7 +23,7 @@ sources:
   - higherlogic-90-9-1
   - a16z-1000-true-fans
 last_verified: 2026-07-17
-word_count_target: 5200
+word_count_target: 3600
 ---
 
 # Building community: the compounding moat

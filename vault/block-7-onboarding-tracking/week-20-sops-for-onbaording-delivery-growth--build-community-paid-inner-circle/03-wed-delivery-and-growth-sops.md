@@ -23,7 +23,7 @@ sources:
   - gawande-checklist-manifesto
   - taskade-sop-generator
 last_verified: 2026-07-17
-word_count_target: 5200
+word_count_target: 3100
 ---
 
 # Delivery & growth SOPs: the runbook and the machine
