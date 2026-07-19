@@ -100,7 +100,7 @@ Take the Level-3 POV you sharpened on [[03-wed-the-thought-leadership-thesis|Wed
 
 ### Step 3: generate the calendar and repurposing matrix (20 min)
 
-Fill in `engine.example.json` with your real cadence (14 days — biweekly — is the
+Fill in `engine.example.json` with your real cadence (14 days, biweekly, is the
 sustainable default), your first four pillar ideas, and your channels. Run:
 
 ```bash
@@ -134,7 +134,7 @@ You are done when both are true:
 
 1. `python planner.py system my-system.json` prints `PASS — no orphan
    subsystems`, and every `built_in` field points to a real course week.
-2. You have a publishable first newsletter issue — live or scheduled — that
+2. You have a publishable first newsletter issue, live or scheduled, that
    passes your four-question quality rubric, and a stranger reading it would not
    flag it as AI slop.
 
