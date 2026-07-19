@@ -242,11 +242,11 @@ https://pmc.ncbi.nlm.nih.gov/articles/PMC4953332/.)
 [^2]: "Newsletter Platform Fees Compared (2026)," That Marketing Buddy.
 https://thatmarketingbuddy.com/blog/newsletter-platform-fees-compared — Substack
 10% platform fee; beehiiv/Ghost 0% on paid plans; Kit ~3.5% bundled.
-(search-verified 2026-07-19; fetch egress-blocked — liveness pass pending;
+(search-verified 2026-07-17; fetch egress-blocked — liveness pass pending;
 corroborated by beehiiv.com/blog/substack-vs-ghost.)
 [^3]: "Content Repurposing Strategy: The 2026 Framework," Tugan.ai.
 https://www.tugan.ai/blog/content-repurposing-strategy — one pillar atomized into
-many native assets across channels and time. (search-verified 2026-07-19;
+many native assets across channels and time. (search-verified 2026-07-17;
 corroborated by storyteq.com/blog/what-is-content-atomization-in-scalable-production.)
 [^4]: Hamel Husain, "Your AI Product Needs Evals." https://hamel.dev/blog/posts/evals/
 — the eval discipline behind the four-question content quality rubric.

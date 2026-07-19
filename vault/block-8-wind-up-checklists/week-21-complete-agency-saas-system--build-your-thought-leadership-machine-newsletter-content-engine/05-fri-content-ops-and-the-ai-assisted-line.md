@@ -276,21 +276,21 @@ model ever touches it.
 ZoomSphere. https://www.zoomsphere.com/blog/linkedin-algorithm-2026-why-generic-ai-content-kills-your-organic-reach
 — ~30% less reach, ~55% less engagement for low-effort AI; reach ~2% for flagged
 pages; hybrid outperforms; penalty triggers on lack of insight, not AI use.
-(search-verified 2026-07-19; fetch egress-blocked — liveness pass pending;
+(search-verified 2026-07-17; fetch egress-blocked — liveness pass pending;
 corroborated by rewarx.com/blogs/ai-content-strategy-punished-by-linkedin.)
 [^2]: "NewsGuard Taps Startup Pangram to Identify AI-Generated News," Adweek.
 https://www.adweek.com/media/newsguard-tracking-ai-slop-content-farms/ —
 site-level AI-content detection deployed; detectors cover current models.
-(search-verified 2026-07-19; corroborated by sapling.ai/ai-content-detector.)
+(search-verified 2026-07-17; corroborated by sapling.ai/ai-content-detector.)
 [^3]: "Businesses are declaring war on AI slop," Fortune, 2026-06-05.
 https://fortune.com/2026/06/05/war-ai-slop-publicis-groupe-hachette-publishers-association/
 — slop drowns the signal buyers rely on; organized pushback. (search-verified
-2026-07-19; corroborated by
+2026-07-17; corroborated by
 theregister.com/ai-and-ml/2026/07/09/ai-slop-writing-has-taken-over-the-internet-particularly-linkedin-and-x.)
 [^4]: "AI Slop won in 2025 — fingerprinting real content might be the answer in
 2026," TechRadar. https://www.techradar.com/ai-platforms-assistants/ai-slop-won-in-2025-fingerprinting-real-content-might-be-the-answer-in-2026
 — content fingerprinting/watermarking as the emerging answer; EU AI Act
-watermarking obligations approaching. (search-verified 2026-07-19; corroborated
+watermarking obligations approaching. (search-verified 2026-07-17; corroborated
 by fortune.com/2026/06/05/war-ai-slop-publicis-groupe-hachette-publishers-association.)
 [^5]: Hamel Husain, "Your AI Product Needs Evals." https://hamel.dev/blog/posts/evals/
 — you cannot improve what you do not evaluate; applied here to a content quality

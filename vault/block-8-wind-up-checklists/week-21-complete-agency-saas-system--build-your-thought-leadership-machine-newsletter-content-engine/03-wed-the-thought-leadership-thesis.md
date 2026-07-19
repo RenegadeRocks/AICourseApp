@@ -287,18 +287,18 @@ publishing it into silence for a while, and only conviction survives that.
 X," The Register, 2026-07-09.
 https://www.theregister.com/ai-and-ml/2026/07/09/ai-slop-writing-has-taken-over-the-internet-particularly-linkedin-and-x/5269525
 — ~a quarter of X posts fully AI-authored; ~41% of LinkedIn long-form
-AI-generated. (search-verified 2026-07-19; fetch egress-blocked — liveness pass
+AI-generated. (search-verified 2026-07-17; fetch egress-blocked — liveness pass
 pending; corroborated by adweek.com/media/newsguard-tracking-ai-slop-content-farms.)
 [^2]: "Businesses are declaring war on AI slop," Fortune, 2026-06-05.
 https://fortune.com/2026/06/05/war-ai-slop-publicis-groupe-hachette-publishers-association/
 — publishers and advertisers organizing against AI slop drowning the signal.
-(search-verified 2026-07-19; corroborated by
+(search-verified 2026-07-17; corroborated by
 techradar.com/ai-platforms-assistants/ai-slop-won-in-2025-fingerprinting-real-content-might-be-the-answer-in-2026.)
 [^3]: "LinkedIn Algorithm 2026: Why Generic AI Content Kills Your Organic
 Reach," ZoomSphere.
 https://www.zoomsphere.com/blog/linkedin-algorithm-2026-why-generic-ai-content-kills-your-organic-reach
 — low-effort AI posts get ~30% less reach and ~55% less engagement; human-AI
-hybrid outperforms. (search-verified 2026-07-19; corroborated by
+hybrid outperforms. (search-verified 2026-07-17; corroborated by
 optimixed.com/linkedin-wants-to-limit-the-reach-of-ai-generated-content.)
 [^4]: Kevin Kelly, "1,000 True Fans," The Technium.
 https://kk.org/thetechnium/1000-true-fans/ — a modest number of deeply committed
@@ -306,17 +306,17 @@ fans sustains a creative business. (Evergreen; canonical.)
 [^5]: "Founder-Led Marketing: The 2026 B2B Personal Brand Playbook," Workflows.io.
 https://www.workflows.io/blog/founder-led-marketing — founder-led inbound
 overtaking the company page; 82% trust and 77% purchase-intent lift when
-leadership engages personally. (search-verified 2026-07-19; corroborated by
+leadership engages personally. (search-verified 2026-07-17; corroborated by
 heysid.com/resources/founder-led-marketing-how-personal-branding-drives-b2b-growth.)
 [^6]: "Founder-Led Marketing vs Brand-Led: What Wins in 2026?" GTM Delta.
 https://gtmdelta.com/founder-led-marketing-vs-brand-led/ — individual accounts
 favored over company pages; buyers under 40 trust individuals over institutions.
-(search-verified 2026-07-19; corroborated by
+(search-verified 2026-07-17; corroborated by
 brandvm.com/post/personal-brand-vs-business-brand-guide.)
 [^7]: "Personal Brand vs Business Brand: A Practical Guide," Brand Vision.
 https://www.brandvm.com/post/personal-brand-vs-business-brand-guide — personal
 brand builds trust early; company brand is the transferable, scalable asset;
-sequence founder-first then build the company asset. (search-verified 2026-07-19;
+sequence founder-first then build the company asset. (search-verified 2026-07-17;
 corroborated by oakscript.net/personal-brand-vs-company-brand-for-founder-led-businesses.)
 
 _last_verified: 2026-07-17_

@@ -290,7 +290,7 @@ https://www.svpg.com/books/inspired-how-to-create-tech-products-customers-love-2
 [^3]: "25 Bootstrapped SaaS Ideas for Founders to Launch in 2026,"
 EntrepreneurLoop. https://entrepreneurloop.com/bootstrapped-saas-ideas-founders-2026/
 — every 2026 product idea should pass the test "what happens when the next
-Claude or GPT update ships?" (search-verified 2026-07-19; fetch egress-blocked —
+Claude or GPT update ships?" (search-verified 2026-07-17; fetch egress-blocked —
 liveness pass pending; corroborated by startupa.ge/blog/micro-saas-ideas-2026
 on model-proof, defensible micro-SaaS.)
 

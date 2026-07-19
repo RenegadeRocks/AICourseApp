@@ -281,35 +281,35 @@ mechanical, rather than the reverse.
 [^1]: "Newsletter Statistics: 2026 Benchmarks for Open Rate, CTR, ROI & Growth,"
 ClickMinded. https://www.clickminded.com/newsletter-statistics/ — email ~8% vs
 social ~3% conversion; owned audiences outperform algorithm-dependent social.
-(search-verified 2026-07-19; fetch egress-blocked — liveness pass pending;
+(search-verified 2026-07-17; fetch egress-blocked — liveness pass pending;
 corroborated by designmodo.com/email-newsletter-stats.)
 [^2]: "What is a Good Open Rate for Email? 2026 Benchmarks," Monday.com;
 "Average Newsletter Open Rate 2026," HeistBrain.
 https://monday.com/blog/monday-campaigns/email-open-rate/ — opted-in creator
 newsletters run ~35–50% opens vs ~22–32% for general business email in 2026.
-(search-verified 2026-07-19; corroborated by
+(search-verified 2026-07-17; corroborated by
 heistbrain.com/benchmarks/newsletter-open-rate.html.)
 [^3]: "Newsletter Platform Fees Compared (2026)," That Marketing Buddy; beehiiv
 "Substack vs Ghost vs beehiiv."
 https://thatmarketingbuddy.com/blog/newsletter-platform-fees-compared — Substack
 10% platform fee; beehiiv/Ghost 0% platform fee (paid plans); Kit ~3.5% bundled;
-$20k/mo loses ~$24k/yr to Substack fees. (search-verified 2026-07-19;
+$20k/mo loses ~$24k/yr to Substack fees. (search-verified 2026-07-17;
 corroborated by beehiiv.com/blog/substack-vs-ghost.)
 [^4]: "The State of Newsletters 2026," beehiiv.
 https://www.beehiiv.com/blog/beehiiv-the-state-of-newsletters-2026 — beehiiv
 subscription revenue $8M→$19M in a year; paid-subscription share of
-revenue-generating users 15%→30% (Q1 2024→Q1 2026). (search-verified 2026-07-19;
+revenue-generating users 15%→30% (Q1 2024→Q1 2026). (search-verified 2026-07-17;
 corroborated by beehiiv.com/blog/the-state-of-paid-newsletters-2026.)
 [^5]: "LinkedIn Algorithm 2026: Why Generic AI Content Kills Your Organic
 Reach," ZoomSphere.
 https://www.zoomsphere.com/blog/linkedin-algorithm-2026-why-generic-ai-content-kills-your-organic-reach
 — platforms demote machine-written content; hybrid human-plus-AI outperforms
-pure AI. (search-verified 2026-07-19; corroborated by
+pure AI. (search-verified 2026-07-17; corroborated by
 rewarx.com/blogs/ai-content-strategy-punished-by-linkedin.)
 [^6]: "Content Repurposing Strategy: The 2026 Framework," Tugan.ai; "What is
 content atomization," Storyteq. https://www.tugan.ai/blog/content-repurposing-strategy
 — create one pillar, atomize into many, distribute natively; AI does the
-reformatting. (search-verified 2026-07-19; corroborated by
+reformatting. (search-verified 2026-07-17; corroborated by
 storyteq.com/blog/what-is-content-atomization-in-scalable-production.)
 
 _last_verified: 2026-07-17_

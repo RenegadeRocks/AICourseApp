@@ -318,12 +318,12 @@ channel decays as it saturates; early traction understates the grind.
 [^2]: "40 Leading SaaS Startups 2026," Wellows.
 https://wellows.com/blog/saas-startups/ — 2026 as the year of vertical and
 micro-SaaS; vertical-SaaS net revenue retention frequently exceeds 130%.
-(search-verified 2026-07-19; fetch egress-blocked — liveness pass pending;
+(search-verified 2026-07-17; fetch egress-blocked — liveness pass pending;
 corroborated by wearepresta.com/ai-saas-startup-ideas-2026.)
 [^3]: "25 Bootstrapped SaaS Ideas for Founders to Launch in 2026,"
 EntrepreneurLoop. https://entrepreneurloop.com/bootstrapped-saas-ideas-founders-2026/
 — bootstrapped ~3× profitability odds in first 3 years, ~¼ the CAC, similar
-growth, higher 5-year survival vs VC-backed. (search-verified 2026-07-19;
+growth, higher 5-year survival vs VC-backed. (search-verified 2026-07-17;
 corroborated by startupa.ge/blog/micro-saas-ideas-2026.)
 [^4]: Rob Walling, the stair-step approach to bootstrapping (MicroConf /
 *The SaaS Playbook*). https://robwalling.com/ — start with a small,
@@ -332,12 +332,12 @@ venture-scale SaaS. (Evergreen; MicroConf canonical.)
 [^5]: "20 Micro-SaaS Ideas for 2026 (That AI Won't Kill)," StartuPage.
 https://startupa.ge/blog/micro-saas-ideas-2026 — a thin wrapper over a frontier
 model is a "countdown timer"; durable micro-SaaS owns a workflow or data the
-base model does not. (search-verified 2026-07-19; corroborated by
+base model does not. (search-verified 2026-07-17; corroborated by
 entrepreneurloop.com/bootstrapped-saas-ideas-founders-2026.)
 [^6]: Jan Luca Sandmann, "Bootstrapping an AI Startup in 2026," Medium.
 https://medium.com/@jan.luca.sandmann/bootstrapping-an-ai-startup-in-2026-how-im-building-computer-agents-without-vc-in-a-selective-734284b40f88
 — building AI products without VC in a selective 2026 funding market; start from
-cash-generating work. (search-verified 2026-07-19; corroborated by
+cash-generating work. (search-verified 2026-07-17; corroborated by
 wellows.com/blog/saas-startups.)
 
 _last_verified: 2026-07-17_
