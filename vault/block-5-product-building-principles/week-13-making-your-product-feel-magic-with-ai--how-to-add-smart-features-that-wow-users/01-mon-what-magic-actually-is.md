@@ -47,7 +47,7 @@ build on Saturday.
 
 - The Week-12 product skeleton (frontend, backend, one AI workflow behind auth).
   Everything this week attaches to that.
-  [[week-12-frontend-basic-uiux-design-principles--build-mvp-backend-connect-with-ai-workflows/_week|Week 12]] (pending).
+  [[06-sat-build-ship-the-product-skeleton|Week 12]].
 - A working sense of what an agent and a workflow are — you will decide which
   shape a magical feature needs.
   [[01-mon-context-engineering-the-successor-discipline|Context engineering]]

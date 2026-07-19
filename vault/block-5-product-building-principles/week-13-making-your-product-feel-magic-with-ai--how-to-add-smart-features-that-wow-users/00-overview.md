@@ -32,7 +32,7 @@ word_count_target: 900
 
 You can already build the machinery. Blocks 2 and 3 gave you RAG, agents,
 context engineering, memory, structured outputs, voice, and unattended
-reliability. [[week-12-frontend-basic-uiux-design-principles--build-mvp-backend-connect-with-ai-workflows/_week|Week 12]] (pending) gave you a product skeleton: a
+reliability. [[06-sat-build-ship-the-product-skeleton|Week 12]] gave you a product skeleton: a
 frontend, a backend, and an AI workflow wired behind a login. This week is the
 craft layer that decides whether users say "this feels like magic" or "this is
 another chatbot bolted onto a form."

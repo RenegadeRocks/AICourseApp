@@ -45,7 +45,7 @@ ship.
 ## Prerequisites
 
 - The Week-12 product skeleton (frontend, backend, auth, one AI workflow).
-  [[week-12-frontend-basic-uiux-design-principles--build-mvp-backend-connect-with-ai-workflows/_week|Week 12]] (pending).
+  [[06-sat-build-ship-the-product-skeleton|Week 12]].
 - All five weekday lessons this week. Today assumes them.
 - The eval-harness pattern from
   [[06-sat-rag-evaluation|Block 2 Week 4]] and the reliability contract from
@@ -176,7 +176,7 @@ Now build the gate that decides whether the feature is allowed to ship. The
 code-lab's `evals/harness.ts` and `golden.json` are the template. Your work:
 
 **Assemble a golden set of real inputs spanning the frontier.** The code-lab uses
-12 cases in three categories, and you should mirror the ratio:
+10 cases in three categories, and you should mirror the ratio:
 
 - **Easy** (smooth frontier): the feature must nail these. Real inputs where the
   model is reliably strong.
@@ -318,7 +318,7 @@ milliseconds, and touch the real model only to measure quality. The lesson could
 lean harder on the mock as a development accelerator, not just a test fixture.
 
 **Hamel Husain** would endorse the eval harness and push on one thing: the golden
-set of 12 is a start, and the failure mode he sees is teams treating it as done.
+set of 10 is a start, and the failure mode he sees is teams treating it as done.
 Every real production failure becomes a new golden case; the set that does not
 grow is a feature no one is watching. Wire the pipeline so that when a user
 discards a draft or the model produces something bad in production, that input

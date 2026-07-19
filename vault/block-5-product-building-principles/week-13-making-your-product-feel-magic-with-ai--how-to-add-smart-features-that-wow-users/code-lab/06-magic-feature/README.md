@@ -21,7 +21,7 @@ src/
   provider.ts    SuggestionProvider interface, MockProvider (offline), AnthropicProvider (real)
   feature.ts     draftFollowUp(): the 4-gate service — the core of the lesson
 evals/
-  golden.json    12 cases spanning the frontier: easy / jagged / adversarial
+  golden.json    10 cases spanning the frontier: easy / jagged / adversarial
   harness.ts     runs the feature, computes 3 ship-gate metrics, exits non-zero on fail
 test/
   feature.test.ts  unit tests for each degradation level

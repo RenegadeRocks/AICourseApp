@@ -120,7 +120,7 @@ The controls, in order of importance:
 4. **Model routing for cost.** Route cheap tasks to a cheap model and hard tasks to a frontier model. With Sonnet 5 at intro pricing around $2/$10 per Mtok and frontier tiers far higher, routing the 80% of easy requests to the cheap model is often a 3-5x cost reduction with no quality loss on those requests.[^6] Meter, then route.
 5. **Cache where you can.** Prompt caching (reusing a cached system prompt or context across calls) cuts input-token cost substantially for repeated-context workloads. The backend is where you configure it.
 
-The unit-economics point, which connects forward to Block 4's pricing work: you cannot price a product whose per-user cost you do not control. Rate limits and cost caps are not just abuse prevention, they are what make your margins predictable. A product with unbounded per-user AI cost has unbounded downside, and one power user can make you unprofitable.
+The unit-economics point, which connects forward to Block 4's pricing work: you cannot price a product whose per-user cost you do not control. Rate limits and cost caps do more than prevent abuse; they are what make your margins predictable. A product with unbounded per-user AI cost has unbounded downside, and one power user can make you unprofitable.
 
 ## Controversy: how much realtime infrastructure does an MVP need?
 
