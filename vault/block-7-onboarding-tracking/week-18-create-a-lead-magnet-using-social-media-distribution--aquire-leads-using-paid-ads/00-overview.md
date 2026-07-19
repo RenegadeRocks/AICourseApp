@@ -9,7 +9,7 @@ tags:
   - paid-ads
   - funnel
   - overview
-last_verified: 2026-07-19
+last_verified: 2026-07-17
 ---
 
 # Week 18 — The Demand-Capture Machine
@@ -69,4 +69,4 @@ pre-register the kill/scale threshold before you spend a rupee on ads.
 - **Organic-first or paid-first for a brand-new product?** (Thu)
 - **AI-generated ad creative: performance win or authenticity tax?** (Fri)
 
-_last_verified: 2026-07-19_
+_last_verified: 2026-07-17_

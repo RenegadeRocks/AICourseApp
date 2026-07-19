@@ -19,7 +19,7 @@ sources:
   - digitalapplied-shortform-2026
   - opusclip-shortform-2026
   - growleads-linkedin-2026
-last_verified: 2026-07-19
+last_verified: 2026-07-17
 word_count_target: 5200
 ---
 
@@ -318,22 +318,22 @@ be useful.
 document existing work and clip it; one 30-60s idea with a hook and captions
 travels across TikTok/Reels/Shorts/LinkedIn/email.
 https://www.opus.pro/blog/short-form-video-strategy-2026 (search-verified
-2026-07-19; corroborated by Digital Applied short-form guide; fetch
+2026-07-17; corroborated by Digital Applied short-form guide; fetch
 egress-blocked — liveness pass pending).
 [^2]: Digital Applied, "Short-Form Video Strategy: Shorts vs TikTok vs Reels
 2026" — each platform has distinct algorithms/expectations, so reshape the idea
 per platform; YouTube Shorts volume and Reels reach data.
 https://www.digitalapplied.com/blog/short-form-video-strategy-shorts-tiktok-reels-2026
-(search-verified 2026-07-19; corroborated by OpusClip).
+(search-verified 2026-07-17; corroborated by OpusClip).
 [^3]: Dataslayer, "LinkedIn Algorithm 2026: What Works Now (Documents,
 Newsletters, Video)" — document carousels ~6.6% ER, native video ~5.6%,
 newsletters bypass the feed, in-body links ~60% less reach, authenticity update
 killed engagement bait. https://www.dataslayer.ai/blog/linkedin-algorithm-february-2026-whats-working-now
-(search-verified 2026-07-19; corroborated by Hootsuite and GrowLeads).
+(search-verified 2026-07-17; corroborated by Hootsuite and GrowLeads).
 [^4]: Hootsuite, "How the LinkedIn Algorithm Works in 2026," and GrowLeads — the
 first ~60 minutes and dwell time (read duration) drive reach expansion.
 https://blog.hootsuite.com/linkedin-algorithm/ and
 https://growleads.io/blog/linkedin-algorithm-2026-text-vs-video-reach/
-(search-verified 2026-07-19; two independent domains).
+(search-verified 2026-07-17; two independent domains).
 
-_last_verified: 2026-07-19_
+_last_verified: 2026-07-17_

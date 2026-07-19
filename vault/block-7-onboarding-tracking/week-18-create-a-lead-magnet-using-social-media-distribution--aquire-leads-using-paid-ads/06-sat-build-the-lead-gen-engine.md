@@ -19,7 +19,7 @@ sources:
   - getryze-meta-minimum-budget-2026
   - dojoai-meta-attribution-2026
   - optimyzee-advantage-plus-2026
-last_verified: 2026-07-19
+last_verified: 2026-07-17
 word_count_target: 4000
 ---
 
@@ -273,23 +273,23 @@ lies with confidence.
 [^1]: Digital Applied, "Lead Magnet Conversion Benchmarks 2026" — promise/page
 match is the top lever; opt-in-rate ranges by format.
 https://www.digitalapplied.com/blog/lead-magnet-conversion-benchmarks-2026-b2b-data-reference
-(search-verified 2026-07-19; corroborated by Amra & Elma; fetch egress-blocked —
+(search-verified 2026-07-17; corroborated by Amra & Elma; fetch egress-blocked —
 liveness pass pending).
 [^2]: Chronos Agency, "Gmail & Yahoo Sender Requirements 2026" — SPF/DKIM/DMARC
 required, 550 rejections for non-compliant bulk mail, one-click unsubscribe.
 https://chronos.agency/blog/gmail-yahoo-email-sender-requirements-2026/
-(search-verified 2026-07-19; corroborated by Red Sift / PowerDMARC).
+(search-verified 2026-07-17; corroborated by Red Sift / PowerDMARC).
 [^3]: get-ryze, "Meta Ads Minimum Budget 2026" — ~50 conversions/ad set/week to
 exit learning; size the test to significance or do not run it.
 https://www.get-ryze.ai/blog/meta-ads-minimum-budget-guide-starting-budget
-(search-verified 2026-07-19; corroborated by Stackmatix).
+(search-verified 2026-07-17; corroborated by Stackmatix).
 [^4]: DOJO AI, "Meta Ads Attribution in 2026" — CAPI + pixel, reconcile against
 your own customer count; 40-60% of reported conversions can be modeled.
 https://www.dojoai.com/blog/meta-ads-attribution-2026-changes-fixes
-(search-verified 2026-07-19; corroborated by Stackmatix / adlibrary).
+(search-verified 2026-07-17; corroborated by Stackmatix / adlibrary).
 [^5]: Optimyzee, "Meta Advantage+ Guide 2026" — feed the automated engine
 distinct creative concepts; use AI to produce but keep it human-feeling.
 https://www.optimyzee.com/blog/meta-advantage-plus-guide-2026 (search-verified
-2026-07-19; corroborated by Digital Applied Meta AI ads guide).
+2026-07-17; corroborated by Digital Applied Meta AI ads guide).
 
-_last_verified: 2026-07-19_
+_last_verified: 2026-07-17_

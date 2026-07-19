@@ -21,7 +21,7 @@ sources:
   - benly-reddit-ads-2026
   - getryze-meta-minimum-budget-2026
   - meetlea-linkedin-benchmarks-2026
-last_verified: 2026-07-19
+last_verified: 2026-07-17
 word_count_target: 5400
 ---
 
@@ -363,32 +363,32 @@ own scoreboard.
 Magazine data cited therein — ~82% of Meta advertisers use Advantage+ automation;
 ~22% higher ROAS vs manual; targeting/creative/budget/bidding automated.
 https://www.optimyzee.com/blog/meta-advantage-plus-guide-2026 (search-verified
-2026-07-19; corroborated by Digital Applied Meta AI ads guide; fetch
+2026-07-17; corroborated by Digital Applied Meta AI ads guide; fetch
 egress-blocked — liveness pass pending).
 [^2]: Digital Applied, "Meta AI Automated Ads 2026: Complete Marketing Guide" —
 2026 conversion threshold lowered to ~25/week; Advantage+ Creative generates
 video from statics and multiple variations, cutting production cost.
 https://www.digitalapplied.com/blog/meta-ai-automated-ads-2026-marketing-guide
-(search-verified 2026-07-19; corroborated by Optimyzee and Pixis).
+(search-verified 2026-07-17; corroborated by Optimyzee and Pixis).
 [^3]: Pixis, "Meta's Fully Automated Ads by 2026" — manual detailed targeting
 being retired; late-2026 direction is goal + budget + image, AI builds the rest.
 https://pixis.ai/blog/metas-fully-automated-ads-by-2026-what-performance-teams-should-prepare-for/
-(search-verified 2026-07-19; corroborated by Digital Applied).
+(search-verified 2026-07-17; corroborated by Digital Applied).
 [^4]: Stackmatix, "LinkedIn Ads Cost Per Lead Benchmarks" — Lead Gen Form CPL
 typically $50-130 (median ~$75-110), enterprise $150-250+; CPC $5-12.
 https://www.stackmatix.com/blog/linkedin-ads-cost-per-lead-benchmarks
-(search-verified 2026-07-19; corroborated by meet-lea).
+(search-verified 2026-07-17; corroborated by meet-lea).
 [^5]: meet-lea, "LinkedIn Ads Benchmarks 2026" — CPC $5-8, CPM ~$31, CPL ranges
 by industry/company size. https://meet-lea.com/en/blog/linkedin-advertising-costs-roi-benchmarks
-(search-verified 2026-07-19; corroborated by Stackmatix).
+(search-verified 2026-07-17; corroborated by Stackmatix).
 [^6]: Benly, "Reddit Ads Cost: CPC, CPM & CPA by Industry (2026)" — CPC
 $0.50-3.00 (B2B/tech higher), CPL commonly $15-40 broad.
 https://benly.ai/learn/reddit-ads/reddit-ads-cost-benchmarks (search-verified
-2026-07-19; corroborated by LinkedIn/Reddit comparison in Stackmatix data).
+2026-07-17; corroborated by LinkedIn/Reddit comparison in Stackmatix data).
 [^7]: get-ryze, "Meta Ads Minimum Budget 2026" / "How Much to Spend First
 Campaign 2026" — meaningful testing ~$50-100/day, target ~50 conversions/ad
 set/week to exit learning, ~$1,500-3,000/month for optimization.
 https://www.get-ryze.ai/blog/meta-ads-minimum-budget-guide-starting-budget
-(search-verified 2026-07-19; corroborated by Stackmatix minimum-budget guidance).
+(search-verified 2026-07-17; corroborated by Stackmatix minimum-budget guidance).
 
-_last_verified: 2026-07-19_
+_last_verified: 2026-07-17_

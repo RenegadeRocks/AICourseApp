@@ -19,7 +19,7 @@ sources:
   - powerdmarc-bulk-sender-2026
   - leadgen-economy-bulk-sender-2026
   - digitalapplied-lead-magnet-benchmarks-2026
-last_verified: 2026-07-19
+last_verified: 2026-07-17
 word_count_target: 5200
 ---
 
@@ -335,22 +335,22 @@ Guide for Ecommerce Brands" — SPF/DKIM/DMARC required, non-compliant bulk mail
 gets 550 rejections since Nov 2025, spam rate ≥0.30% triggers enforcement,
 one-click unsubscribe within 48h.
 https://chronos.agency/blog/gmail-yahoo-email-sender-requirements-2026/
-(search-verified 2026-07-19; corroborated by Red Sift and PowerDMARC; fetch
+(search-verified 2026-07-17; corroborated by Red Sift and PowerDMARC; fetch
 egress-blocked — liveness pass pending).
 [^2]: Red Sift, "2026 Bulk Email Sender Requirements Checklist: Microsoft,
 Google, and Yahoo," and PowerDMARC, "Bulk Email Sender Rules 2026" — DMARC
 p=none minimum progressing to quarantine/reject; one-click unsubscribe; ~5,000/
 day threshold. https://redsift.com/guides/bulk-email-sender-requirements and
 https://powerdmarc.com/bulk-email-sender-requirements/ (search-verified
-2026-07-19; two independent domains).
+2026-07-17; two independent domains).
 [^3]: Leadgen Economy, "Gmail, Yahoo, and Microsoft Bulk Sender Requirements:
 What Changed and What Operators Do Now" — keep complaints below 0.10%,
 unsubscribe protects reputation vs "Report Spam," process within 48h.
 https://www.leadgen-economy.com/blog/gmail-yahoo-microsoft-bulk-sender-requirements/
-(search-verified 2026-07-19; corroborated by Chronos Agency).
+(search-verified 2026-07-17; corroborated by Chronos Agency).
 [^4]: Digital Applied, "Lead Magnet Conversion Benchmarks 2026" — opt-in-rate
 ranges by format and traffic temperature; interactive gates outconvert static.
 https://www.digitalapplied.com/blog/lead-magnet-conversion-benchmarks-2026-b2b-data-reference
-(search-verified 2026-07-19; corroborated by Amra & Elma).
+(search-verified 2026-07-17; corroborated by Amra & Elma).
 
-_last_verified: 2026-07-19_
+_last_verified: 2026-07-17_

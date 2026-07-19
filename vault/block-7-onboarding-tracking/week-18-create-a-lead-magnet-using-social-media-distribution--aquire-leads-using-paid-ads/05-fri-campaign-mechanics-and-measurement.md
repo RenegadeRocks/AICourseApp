@@ -22,7 +22,7 @@ sources:
   - dmnews-ai-ads-authentic-2026
   - digitalapplied-ai-creative-2026
   - getryze-meta-minimum-budget-2026
-last_verified: 2026-07-19
+last_verified: 2026-07-17
 word_count_target: 5400
 ---
 
@@ -351,30 +351,30 @@ and will outlast the current aesthetic tells.
 How to Fix It" — attribution gaps 50-70%, ATT opt-in 18-25%, 40-60% of 7-day
 conversions modeled, CAPI recovers 15-25%.
 https://www.dojoai.com/blog/meta-ads-attribution-2026-changes-fixes
-(search-verified 2026-07-19; corroborated by Stackmatix and adlibrary; fetch
+(search-verified 2026-07-17; corroborated by Stackmatix and adlibrary; fetch
 egress-blocked — liveness pass pending).
 [^2]: Stackmatix, "Facebook Ads Attribution in 2026," and adlibrary, "iOS 14
 ATT Retrospective 2026" — CAPI + pixel mandatory, incrementality/geo-holdout as
 the gold standard, ~75% of iOS conversions not deterministically attributable.
 https://www.stackmatix.com/blog/facebook-ads-attribution-2026 and
-https://adlibrary.com/posts/ios-14-att (search-verified 2026-07-19; two
+https://adlibrary.com/posts/ios-14-att (search-verified 2026-07-17; two
 independent domains).
 [^3]: get-ryze, "Meta Ads Budget Guide 2026" — scale winners ~20-30% at a time to
 avoid re-entering learning; 70/30 scale-vs-test split.
 https://www.get-ryze.ai/blog/meta-ads-minimum-budget-guide-starting-budget
-(search-verified 2026-07-19; corroborated by Stackmatix budget guidance).
+(search-verified 2026-07-17; corroborated by Stackmatix budget guidance).
 [^4]: Taboola (with Columbia, Harvard, TU Munich, Carnegie Mellon), "GenAI Ads
 Study 2026" — AI ads match human creative overall; the highest performers are
 AI ads that do not look like AI; human face as trust signal.
 https://www.taboola.com/press-releases/genai-ads-study-2026/ (search-verified
-2026-07-19; corroborated by DMNews and Content+Technology coverage).
+2026-07-17; corroborated by DMNews and Content+Technology coverage).
 [^5]: Digital Applied, "AI Ad Creative Benchmarks 2026: CTR and ROAS Data" — AI
 CTR ~0.76% vs human ~0.65%, comparable under tight controls.
 https://www.digitalapplied.com/blog/ai-ad-creative-benchmark-2026-ctr-roas-data
-(search-verified 2026-07-19; corroborated by Taboola study).
+(search-verified 2026-07-17; corroborated by Taboola study).
 [^6]: DMNews, "AI-generated ads are now matching human creative performance — but
 only when they don't look like AI" — reframes AI-vs-human as authentic-vs-not.
 https://dmnews.com/n-ai-generated-ads-are-now-matching-human-creative-performance-but-only-when-they-dont-look-like-ai-which-means-the-entire-ai-vs-human-debate-may-be-asking-the-wrong-question/
-(search-verified 2026-07-19; corroborated by Taboola press release).
+(search-verified 2026-07-17; corroborated by Taboola press release).
 
-_last_verified: 2026-07-19_
+_last_verified: 2026-07-17_

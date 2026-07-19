@@ -12,7 +12,7 @@ tags:
   - flashcards
   - lead-gen
   - paid-ads
-last_verified: 2026-07-19
+last_verified: 2026-07-17
 word_count_target: 3200
 ---
 
@@ -182,9 +182,10 @@ Take it cold, no notes. Answers below.
     attribution model can distort it, so when platform ROAS and blended CAC
     disagree, trust blended. ([[05-fri-campaign-mechanics-and-measurement|Fri]])
 
-14. Returns **`INSUFFICIENT_DATA`.** CAC is $262 (below the kill line), but only
-    4 customers is below `min_customers=5`, so the rule refuses to decide on a
-    sample too small to be meaningful. This is the small-N guardrail.
+14. Returns **`INSUFFICIENT_DATA`.** CAC is $262 (which would otherwise breach the
+    kill line), but only 4 customers is below `min_customers=5`, so the rule
+    refuses to decide on a sample too small to be meaningful — you cannot even
+    call it a loser yet. This is the small-N guardrail.
     ([[06-sat-build-the-lead-gen-engine|Sat]], `code-lab/1`)
 
 15. AI ads performed best when they **did not look like AI** (avoiding the
@@ -302,6 +303,6 @@ what the ratios told you that your gut did not.
 Block 7 continues with the client-facing machinery: async dashboards,
 productized-service ops, and the SOPs that make delivery systematic. The leads
 you can now capture need somewhere to land and something repeatable to receive.
-See [[block-7-onboarding-tracking/week-19-build-async-client-dashboard-or-project-tracking-for-agency--productizing-your-service-community-market-research/00-overview|Week 19]] (pending).
+See [[block-7-onboarding-tracking/week-19-build-async-client-dashboard-or-project-tracking-for-agency--productizing-your-service-community-market-research/00-overview|Week 19]].
 
-_last_verified: 2026-07-19_
+_last_verified: 2026-07-17_

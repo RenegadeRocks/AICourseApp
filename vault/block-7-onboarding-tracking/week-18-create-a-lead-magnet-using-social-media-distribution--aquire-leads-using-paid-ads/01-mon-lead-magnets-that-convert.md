@@ -20,7 +20,7 @@ sources:
   - cognism-gated-vs-ungated
   - a88lab-ungated-content-2026
   - hormozi-100m-leads
-last_verified: 2026-07-19
+last_verified: 2026-07-17
 word_count_target: 5200
 ---
 
@@ -200,8 +200,8 @@ that leaves them thinking "that was a bait-and-switch" has poisoned the well.
 
 This is the live debate, and both camps have credible champions.
 
-**The ungated camp.** Chris Walker, longtime demand-generation voice and CEO of
-Refine Labs, argues that gating suppresses distribution and that ungated content
+**The ungated camp.** Chris Walker, longtime demand-generation voice and founder
+of Refine Labs, argues that gating suppresses distribution and that ungated content
 is higher quality precisely because it is built for impact rather than for the
 form fill.[^5] The logic: in a world where buyers research anonymously and hate
 forms, the gate is friction that costs you reach, trust, and the compounding
@@ -378,36 +378,36 @@ Guide," and PowerDMARC bulk-sender rules — spam-complaint rate ≥0.30% trigge
 rejection; low-intent lists are a deliverability liability.
 https://chronos.agency/blog/gmail-yahoo-email-sender-requirements-2026/ and
 https://powerdmarc.com/bulk-email-sender-requirements/ (search-verified
-2026-07-19; two independent domains; fetch egress-blocked — liveness pass
+2026-07-17; two independent domains; fetch egress-blocked — liveness pass
 pending).
 [^2]: Digital Applied, "Lead Magnet Conversion Benchmarks 2026: B2B Data Guide"
 — ebooks 4-8%, webinars 6-12%, calculators 28-42%; case studies 78.5% more
 likely to precede purchase; promise/page match is the top lever.
 https://www.digitalapplied.com/blog/lead-magnet-conversion-benchmarks-2026-b2b-data-reference
-(search-verified 2026-07-19; corroborated by Amra & Elma lead-magnet statistics,
+(search-verified 2026-07-17; corroborated by Amra & Elma lead-magnet statistics,
 https://www.amraandelma.com/lead-magnet-conversion-statistics/).
 [^3]: Prospeo, "Lead Magnet Ideas: Data-Backed Formats That Convert in 2026,"
 and Amra & Elma — interactive magnets ~70% lift over static; quizzes ~40%,
 AI-adaptive quizzes ~47.3%. https://prospeo.io/s/lead-magnet-ideas
-(search-verified 2026-07-19; corroborated by
+(search-verified 2026-07-17; corroborated by
 https://www.amraandelma.com/lead-magnet-conversion-statistics/).
 [^4]: Alex Hormozi, "$100M Leads: How to Get Strangers to Want to Buy Your
 Stuff" (Acquisition.com, 2023) — the lead-magnet value-calibration principle:
 give away the what/why, sell the implementation. Book, ch. on lead magnets.
 (Evergreen; author and title verified via publisher listing.)
-[^5]: Chris Walker (CEO, Refine Labs), position on ungated content, as
+[^5]: Chris Walker (founder of Refine Labs), position on ungated content, as
 summarized in Cognism's "Gated Vs Ungated Content" — ungated content is higher
 quality because built for impact, not the form fill.
 https://www.cognism.com/blog/gated-vs-ungated-content-marketing (search-verified
-2026-07-19; corroborated by Stackmatix gated-vs-ungated 2026 piece).
+2026-07-17; corroborated by Stackmatix gated-vs-ungated 2026 piece).
 [^6]: Stackmatix, "Gated vs Ungated Content: The 2026 Data on What Works Better"
 — the binary gate/ungate question is obsolete; gate by intent and value
 exchange. https://www.stackmatix.com/blog/gated-vs-ungated-content-debate
-(search-verified 2026-07-19; corroborated by Cognism).
+(search-verified 2026-07-17; corroborated by Cognism).
 [^7]: a88lab, "Ditch the Gate: How to Build Trust and Demand with Ungated
 Content in 2026" — ungate top-of-funnel to build trust; reserve gating for
 high-intent, high-utility assets.
 https://www.a88lab.com/blog/ditch-the-gate-how-to-build-trust-and-demand-with-ungated-content
-(search-verified 2026-07-19; corroborated by Stackmatix).
+(search-verified 2026-07-17; corroborated by Stackmatix).
 
-_last_verified: 2026-07-19_
+_last_verified: 2026-07-17_
