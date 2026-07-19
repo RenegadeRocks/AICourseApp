@@ -348,4 +348,4 @@ Five places this lesson is making simplifications a careful reader should push b
 
 _last_verified: 2026-07-17_
 
-Links to other vault lessons: [[vault/block-0-basecamp/week-01-basecamp-part-1-prompting-rags--basecamp-part-2-vibe-coding/01-mon-prompting-first-principles|Week 1 Mon — Prompting from first principles]]; [[vault/block-0-basecamp/week-02-basecamp-part-3-mcps-voice-agents--basecamp-part-4-revisiting-n8n-ai-agent-fundamentals/|Week 2 index]] (pending).
+Links to other vault lessons: [[vault/block-0-basecamp/week-01-basecamp-part-1-prompting-rags--basecamp-part-2-vibe-coding/01-mon-prompting-first-principles|Week 1 Mon — Prompting from first principles]]; [[00-overview|Week 2 overview]].
