@@ -44,7 +44,7 @@ wrong: which parts of your business you should never systematize.
 
 ## Prerequisites
 
-- [[block-7-onboarding-tracking/week-19-build-async-client-dashboard-or-project-tracking-for-agency--productizing-your-service-community-market-research/00-overview|Week 19 · productized service]] (pending) — the delivery
+- [[block-7-onboarding-tracking/week-19-build-async-client-dashboard-or-project-tracking-for-agency--productizing-your-service-community-market-research/00-overview|Week 19 · productized service]] — the delivery
   model these SOPs document.
 - [[block-4-test-validate-package/week-09-packaging-selling-your-ai-agents--create-your-first-sellable-agent-package/03-wed-delivery-engineering-one-build-many-customers|Week 9 · delivery engineering (one build, many customers)]] — the
   same repeatability principle, applied to product.

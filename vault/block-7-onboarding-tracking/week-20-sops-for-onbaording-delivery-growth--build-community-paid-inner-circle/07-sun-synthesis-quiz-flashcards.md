@@ -59,10 +59,10 @@ This is the last content week of Block 7, so step back and see the whole block a
 machine. Block 7 took you from "I can get interest" to "I have a business that turns
 interest into repeatable revenue without me in every loop."
 
-- **[[block-7-onboarding-tracking/week-18-create-a-lead-magnet-using-social-media-distribution--aquire-leads-using-paid-ads/00-overview|Week 18 · demand capture]]** (pending). The front of
+- **[[block-7-onboarding-tracking/week-18-create-a-lead-magnet-using-social-media-distribution--aquire-leads-using-paid-ads/00-overview|Week 18 · demand capture]]**. The front of
   the machine: lead magnets distributed through social, and paid ads to acquire
   leads at scale. You learned to turn attention into captured, owned demand.
-- **[[block-7-onboarding-tracking/week-19-build-async-client-dashboard-or-project-tracking-for-agency--productizing-your-service-community-market-research/00-overview|Week 19 · delivery infrastructure]]** (pending). The
+- **[[block-7-onboarding-tracking/week-19-build-async-client-dashboard-or-project-tracking-for-agency--productizing-your-service-community-market-research/00-overview|Week 19 · delivery infrastructure]]**. The
   middle: the async client dashboard that gives clients a live view of progress, and
   the productized service that turns bespoke work into a repeatable, scoped offer.
   You learned to deliver at scale without chaos.

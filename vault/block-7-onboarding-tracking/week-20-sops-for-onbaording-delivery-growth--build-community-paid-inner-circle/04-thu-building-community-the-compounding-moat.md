@@ -65,7 +65,7 @@ copy your product on Tuesday and still not have your community by next year, bec
 the community is made of accumulated trust and belonging that cannot be
 fast-forwarded.
 
-David Spinks, who spent a decade building community and founded CMX, makes the
+David Spinks, who spent a decade building community and co-founded CMX, makes the
 mechanism precise in *The Business of Belonging*: the shift is from a business that
 creates all the value *for* its customers to one that creates the spaces and
 platforms for members to create value *for each other*.[^2] That is the flywheel a
@@ -73,13 +73,13 @@ feature cannot have. When members help each other, the value of belonging grows
 with every new member, and that value accrues to you as retention and word of
 mouth. Spinks frames it bluntly: if you build community optimizing only for profit,
 without genuinely serving members' sense of connection and belonging, it will not
-have engagement, and a community without engagement is not a moat, it is a ghost
-town with a logo.
+have engagement, and a community without engagement is a ghost town with a logo,
+not a moat.
 
 ### Why community makes every other number better
 
-Community is not a separate business line, it is a multiplier on the business you
-already have. Concretely:
+Community is a multiplier on the business you already have, not a separate business
+line. Concretely:
 
 - **Retention.** A member who has friends inside your community, who has status and
   relationships there, faces a switching cost that has nothing to do with your
@@ -332,8 +332,8 @@ starting to die while you can still save it.
 "AI cannot copy trust and network effects" argument is right, but it cuts both ways,
 your community is only a moat if you actually accumulate the trust and engagement
 over real time, and most founders quit before the flywheel turns. His adoption lens
-says the hard part is not the strategy, it is the months of unglamorous daily
-showing-up that the strategy requires, and that is exactly where communities die.
+says the hard part is the months of unglamorous daily showing-up that the strategy
+requires, well beyond the strategy itself, and that is exactly where communities die.
 
 **Michael Seibel** would push back on the whole enterprise for an early founder:
 building a community is a huge time sink that can become elaborate procrastination

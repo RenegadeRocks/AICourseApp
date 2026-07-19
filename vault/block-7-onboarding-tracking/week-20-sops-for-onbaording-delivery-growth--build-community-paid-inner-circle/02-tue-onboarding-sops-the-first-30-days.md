@@ -47,7 +47,7 @@ comes in and tells you it was not.
   (trigger, checklist, definition of done) you will apply to onboarding today.
 - [[block-5-product-building-principles/week-14-analytics-iteration-what-to-measure--scale-infra-auth-db-ui-polish/01-mon-product-analytics-for-ai-products|Week 14 · product analytics and retention]] — activation, the
   aha moment, and retention curves. We build on it, we do not re-teach it.
-- [[block-7-onboarding-tracking/week-19-build-async-client-dashboard-or-project-tracking-for-agency--productizing-your-service-community-market-research/00-overview|Week 19 · the client dashboard]] (pending) — the artifact
+- [[block-7-onboarding-tracking/week-19-build-async-client-dashboard-or-project-tracking-for-agency--productizing-your-service-community-market-research/00-overview|Week 19 · the client dashboard]] — the artifact
   onboarding hands the client into.
 
 ## Core content
@@ -196,7 +196,7 @@ The acknowledgement, the form send, the project setup, the reminder nudges, all
 automated. The first substantive human contact (the kickoff, the first real
 feedback on their situation) stays genuinely human, because that is where trust is
 built and a template is felt as a template. The client dashboard from
-[[block-7-onboarding-tracking/week-19-build-async-client-dashboard-or-project-tracking-for-agency--productizing-your-service-community-market-research/00-overview|Week 19]] (pending) is the automation-friendly
+[[block-7-onboarding-tracking/week-19-build-async-client-dashboard-or-project-tracking-for-agency--productizing-your-service-community-market-research/00-overview|Week 19]] is the automation-friendly
 spine here: it gives the client a live, always-on view of progress, which reduces
 the "what's happening?" anxiety without requiring you to send a status update
 every time.
