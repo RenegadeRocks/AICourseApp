@@ -1,0 +1,11 @@
+# Core logic (store, summary offline mode, pricing, tests, seed demo) runs on
+# the Python 3.10+ standard library with NO dependencies. Install these only to
+# run the HTTP API (app.py) or the online LLM summary.
+
+# --- HTTP API (app.py) ---
+fastapi==0.115.6
+uvicorn==0.34.0
+
+# --- Online AI status summary (summary.render_llm) ---
+# Optional. Offline mode needs none of this. Set ANTHROPIC_API_KEY to use.
+anthropic==0.42.0

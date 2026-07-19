@@ -1,0 +1,5 @@
+# No third-party dependencies.
+# Both scripts use the Python 3.10+ standard library only
+# (dataclasses, datetime, typing). Pinned interpreter target below.
+#
+# Requires: Python >= 3.10  (uses X | Y type unions and list[...] generics)
