@@ -1,0 +1,26 @@
+=================================================================
+  DRAFT — FOR HUMAN REVIEW — DO NOT SEND AS-IS
+  Read every line. Verify the {signal} is true. Edit in your voice.
+  Then send by hand from your own email client.
+=================================================================
+
+To:      Priya Nair <priya@examplesaas.com>
+Role:    Head of Support @ ExampleSaaS
+Region:  US
+Send:    touch 1, +0 days
+Signal:  Your team posted last week about tier-1 ticket volume tripling after the v3 launch
+
+Subject: Your team posted last week about tier-1 ticket volume tripling after the v3 launch — a 40% shortcut?
+
+Hi Priya,
+
+Your team posted last week about tier-1 ticket volume tripling after the v3 launch — that usually means tier-1 tickets are eating your team's day.
+
+I built Triage Agent to resolve 40% of tier-1 support tickets before a human sees them. It just went live. Worth a 15-minute look, or should I send a 90-second demo instead?
+
+Either way, no pressure.
+
+--
+Alex Rivera
+Triage Labs, 12 Example St, Austin, TX 78701, USA
+Not relevant? Opt out here and I won't contact you again: https://triage.example/opt-out

@@ -24,7 +24,7 @@ sources:
   - viralloops-dropbox-3900
   - amplitude-hidden-roi-winback
   - baincapital-elena-verna-plg
-last_verified: 2026-09-12
+last_verified: 2026-07-17
 word_count_target: 3600
 ---
 

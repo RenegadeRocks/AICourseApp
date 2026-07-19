@@ -70,15 +70,13 @@ validated product from Blocks 4 and 5 and turned it into a business that grows.
 **Week 15 — Launch.** You planned a Product Hunt and social launch, published live,
 and ran cold outreach. The launch is the *spike*: it proves people will try the
 product, and it is a one-time event that does not compound on its own.
-([[block-6-launch-monetization/week-15-plan-product-hunt-social-strategy--publish-live-cold-outreach|Week 15]]
-(pending))
+([[block-6-launch-monetization/week-15-plan-product-hunt-social-strategy--publish-live-cold-outreach/00-overview|Week 15]])
 
 **Week 16 — Monetize.** You explored monetization paths, used AI in sales calls,
 and built pricing strategy, tiers, and upsell mechanics. Monetization turns usage
 into revenue: it is the number that decides whether growth is a business or a
 charity.
-([[block-6-launch-monetization/week-16-explore-monetisation-paths-using-ai-in-sales-calls-pricing-strategy--pricing-revenue-planning-pricing-tiers-upse|Week 16]]
-(pending))
+([[block-6-launch-monetization/week-16-explore-monetisation-paths-using-ai-in-sales-calls-pricing-strategy--pricing-revenue-planning-pricing-tiers-upse/00-overview|Week 16]])
 
 **Week 17 — Grow.** This week: the machinery that makes the launch and the pricing
 compound. The feedback engine keeps the product worth spreading, re-engagement

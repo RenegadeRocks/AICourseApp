@@ -1,0 +1,24 @@
+=================================================================
+  DRAFT — FOR HUMAN REVIEW — DO NOT SEND AS-IS
+  Read every line. Verify the {signal} is true. Edit in your voice.
+  Then send by hand from your own email client.
+=================================================================
+
+To:      Tom Becker <tom@berlinhelpco.de>
+Role:    VP Customer Experience @ BerlinHelpCo
+Region:  EU
+Send:    touch 2, +4 days
+Signal:  You just hired three support reps and mentioned wanting to automate tier-1 before scaling further
+
+Subject: one number from a team like BerlinHelpCo
+
+Hi Tom,
+
+Quick follow-up with something useful either way: one VP Customer Experience-led team cut first-response time from 14h to 1.1h in nine weeks after routing tier-1 through Triage Agent.
+
+Happy to share exactly how they did it, whether or not you ever try the tool. Want the teardown?
+
+--
+Alex Rivera
+Triage Labs, 12 Example St, Austin, TX 78701, USA
+Not relevant? Opt out here and I won't contact you again: https://triage.example/opt-out

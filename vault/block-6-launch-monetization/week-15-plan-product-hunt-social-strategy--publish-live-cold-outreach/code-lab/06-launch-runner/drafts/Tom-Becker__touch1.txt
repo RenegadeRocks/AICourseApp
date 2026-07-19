@@ -1,0 +1,26 @@
+=================================================================
+  DRAFT — FOR HUMAN REVIEW — DO NOT SEND AS-IS
+  Read every line. Verify the {signal} is true. Edit in your voice.
+  Then send by hand from your own email client.
+=================================================================
+
+To:      Tom Becker <tom@berlinhelpco.de>
+Role:    VP Customer Experience @ BerlinHelpCo
+Region:  EU
+Send:    touch 1, +0 days
+Signal:  You just hired three support reps and mentioned wanting to automate tier-1 before scaling further
+
+Subject: You just hired three support reps and mentioned wanting to automate tier-1 before scaling further — a 40% shortcut?
+
+Hi Tom,
+
+You just hired three support reps and mentioned wanting to automate tier-1 before scaling further — that usually means tier-1 tickets are eating your team's day.
+
+I built Triage Agent to resolve 40% of tier-1 support tickets before a human sees them. It just went live. Worth a 15-minute look, or should I send a 90-second demo instead?
+
+Either way, no pressure.
+
+--
+Alex Rivera
+Triage Labs, 12 Example St, Austin, TX 78701, USA
+Not relevant? Opt out here and I won't contact you again: https://triage.example/opt-out

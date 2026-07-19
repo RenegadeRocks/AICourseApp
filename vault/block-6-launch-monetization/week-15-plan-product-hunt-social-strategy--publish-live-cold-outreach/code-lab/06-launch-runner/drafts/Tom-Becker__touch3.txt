@@ -1,0 +1,24 @@
+=================================================================
+  DRAFT — FOR HUMAN REVIEW — DO NOT SEND AS-IS
+  Read every line. Verify the {signal} is true. Edit in your voice.
+  Then send by hand from your own email client.
+=================================================================
+
+To:      Tom Becker <tom@berlinhelpco.de>
+Role:    VP Customer Experience @ BerlinHelpCo
+Region:  EU
+Send:    touch 3, +5 days
+Signal:  You just hired three support reps and mentioned wanting to automate tier-1 before scaling further
+
+Subject: closing the loop, Tom
+
+Hi Tom,
+
+I'll stop here so I'm not cluttering your inbox. If tier-1 ticket volume ever becomes the thing you want to fix, Triage Agent will be here.
+
+Thanks for reading this far.
+
+--
+Alex Rivera
+Triage Labs, 12 Example St, Austin, TX 78701, USA
+Not relevant? Opt out here and I won't contact you again: https://triage.example/opt-out

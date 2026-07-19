@@ -1,0 +1,24 @@
+=================================================================
+  DRAFT — FOR HUMAN REVIEW — DO NOT SEND AS-IS
+  Read every line. Verify the {signal} is true. Edit in your voice.
+  Then send by hand from your own email client.
+=================================================================
+
+To:      Priya Nair <priya@examplesaas.com>
+Role:    Head of Support @ ExampleSaaS
+Region:  US
+Send:    touch 2, +4 days
+Signal:  Your team posted last week about tier-1 ticket volume tripling after the v3 launch
+
+Subject: one number from a team like ExampleSaaS
+
+Hi Priya,
+
+Quick follow-up with something useful either way: one Head of Support-led team cut first-response time from 14h to 1.1h in nine weeks after routing tier-1 through Triage Agent.
+
+Happy to share exactly how they did it, whether or not you ever try the tool. Want the teardown?
+
+--
+Alex Rivera
+Triage Labs, 12 Example St, Austin, TX 78701, USA
+Not relevant? Opt out here and I won't contact you again: https://triage.example/opt-out
