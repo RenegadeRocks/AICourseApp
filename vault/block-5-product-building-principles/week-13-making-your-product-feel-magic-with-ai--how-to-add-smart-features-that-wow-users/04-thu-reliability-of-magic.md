@@ -269,6 +269,52 @@ problem for AI features, built from transparency, control, consistency, and
 graceful failure handling — the exact four things this lesson operationalizes.[^7]
 The feature-trust number is how you know whether you built them.
 
+## Instrumenting the gate: what to log so failures teach you
+
+An eval gate that runs once before launch certifies the feature against the inputs
+you imagined. Production sends inputs you did not. The bridge between the two is
+logging, and the specific things you log determine whether a production failure
+becomes a fixed golden case or an invisible slow leak of trust.
+
+Log, per feature invocation:
+
+- **The degradation level that fired** (suggested / low_confidence / suppressed /
+  fallback) and *which gate* produced it. This tells you the shape of your
+  traffic: if 40% of invocations hit the fallback, either the model is failing
+  more than you think or your precondition is too strict. You cannot tune a gate
+  you are not measuring.
+- **The gate inputs** that drove the decision: the deterministic precondition's
+  values, the returned confidence, the validation result. When a user reports "it
+  should have suggested here," these let you replay the decision instead of
+  guessing.
+- **The user's response to a shown output**: accepted unchanged, edited (with a
+  rough edit distance), or discarded. This is your precision signal in production,
+  and it is the one that catches frontier drift: if accept rate falls after a
+  model update, an input distribution shift, or a prompt change, you see it here
+  before it shows up as churn.
+- **Abstention outcomes, sampled.** When the feature suppressed or fell back, was
+  that the right call? You cannot log this automatically, so sample a slice weekly
+  and label it. Over-abstention (the feature was too cautious and left magic on
+  the table) is as real a failure as under-abstention, and only sampled labels
+  reveal it.
+
+The loop this enables is the whole game: production failure → logged with enough
+context to replay → added to the golden set → gate re-run → threshold re-tuned.
+This is the same continuous-eval discipline the reliability lesson in
+[[05-fri-reliability-engineering-for-unattended-agents|Block 3 Week 8]] applies to
+unattended agents, with the difference that a user-facing feature's failures are
+seen by users, so the loop has to be fast. A feature whose golden set has not
+grown from production in a month is a feature nobody is watching, and an unwatched
+magical feature is a trust incident waiting for its input.
+
+One caution on the confidence threshold specifically: it is not a set-once
+constant. It drifts as the model updates, as your inputs shift, and as user
+expectations rise, so the number you tuned in August is likely wrong by October
+unless you re-calibrate against fresh labels. Treat "set a threshold" as "maintain
+a threshold," and put the re-calibration on a recurring calendar, not a someday
+list. This is real ongoing work most teams do not budget, and it is why the gate
+needs its own monitoring, not just the feature.
+
 ## Worked example — the reliability spec for one feature
 
 Complete the draft-follow-up feature's reliability layer, which you will

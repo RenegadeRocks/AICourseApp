@@ -264,6 +264,64 @@ not after.
 > can we collapse, reliably, for users who will pay to keep it collapsed?" The
 > first question leads to the graveyard; the second leads to the 85%-NRR cohort.
 
+## The feature portfolio: you do need some demo value
+
+The triage so far reads as "build retention value, ignore demo value," and that is
+too simple. Demo value is not worthless; it does real jobs. It drives the top of
+the funnel (signups, press, the Product Hunt moment covered in
+[[05-fri-launch-day-instrumentation|Block 4 Week 10]]), it helps sales tell a
+story, and it earns the attention that lets a user discover the quieter
+retention-driving features underneath. The mistake is not *having* demo features;
+it is *mistaking* them for retention features and building only them.
+
+Think of it as a small portfolio with two kinds of bets:
+
+- **Retention bets** (most of your effort): features woven into the core loop that
+  compound value invisibly. These keep the cohort. You want the majority of your
+  build capacity here, because this is what determines whether the business
+  survives past the demo-effect spike.[^1]
+- **Demo bets** (a minority, deliberately chosen): one or two features whose job
+  is to be impressive and communicable, to win the top of funnel and the sales
+  conversation. These are legitimate as long as you *know* that is their job,
+  budget their reliability accordingly, and do not let them consume the roadmap.
+
+The failure modes are asymmetric. A portfolio that is all retention bets and no
+demo value can build a genuinely good product that nobody discovers, because
+nothing about it is communicable enough to earn attention. A portfolio that is all
+demo bets spikes and churns, the graveyard outcome. The healthy mix is
+retention-heavy with a deliberate demo-value spearhead, and the discipline is
+labeling each feature honestly so you spend the right reliability budget on each:
+a demo feature that fails in public damages the very attention it was built to
+capture, so demo features paradoxically need *more* reliability polish, not less.
+
+The sequencing consequence: ship your reliable retention bet first (to earn trust
+and learn your failure modes on a low-stakes feature), then ship the demo
+spearhead once your eval muscle is built and your fallback discipline is habit.
+Leading with the demo feature is leading with your least-reliable, highest-blast-
+radius bet before you have earned the right, which is exactly the sequence that
+poisons the roadmap.
+
+## The disappearance test versus the demo test, side by side
+
+The two tests that separate the two kinds of value are worth running explicitly on
+every feature, because a feature can pass one and fail the other and you need to
+know which:
+
+- **The demo test:** "Does this feature make a stranger say 'wow' in thirty
+  seconds?" Passing means it earns attention. Failing does not mean the feature is
+  bad; it means it is not a discovery driver.
+- **The disappearance test:** "Would an existing user complain if this feature
+  vanished next week?" Passing means it is retention value. Failing means it is
+  decoration, whatever its demo score.
+
+The four quadrants: passes both (rare and precious, protect it); passes
+disappearance only (your retention backbone, invest heavily, accept it is quiet);
+passes demo only (your funnel spearhead, ship one or two, polish for reliability,
+do not over-index); passes neither (the graveyard, do not build). Most teams'
+backlogs are dominated by "passes demo only" features that the team has
+misfiled as "passes both." Running the two tests separately is the cheapest way to
+catch the misfile before it costs a build week.
+
 ## Worked example — triage the CRM feature backlog
 
 Score the running example's candidate features to pick Saturday's build.
