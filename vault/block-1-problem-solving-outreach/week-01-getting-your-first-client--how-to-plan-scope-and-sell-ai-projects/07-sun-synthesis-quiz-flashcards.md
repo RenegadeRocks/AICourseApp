@@ -26,7 +26,6 @@ sources:
   - decagon-pricing-sacra
   - morgan-lewis-ai-contracts-2026
   - meddicc-andy-whyte
-last_verified: 2026-04-16
 word_count_target: 3800
 ---
 
