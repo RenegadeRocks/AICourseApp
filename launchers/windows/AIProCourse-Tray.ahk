@@ -1,4 +1,4 @@
-; AI Catalyst C3 — Windows system tray launcher (AutoHotkey v2)
+; AI Pro-level Course — Windows system tray launcher (AutoHotkey v2)
 ; Save and double-click to get a persistent tray icon with a right-click menu.
 ; Requires AutoHotkey v2.
 
@@ -8,7 +8,7 @@ RepoRoot := A_ScriptDir . "\..\.."
 AppDir := RepoRoot . "\app"
 
 TraySetIcon "shell32.dll", 44
-A_IconTip := "AI Catalyst C3"
+A_IconTip := "AI Pro-level Course"
 
 tray := A_TrayMenu
 tray.Delete()
@@ -34,16 +34,16 @@ OpenToday(*) {
 
 StartServer(*) {
     if IsServerUp() {
-        TrayTip "AI Catalyst", "Dev server already running.", 3
+        TrayTip "AI Pro-level Course", "Dev server already running.", 3
         return
     }
     Run('cmd /c "cd /d ' . AppDir . ' && npm run dev"', , "Min")
-    TrayTip "AI Catalyst", "Starting dev server…", 3
+    TrayTip "AI Pro-level Course", "Starting dev server…", 3
 }
 
 StopServer(*) {
     RunWait('cmd /c "for /f `"tokens=5`" %a in (''netstat -ano ^| findstr :3000 ^| findstr LISTENING'') do taskkill /pid %a /f"', , "Hide")
-    TrayTip "AI Catalyst", "Stopped any process listening on :3000.", 3
+    TrayTip "AI Pro-level Course", "Stopped any process listening on :3000.", 3
 }
 
 IsServerUp() {

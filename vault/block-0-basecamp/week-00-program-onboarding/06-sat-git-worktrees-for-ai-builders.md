@@ -4,7 +4,7 @@ block: block-0-basecamp
 week: week-00
 day_of_cycle: 6
 day_name: sat
-session_slug: ai-catalyst-program-onboarding
+session_slug: program-onboarding
 date_due: 2026-04-25
 tags: [git, worktrees, claude-code, parallel-agents, diff-review, recovery, aider, reflog, agent-isolation, version-control]
 sources:

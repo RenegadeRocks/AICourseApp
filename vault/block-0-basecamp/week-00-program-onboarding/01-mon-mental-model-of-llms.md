@@ -4,7 +4,7 @@ block: block-0-basecamp
 week: week-00
 day_of_cycle: 1
 day_name: mon
-session_slug: ai-catalyst-program-onboarding
+session_slug: program-onboarding
 date_due: 2026-04-20
 tags: [mental-model, pretraining, post-training, rlhf, rlaif, tokenization, bpe, sampling, temperature, kv-cache, reasoning-models, hallucination, confabulation, karpathy]
 sources:

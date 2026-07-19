@@ -24,20 +24,20 @@ If probe passes, delete the probe file with Bash `rm`, and proceed.
 
 Read these before writing. They define audience, voice, experiment medium, quality bar, and structural shape.
 
-1. `C:\Users\satsi\.claude\projects\D--Work-ClaudeCode-AICatalyst\memory\user_profile.md`
-2. `C:\Users\satsi\.claude\projects\D--Work-ClaudeCode-AICatalyst\memory\feedback_audience_framing.md`
-3. `C:\Users\satsi\.claude\projects\D--Work-ClaudeCode-AICatalyst\memory\feedback_experiment_medium.md`
-4. `C:\Users\satsi\.claude\projects\D--Work-ClaudeCode-AICatalyst\memory\feedback_content_standards.md`
-5. `C:\Users\satsi\.claude\projects\D--Work-ClaudeCode-AICatalyst\memory\feedback_l3_content_spec.md`
-6. `C:\Users\satsi\.claude\projects\D--Work-ClaudeCode-AICatalyst\memory\feedback_course_is_the_content.md`
+1. `C:\Users\satsi\.claude\projects\D--Work-ClaudeCode-AIProCourse\memory\user_profile.md`
+2. `C:\Users\satsi\.claude\projects\D--Work-ClaudeCode-AIProCourse\memory\feedback_audience_framing.md`
+3. `C:\Users\satsi\.claude\projects\D--Work-ClaudeCode-AIProCourse\memory\feedback_experiment_medium.md`
+4. `C:\Users\satsi\.claude\projects\D--Work-ClaudeCode-AIProCourse\memory\feedback_content_standards.md`
+5. `C:\Users\satsi\.claude\projects\D--Work-ClaudeCode-AIProCourse\memory\feedback_l3_content_spec.md`
+6. `C:\Users\satsi\.claude\projects\D--Work-ClaudeCode-AIProCourse\memory\feedback_course_is_the_content.md`
 
 ## 3. SHAPE TEMPLATE
 
 Read this as structural reference (frontmatter shape, section rhythm, citation density, reviewer-lens format, problem-set shape):
-`D:\Work\ClaudeCode\AICatalyst\vault\block-0-basecamp\week-03-decoding-real-business-problems-with-ai-i--decoding-real-business-problems-with-ai-ii\01-mon-problem-discovery-frameworks.md`
+`D:\Work\ClaudeCode\AIProCourse\vault\block-0-basecamp\week-03-decoding-real-business-problems-with-ai-i--decoding-real-business-problems-with-ai-ii\01-mon-problem-discovery-frameworks.md`
 
 Also reference for Block 1-style commercial-technical balance:
-`D:\Work\ClaudeCode\AICatalyst\vault\block-1-problem-solving-outreach\week-01-getting-your-first-client--how-to-plan-scope-and-sell-ai-projects\04-thu-project-planning-phases-and-risk.md`
+`D:\Work\ClaudeCode\AIProCourse\vault\block-1-problem-solving-outreach\week-01-getting-your-first-client--how-to-plan-scope-and-sell-ai-projects\04-thu-project-planning-phases-and-risk.md`
 
 Copy the **shape** (section order, density, voice, reviewer-lens specificity, problem-set rigor). Do NOT copy the subject matter — you are writing a different topic.
 

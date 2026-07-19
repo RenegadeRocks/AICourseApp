@@ -38,7 +38,7 @@ you that practice, using this course's own refresh as the worked example.
 
 ## Prerequisites
 
-[[block-0-basecamp/week-00-ai-catalyst-program-onboarding/04-thu-reading-model-specs-critically|Reading model specs critically]] from Basecamp — the atomic version of today's skill — and [[03-wed-the-durable-principles|Wednesday's durable principles]], because the whole method rests on knowing which layer decays.
+[[block-0-basecamp/week-00-program-onboarding/04-thu-reading-model-specs-critically|Reading model specs critically]] from Basecamp — the atomic version of today's skill — and [[03-wed-the-durable-principles|Wednesday's durable principles]], because the whole method rests on knowing which layer decays.
 
 ## The core insight: knowledge has a half-life, and it is short
 
@@ -269,7 +269,7 @@ the perpetual-learner warning is the hinge into Friday's plan.
 
 ## Further reading
 
-- **Must-read:** [[block-0-basecamp/week-00-ai-catalyst-program-onboarding/04-thu-reading-model-specs-critically|Reading model specs critically]] — the atomic skill this lesson generalizes.
+- **Must-read:** [[block-0-basecamp/week-00-program-onboarding/04-thu-reading-model-specs-critically|Reading model specs critically]] — the atomic skill this lesson generalizes.
 - **Recommended:** the July 2026 refresh master report, [[00-program/_refresh-2026-07-master-report|in the program folder]] — the worked example of a real re-verification at scale, including its forbidden-facts rules.
 - **Optional:** Simon Willison's blog, simonwillison.net — the date-and-cite
   discipline practiced in public.[^5]
@@ -279,7 +279,7 @@ the perpetual-learner warning is the hinge into Friday's plan.
 [^1]: AI Pro-level Course, "July 2026 Content Refresh — Master Findings Report," internal, 2026-07-17 — "skeleton is sound; skin is three months old"; decay concentrated in model names, prices, benchmarks, tool features, commands, API surfaces; forbidden-facts and two-source rules of engagement; findings are leads not truth. See [[00-program/_refresh-2026-07-master-report|the master report]].
 [^2]: Anthropic, "Pricing," platform.claude.com/docs/en/about-claude/pricing and "Introducing Claude Sonnet 5," anthropic.com/news/claude-sonnet-5 — Opus 4.8 $5/$25; Sonnet 5 $2/$10 intro → $3/$15; new tokenizer adds ~1.0–1.35× tokens. Corroborated by the refresh master report. (search-verified 2026-07-17; fetch egress-blocked — liveness pass pending)
 [^3]: European Union, EU AI Act, official implementation timeline — full applicability from 2 August 2026; corroborated in the refresh landscape-delta. Plus platform-rule shifts (LinkedIn AI-outreach demotion, X ranker change) documented in the same delta. (search-verified 2026-07-17; fetch egress-blocked — liveness pass pending)
-[^4]: [[block-0-basecamp/week-00-ai-catalyst-program-onboarding/04-thu-reading-model-specs-critically|"Reading model specs critically," Basecamp Week 00]] — separate benchmark from marketing; ask what was measured and what is omitted.
+[^4]: [[block-0-basecamp/week-00-program-onboarding/04-thu-reading-model-specs-critically|"Reading model specs critically," Basecamp Week 00]] — separate benchmark from marketing; ask what was measured and what is omitted.
 [^5]: Simon Willison, simonwillison.net — dated observations, linked primary sources, open revision as facts move; a public model of the re-verification discipline.
 [^6]: Personal knowledge management and staying-current practice, 2026 — curated information diet, PARA (Tiago Forte), run one system long enough to compound, JOMO as defense against AI fatigue; reported across atlasworkspace.ai and pretalx PyConDE/PyData 2026. (search-verified 2026-07-17; fetch egress-blocked — liveness pass pending)
 

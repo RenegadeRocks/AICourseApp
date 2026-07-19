@@ -1,5 +1,5 @@
 @echo off
-REM --- AI Catalyst C3 launcher (Windows) ---
+REM --- AI Pro-level Course launcher (Windows) ---
 REM Double-click this to start the dev server (if needed) and open today's lesson.
 
 set "REPO_ROOT=%~dp0..\.."

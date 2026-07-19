@@ -1,14 +1,14 @@
 """
-Parse 'AI Catalyst C3 - Tentative Schedule.xlsx' into curriculum.json.
+Parse 'AI Pro-level Course - Tentative Schedule.xlsx' into curriculum.json.
 
 Output schema:
 {
   "program": {
-    "name": "AI Catalyst C3",
+    "name": "AI Pro-level Course",
     "start_date": "2026-04-18",
     "end_date": "2026-10-22",
     "session_time_ist": "19:30",
-    "source_file": "AI Catalyst C3 - Tentative Schedule.xlsx",
+    "source_file": "AI Pro-level Course - Tentative Schedule.xlsx",
     "parsed_at": "ISO-8601"
   },
   "blocks": [
@@ -45,7 +45,7 @@ from typing import Iterable
 import openpyxl
 
 ROOT = Path(__file__).resolve().parent.parent
-XLSX = ROOT / "AI Catalyst C3 - Tentative Schedule.xlsx"
+XLSX = ROOT / "AI Pro-level Course - Tentative Schedule.xlsx"
 OUT = ROOT / "curriculum.json"
 
 BLOCK_ORDER = [
@@ -207,7 +207,7 @@ def main() -> int:
 
     out = {
         "program": {
-            "name": "AI Catalyst C3",
+            "name": "AI Pro-level Course",
             "instructor": "Dileep (Outskill)",
             "start_date": start,
             "end_date": end,

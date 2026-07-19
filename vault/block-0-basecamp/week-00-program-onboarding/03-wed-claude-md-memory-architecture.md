@@ -4,7 +4,7 @@ block: block-0-basecamp
 week: week-00
 day_of_cycle: 3
 day_name: wed
-session_slug: ai-catalyst-program-onboarding
+session_slug: program-onboarding
 date_due: 2026-04-22
 tags: [claude-code, claude-md, memory, auto-memory, skills, subagents, hooks, settings, agent-architecture, context-engineering, team-workflow]
 sources:

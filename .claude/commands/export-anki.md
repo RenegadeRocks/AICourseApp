@@ -9,7 +9,7 @@ Run `python scripts/anki_export.py $ARGUMENTS` which:
 
 1. Finds every `06-flashcards.md` in scope.
 2. Parses the `Q:/A:/---` format.
-3. Builds a single `.apkg` deck named `AI-Catalyst-<scope>.apkg`.
+3. Builds a single `.apkg` deck named `AI-Pro-Course-<scope>.apkg`.
 4. Writes it to `exports/anki/`.
 5. Prints the absolute path so the user can drag it into Anki.
 

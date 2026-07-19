@@ -93,7 +93,7 @@ you want shared streaks — defer until you actually feel the friction.
 
 ```
 .
-├── AI Catalyst C3 - Tentative Schedule.xlsx   — upstream curriculum xlsx
+├── AI Pro-level Course - Tentative Schedule.xlsx   — upstream curriculum xlsx
 ├── curriculum.json                             — parsed, versioned
 ├── vault/                                      — study material
 │   ├── 00-program/                             — index, how-to-study, quality-standard

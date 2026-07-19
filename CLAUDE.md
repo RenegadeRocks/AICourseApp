@@ -101,10 +101,12 @@ working.
 - Don't add calendar dates back to the app surface. The schedule is
   slug-based (block / week-in-program / day-of-cycle) — see
   `app/src/lib/schedule.ts`. Calendar dates were intentionally removed.
-- Don't refer to "AI Catalyst" or "Outskill" in user-facing copy. The
-  brand is "AI Pro-level Course" by "Renegade Rocks". (The xlsx filename
-  on disk still says "AI Catalyst C3" — that's the real filename, leave
-  it alone.)
+- The brand is "AI Pro-level Course" by "Renegade Rocks". Never use the
+  program's old names ("AI Catalyst", "AI Catalyst C3", "Outskill") anywhere
+  — content, slugs, filenames, tooling, or launcher scripts. This line is the
+  only place the old name is retained, so the rule itself is enforceable; the
+  July-2026 purge removed it everywhere else (the schedule xlsx and the
+  week-00 folder slug were renamed too).
 
 ## Project conventions
 

@@ -4,7 +4,7 @@ block: block-0-basecamp
 week: week-00
 day_of_cycle: 2
 day_name: tue
-session_slug: ai-catalyst-program-onboarding
+session_slug: program-onboarding
 date_due: 2026-04-21
 tags: [ai-coding-tools, claude-code, codex-cli, cursor, aider, cline, roo-code, replit-agent, windsurf, swe-bench, mcp, agent-loop, tool-selection]
 sources:

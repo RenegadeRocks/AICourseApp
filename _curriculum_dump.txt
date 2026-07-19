@@ -1,14 +1,14 @@
 === SHEET: Program Schedule ===
 INSTRUCTIONS 
 
-Here's your AI Catalyst schedule. Please note that this is a TENTATIVE schedule. We are building the program as we speak. So the topics and the structure would change while the dates would not change. As we finalize on topics and curriculum, we will update it here. Any questions or concerns, reach out on dileep@outskill.com
+Here's your AI Pro-level Course schedule. Please note that this is a TENTATIVE schedule. We are building the program as we speak. So the topics and the structure would change while the dates would not change. As we finalize on topics and curriculum, we will update it here. Any questions or concerns, reach out on dileep@outskill.com
 
 1. Weekly Core Sessions - Every Saturday & Sunday - 7:30 PM IST
 2. Office Hours - Every Thursday  - 7:30 PM IST
 3. Recordings will be available within the next 24 hours of the completion of a session on the LMS.
 4. The timings of the sessions or officers might be subject to change based on extraneous circumstances.  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
  | Week | Details of each week | Date | Time (IST) | GMT/UTC | EST |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
-Basecamp | Week 0 | AI Catalyst Program - Onboarding | 2026-04-18 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
+Basecamp | Week 0 | AI Pro-level Course Program - Onboarding | 2026-04-18 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
  | Week 1 | Basecamp Part 1: Prompting & RAGs | 2026-05-02 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
  |  | Basecamp Part 2 : Vibe Coding ✍️ | 2026-05-03 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 | 10:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 
  |  | Release of Session Resources (recordings, worksheets, prompts) | 2026-05-04 00:00:00 | 19:30:00 | 14:00:00 | 10:00:00 | 04:30:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 

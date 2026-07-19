@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# <bitbar.title>AI Catalyst C3</bitbar.title>
+# <bitbar.title>AI Pro-level Course</bitbar.title>
 # <bitbar.version>v0.1</bitbar.version>
-# <bitbar.desc>Open today's AI Catalyst lesson</bitbar.desc>
+# <bitbar.desc>Open today's AI Pro-level Course lesson</bitbar.desc>
 
 # EDIT THIS PATH to the repo root on your Mac.
-REPO_ROOT="${HOME}/Work/AICatalyst"
+REPO_ROOT="${HOME}/Work/AIProCourse"
 
 # Status line (shown in menu bar)
 if curl -s -o /dev/null -w "%{http_code}" http://localhost:3000 | grep -q "200"; then

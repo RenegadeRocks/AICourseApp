@@ -39,7 +39,7 @@ What they lack is not effort but a rigorous frame for *what counts as a real pro
 
 - You have read, or are willing to skim while we reference it, Bob Moesta's Lenny Rachitsky podcast appearance on JTBD (2023, ~70 min).[^3] This lesson does not require it — we explain what we use — but the interview will pay for itself by Wednesday.
 - Familiarity with a "problem statement" discovery workshop. If you have ever written a PRD, user story, or product brief, you qualify.
-- The substrate mental model from [[week-00-ai-catalyst-program-onboarding/01-mon-mental-model-of-llms|Week 0's LLM mental model]] — discovery for AI products presumes you know what the technology can and cannot do. Tomorrow's [[02-tue-when-ai-fits-a-problem|fit rubric]] formalizes that judgment.
+- The substrate mental model from [[week-00-program-onboarding/01-mon-mental-model-of-llms|Week 0's LLM mental model]] — discovery for AI products presumes you know what the technology can and cannot do. Tomorrow's [[02-tue-when-ai-fits-a-problem|fit rubric]] formalizes that judgment.
 - Optional: Teresa Torres, *Continuous Discovery Habits* (2021). Five years old and still the most operational treatment of weekly discovery rhythm. Torres shipped her own first AI products in 2025 and has publicly updated the framework in that context.[^4]
 
 ## Layer 1 — Three JTBD schools, and why the difference matters for AI
