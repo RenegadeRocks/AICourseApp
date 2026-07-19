@@ -20,7 +20,7 @@ sources:
   - assembly-client-portal
   - digitalapplied-ai-pricing-2026
 last_verified: 2026-07-17
-word_count_target: 4600
+word_count_target: 2300
 ---
 
 # BUILD: client dashboard + productized-service spec + community-research plan

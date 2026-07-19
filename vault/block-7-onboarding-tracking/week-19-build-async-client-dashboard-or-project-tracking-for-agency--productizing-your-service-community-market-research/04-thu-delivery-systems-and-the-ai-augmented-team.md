@@ -24,7 +24,7 @@ sources:
   - anthropic-claude-models
   - taskip-ai-agency-pricing
 last_verified: 2026-07-17
-word_count_target: 5200
+word_count_target: 3400
 ---
 
 # Delivery systems and the AI-augmented team

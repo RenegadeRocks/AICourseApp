@@ -23,7 +23,7 @@ sources:
   - assembly-client-portal
   - doist-twist-async
 last_verified: 2026-07-17
-word_count_target: 4800
+word_count_target: 3700
 ---
 
 # The async client dashboard: why status meetings die

@@ -23,7 +23,7 @@ sources:
   - agencyhandy-productized-examples
   - tylertringas-manyrequests
 last_verified: 2026-07-17
-word_count_target: 5200
+word_count_target: 3600
 ---
 
 # Productizing your service: from hours to outcomes

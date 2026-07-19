@@ -24,7 +24,7 @@ sources:
   - quantumbyte-skool-vs-circle
   - hiveindex-slack-groups
 last_verified: 2026-07-17
-word_count_target: 5000
+word_count_target: 3300
 ---
 
 # Community-driven market research

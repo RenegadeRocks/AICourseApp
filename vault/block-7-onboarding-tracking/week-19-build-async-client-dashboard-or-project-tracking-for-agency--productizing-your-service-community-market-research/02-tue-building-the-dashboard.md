@@ -23,7 +23,7 @@ sources:
   - manyrequests-white-label-portal
   - assembly-client-portal
 last_verified: 2026-07-17
-word_count_target: 5000
+word_count_target: 3300
 ---
 
 # Building the dashboard (AI-assisted)

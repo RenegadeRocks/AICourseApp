@@ -48,13 +48,13 @@ across all of these.
 
 | Day | Topic | Shape |
 |-----|-------|-------|
-| Mon | [[01-mon-the-async-client-dashboard\|The async client dashboard — why status meetings die and transparency becomes trust]] | Deep-dive + status-tax audit |
-| Tue | [[02-tue-building-the-dashboard\|Building the dashboard (AI-assisted) — data model, client-scoped access, AI status summaries]] | Deep-dive + build spec |
-| Wed | [[03-wed-productizing-your-service\|Productizing your service — from hours to outcomes, and removing yourself from delivery]] | Deep-dive + offer design |
-| Thu | [[04-thu-delivery-systems-and-the-ai-augmented-team\|Delivery systems and the AI-augmented team — the margin math, honestly]] | Deep-dive + capacity model |
-| Fri | [[05-fri-community-driven-market-research\|Community-driven market research — the audience as a standing research instrument]] | Deep-dive + listening plan |
-| Sat | [[06-sat-build-client-dashboard-and-productized-spec\|BUILD — client dashboard + productized-service spec + community-research plan]] | Build + code-lab |
-| Sun | [[07-sun-synthesis-quiz-flashcards\|Synthesis, quiz, flashcards — the delivery-and-trust system as one model]] | Review |
+| Mon | [[01-mon-the-async-client-dashboard\|The async client dashboard: why status meetings die and transparency becomes trust]] | Deep-dive + status-tax audit |
+| Tue | [[02-tue-building-the-dashboard\|Building the dashboard (AI-assisted): data model, client-scoped access, AI status summaries]] | Deep-dive + build spec |
+| Wed | [[03-wed-productizing-your-service\|Productizing your service: from hours to outcomes, and removing yourself from delivery]] | Deep-dive + offer design |
+| Thu | [[04-thu-delivery-systems-and-the-ai-augmented-team\|Delivery systems and the AI-augmented team: the margin math, honestly]] | Deep-dive + capacity model |
+| Fri | [[05-fri-community-driven-market-research\|Community-driven market research: the audience as a standing research instrument]] | Deep-dive + listening plan |
+| Sat | [[06-sat-build-client-dashboard-and-productized-spec\|BUILD: client dashboard + productized-service spec + community-research plan]] | Build + code-lab |
+| Sun | [[07-sun-synthesis-quiz-flashcards\|Synthesis, quiz, flashcards: the delivery-and-trust system as one model]] | Review |
 
 ## Why these topics belong together
 
@@ -84,13 +84,13 @@ live debates so you leave with an operating stance, not just tactics.
 
 ## The four live debates this week
 
-1. **Build vs buy the client portal** — off-the-shelf (Assembly, ManyRequests,
+1. **Build vs buy the client portal.** Off-the-shelf (Assembly, ManyRequests,
    SPP) vs a thin custom app you own.
-2. **Productized service vs custom agency vs product** — Jonathan Stark's
+2. **Productized service vs custom agency vs product.** Jonathan Stark's
    value-pricing critique vs the productized camp vs going full SaaS.
-3. **AI-augmented margins: real or hype** — the 60–80% gross-margin claim against
+3. **AI-augmented margins: real or hype.** The 60–80% gross-margin claim against
    the flagship productized business whose revenue actually fell in 2025.
-4. **Community-as-research vs formal research** — continuous signal from a
+4. **Community-as-research vs formal research.** Continuous signal from a
    community vs structured interviews, and where each lies to you.
 
 _last_verified: 2026-07-17_
