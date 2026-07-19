@@ -30,7 +30,7 @@ word_count_target: 6000
 
 ## Why this matters
 
-Your job, if you are a catalyst lead and not just a prompt engineer, is to decide what to ship, what to kill, and when to kill it. Everything else — evals, cost curves, retrieval precision, fine-tune vs prompt, human fallback design — is downstream of that one decision.
+Your job, if you are an operator and not just a prompt engineer, is to decide what to ship, what to kill, and when to kill it. Everything else — evals, cost curves, retrieval precision, fine-tune vs prompt, human fallback design — is downstream of that one decision.
 
 In mid-2026 that decision is much harder than it looks, and much easier than the industry is making it. It is harder because frontier capability shifts every six weeks, which means a scoped project can become obsolete before it reaches staging. It is easier because a short list of people (Hamel Husain, Shreya Shankar, Eugene Yan, the Anthropic Applied AI team, the OpenAI cookbook maintainers) have converged on a single operational pattern — *walking skeleton with eval harness, hard eval gates, weekly iteration, ruthless scope discipline* — that works. If you adopt that pattern you will kill projects faster, ship the survivors faster, and spend roughly half what your peers spend doing it.
 
@@ -158,7 +158,7 @@ For systems that route to a human (legal drafting, clinician-facing medical summ
 
 ## Part 4 — The cost model you have to build before you commit
 
-If you start building before you've costed, you are not scoping; you're gambling. Here is the cost model in the form I use when advising catalyst leads. Fill in the blanks *before* the walking skeleton ships, not after.
+If you start building before you've costed, you are not scoping; you're gambling. Here is the cost model in the form I use when advising operators. Fill in the blanks *before* the walking skeleton ships, not after.
 
 ### Cost surface 1 — Token costs (inference)
 
@@ -279,7 +279,7 @@ Self-check when done: can a smart stranger read your scope doc and predict withi
 
 **Eugene Yan would probably push back on:** the weight I've put on LLM-as-judge relative to process fixes. His April 2025 post *"An LLM-as-Judge Won't Save The Product — Fixing Your Process Will"* is literally about this: teams over-invest in judge sophistication and under-invest in labeling process, error analysis cadence, and hypothesis discipline. He'd say: spend less time calibrating the judge, more time in the weekly error-analysis session.[^6]
 
-**An Anthropic Applied AI engineer would probably push back on:** the explicit cost-model framing as a scoping artifact. In their internal work, the cost model tends to be a constraint on architecture choice (which model, which retrieval, which agent pattern) rather than a separate scoping document. My take: the cost model belongs in the scope doc for catalyst-leads-turned-advisors, because clients won't architect around it unless you show it to them. For an internal team with strong architectural judgment, it can be implicit.
+**An Anthropic Applied AI engineer would probably push back on:** the explicit cost-model framing as a scoping artifact. In their internal work, the cost model tends to be a constraint on architecture choice (which model, which retrieval, which agent pattern) rather than a separate scoping document. My take: the cost model belongs in the scope doc for operators-turned-advisors, because clients won't architect around it unless you show it to them. For an internal team with strong architectural judgment, it can be implicit.
 
 **A capability-optimist (Gwern-style, or any of several 2026 YC founders)** would push back on the whole frame. They'd say: hard kill criteria, evaluated at week 6, systematically underweight the fact that models get materially better every 8–12 weeks. A project that fails today might succeed against a frontier model in three months. My counter: that's an argument for shorter kill cycles, not weaker kill criteria. If model capability is moving fast, test against the new model when it ships, not against a hope. The discipline survives; the baseline moves.
 

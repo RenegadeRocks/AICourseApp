@@ -241,17 +241,17 @@ Three lessons I would engrave into every AI pricing model from now on:
 2. **Model the 99th-percentile usage customer, not the mean.** If they break your margin, they will find you — heavy users self-select into unlimited plans.
 3. **Gross margin is a function of three inputs — token price, output length, HITL automation rate — and at least two of them move on a quarterly cadence.** Your board deck should have all three as line items, not a single "AI costs" bucket.
 
-## The AI-catalyst-as-service pricing question
+## The AI-services pricing question
 
-If you are selling *services* rather than a product — you are brought in as an AI catalyst to transform a function, a workflow, a department — the pricing question inverts.
+If you are selling *services* rather than a product — you are brought in as an AI operator to transform a function, a workflow, a department — the pricing question inverts.
 
-You are not pricing inference. You are pricing *judgment about inference*, and your COGS is your own time plus whatever tools and cloud you put on the invoice. Three models dominate in the senior AI-catalyst market in 2026:
+You are not pricing inference. You are pricing *judgment about inference*, and your COGS is your own time plus whatever tools and cloud you put on the invoice. Three models dominate in the senior AI-operator market in 2026:
 
 - **Fixed-price transformation project.** "We will cut your customer-service cost per ticket by 40 percent within six months, or you pay 50 percent." Ties your fee to the outcome. Works when you can measure the baseline cleanly and control the deployment surface.
 - **Retainer plus usage-sharing.** Monthly retainer of $25–50k plus a percentage of documented savings over a baseline, typically 10–25 percent for 24 months. This is the McKinsey-style AI transformation model, scaled for senior independent operators.
 - **Day rate plus tool markup.** $3–8k/day for you, with a 20–40 percent markup on any AI tools or inference you provision on behalf of the client. Honest, predictable, boring. Works for engagements where you don't control the production deployment.
 
-The trap in pricing yourself as a service provider is the same trap you just diagnosed in the product pricing debate: don't confuse *value-based billing* (what the client agrees to pay) with *cost-based planning* (what your margin model assumes). Many independent operators in 2026 quote fixed-fee transformation projects and then discover that the client's IT environment, data quality, and change-management appetite consume 3x the planned effort. The client is delighted; the catalyst is losing money per hour. Fix this by scoping ruthlessly and pricing change-management effort separately from AI engineering effort. They are different skills with different rates.
+The trap in pricing yourself as a service provider is the same trap you just diagnosed in the product pricing debate: don't confuse *value-based billing* (what the client agrees to pay) with *cost-based planning* (what your margin model assumes). Many independent operators in 2026 quote fixed-fee transformation projects and then discover that the client's IT environment, data quality, and change-management appetite consume 3x the planned effort. The client is delighted; the operator is losing money per hour. Fix this by scoping ruthlessly and pricing change-management effort separately from AI engineering effort. They are different skills with different rates.
 
 ## Common mistakes experts see
 

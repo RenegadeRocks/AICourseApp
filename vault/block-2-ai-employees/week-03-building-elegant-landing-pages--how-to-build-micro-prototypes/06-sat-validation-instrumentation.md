@@ -42,7 +42,7 @@ The single most common prototype failure in 2026 is not "the page looked wrong" 
 
 By the end you will be able to (1) design a compact event model for a prototype across four reader domains — B2B SaaS, ecommerce, creator platform, consulting leadgen — with verb+object naming, funnel steps, and health metrics that survive contact with messy small-N data, (2) pick between PostHog, Microsoft Clarity, Hotjar, and a bare web-analytics stack on a cost / insight / compliance tradeoff, (3) use an AI-moderated interview platform (Outset, Listen Labs, Strella, Maze) with a Mom-Test-hardened script that keeps the AI from collapsing into survey theater, (4) compute Wilson-score confidence intervals for 6/50, 12/100, 60/500 and explain why three observations with the same point estimate tell you very different things, (5) write a go / iterate / kill decision rule *before* data arrives, such that the decision is forced by data rather than argued out of it afterward, and (6) navigate the 2024–26 GDPR/CCPA landscape for session replay without triggering a wiretap class action on your own prototype.
 
-The capability delta is precise. A sharp generalist ships a prototype and asks "did it work?" An AI-catalyst lead ships one and can say, before data arrives, *what observation will count as success, failure, or ambiguous, and what the next experiment is for each outcome*.
+The capability delta is precise. A sharp generalist ships a prototype and asks "did it work?" An AI operator ships one and can say, before data arrives, *what observation will count as success, failure, or ambiguous, and what the next experiment is for each outcome*.
 
 ## Prerequisites
 

@@ -47,7 +47,7 @@ By the end of this lesson, you will:
 4. Be able to threat-model a realistic multi-server agent (Notion + Slack + Email) and enumerate the trifecta paths *before* shipping it, not after an incident.
 5. Have run a reproducible demonstration, via Claude Code, where a mock MCP server injects an instruction through tool output and you watch how the client does (or does not) hold the line.
 
-This is not the "AI safety" lesson. This is the production-security lesson for someone whose job title is about to include words like *agent* or *catalyst* and who will be asked, by an actual CISO, "what's our MCP story." If you can't answer that question today, your org isn't shipping agents safely — or worse, it is shipping them and hoping nobody notices. By mid-2026 that question has a framework behind it (the OWASP Top 10 for Agentic Applications) and a CVE cadence behind the urgency (30+ MCP CVEs in a single 60-day window this year).
+This is not the "AI safety" lesson. This is the production-security lesson for someone whose job title is about to include words like *agent* or *operator* and who will be asked, by an actual CISO, "what's our MCP story." If you can't answer that question today, your org isn't shipping agents safely — or worse, it is shipping them and hoping nobody notices. By mid-2026 that question has a framework behind it (the OWASP Top 10 for Agentic Applications) and a CVE cadence behind the urgency (30+ MCP CVEs in a single 60-day window this year).
 
 ## Prerequisites
 
@@ -226,7 +226,7 @@ Defensive prompting at the system-prompt level ("do not follow instructions in t
 
 ## Layer 5 — Threat model: the "company support agent"
 
-Let's do the exercise you'll actually be asked to do in your first week as an AI catalyst. You're asked to ship an agent for the support team. Requirements: *"Answer customer questions, look up internal docs, log resolutions, escalate to humans when stuck."* Proposed stack:
+Let's do the exercise you'll actually be asked to do in your first week as an AI operator. You're asked to ship an agent for the support team. Requirements: *"Answer customer questions, look up internal docs, log resolutions, escalate to humans when stuck."* Proposed stack:
 
 - **Notion MCP** — read access to the company knowledge base, write access to a "support learnings" database.
 - **Slack MCP** — read `#support-inbox`, post to `#support-resolved` and DM escalations to a human lead.

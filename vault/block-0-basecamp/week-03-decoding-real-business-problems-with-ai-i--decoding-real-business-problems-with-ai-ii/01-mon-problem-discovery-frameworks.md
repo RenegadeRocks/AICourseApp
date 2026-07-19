@@ -31,7 +31,7 @@ word_count_target: 6000
 
 ## Why this matters
 
-You are now the person in the room who decides *what* to build with AI, not just *how* to prompt it or stitch it together. That shift — from prompt operator to problem selector — is where most AI-catalyst leads silently fail. They get handed a McKinsey slide that says generative AI is a $4.4 trillion opportunity,[^1] a BCG deck that says only 5% of companies generate measurable value from it,[^2] and an executive mandate that says "pick three places to pilot this quarter." They go run a few discovery interviews, read *The Innovator's Dilemma* on a flight, build a RICE-scored opportunity list, and ship something that gets used twice and quietly sunsets.
+You are now the person in the room who decides *what* to build with AI, not just *how* to prompt it or stitch it together. That shift — from prompt operator to problem selector — is where most AI operators silently fail. They get handed a McKinsey slide that says generative AI is a $4.4 trillion opportunity,[^1] a BCG deck that says only 5% of companies generate measurable value from it,[^2] and an executive mandate that says "pick three places to pilot this quarter." They go run a few discovery interviews, read *The Innovator's Dilemma* on a flight, build a RICE-scored opportunity list, and ship something that gets used twice and quietly sunsets.
 
 What they lack is not effort but a rigorous frame for *what counts as a real problem worth solving with AI*. They treat JTBD as a vocabulary rather than a discipline, confuse capability demos for problem statements, and rank opportunities by gut feel dressed up in a spreadsheet. This lesson is the antidote. By the end of it you will be able to (1) distinguish Christensen's story-based JTBD from Ulwick's outcome-driven JTBD and know when each is the right tool, (2) explain — on a whiteboard, to a skeptical VP of Product — why McKinsey-style opportunity lists systematically fail the JTBD test, (3) run a JTBD switch interview for an AI product without the common beginner mistakes that turn it into a feature-preference survey, (4) apply a checklist to any candidate AI project that catches the seven most common discovery failures before you burn a quarter, and (5) have a defensible view on the live controversy of whether JTBD is even the right lens for *AI-native* products — or whether it's a retrofit that smuggles yesterday's product thinking into a category where capabilities arrive before needs.
 
@@ -44,7 +44,7 @@ What they lack is not effort but a rigorous frame for *what counts as a real pro
 
 ## Layer 1 — Three JTBD schools, and why the difference matters for AI
 
-There is no single "Jobs To Be Done." There are at least three traditions with different parentage, different claims, and different techniques, and practitioners routinely bolt them together without noticing the seams. For an AI-catalyst lead picking problems, the seams are where projects die.
+There is no single "Jobs To Be Done." There are at least three traditions with different parentage, different claims, and different techniques, and practitioners routinely bolt them together without noticing the seams. For an AI operator picking problems, the seams are where projects die.
 
 ### The Christensen / Moesta school — story-based JTBD
 
@@ -88,7 +88,7 @@ Here is where a problem-discovery discipline pays for itself. The opportunity li
 
 **(3) Integration cost is systematically omitted.** The McKinsey and BCG numbers are gross potential. They do not discount for the change-management, data, and process work required to realize them. BCG's own data shows leaders put 10% of AI investment into algorithms, 20% into tech and data, and 70% into people and processes[^2] — which means 90% of the work is not the AI. Opportunity lists that price only the algorithmic layer are off by a factor of ten on the implementation side. The gap between $4.4T potential and 5% of companies realizing value[^1][^17] is largely the unacknowledged 70%.
 
-> My take: the McKinsey number is not dishonest — it's an unconditional upper bound computed from a reasonable methodology. It is, however, *operationally useless* for an AI-catalyst lead. Treating it as a target produces exactly the value gap BCG measures. The right use of the number is political (it gets you budget); the wrong use is planning (it gets you pilots that never scale).
+> My take: the McKinsey number is not dishonest — it's an unconditional upper bound computed from a reasonable methodology. It is, however, *operationally useless* for an AI operator. Treating it as a target produces exactly the value gap BCG measures. The right use of the number is political (it gets you budget); the wrong use is planning (it gets you pilots that never scale).
 
 ## Layer 4 — Problem-first vs technology-first: the discovery discipline
 
@@ -102,7 +102,7 @@ There is an honest counter-argument here, and it deserves stating at full streng
 
 ## Layer 5 — How to run a JTBD switch interview for an AI product without screwing it up
 
-This is the most operational section. Most JTBD interviews an AI-catalyst lead will run in the wild are bad — not because the framework is complex but because the mode of inquiry runs against ordinary instincts. Four failure patterns dominate.
+This is the most operational section. Most JTBD interviews an AI operator will run in the wild are bad — not because the framework is complex but because the mode of inquiry runs against ordinary instincts. Four failure patterns dominate.
 
 **Failure 1: asking about preferences instead of switches.** "Would you use an AI that could draft your follow-up emails?" is useless. You get a social answer. The Moesta move is: "Tell me about the last time you sent a follow-up email you were unhappy with. When exactly? Who was the prospect? What had just happened? What did you do first? What did you try second?" You are reconstructing a specific timeline of a specific switch.
 
@@ -149,7 +149,7 @@ Here is the disagreement worth staking a position on. Two named positions, both 
 
 **My position:** Position A is right *for selection* and Position B is right *for expansion*. The selection decision — do we start a project here, yes or no — needs JTBD discipline, because capability-first selection at the portfolio level produces the hit rate in the McKinsey and BCG numbers (single-digit percent of companies realize material value). You cannot run a portfolio on "let's build whatever the model is newly capable of"; the hit rate is too low and the integration costs too high. But *within* a project, once JTBD has identified a real struggle, capability-first expansion is how you find the product surface that matters. Cursor is instructive: the initial JTBD was tight and recognizable — "help me write code faster with fewer lookups" — and only *after* product-market fit did the capability-first expansion (agent mode, background tasks, codebase-wide refactors) unlock the $500M → $1B → $4B ARR run that ended in the June 2026 SpaceX acquisition.[^12][^13] Flipping the order — capability-first selection followed by JTBD retrofit — is the Humane pattern.
 
-An AI-catalyst lead who says "we are capability-first" is usually either (a) a foundation-model lab, where the economics genuinely work that way, or (b) running the Humane playbook and hasn't noticed.
+An AI operator who says "we are capability-first" is usually either (a) a foundation-model lab, where the economics genuinely work that way, or (b) running the Humane playbook and hasn't noticed.
 
 ## Problem-discovery checklist for AI projects
 

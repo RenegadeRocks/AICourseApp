@@ -31,7 +31,7 @@ word_count_target: 6000
 
 ## Why this matters
 
-You are the AI-catalyst lead now. A founder, a COO, or a head of customer support will walk into your office this quarter with a deck that says "let's use AI for this." Roughly half the time, the problem is a terrible fit for AI. Another quarter, AI is a fit but not the *highest-leverage* fit on the portfolio. Your job is not to build what they asked for. Your job is to decide — in minutes, not weeks — whether this problem belongs to AI, to deterministic code, to humans, or to some partition across all three; and then to rank it against the eight other things you could be building.
+You are the AI operator now. A founder, a COO, or a head of customer support will walk into your office this quarter with a deck that says "let's use AI for this." Roughly half the time, the problem is a terrible fit for AI. Another quarter, AI is a fit but not the *highest-leverage* fit on the portfolio. Your job is not to build what they asked for. Your job is to decide — in minutes, not weeks — whether this problem belongs to AI, to deterministic code, to humans, or to some partition across all three; and then to rank it against the eight other things you could be building.
 
 This lesson is about the decision that happens before any prompt is written. Two moves: a **fit rubric** that tells you whether AI even belongs here, and a **prioritization frame** (a modified RICE with an eval-confidence column) that tells you where it sits in the queue. By the end you will produce, for a real problem you are holding right now, a one-page AI-fit evaluation: rubric score + build/buy/wrap recommendation + RICE with eval-confidence, ready to show a skeptical CFO.
 
@@ -308,7 +308,7 @@ Five patterns you will see this year. Name them, and you will intervene earlier.
 
 ## Reviewer lens — where I disagree with the received wisdom
 
-Five specific disagreements you should hold as the AI-catalyst lead:
+Five specific disagreements you should hold as the AI operator:
 
 1. **Against "*Prediction Machines* is foundational, not current."** The 2022 updated edition is foundational *and* current; the framing of "cheap prediction shifts the value of judgment and action" maps cleanly onto the LLM era.[^3] The common L1 critique that "it's pre-LLM" misses that the economics do not depend on the model architecture — they depend on the cost curve of prediction. LLMs just drove the cost down faster than the book's 2018 prediction. The framework holds harder than ever.
 

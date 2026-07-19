@@ -42,7 +42,7 @@ word_count_target: 6000
 
 Support is the category where AI agents first met the P&L. Every vendor pitch that crosses your desk this year — whether it's a legal agent, a revenue-ops agent, an internal-IT agent — is retelling the customer-support story with the serial numbers filed off. "Deflection rate" becomes "automation rate." "Cost per resolution" becomes "cost per task." "$0.99 outcome-based pricing" becomes whatever you're willing to pay per draft contract, per reconciled invoice, per triaged ticket.
 
-So if you are an AI-catalyst lead, treat the support category as the reference implementation for every other agent category you will evaluate. The vendors in it have been shipping to production for two years. They have posted real numbers, eaten real walk-backs, and pivoted real pricing models. You can read their pitch decks, their case studies, their Trustpilot reviews, and the CFO's earnings transcripts side by side. Nowhere else in enterprise AI do you get that density of ground truth.
+So if you are an AI operator, treat the support category as the reference implementation for every other agent category you will evaluate. The vendors in it have been shipping to production for two years. They have posted real numbers, eaten real walk-backs, and pivoted real pricing models. You can read their pitch decks, their case studies, their Trustpilot reviews, and the CFO's earnings transcripts side by side. Nowhere else in enterprise AI do you get that density of ground truth.
 
 This lesson is a teardown. By the end of it you will:
 
@@ -135,7 +135,7 @@ Add those back and the first-year real savings on a 10K-volume account are typic
 
 **The metric controversy.** Resolution rate is a politically convenient number because it is measurable by the vendor — they know when their bot responded and the conversation closed. It is not the same thing as whether the customer's problem was solved. Fini Labs and Ada have both publicly argued that deflection and containment rates **punish** good AI and reward bad AI, because a bot that terminates a conversation with "I'm sorry I can't help with that, is there anything else?" and the frustrated customer gives up gets counted as a successful resolution.[^18][^19] Ada specifically ran a "sounding the alarm on containment rate" piece arguing the industry needs new metrics.[^19]
 
-**Practical fix:** if you are an AI-catalyst lead evaluating Intercom or any resolution-priced vendor, insist on three additional numbers in the contract: (a) **customer-return-within-7-days rate** on "resolved" conversations; (b) **post-resolution CSAT** on AI-resolved conversations specifically, separated from blended numbers; (c) **escalation-request rate**, measuring how often customers ask for a human mid-conversation even if they don't get one. If the vendor won't share (a), (b), or (c), you are paying for a metric the vendor controls the definition of.
+**Practical fix:** if you are an AI operator evaluating Intercom or any resolution-priced vendor, insist on three additional numbers in the contract: (a) **customer-return-within-7-days rate** on "resolved" conversations; (b) **post-resolution CSAT** on AI-resolved conversations specifically, separated from blended numbers; (c) **escalation-request rate**, measuring how often customers ask for a human mid-conversation even if they don't get one. If the vendor won't share (a), (b), or (c), you are paying for a metric the vendor controls the definition of.
 
 ## Decagon: enterprise positioning, and what 80% deflection actually looks like
 

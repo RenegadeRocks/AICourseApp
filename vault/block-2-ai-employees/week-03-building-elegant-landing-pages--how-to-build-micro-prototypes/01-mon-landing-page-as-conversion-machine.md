@@ -86,7 +86,7 @@ Peep Laja's Wynter framework — derived from the message-testing results of tho
 
 Shapiro's hero header carries *clarity*; his subheader carries *value*; his proof stack carries *differentiation*; *relevance* is carried by the segmentation of the traffic source (which is why running paid ads to a generic homepage converts so poorly — the relevance wall is unbuilt).
 
-Where the two frameworks diverge is on pacing. Shapiro is prescriptive about structure. Laja is prescriptive about hierarchy and explicitly says that testing reveals which layer is broken — sometimes it's value, sometimes it's clarity, sometimes it's relevance. For an AI-catalyst lead, the synthesis is operational: **use Shapiro's modular skeleton as your default skeleton; use Laja's four-layer test to diagnose which module is failing when a page under-converts.**
+Where the two frameworks diverge is on pacing. Shapiro is prescriptive about structure. Laja is prescriptive about hierarchy and explicitly says that testing reveals which layer is broken — sometimes it's value, sometimes it's clarity, sometimes it's relevance. For an AI operator, the synthesis is operational: **use Shapiro's modular skeleton as your default skeleton; use Laja's four-layer test to diagnose which module is failing when a page under-converts.**
 
 ### The value proposition engine
 

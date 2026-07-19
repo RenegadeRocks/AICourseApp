@@ -38,7 +38,7 @@ By this point in the week you have built MCP servers, wired voice agents, and st
 
 The defensible answer in 2026 is almost never *"LangGraph, obviously."* It is almost never *"Temporal, obviously."* It is almost always *"what can the operating team maintain six months from now when I have moved on to the next project, and which of these tools is the cheapest thing that still satisfies the real durability, observability, and SLA requirements of the workload?"*
 
-n8n is, in 2025–2026, the single most under-respected tool in the AI-catalyst-lead toolbox. It is the workflow engine that a marketing ops person can keep alive on Monday morning when your pager goes off at 3 a.m. It has shipped a credible LangChain-based AI Agent node,[^1] MCP Client and MCP Trigger nodes,[^2][^3] and a self-hostable execution model that lets you put the whole thing inside your VPC without a vendor negotiation. It is also not the right tool for a dynamic, self-directed agent that has to replan itself across hundreds of steps under a five-nines SLA.
+n8n is, in 2025–2026, the single most under-respected tool in the AI-operator toolbox. It is the workflow engine that a marketing ops person can keep alive on Monday morning when your pager goes off at 3 a.m. It has shipped a credible LangChain-based AI Agent node,[^1] MCP Client and MCP Trigger nodes,[^2][^3] and a self-hostable execution model that lets you put the whole thing inside your VPC without a vendor negotiation. It is also not the right tool for a dynamic, self-directed agent that has to replan itself across hundreds of steps under a five-nines SLA.
 
 Your job today is to develop the taste to tell those cases apart — mechanically, not by vibe — so that when you walk into a leadership meeting you can defend your framework choice in a single paragraph. By the end of the lesson you will have:
 
@@ -246,7 +246,7 @@ We will build the canonical "new GitHub issue → Claude summarizes it → posts
 >
 > Before you execute anything, show me the graph you are going to build, the node types, and the prompts you will set. I want to approve the plan before you run the tool calls that mutate my n8n instance.
 
-The reason to do it this way: you will *see*, in Claude Code's plan, exactly what a visual agent workflow looks like expressed as a declarative spec. When Claude Code executes the MCP calls, n8n's UI will update in real time. This is the shape of the "AI-catalyst-lead directs AI through MCP" pattern, not the "vibe-code a Python script" pattern.
+The reason to do it this way: you will *see*, in Claude Code's plan, exactly what a visual agent workflow looks like expressed as a declarative spec. When Claude Code executes the MCP calls, n8n's UI will update in real time. This is the shape of the "AI-operator directs AI through MCP" pattern, not the "vibe-code a Python script" pattern.
 
 ### Path B — build it in the n8n UI by hand
 

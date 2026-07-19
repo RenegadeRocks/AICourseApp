@@ -20,7 +20,7 @@ This week separates the two variables — brand and niche — and teaches each a
 
 ## Who this week is for
 
-You have either done Week 1 or you already have live deal flow and your bottleneck is not outbound mechanics but **consistency of demand**. You are willing to narrow — to say a specific thing to a specific buyer in a specific industry — even if narrowing feels like leaving money on the table. The vault reader could be a marketing director moving into AI-consulting, a finance lead building fractional AI-CFO services, a legal ops manager productizing AI-contracts review, a creative director pivoting into AI-for-brand-strategy, or a generalist Catalyst trying to pick one of six possible niches. The content lands for any of them.
+You have either done Week 1 or you already have live deal flow and your bottleneck is not outbound mechanics but **consistency of demand**. You are willing to narrow — to say a specific thing to a specific buyer in a specific industry — even if narrowing feels like leaving money on the table. The vault reader could be a marketing director moving into AI-consulting, a finance lead building fractional AI-CFO services, a legal ops manager productizing AI-contracts review, a creative director pivoting into AI-for-brand-strategy, or a generalist operator trying to pick one of six possible niches. The content lands for any of them.
 
 If you are already niched and branded and want a third variable — e.g., pricing power or category creation — Saturday pushes into category creation (Lochhead, Raskin) as the advanced move.
 
