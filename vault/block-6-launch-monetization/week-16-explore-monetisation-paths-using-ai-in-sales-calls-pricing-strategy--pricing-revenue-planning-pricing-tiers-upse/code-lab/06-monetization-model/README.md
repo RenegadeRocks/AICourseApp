@@ -43,8 +43,10 @@ network — the rate card is a local, date-stamped table you maintain by hand.
   Sonnet-5-standard (Sept-1 expiry), Opus 4.8, and Fable 5, and flags the first
   scenario to break a pass bar. This is the whole point: **a margin event you
   don't control can break your unit economics with no change to price or churn.**
-- **Tier-designer audit** — warns on tiers below the 60% margin floor, ladder
+- **Tier-designer audit** — warns on tiers below the 50% margin floor, ladder
   steps under ~2×, and adjacent tiers with identical fences (no upgrade path).
+  The floor is 50% (not classic SaaS's 80%) because AI-native gross margins run
+  50–60%; Niche Radar's tiers land at 54% / 58% / 60%, healthy for the category.
 
 ## The stress case (why it's here)
 
@@ -53,9 +55,10 @@ before any shock: negative margins (an over-provisioned model on a $29–$49
 product), an $1,500 paid-ads CAC that can never pay back, and a ladder the audit
 flags on all three checks. It exists so you can recognize the shape of a broken
 model instantly — and so the calculator is proven to *fail loudly* rather than
-print a comfortable lie. The healthy scenario, by contrast, survives every shock
-down to Fable 5 (margin 20%, LTV:CAC 3.2:1) — thin, but alive — which is exactly
-what a floor-plus-variable hybrid is supposed to do.
+print a comfortable lie. The healthy scenario, by contrast, starts at a 58.1%
+blended margin (ARPA $179, LTV:CAC 11.8:1, payback 2.1 months) and survives every
+shock down to Fable 5 (margin 15%, LTV:CAC 3.1:1) — thin, but alive — which is
+exactly what a floor-plus-variable hybrid is supposed to do.
 
 ## Make it yours
 

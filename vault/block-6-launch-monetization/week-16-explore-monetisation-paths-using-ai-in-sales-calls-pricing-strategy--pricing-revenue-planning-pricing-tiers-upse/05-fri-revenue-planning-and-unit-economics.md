@@ -89,13 +89,13 @@ When unit economics are tight — payback too long, LTV:CAC below 3:1. You have 
 
 ## Worked example — Niche Radar's unit economics
 
-Inputs (from the week): blended ARPA ~$180/month (mostly Pro), gross margin 58% (Monday's hybrid at Sonnet-5-intro rates, including support), monthly revenue churn 4% net of expansion (Thursday's ladder pulled NRR toward positive but SMB churn is real), CAC ~$220 (mostly your time + light ads, product-led).
+Inputs (from the week, and reproduced by Saturday's calculator): blended ARPA $179/month (mostly Pro), gross margin 58.1% (Monday's hybrid at Sonnet-5-intro rates, including a loaded support line), monthly revenue churn 4% net of expansion (Thursday's ladder pulled NRR toward positive but SMB churn is real), CAC $220 (mostly your time + light ads, product-led).
 
-- **LTV** = (180 × 0.58) / 0.04 = **$2,610** (cap at 36 months: 180 × 0.58 × 36 = $3,758, so the churn-based number governs — fine).
-- **LTV:CAC** = 2,610 / 220 = **11.9:1**. Suspiciously high → you're *under*-investing in acquisition (product-led, low CAC). The model says: you can afford to spend more to grow, or raise price.
-- **CAC payback** = 220 / (180 × 0.58) = **2.1 months**. Excellent, fast payback, room to invest.
-- **The stress:** Sonnet-5 intro expires Sept 1, margin drops to ~52%. LTV → $2,340, payback → 2.3 months. Survivable. Forced Opus migration → margin ~42%, LTV → $1,890, payback → 2.9 months, LTV:CAC → 8.6:1. Still healthy — the hybrid floor did its job.
-- **The diagnosis:** this business is *under-monetized and under-marketed*, not broken. The lever is (2) raise price and (1) spend on acquisition. The 11.9:1 ratio is money left on the table. Contrast a hypothetical where CAC were $1,500 (paid ads for a $39 SMB product): LTV:CAC = 1.7:1, payback 14 months — three strikes, and the model would say "your acquisition model is wrong for this ACV; go product-led or raise ACV."
+- **LTV** = (179 × 0.581) / 0.04 = **$2,602** (cap at 36 months: 179 × 0.581 × 36 = $3,743, so the churn-based number governs — fine).
+- **LTV:CAC** = 2,602 / 220 = **11.8:1**. Suspiciously high → you're *under*-investing in acquisition (product-led, low CAC). The model says: you can afford to spend more to grow, or raise price.
+- **CAC payback** = 220 / (179 × 0.581) = **2.1 months**. Excellent, fast payback, room to invest.
+- **The stress:** Sonnet-5 intro expires Sept 1, margin drops to 52.8%. LTV → $2,362, payback → 2.3 months. Survivable. Forced Opus migration → margin 42.0%, LTV → $1,881, payback → 2.9 months, LTV:CAC → 8.6:1. Still healthy — the hybrid floor did its job.
+- **The diagnosis:** this business is *under-monetized and under-marketed*, not broken. The lever is (2) raise price and (1) spend on acquisition. The 11.8:1 ratio is money left on the table. Contrast a hypothetical where CAC were $1,500 (paid ads for a $39 SMB product): LTV:CAC = 1.7:1, payback 14 months — three strikes, and the model would say "your acquisition model is wrong for this ACV; go product-led or raise ACV."
 
 The point of the model isn't the numbers; it's the *diagnosis*. It tells you which of the three levers to pull.
 
@@ -105,7 +105,7 @@ Allow 2 hours. Saturday's `code-lab/06-monetization-model/` mechanizes this; tod
 
 **Step 1 — The five numbers (40 min).** For your product, compute gross margin (real COGS from Monday), CAC (include your own time), ARPA (your tier mix), churn (from [[05-fri-data-and-scale|b5w14]] or an honest estimate), and derive LTV, LTV:CAC, and payback. Use real numbers where you have them; label estimates as estimates.
 
-**Step 2. The COGS-shock cascade (30 min).** Re-run LTV, LTV:CAC, and payback at three margins: current, post-Sept-1 (intro expiry, ~−6pts), and forced-Opus-migration (~−16pts). Note which metric crosses a health threshold (LTV:CAC < 3:1, payback > 12mo) first, and at what margin.
+**Step 2. The COGS-shock cascade (30 min).** Re-run LTV, LTV:CAC, and payback at three margins: current, post-Sept-1 (intro expiry, ~−5pts), and forced-Opus-migration (~−16pts). Note which metric crosses a health threshold (LTV:CAC < 3:1, payback > 12mo) first, and at what margin.
 
 **Step 3 — The churn sensitivity (20 min).** Re-run LTV at your current churn, half your churn, and double it. Observe that halving churn ~doubles LTV. This tells you retention's leverage relative to price.
 

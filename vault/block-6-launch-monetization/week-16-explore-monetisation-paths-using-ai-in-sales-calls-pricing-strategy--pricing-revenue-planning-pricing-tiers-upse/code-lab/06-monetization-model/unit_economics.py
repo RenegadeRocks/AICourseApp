@@ -25,7 +25,7 @@ from rate_card import DEFAULT_TOKENIZER_FACTOR, get_rate, run_cost
 # Health thresholds (Friday's pass bars). Directional, not gospel.
 MIN_LTV_CAC = 3.0
 MAX_PAYBACK_MONTHS = 12.0
-MIN_TIER_MARGIN = 0.60          # per-tier gross-margin floor
+MIN_TIER_MARGIN = 0.50          # per-tier gross-margin floor (AI-native band is 50-60%, per Bessemer/SaaS Mag; below 50% is the design finding)
 MIN_LADDER_STEP = 2.0           # tiers should be >= ~2x apart to feel distinct
 
 

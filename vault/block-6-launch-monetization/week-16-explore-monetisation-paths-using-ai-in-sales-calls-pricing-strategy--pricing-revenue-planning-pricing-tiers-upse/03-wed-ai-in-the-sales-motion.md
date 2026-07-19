@@ -34,7 +34,7 @@ You have a product and a price. Now you have to sell it, and increasingly the ma
 - [[02-tue-agent-architectures|b2w04, the sales-agent build]]: you built the *technology* of an outbound sales agent (research, drafting, sequencing, RAG grounding). Today is the *seller's* angle — how a human uses these tools in their own motion. Recapped, not re-taught.
 - [[03-wed-outbound-deliverability-and-compliance|b2w04 Wednesday]]: the canonical deliverability and compliance mechanics (domain warming, SPF/DKIM/DMARC, CAN-SPAM). Today builds the 2026 *AI-specific* deliverability crisis on top.
 - [[04-thu-voice-agent-trust-and-safety|b3w07 Thursday]]: the **canonical home for call-recording consent law**. Today wikilinks it and adds the 2026 AI-notetaker developments; it does not re-teach the two-party-consent fundamentals.
-- Week 15 (b6w15, *pending*. See the [week-15 folder](../week-15-plan-product-hunt-social-strategy--publish-live-cold-outreach/)): last week's cold-outreach launch. Today systematizes the sales motion behind it.
+- [[04-thu-cold-outreach-post-ai-slop|b6w15 Thursday — cold outreach after the AI-slop era]]: last week's cold-outreach launch. Today systematizes the sales motion behind it.
 
 ## The map: where AI helps, where it hurts
 

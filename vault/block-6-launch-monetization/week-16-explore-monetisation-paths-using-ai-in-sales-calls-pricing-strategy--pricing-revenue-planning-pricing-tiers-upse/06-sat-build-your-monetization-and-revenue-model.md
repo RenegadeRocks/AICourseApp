@@ -67,9 +67,9 @@ This is the load-bearing artifact. Use `code-lab/06-monetization-model/`.
 **Step 2. Encode your product.** Copy `config_example.py`, replace `HEALTHY_SCENARIO` with your product: real token counts per core action (measured, not guessed), your tiers from Build 2, your customer mix, and your business inputs, CAC **including your own time valued at your rate**, and real churn from [[05-fri-data-and-scale|b5w14]] analytics (or an honest estimate labeled as one).
 
 **Step 3 — Run and read.** `python unit_economics.py`. Read the three outputs:
-- **Per-tier margins**. Any tier below the 60% floor is a design finding (raise the price or tighten the fence).
+- **Per-tier margins**. Any tier below the 50% floor is a design finding (raise the price or tighten the fence). The floor is 50%, not the classic-SaaS 80%, because AI-native margins run 50-60% — Niche Radar's three tiers land at 54% / 58% / 60%, healthy for the category.
 - **Blended LTV:CAC and payback** — against the ≥3:1 and ≤12-month bars (sanity-check the output against the 2026 segment benchmarks, which put the median LTV:CAC near 3.2:1 and healthy payback under 12 months).[^5]
-- **The COGS-shock matrix**, the number that matters most: *which shock breaks a pass bar first, and at what margin.* The bundled Niche Radar example survives all the way to Fable 5 (margin 20%, LTV:CAC 3.2:1) because the hybrid floor holds; your job is to make yours do the same or know exactly where it breaks.
+- **The COGS-shock matrix**, the number that matters most: *which shock breaks a pass bar first, and at what margin.* The bundled Niche Radar example survives all the way to Fable 5 (margin 15%, LTV:CAC 3.1:1) because the hybrid floor holds; your job is to make yours do the same or know exactly where it breaks.
 
 **Step 4. Read the failing case.** Run the bundled `THREE_STRIKES_SCENARIO` and study it: negative margins from an over-provisioned model on a cheap product, a paid-ads CAC that never pays back, a ladder the audit flags three ways. This is the shape of a broken model — learn to recognize it in one glance, because someday it'll be yours and you'll want to see it early.
 
@@ -101,7 +101,7 @@ Running all four builds on the week's example:
 
 1. **Model:** hybrid. $39 base (2 niches) + $15/niche beyond, capped per tier with 80% alerts. Outcome ("competitive moves acted on") tracked, not billed. Free tier usage-capped (1 niche, weekly) to bound free COGS to ~$2/user.
 2. **Ladder:** Starter $39 / Pro $199 / Team $599, ~5× then ~3×, each fenced on niches + capability + support, each with a success-correlated upgrade trigger and a verbatim hook.
-3. **Model output:** blended margin 76% at Sonnet-5-intro, LTV:CAC 12.2:1, payback 2.0 months — *under-monetized*, room to raise price and invest in acquisition. Survives to Fable 5 (20% margin, 3.2:1). Diagnosis: raise price, spend on growth.
+3. **Model output:** blended ARPA $179, blended margin 58.1% at Sonnet-5-intro (per-tier 54% / 58% / 60%, all inside the AI-native band), LTV $2,602, LTV:CAC 11.8:1, payback 2.1 months — *under-monetized*, room to raise price and invest in acquisition. Survives to Fable 5 (15% margin, 3.1:1). Diagnosis: raise price, spend on growth.
 4. **Sales workflow:** Claude prep brief + verified follow-up drafter, consent baked into the opener.
 
 The read-out: this is a healthy, under-priced, under-marketed business, the model told us the lever (price + acquisition), not just the numbers. That diagnosis, produced in an afternoon, is the entire point of the week.

@@ -27,20 +27,28 @@ HEALTHY_SCENARIO = {
         "hosting_usd_per_customer": 3.00,      # infra slice per tenant
         "loaded_support_rate_usd": 90.00,      # your time, loaded, per hour
     },
+    # Tokens/runs above reproduce Monday's per-brief math exactly ($0.156/run,
+    # $3.43/niche/mo). `expected_units` is the *active* niche count a tier
+    # customer actually monitors — always below the tier's niche cap (fence),
+    # because real customers don't max their plan. Mix is Pro-heavy (Friday:
+    # "mostly Pro") for ARPA ~$180. Support hours are loaded at $90/hr and are
+    # the largest single COGS line at the higher tiers — which, with real token
+    # COGS, lands every tier in the week's 50-60% AI-native margin band rather
+    # than the 80-90% of classic SaaS.
     "tiers": [
         {
-            "name": "Starter", "price": 39.0, "customers": 22,
-            "expected_units": 2, "support_hours_per_month": 0.05,
+            "name": "Starter", "price": 39.0, "customers": 15,
+            "expected_units": 2, "support_hours_per_month": 0.09,
             "fences": ["2 niches", "email", "basic-analysis"],
         },
         {
-            "name": "Pro", "price": 199.0, "customers": 15,
-            "expected_units": 8, "support_hours_per_month": 0.15,
+            "name": "Pro", "price": 199.0, "customers": 21,
+            "expected_units": 6, "support_hours_per_month": 0.67,
             "fences": ["10 niches", "slack", "trend-analysis", "3-seats"],
         },
         {
-            "name": "Team", "price": 599.0, "customers": 3,
-            "expected_units": 22, "support_hours_per_month": 0.50,
+            "name": "Team", "price": 599.0, "customers": 4,
+            "expected_units": 17, "support_hours_per_month": 2.00,
             "fences": ["30 niches", "api", "custom-prompts", "unlimited-seats", "onboarding"],
         },
     ],
