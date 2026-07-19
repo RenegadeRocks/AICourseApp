@@ -62,7 +62,7 @@ curl -sc a.txt -X POST localhost:3000/auth/signup \
   -d '{"email":"a@example.com","password":"password-a1"}'
 RID=$(curl -sb a.txt -X POST localhost:3000/reports \
   -H 'content-type: application/json' -d '{"title":"A secret"}' | \
-  sed 's/[^0-9a-f-]//g')
+  sed -E 's/.*"id":"([^"]+)".*/\1/')
 curl -sb a.txt -X POST "localhost:3000/reports/$RID/share"
 
 # Stranger B signs up and lists reports — sees ONLY their own (empty).

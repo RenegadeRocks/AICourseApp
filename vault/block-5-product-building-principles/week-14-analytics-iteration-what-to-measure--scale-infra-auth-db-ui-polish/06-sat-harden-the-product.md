@@ -272,10 +272,10 @@ Step back. Three weeks built one machine:
 
 - **Week 12 — the skeleton.** A frontend with basic UI/UX, an MVP backend, wired
   to AI workflows. The product could exist and do its core thing.
-  ([[block-5-product-building-principles/week-12-frontend-basic-uiux-design-principles--build-mvp-backend-connect-with-ai-workflows/|Week 12]], pending.)
+  ([[block-5-product-building-principles/week-12-frontend-basic-uiux-design-principles--build-mvp-backend-connect-with-ai-workflows/06-sat-build-ship-the-product-skeleton|Week 12]].)
 - **Week 13 — the magic.** Smart AI features that make the product feel alive:
   the wow that turns a utility into something people tell their friends about.
-  ([[block-5-product-building-principles/week-13-making-your-product-feel-magic-with-ai--how-to-add-smart-features-that-wow-users/|Week 13]], pending.)
+  ([[block-5-product-building-principles/week-13-making-your-product-feel-magic-with-ai--how-to-add-smart-features-that-wow-users/06-sat-build-add-one-magical-feature|Week 13]].)
 - **Week 14 — the hardening.** This week: honest measurement (what to count and
   why), the iteration loop that turns numbers into changes, and the
   production-readiness pass (auth, DB, isolation, observability, polish) that lets
