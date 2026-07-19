@@ -76,7 +76,7 @@ what a launch means now ([[block-6-launch-monetization/week-15-plan-product-hunt
 you: lead magnets and an opt-in engine ([[block-7-onboarding-tracking/week-18-create-a-lead-magnet-using-social-media-distribution--aquire-leads-using-paid-ads/01-mon-lead-magnets-that-convert|lead magnets that convert]]), productizing the service ([[block-7-onboarding-tracking/week-19-build-async-client-dashboard-or-project-tracking-for-agency--productizing-your-service-community-market-research/03-wed-productizing-your-service|productizing your service]]), SOPs as the operating system ([[block-7-onboarding-tracking/week-20-sops-for-onbaording-delivery-growth--build-community-paid-inner-circle/01-mon-sops-the-operating-system-of-a-scaling-business|SOPs as the operating system]]), and community as a compounding moat ([[block-7-onboarding-tracking/week-20-sops-for-onbaording-delivery-growth--build-community-paid-inner-circle/04-thu-building-community-the-compounding-moat|community as a moat]]).
 
 **Block 8: Wind-up.** Week 21 assembled the complete agency/SaaS system and the
-thought-leadership engine ([[block-8-wind-up-checklists/week-21-complete-agency-saas-system--build-your-thought-leadership-machine-newsletter-content-engine/_week|Week 21 (pending)]]). Week 22, this one, integrates all of it.
+thought-leadership engine ([[04-thu-the-newsletter-and-content-engine|Week 21]]). Week 22, this one, integrates all of it.
 
 ## The five through-lines that ran the whole course
 
