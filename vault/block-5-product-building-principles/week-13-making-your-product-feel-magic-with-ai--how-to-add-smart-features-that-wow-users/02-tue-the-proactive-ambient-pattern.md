@@ -315,6 +315,74 @@ higher, and its four trust-layer decisions (transparency, control, confidence,
 timing). If your rung choice is 4, you must justify the irreversibility or drop
 to 3.
 
+## Rung 0 deserves more of your attention than it gets
+
+Smart defaults are the most under-invested rung, so they earn their own section.
+A smart default is the product pre-selecting the most likely choice: the category
+already guessed, the field already filled, the setting already right for this
+user. It is proactive AI with a near-zero interruption cost and near-total
+reversibility (the user just changes it), which makes it the highest
+magic-per-unit-risk feature you can ship.
+
+The reason teams skip it is the same reason they over-ship chatbots: a default is
+invisible and un-demo-able. Nobody screenshots a form that arrived correctly
+filled. But invisibility is the point. A default that is right 85% of the time
+saves the user a decision 85% of the time and costs them a two-second correction
+the other 15%, and because the correction is trivial, the *felt* experience is
+"this product knows me," not "the AI was wrong." Contrast that with a rung-3 draft
+that is right 85% of the time: the 15% of bad drafts each cost a review-and-fix
+cycle, and the user remembers those.
+
+Two design rules make smart defaults magical rather than annoying:
+
+- **A default must be trivially correctable, and the correction must stick.** If
+  the user changes the guessed category, the product should not re-guess and
+  clobber it next time. A default that fights the user's correction is worse than
+  no default. This is the memory-and-personalization discipline from
+  [[02-tue-memory-and-compaction-architectures|Block 3 Week 6]] applied at the
+  smallest scale: remember the correction.
+- **A default should often be computed, not generated.** The cheapest smart
+  default is a rule or a lookup (last value, most common value, the value a
+  similar record used), not a model call. Reserve the model for the defaults a
+  rule genuinely cannot produce. This keeps rung 0 instant and nearly free, which
+  is exactly what makes it feel like magic rather than latency.
+
+If you take one action from this lesson into Saturday, consider whether your
+feature could be delivered as a smart default instead of a higher rung. It is
+often the same value at a fraction of the risk.
+
+## The magic/creepy audit: a field checklist
+
+Turn the controversy resolution into something you can run in ten minutes on any
+proactive feature before it ships. For each item, a "no" is a design bug to fix,
+not a reason to kill the feature.
+
+1. **Legible context.** Can the user see, at the moment of use, every piece of
+   information the feature used? Is there any input that would make them ask "how
+   did it know that?" If yes, surface the provenance or drop that input.
+2. **User-serving goal.** Does the feature optimize the user's stated task, or a
+   vendor metric (engagement, upsell, retention-by-friction)? If any part of the
+   proactivity exists to serve *your* funnel rather than the user's task, it is on
+   the dark-pattern side of the CDT taxonomy.[^1]
+3. **Free rejection.** Can the user ignore or reverse the action at near-zero
+   cost? What is the most expensive thing the feature can do that the user cannot
+   cheaply undo? Is there a confirmation before it?
+4. **Off-switch.** Can the user turn the whole behavior off without reading a
+   manual or contacting support? Is the off-switch findable in under thirty
+   seconds?
+5. **Confidence honesty.** Does the UI look different when the feature is
+   uncertain? Would a low-confidence output be visually distinguishable from a
+   high-confidence one?
+6. **Attention worth.** Does every interruption (notification, modal, banner) the
+   feature generates clear the cost of the interruption? Could the same value be
+   delivered at a lower rung with less interruption?
+
+A feature that passes all six can be maximally proactive and still feel like
+magic. A feature that fails two or more is on its way to the "creepy" or
+"annoying" bucket regardless of how good the underlying model is. Run this audit
+on your Saturday feature before you write the eval harness; it is cheaper to fix a
+creepy design than a shipped one.
+
 ## Common mistakes experts see
 
 1. **Reaching for rung 3 or 4 for demo impact.** The autonomous action demos

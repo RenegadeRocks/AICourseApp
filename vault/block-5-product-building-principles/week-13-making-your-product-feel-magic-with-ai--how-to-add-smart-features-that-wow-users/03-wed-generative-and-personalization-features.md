@@ -271,6 +271,49 @@ The routing principles:
    succeeds. This is Friday's frontier, previewed: the right metric is
    fully-loaded cost per magical outcome.
 
+## The context budget: a worked accounting
+
+"Smallest sufficient context" and "route by stakes and frequency" are principles;
+here is the arithmetic that turns them into decisions, because the difference
+between a sustainable feature and a money-loser is usually a few thousand tokens
+you did not need to send.
+
+Take the draft-follow-up feature at a realistic scale: a freelancer with 200
+active deals, of which 30 go quiet in a given week. Consider two designs for the
+context you send per draft.
+
+**The lazy design** stuffs everything: the full message history of the deal (say
+2,000 tokens), the user's entire profile and all past drafts (3,000 tokens), a
+large system prompt with ten few-shot examples (2,500 tokens), plus the deal
+metadata (500 tokens). That is roughly 8,000 input tokens per draft. It feels
+"more personalized." It is mostly noise: past drafts for *other* deals dilute the
+signal, and ten few-shot examples past the third add little. The generation is
+both worse (context contamination) and more expensive.
+
+**The disciplined design** sends the last three messages of *this* deal (600
+tokens), the user's one saved tone preference (50 tokens), a tight system prompt
+with two few-shot examples (900 tokens), and the deal metadata (200 tokens).
+Roughly 1,750 input tokens, a bit over a fifth of the lazy design, and the
+generation is *better* because the signal is not buried.
+
+Now apply the two levers from the routing section. First, **prompt-cache the
+stable prefix**: the system prompt, the few-shot examples, and the tone spec do
+not change between the 30 drafts in a batch, so caching them means you pay full
+price for that prefix once and a fraction on each subsequent call. Second, **do
+the cheap deterministic thing first**: the detection (which deals are quiet) is a
+database query, not a model call, so you only pay for generation on the 30 deals
+that qualify, not all 200.
+
+The numbers move the feature from "an expensive novelty I might disable" to "a
+line item I barely notice." The exact costs will shift with the tokenizer change
+(re-baseline for the ~+30% tokens on current models) and with your model
+choice.[^8] The point is not the arithmetic itself but the habit: **every feature
+has a per-invocation context budget, and you set it deliberately by asking what is
+the smallest context that makes the generation good, not the largest context you
+happen to have.** Teams that never do this accounting ship features whose unit
+economics quietly go negative at scale, which is the Wednesday version of the
+Friday churn story.
+
 ## Worked example — spec a generation feature end to end
 
 Extend the CRM "draft follow-up" feature into a full generation spec you could
