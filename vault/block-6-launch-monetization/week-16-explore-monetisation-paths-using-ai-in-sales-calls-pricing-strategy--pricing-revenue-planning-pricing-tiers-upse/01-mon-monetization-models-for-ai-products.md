@@ -37,7 +37,7 @@ By Friday you will commit to *how* your launched product makes money, and that c
 
 ## First principles: a price is a metric times a rate, and AI broke the metric
 
-For thirty years of software, the dominant value metric was the **seat**. It worked because software *assisted a human*, so counting humans counted value, and — critically — a marginal seat cost the vendor almost nothing. Gross margins sat at 80–90% and nobody running a SaaS business thought hard about cost of goods sold.[^1]
+For thirty years of software, the dominant value metric was the **seat**. It worked because software *assisted a human*, so counting humans counted value, and, critically, a marginal seat cost the vendor almost nothing. Gross margins sat at 80–90% and nobody running a SaaS business thought hard about cost of goods sold.[^1]
 
 Agents break both halves of that. First, the pitch of an agent is that it does work *without* a human in the seat, so pricing per seat invites the buyer to notice that your product means *fewer* seats — you are taxing the thing you eliminate. Bessemer's 2026 framing is blunt: "per-user products are for humans; consumption products are for agents."[^1] Second, and more importantly for your survival, **the marginal unit now costs real money.** An agent run consumes thousands of model calls on your COGS line whether the customer has five logins or five hundred. Bessemer and SaaS Mag independently put AI-native gross margins at 50–60%, not 80–90%.[^1][^2] That 30-point compression is the single fact that reorganizes the entire monetization menu.
 
@@ -45,7 +45,7 @@ So the design question is no longer just "what metric captures value?" (the [[05
 
 ## The 2026 menu, in ascending order of buyer-risk transfer
 
-Here is the full menu. For each, the mechanic, who it fits, and — the part most guides skip — what the token-COGS line does to it.
+Here is the full menu. For each: the mechanic, who it fits, and the part most guides skip, what the token-COGS line does to it.
 
 ### 1. Flat subscription (per month, by feature/scope band)
 
@@ -57,7 +57,7 @@ Legacy metric, increasingly wrong for agents (see above). Still viable for *coll
 
 ### 3. Usage-based (per run, per message, per 1K tokens, per credit)
 
-You bill for consumption. This aligns revenue with COGS beautifully — every expensive action bills the customer — which is exactly why AI companies rushed to it: roughly 92% of AI software companies now use *some* usage component.[^4][^5] But pure usage has a well-documented 2026 problem: buyers hate the unpredictability. Enterprise buyers reject pure usage citing cost unpredictability and attribution as their top objections;[^3] the [[05-fri-pricing-the-package|b4w09]] backlash data (78% of IT leaders hitting surprise charges; credits nobody can define) is the canonical evidence. Usage aligns *your* incentives and misaligns the *buyer's* sense of control.
+You bill for consumption. This aligns revenue with COGS beautifully, every expensive action bills the customer — which is exactly why AI companies rushed to it: roughly 92% of AI software companies now use *some* usage component.[^4][^5] But pure usage has a well-documented 2026 problem: buyers hate the unpredictability. Enterprise buyers reject pure usage citing cost unpredictability and attribution as their top objections;[^3] the [[05-fri-pricing-the-package|b4w09]] backlash data (78% of IT leaders hitting surprise charges; credits nobody can define) is the canonical evidence. Usage aligns *your* incentives and misaligns the *buyer's* sense of control.
 
 ### 4. Credits (a usage abstraction)
 
@@ -65,11 +65,11 @@ Credits are usage in a costume: you sell a bucket of "credits" that map to actio
 
 ### 5. Per-outcome (per resolution, per booked meeting, per document delivered)
 
-The buyer pays only when the AI produces a defined result; failure is free. Sierra's per-resolution model, Intercom Fin's $0.99-per-resolution, Salesforce's pay-per-resolution — all live at $100M+ ARR scale.[^7] This is the maximum risk transfer *from* buyer *to* you: you now carry both the COGS *and* the delivery risk. It is magnetic in a sales conversation ("you only pay when it works") and treacherous in operations. We return to whether it fits you in the controversy section — the short version is that it is a conditional technology, not a law.
+The buyer pays only when the AI produces a defined result; failure is free. Sierra's per-resolution model, Intercom Fin's $0.99-per-resolution, Salesforce's pay-per-resolution. All live at $100M+ ARR scale.[^7] This is the maximum risk transfer *from* buyer *to* you: you now carry both the COGS *and* the delivery risk. It is magnetic in a sales conversation ("you only pay when it works") and treacherous in operations. We return to whether it fits you in the controversy section — the short version is that it is a conditional technology, not a law.
 
 ### 6. Hybrid (a floor plus a variable component)
 
-A base subscription that covers your fixed COGS and gives the CFO a forecastable floor, plus a metered or credit component that scales with heavy usage and passes through your variable COGS. This is where the market's center of gravity actually sits. Hybrid adoption in B2B software went from 27% to 41% in a single year, with ICONIQ projecting 48% in 2026; Stripe found 21% higher median growth for hybrid vs pure subscription or pure usage.[^8][^5] For most AI products with real, variable inference cost, **hybrid is the honest default** — it gives buyers a predictable floor and gives you a margin shield. This is the product-company echo of [[05-fri-pricing-the-package|b4w09]]'s floor-plus-variable conclusion.
+A base subscription that covers your fixed COGS and gives the CFO a forecastable floor, plus a metered or credit component that scales with heavy usage and passes through your variable COGS. This is where the market's center of gravity actually sits. Hybrid adoption in B2B software went from 27% to 41% in a single year, with ICONIQ projecting 48% in 2026; Stripe found 21% higher median growth for hybrid vs pure subscription or pure usage.[^8][^5] For most AI products with real, variable inference cost, **hybrid is the honest default**, it gives buyers a predictable floor and gives you a margin shield. This is the product-company echo of [[05-fri-pricing-the-package|b4w09]]'s floor-plus-variable conclusion.
 
 ### 7. Usage-based-with-floor / committed-use
 
@@ -91,7 +91,7 @@ Add embeddings/retrieval, scraping infra, and a hosting slice: call fully-loaded
 - **Usage: $9 per niche/month.** COGS ~$7/niche → margin ~22%. Aligned with COGS but thin, and the buyer with 8 niches sees a bill that swings monthly. Legible unit (niches, which they chose) but low margin unless you mark up harder.
 - **Hybrid: $39 base (2 niches included) + $15 per extra niche.** A 5-niche customer pays $39 + $45 = $84; COGS ~$35 → margin ~58%. Forecastable floor, scales with the legible unit, margin holds. This is the structure the physics wants.
 
-Now the part that separates 2026 from 2024: **run the COGS shock.** On **September 1**, Sonnet 5 intro pricing expires and inference rises 50% ($2/$10 → $3/$15). If you were forced onto **Opus 4.8 ($5/$25)**, inference is ~2.5× the Sonnet-5-intro baseline; onto **Fable 5 ($10/$50)**, ~5×.[^9] Under the flat $49/1-niche plan at Opus rates, the single-niche COGS climbs toward $17 and margin falls from 86% to ~65% — survivable. Under the naive usage plan at Fable rates, margin goes *negative*. The lesson is not "avoid usage." It is that **your model must degrade gracefully as COGS moves**, and a floor is the cheapest insurance you can buy. (Saturday's calculator runs this matrix for your product automatically.)
+Now the part that separates 2026 from 2024: **run the COGS shock.** On **September 1**, Sonnet 5 intro pricing expires and inference rises 50% ($2/$10 → $3/$15). If you were forced onto **Opus 4.8 ($5/$25)**, inference is ~2.5× the Sonnet-5-intro baseline; onto **Fable 5 ($10/$50)**, ~5×.[^9] Under the flat $49/1-niche plan at Opus rates, the single-niche COGS climbs toward $17 and margin falls from 86% to ~65%. Survivable. Under the naive usage plan at Fable rates, margin goes *negative*. The lesson is not "avoid usage." It is that **your model must degrade gracefully as COGS moves**, and a floor is the cheapest insurance you can buy. (Saturday's calculator runs this matrix for your product automatically.)
 
 The optimistic mirror image is real too: in 2026 the cheap-tier curve is falling fast — Sonnet 5 reset the agent-cost floor, GPT-5.6 Terra shipped at ~2× cheaper than GPT-5.5, Gemini 3.5 Flash sits at $1.50/$9, and Kimi K3 put an open-weight frontier model in play.[^12] If your model has a floor and you are honest with customers, falling inference cost drops straight to your margin or funds a visible "we upgraded your model tier at no charge" retention gift. Betting on cheaper inference is, in 2026, one of the least crazy bets available — but you build for the shock and *enjoy* the windfall, never the reverse.
 
@@ -101,7 +101,7 @@ This is the loudest pricing debate of 2026, so you must be able to argue both si
 
 **Position A — outcomes are the endgame.** The strongest version (Bret Taylor's, canonically covered in [[05-fri-pricing-the-package|b4w09]]): the atomic unit of AI productivity is a completed *process*, not a person, so you should price the completed process. Align price with delivered value and the whole "are we getting our money's worth" conversation evaporates. The receipts are real — Sierra, Fin at $0.99/resolution across 30,000+ customers, Salesforce shipping it natively, and a majority of agencies moving toward outcome engagements.[^7]
 
-**Position B — outcome pricing is the most expensive myth in enterprise AI.** Parloa's Forbes piece and a chorus of 2026 pricing-ops writers make the skeptic's case, and it is sharper than the hype admits.[^10][^11] Outcome pricing only functions where the outcome is (a) high-frequency, (b) crisply definable, (c) mostly attributable to *you* and not the customer's team or other tools, and (d) cheap to adjudicate. Break any condition and you get: **attribution fights** ("did your AI close the deal or did my rep?"), **measurement disputes** ("your AI didn't save that, our process change did"), **perverse incentives** (an agent paid per resolution learns to close tickets fast at the cost of satisfaction), and **revenue volatility you cannot hedge**.[^11] Customer-support resolutions meet all four conditions almost uniquely well, which is precisely why every famous outcome-pricing example is a support agent.
+**Position B. Outcome pricing is the most expensive myth in enterprise AI.** Parloa's Forbes piece and a chorus of 2026 pricing-ops writers make the skeptic's case, and it is sharper than the hype admits.[^10][^11] Outcome pricing only functions where the outcome is (a) high-frequency, (b) crisply definable, (c) mostly attributable to *you* and not the customer's team or other tools, and (d) cheap to adjudicate. Break any condition and you get: **attribution fights** ("did your AI close the deal or did my rep?"), **measurement disputes** ("your AI didn't save that, our process change did"), **perverse incentives** (an agent paid per resolution learns to close tickets fast at the cost of satisfaction), and **revenue volatility you cannot hedge**.[^11] Customer-support resolutions meet all four conditions almost uniquely well, which is precisely why every famous outcome-pricing example is a support agent.
 
 **The synthesis you should hold:** outcome pricing is a *conditional technology*. Run the four conditions against your product honestly. Support-shaped products: often yes. Monitor-and-brief products like Niche Radar, most content and analysis tools, anything low-frequency or multi-attribution: usually no — take hybrid-with-a-guarantee and revisit at 10× volume. But absorb Position A's *accounting posture* regardless: **track your outcome metric even when you don't bill on it**, because the renewal conversation ("this quarter we surfaced 43 actionable competitive moves, you acted on 11") is where outcome data pays whether or not it is on the invoice.
 
@@ -116,7 +116,7 @@ The data, from a January-2026 study of ~200 products and corroborating benchmark
 - **AI-native products convert slightly higher** than traditional SaaS (good ~6–8%, great ~15–20%).
 - The counterintuitive full-funnel finding: freemium's *lower* conversion rate is offset by a *much higher* signup rate. Per 1,000 visitors, freemium yields ~90 signups → ~5 paying; a no-card trial yields ~45 signups → ~3.6 paying. Freemium can win on total customers *and* still lose you money if the 85 non-converting free users each burn $6/month of inference.
 
-The AI-specific decision rule: **your free tier's COGS per user must be a marketing number you can afford at your conversion rate.** If freemium free users cost $6/month and convert at 4.5%, you are paying ~$127 in inference to acquire one paying customer through the free tier alone (before any other CAC). If that is below your other acquisition channels and your LTV supports it (Friday's math), freemium is a channel. If not, use a **time-boxed trial** (bounds the COGS exposure), a **usage-capped free tier** (free but hard-limited to N actions/month — the most common AI-native answer), or **paid-only with a money-back guarantee** (zero free COGS, higher friction). Most AI products in 2026 land on usage-capped free or a short trial, precisely because unbounded freemium on a GPU bill is how you fund your competitors' evaluations.
+The AI-specific decision rule: **your free tier's COGS per user must be a marketing number you can afford at your conversion rate.** If freemium free users cost $6/month and convert at 4.5%, you are paying ~$127 in inference to acquire one paying customer through the free tier alone (before any other CAC). If that is below your other acquisition channels and your LTV supports it (Friday's math), freemium is a channel. If not, use a **time-boxed trial** (bounds the COGS exposure), a **usage-capped free tier** (free but hard-limited to N actions/month. The most common AI-native answer), or **paid-only with a money-back guarantee** (zero free COGS, higher friction). Most AI products in 2026 land on usage-capped free or a short trial, precisely because unbounded freemium on a GPU bill is how you fund your competitors' evaluations.
 
 ## Choosing your model: the decision procedure
 
@@ -147,7 +147,7 @@ Running the procedure: value is delivered to a process (autonomous monitoring), 
 
 ## Reflection questions
 
-- Name the single displaced dollar your product replaces, in one sentence. If you cannot, is your value diffuse — and which model handles diffuse value honestly (hint: not outcome pricing)?
+- Name the single displaced dollar your product replaces, in one sentence. If you cannot, is your value diffuse, and which model handles diffuse value honestly (hint: not outcome pricing)?
 - If your inference cost fell 80% next year, would you cut price, expand scope, or take margin? What does each choice signal to your niche, and which competitor does each invite?
 - Where in your current draft could a customer be *surprised* by a bill? What would it cost you to make that surprise impossible, and is that cost less than one churned customer?
 - Your free tier costs $X/user/month in inference and converts at Y%. Multiply it out: what are you actually paying to acquire one customer through free, and is that your cheapest channel or your most expensive?
@@ -155,34 +155,34 @@ Running the procedure: value is delivered to a process (autonomous monitoring), 
 
 ## My take (reviewer lens)
 
-**Michael Seibel** would compress this entire lesson to one imperative: "You have a launched product and, probably, single-digit paying customers. Your monetization problem is not model selection — it is that not enough people have said yes. Pick hybrid, ship a price, and let ten real buyers' faces tell you if it's wrong. Every hour on the COGS-shock matrix before you have pricing feedback is procrastination dressed as rigor." He is 80% right, and the defense is narrow: the shock matrix exists not to perfect the number but to stop you shipping structures — uncapped flat, unbounded freemium — that are cheap to *set* and expensive to *unwind* once customers arrive. **Hamel Husain** would go after the "track outcomes even when you don't bill them" line: a metric with no money on it rots, because nobody audits a number that has no consequence. He is right, which is why the outcome metric here is wired into a monthly value email the customer actually receives — a consequence — not a dashboard nobody opens. **Chip Huyen** would push on the margin math: the ~+30% tokenizer factor and the rate card are *today's* numbers, and both will move; the honest move is to build the calculator to read a date-stamped rate card (Saturday does exactly this) rather than hard-coding a margin you'll quote for six months after it's false. All three converge on the real point: your pricing model is a live experiment, and today's job is to choose a structure that makes that experiment cheap to run and safe to be wrong in.
+**Michael Seibel** would compress this entire lesson to one imperative: "You have a launched product and, probably, single-digit paying customers. Your monetization problem is not model selection. It is that not enough people have said yes. Pick hybrid, ship a price, and let ten real buyers' faces tell you if it's wrong. Every hour on the COGS-shock matrix before you have pricing feedback is procrastination dressed as rigor." He is 80% right, and the defense is narrow: the shock matrix exists not to perfect the number but to stop you shipping structures — uncapped flat, unbounded freemium — that are cheap to *set* and expensive to *unwind* once customers arrive. **Hamel Husain** would go after the "track outcomes even when you don't bill them" line: a metric with no money on it rots, because nobody audits a number that has no consequence. He is right, which is why the outcome metric here is wired into a monthly value email the customer actually receives, a consequence — not a dashboard nobody opens. **Chip Huyen** would push on the margin math: the ~+30% tokenizer factor and the rate card are *today's* numbers, and both will move; the honest move is to build the calculator to read a date-stamped rate card (Saturday does exactly this) rather than hard-coding a margin you'll quote for six months after it's false. All three converge on the real point: your pricing model is a live experiment, and today's job is to choose a structure that makes that experiment cheap to run and safe to be wrong in.
 
 ## Further reading
 
 **Must-read**
-- Bessemer, *The AI Pricing and Monetization Playbook* (2026) — the margin-compression thesis and the seat-vs-consumption reframe, primary-sourced.[^1]
+- Bessemer, *The AI Pricing and Monetization Playbook* (2026). The margin-compression thesis and the seat-vs-consumption reframe, primary-sourced.[^1]
 - [[05-fri-pricing-the-package|b4w09 Friday]] — value metrics, the labor-line anchor, the usage-based backlash, canonical.
 
 **Recommended**
 - Flexprice, *Hybrid Pricing: The Complete Guide for SaaS and AI Companies (2026)* — the hybrid-dominance data and structures.[^8]
-- Forbes / Parloa, *Outcome-Based Pricing: The Most Expensive Myth in Enterprise AI* — the sharpest Position-B text.[^10]
+- Forbes / Parloa, *Outcome-Based Pricing: The Most Expensive Myth in Enterprise AI*, the sharpest Position-B text.[^10]
 - Lago, *7 AI Pricing Models: What Works, What Breaks* — a clean taxonomy with failure modes.[^4]
 
 **Optional**
 - Monetizely, *The 2026 Guide to SaaS, AI, and Agentic Pricing Models* — the hybrid-structures survey.[^5]
-- First Page Sage, *SaaS Freemium Conversion Rates: 2026* — freemium benchmark detail.[^14]
+- First Page Sage, *SaaS Freemium Conversion Rates: 2026*. Freemium benchmark detail.[^14]
 
 ## Citations
 
 [^1]: Bessemer Venture Partners, *The AI Pricing and Monetization Playbook* (2026): 50–60% AI-native gross margins vs 80–90% SaaS; "per-user products are for humans, consumption products are for agents"; the 2026 renewal-cliff argument. https://www.bvp.com/atlas/the-ai-pricing-and-monetization-playbook ; PDF https://www.bvp.com/assets/uploads/2026/02/The_AI_pricing_playbook_for_founders_Bessemer_Venture_Partners_2026.pdf (search-verified 2026-07-17; fetch egress-blocked — liveness pass pending)
 
-[^2]: SaaS Mag, *The AI COGS Problem: SaaS Gross Margin Compression 2026*: independent corroboration of the 50–60% AI gross-margin band and COGS-driven pricing shift. https://www.saasmag.com/ai-cogs-saas-gross-margin-compression/ (search-verified 2026-07-17; fetch egress-blocked — liveness pass pending)
+[^2]: SaaS Mag, *The AI COGS Problem: SaaS Gross Margin Compression 2026*: independent corroboration of the 50–60% AI gross-margin band and COGS-driven pricing shift. https://www.saasmag.com/ai-cogs-saas-gross-margin-compression/ (search-verified 2026-07-17; fetch egress-blocked, liveness pass pending)
 
 [^3]: Tropic (buyer-side) and Zenskar (CFO-side) on usage-pricing forecastability: 78% of IT leaders report unexpected charges under consumption/AI pricing; enterprise buyers reject pure usage citing unpredictability and attribution. Canonically treated in [[05-fri-pricing-the-package|b4w09]]; https://www.tropicapp.io/blog/what-is-a-credit-ai-pricing ; https://www.zenskar.com/blog/token-based-pricing (search-verified 2026-07-17; fetch egress-blocked — liveness pass pending)
 
 [^4]: Lago, *7 AI Pricing Models: What Works, What Breaks* (2026): taxonomy of AI pricing models with failure modes; usage aligns COGS but transfers unpredictability to buyers. https://getlago.com/blog/ai-pricing-models (search-verified 2026-07-17; fetch egress-blocked — liveness pass pending)
 
-[^5]: Monetizely, *The 2026 Guide to SaaS, AI, and Agentic Pricing Models*: ~92% of AI software companies use some usage component; hybrid as the surviving structure. https://www.getmonetizely.com/blogs/the-2026-guide-to-saas-ai-and-agentic-pricing-models ; corroborated by Bessemer playbook[^1] (search-verified 2026-07-17; fetch egress-blocked — liveness pass pending)
+[^5]: Monetizely, *The 2026 Guide to SaaS, AI, and Agentic Pricing Models*: ~92% of AI software companies use some usage component; hybrid as the surviving structure. https://www.getmonetizely.com/blogs/the-2026-guide-to-saas-ai-and-agentic-pricing-models ; corroborated by Bessemer playbook[^1] (search-verified 2026-07-17; fetch egress-blocked. Liveness pass pending)
 
 [^6]: GitHub Copilot AI Credits pricing (June 2026): Pro $10/mo + $10 credits, Business $19 + $19, Enterprise $39 + $39. Also recorded in this vault's July-2026 master refresh (cross-cutting theme #2, counts as one corroboration). https://flexprice.io/blog/hybrid-pricing-guide (search-verified 2026-07-17)
 
@@ -194,7 +194,7 @@ Running the procedure: value is delivered to a process (autonomous monitoring), 
 
 [^10]: Forbes / Parloa BrandVoice, *Outcome-Based Pricing: The Most Expensive Myth in Enterprise AI* (Jan 2026): the four-condition skeptic's case; attribution and adjudication costs. https://www.forbes.com/sites/parloa/2026/01/06/outcome-based-pricing-the-most-expensive-myth-in-enterprise-ai/ (search-verified 2026-07-17; fetch egress-blocked — liveness pass pending)
 
-[^11]: Monetizely, *Why Outcome-Based AI Pricing Models Are Gaining Traction (And Their Hidden Pitfalls)*: attribution complexity, measurement disputes, perverse incentives, multi-variable systems billed as single-variable. https://www.getmonetizely.com/articles/why-outcome-based-ai-pricing-models-are-gaining-traction-and-their-hidden-pitfalls (search-verified 2026-07-17; fetch egress-blocked — liveness pass pending)
+[^11]: Monetizely, *Why Outcome-Based AI Pricing Models Are Gaining Traction (And Their Hidden Pitfalls)*: attribution complexity, measurement disputes, perverse incentives, multi-variable systems billed as single-variable. https://www.getmonetizely.com/articles/why-outcome-based-ai-pricing-models-are-gaining-traction-and-their-hidden-pitfalls (search-verified 2026-07-17; fetch egress-blocked, liveness pass pending)
 
 [^12]: Model lineup, tokenizer, and cheap-tier curve (Sonnet 5 reset the agent cost floor; GPT-5.6 Terra ~2× cheaper than GPT-5.5; Gemini 3.5 Flash $1.50/$9; Kimi K3 open-weight frontier; new Anthropic tokenizer ~+30% tokens): this vault's `_refresh-2026-07-master-report.md` (binding theme #1) and `_refresh-2026-07-landscape-delta.md` §1, both URL-cited therein. (search-verified 2026-07-17)
 

@@ -2,10 +2,10 @@
 type: week-overview
 block: block-6-launch-monetization
 week: week-16
-title: 'Week 16 — Monetization paths, AI in sales calls, pricing tiers & revenue planning'
+title: 'Week 16, Monetization paths, AI in sales calls, pricing tiers & revenue planning'
 live_sessions:
   - '2026-09-05 — Explore monetisation paths: Using AI in Sales Calls & Pricing Strategy'
-  - '2026-09-06 — Pricing & Revenue Planning: Pricing tiers & upsell hooks'
+  - '2026-09-06. Pricing & Revenue Planning: Pricing tiers & upsell hooks'
 study_window: 2026-08-31 to 2026-09-06
 last_verified: 2026-07-17
 ---
@@ -14,9 +14,9 @@ last_verified: 2026-07-17
 
 ## The thesis of this week
 
-Last week you launched. People are arriving. This week decides whether their arrival compounds into a business or evaporates into a graph that spikes and dies. The launch is an event; monetization is a machine, and the machine has four moving parts: the **model** by which you charge, the **price** you attach to it, the **motion** by which you sell (increasingly AI-assisted), and the **revenue architecture** — tiers, upsell hooks, expansion — that turns one customer into a growing account. Get the machine right and every future launch pours into a structure that keeps money. Get it wrong and you spend Block 7 papering over a monetization model that was mispriced at birth.
+Last week you launched. People are arriving. This week decides whether their arrival compounds into a business or evaporates into a graph that spikes and dies. The launch is an event; monetization is a machine, and the machine has four moving parts: the **model** by which you charge, the **price** you attach to it, the **motion** by which you sell (increasingly AI-assisted), and the **revenue architecture**, tiers, upsell hooks, expansion — that turns one customer into a growing account. Get the machine right and every future launch pours into a structure that keeps money. Get it wrong and you spend Block 7 papering over a monetization model that was mispriced at birth.
 
-The hard constraint that makes 2026 different from every prior SaaS era: **your cost of goods sold moves.** A traditional SaaS company shipped bits at ~85% gross margin and never thought about COGS again. You run inference on every action, your token bill is a real line item, your model's price changed twice this quarter, and the tokenizer under it inflated by ~30%. Bessemer's own 2026 data puts AI-native gross margins at 50–60%, not 80–90%.[^1] Every pricing decision this week is grounded in that reality — we do the margin math with the actual July-2026 rate card, so the numbers you leave with are real, not aspirational.
+The hard constraint that makes 2026 different from every prior SaaS era: **your cost of goods sold moves.** A traditional SaaS company shipped bits at ~85% gross margin and never thought about COGS again. You run inference on every action, your token bill is a real line item, your model's price changed twice this quarter, and the tokenizer under it inflated by ~30%. Bessemer's own 2026 data puts AI-native gross margins at 50–60%, not 80–90%.[^1] Every pricing decision this week is grounded in that reality. We do the margin math with the actual July-2026 rate card, so the numbers you leave with are real, not aspirational.
 
 ## What this week is NOT re-teaching
 
@@ -28,7 +28,7 @@ The hard constraint that makes 2026 different from every prior SaaS era: **your 
 |-----|-------|--------|
 | Mon | Monetization models for AI products in 2026: the full menu, how token COGS reshapes viability, the usage-vs-subscription debate resolved | A chosen model with margin math |
 | Tue | Pricing strategy: value metric, anchoring, good-better-best, price testing with tiny N, discounting discipline | Draft price points + test plan |
-| Wed | AI in the sales motion: research, drafting, call prep, real-time assist, follow-up, CRM hygiene — where AI helps and where it erodes trust | An AI-assisted sales workflow |
+| Wed | AI in the sales motion: research, drafting, call prep, real-time assist, follow-up, CRM hygiene, where AI helps and where it erodes trust | An AI-assisted sales workflow |
 | Thu | Tiers, upsell hooks, and expansion revenue: the tier ladder, in-product upgrade prompts, gating without crippling, NRR as the compounding metric | A 3-tier ladder + expansion map |
 | Fri | Revenue planning & unit economics: CAC, LTV, payback, gross margin under AI COGS, churn's compounding damage, the raise-price-vs-cut-cost-vs-retain decision | A maintainable revenue model |
 | Sat | BUILD: choose your model, design the tier ladder, build the unit-economics + revenue-projection calculator, wire an AI sales-prep + follow-up workflow | `code-lab/06-monetization-model/` |
@@ -47,9 +47,9 @@ The hard constraint that makes 2026 different from every prior SaaS era: **your 
 
 ## Prerequisites
 
-- [[05-fri-pricing-the-package|b4w09 Friday — Pricing the package]] (value metric, labor-line anchor, COGS discipline)
+- [[05-fri-pricing-the-package|b4w09 Friday. Pricing the package]] (value metric, labor-line anchor, COGS discipline)
 - [[02-tue-agent-architectures|b2w04 — the sales-agent build]]
-- [[05-fri-data-and-scale|b5w14 Friday — retention metrics]]
+- [[05-fri-data-and-scale|b5w14 Friday, retention metrics]]
 - Your launched product's real numbers: token cost per core action, current visitor→signup→paid funnel (from [[05-fri-launch-day-instrumentation|b4w10]] instrumentation).
 
 _last_verified: 2026-07-17_
