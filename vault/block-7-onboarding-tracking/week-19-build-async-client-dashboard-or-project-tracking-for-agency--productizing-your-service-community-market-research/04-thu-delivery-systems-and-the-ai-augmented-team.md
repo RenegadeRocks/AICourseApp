@@ -255,9 +255,9 @@ days." Model its delivery honestly.
 ```
 SOP human hours per client (one-time build):
   intake + access                    2 h  (human)
-  workflow build from template       3 h  (human + AI drafting)
+  workflow build from template       3 h  (AI drafts, human reviews)   <- verification
   AI-drafted test cases              0.5 h (human review of AI output) <- verification
-  QA against eval checklist          2 h  (human)                       <- verification
+  QA against eval checklist          2 h  (human)
   client walkthrough                 1 h  (human)
   2 weeks tuning                     4 h  (human, spread)
   --------------------------------------------------

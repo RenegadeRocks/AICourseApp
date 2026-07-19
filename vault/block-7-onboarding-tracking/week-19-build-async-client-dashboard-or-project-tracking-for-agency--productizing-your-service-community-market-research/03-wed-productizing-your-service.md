@@ -196,9 +196,9 @@ product (flat monthly price, buy online, no sales call) but it is capacity-bound
 every subscriber consumes delivery capacity, so growth requires either more
 capacity (hire) or more AI leverage per unit. The flagship example is instructive
 and honest: DesignJoy, Brett Williams's one-person unlimited-design subscription,
-is the poster child of the productized model and reached roughly **$3.1M ARR in
-2024**, all solo. But its reported revenue **declined to around $1.7M ARR
-(~$145K MRR) through 2025**.[^6][^7] The productized model did not fail; it hit the
+is the poster child of the productized model and reached roughly **$3.1M ARR at
+its 2024 peak**, all solo. But its reported revenue **declined to around $1.7M ARR
+(~$145K MRR run-rate) through 2025**.[^6][^7] The productized model did not fail; it hit the
 capacity ceiling that a one-person unlimited-queue business structurally faces,
 plus a more competitive market. This is the single most important cautionary data
 point in the week: the most celebrated productized-service-of-one is a demonstration
