@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MVP AI Product Skeleton</title>
+    <style>
+      /* Monday's usability floor: readable measure, AA contrast, clear hierarchy.
+         Colors chosen to meet WCAG 2.2 AA (text >= 4.5:1, controls >= 3:1). */
+      :root {
+        --bg: #ffffff;
+        --fg: #18181b;      /* ~15:1 on white */
+        --muted: #52525b;   /* ~7:1 on white  */
+        --accent: #1d4ed8;  /* ~6.4:1 on white */
+        --line: #d4d4d8;
+        --err: #b91c1c;     /* ~5.9:1 on white */
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font: 16px/1.6 system-ui, -apple-system, sans-serif;
+        color: var(--fg);
+        background: var(--bg);
+        display: flex;
+        justify-content: center;
+      }
+      main { width: 100%; max-width: 680px; padding: 24px 16px; } /* body measure ~65ch */
+      h1 { font-size: 24px; line-height: 1.2; margin: 0 0 4px; }
+      p.sub { color: var(--muted); margin: 0 0 24px; }
+      #thread { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; }
+      .bubble {
+        padding: 12px 16px;
+        border-radius: 8px;
+        white-space: pre-wrap;
+        border: 1px solid var(--line);
+      }
+      .bubble.user { background: #f4f4f5; align-self: flex-end; max-width: 85%; }
+      .bubble.assistant { background: #fff; align-self: flex-start; max-width: 100%; }
+      .bubble.error { border-color: var(--err); color: var(--err); }
+      /* Tuesday's empty state: example prompts, not a blank canvas. */
+      #empty { color: var(--muted); border: 1px dashed var(--line); border-radius: 8px; padding: 16px; margin-bottom: 24px; }
+      #empty ul { margin: 8px 0 0; padding-left: 20px; }
+      form { display: flex; gap: 8px; }
+      textarea {
+        flex: 1;
+        min-height: 48px;
+        padding: 12px;
+        font: inherit;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        resize: vertical;
+      }
+      textarea:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; } /* visible AA focus */
+      button {
+        font: inherit;
+        padding: 0 20px;
+        min-height: 48px;               /* Fitts's law: large primary target */
+        border: 0;
+        border-radius: 8px;
+        background: var(--accent);
+        color: #fff;
+        cursor: pointer;
+      }
+      button:disabled { opacity: 0.5; cursor: default; }
+      .retry {
+        display: inline-block;
+        margin-top: 8px;
+        min-height: 36px;
+        padding: 0 12px;
+        background: #fff;
+        color: var(--err);
+        border: 1px solid var(--err);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Ask the assistant</h1>
+      <p class="sub">A thin backend streams a real model response, token by token.</p>
+
+      <div id="empty">
+        No messages yet. Try one of these:
+        <ul>
+          <li>Explain server-sent events like I'm new to backend work.</li>
+          <li>Draft a friendly rate-limit error message.</li>
+          <li>Give me three UX rules for AI loading states.</li>
+        </ul>
+      </div>
+
+      <div id="thread" aria-live="polite"></div>
+
+      <form id="form">
+        <textarea id="prompt" aria-label="Your prompt" placeholder="Type a prompt…"></textarea>
+        <button id="send" type="submit">Send</button>
+      </form>
+    </main>
+    <script src="/app.js"></script>
+  </body>
+</html>
