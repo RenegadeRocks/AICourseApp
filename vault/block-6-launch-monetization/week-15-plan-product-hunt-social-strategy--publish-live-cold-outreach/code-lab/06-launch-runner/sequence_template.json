@@ -1,0 +1,23 @@
+{
+  "note": "3-touch sequence. {signal} MUST be a real, specific observation about THIS prospect — the human editor verifies it before sending. Keep touch 1 under 80 words (the compliance footer is excluded from the count).",
+  "touches": [
+    {
+      "number": 1,
+      "send_after_days": 0,
+      "subject": "{signal} — a 40% shortcut?",
+      "body": "Hi {first_name},\n\n{signal} — that usually means tier-1 tickets are eating your team's day.\n\nI built {product} to {outcome}. It just went live. Worth a 15-minute look, or should I send a 90-second demo instead?\n\nEither way, no pressure."
+    },
+    {
+      "number": 2,
+      "send_after_days": 4,
+      "subject": "one number from a team like {company}",
+      "body": "Hi {first_name},\n\nQuick follow-up with something useful either way: one {role}-led team cut first-response time from 14h to 1.1h in nine weeks after routing tier-1 through {product}.\n\nHappy to share exactly how they did it, whether or not you ever try the tool. Want the teardown?"
+    },
+    {
+      "number": 3,
+      "send_after_days": 5,
+      "subject": "closing the loop, {first_name}",
+      "body": "Hi {first_name},\n\nI'll stop here so I'm not cluttering your inbox. If tier-1 ticket volume ever becomes the thing you want to fix, {product} will be here.\n\nThanks for reading this far."
+    }
+  ]
+}

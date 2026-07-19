@@ -1,0 +1,30 @@
+{
+  "product": "Triage Agent",
+  "launch_date": "2026-08-29",
+  "items": [
+    {"id": "page-instrumented", "phase": "T-7", "blocking": true, "done": true, "owner": "you",
+     "text": "Launch page live + instrumented (b4w10): separate PH UTM, qualified-action event firing"},
+    {"id": "ph-assets", "phase": "T-7", "blocking": true, "done": true, "owner": "you",
+     "text": "PH asset kit: outcome-led tagline, product-in-action thumbnail, 20s demo GIF"},
+    {"id": "ph-first-comment", "phase": "T-7", "blocking": true, "done": false, "owner": "you",
+     "text": "Maker first comment drafted, <30s read, one honest limitation named, compliant ask"},
+    {"id": "warm-list-notified", "phase": "T-2", "blocking": true, "done": false, "owner": "you",
+     "text": "Warm list invited to 'try it and give honest feedback' (compliant phrasing, no upvote ask)"},
+    {"id": "social-sequence", "phase": "T-2", "blocking": true, "done": true, "owner": "you",
+     "text": "5-post launch sequence written, link-in-comment, passes slop test"},
+    {"id": "outreach-drafts", "phase": "T-2", "blocking": true, "done": false, "owner": "you",
+     "text": "3-touch sequence drafted for 20 hand-picked prospects (personalizer.py), every specific human-verified"},
+    {"id": "lia-documented", "phase": "T-2", "blocking": true, "done": true, "owner": "you",
+     "text": "One-page Legitimate Interest Assessment written; EU prospects segmented"},
+    {"id": "communities-seeded", "phase": "T-2", "blocking": false, "done": false, "owner": "you",
+     "text": "Problem-story posts ready for 2 communities you already have standing in"},
+    {"id": "go-live", "phase": "launch-day", "blocking": true, "done": false, "owner": "you",
+     "text": "Self-hunt on PH at 12:01 PT, paste first comment immediately, then reply within the hour"},
+    {"id": "geo-first-pass", "phase": "T+1", "blocking": false, "done": false, "owner": "you",
+     "text": "Page intro rewritten as direct answer + statistic; week-0 citation baseline logged"},
+    {"id": "assets-banked", "phase": "T+1", "blocking": true, "done": false, "owner": "you",
+     "text": "PH badge + review quotes onto page; warm list -> outreach + interview pool"},
+    {"id": "decision-memo", "phase": "T+14", "blocking": false, "done": false, "owner": "you",
+     "text": "14-day decision memo vs pre-registered bands (b4w10)"}
+  ]
+}

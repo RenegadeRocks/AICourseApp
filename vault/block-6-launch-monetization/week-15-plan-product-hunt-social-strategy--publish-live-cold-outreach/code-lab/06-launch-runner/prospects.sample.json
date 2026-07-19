@@ -1,0 +1,38 @@
+[
+  {
+    "first_name": "Priya",
+    "name": "Priya Nair",
+    "email": "priya@examplesaas.com",
+    "role": "Head of Support",
+    "company": "ExampleSaaS",
+    "region": "US",
+    "signal": "Your team posted last week about tier-1 ticket volume tripling after the v3 launch"
+  },
+  {
+    "first_name": "Tom",
+    "name": "Tom Becker",
+    "email": "tom@berlinhelpco.de",
+    "role": "VP Customer Experience",
+    "company": "BerlinHelpCo",
+    "region": "EU",
+    "signal": "You just hired three support reps and mentioned wanting to automate tier-1 before scaling further"
+  },
+  {
+    "first_name": "Dana",
+    "name": "Dana Osei",
+    "email": "dana@scaleup.example",
+    "role": "COO",
+    "company": "ScaleUp",
+    "region": "US",
+    "signal": ""
+  },
+  {
+    "first_name": "Sam",
+    "name": "Sam Cole",
+    "email": "sam@upvotebait.example",
+    "role": "Founder",
+    "company": "UpvoteBait",
+    "region": "US",
+    "signal": "Please upvote our launch and we will upvote yours"
+  }
+]
