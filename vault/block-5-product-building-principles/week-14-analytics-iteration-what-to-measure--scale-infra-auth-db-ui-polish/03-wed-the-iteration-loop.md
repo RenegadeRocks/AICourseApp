@@ -237,7 +237,7 @@ factual accuracy on the golden set. Then you ship it to new signups.
 
 Two weeks later: the post-change cohort's generate→share rate is 38% vs 25%,
 regeneration rate held steady (not a fake win from users retrying), and eval
-accuracy held. Wilson intervals on 38% (n≈120) and 25% (n≈110) do not overlap.
+accuracy held. Wilson intervals on 38% (n≈250) and 25% (n≈240) do not overlap.
 **Decision: keep, and roll to all users.** One turn. Notice how little of it was
 statistics and how much was reading fifteen transcripts.
 
@@ -264,8 +264,8 @@ def should_ship(succ_a, n_a, succ_b, n_b):
             "overlap": overlap, "ship": better and not overlap}
 
 if __name__ == "__main__":
-    # control 25% of 110; variant 38% of 120
-    print(should_ship(28, 110, 46, 120))
+    # control 25% of 240; variant 38% of 250
+    print(should_ship(60, 240, 95, 250))
 ```
 
 **Pass bar:** the function returns `ship: True` only when the variant is both
