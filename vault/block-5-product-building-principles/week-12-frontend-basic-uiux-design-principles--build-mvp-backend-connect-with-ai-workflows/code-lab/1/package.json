@@ -1,0 +1,24 @@
+{
+  "name": "week12-mvp-ai-skeleton",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Week 12 code-lab — thin MVP backend + streaming AI endpoint + minimal frontend (zero runtime deps).",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src",
+    "start": "node dist/server.js",
+    "dev": "tsc && node dist/server.js"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.32.0",
+    "@types/node": "22.15.3",
+    "eslint": "9.32.0",
+    "typescript": "5.8.3",
+    "typescript-eslint": "8.38.0"
+  }
+}

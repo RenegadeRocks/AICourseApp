@@ -32,7 +32,7 @@ OUT_DIR = ROOT / "exports" / "anki"
 
 
 MODEL_ID = 1607392319
-DECK_ROOT = "AI Catalyst C3"
+DECK_ROOT = "AI Pro-level Course"
 
 MODEL = genanki.Model(
     MODEL_ID,
@@ -114,7 +114,7 @@ def main() -> int:
         print("No cards parsed.")
         return 1
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    out = OUT_DIR / f"AI-Catalyst-{scope.replace('/', '-')}.apkg"
+    out = OUT_DIR / f"AI-Pro-Course-{scope.replace('/', '-')}.apkg"
     genanki.Package(deck).write_to_file(out)
     print(f"[ok] {total} cards -> {out}")
     return 0

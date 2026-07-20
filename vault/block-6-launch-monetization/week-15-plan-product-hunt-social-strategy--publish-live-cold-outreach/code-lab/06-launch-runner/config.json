@@ -1,0 +1,8 @@
+{
+  "product": "Triage Agent",
+  "outcome": "resolve 40% of tier-1 support tickets before a human sees them",
+  "sender_name": "Alex Rivera",
+  "sender_physical_address": "Triage Labs, 12 Example St, Austin, TX 78701, USA",
+  "unsubscribe_url": "https://triage.example/opt-out",
+  "lia_documented": true
+}

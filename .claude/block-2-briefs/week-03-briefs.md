@@ -15,7 +15,7 @@ Named operators for Week 3 reviewer-lens rotation: Julian Shapiro (copy + conver
 
 ## Day 1 — Monday — The landing page as conversion machine
 
-- **Output path:** `D:\Work\ClaudeCode\AICatalyst\vault\block-2-ai-employees\week-03-building-elegant-landing-pages--how-to-build-micro-prototypes\01-mon-landing-page-as-conversion-machine.md`
+- **Output path:** `D:\Work\ClaudeCode\AIProCourse\vault\block-2-ai-employees\week-03-building-elegant-landing-pages--how-to-build-micro-prototypes\01-mon-landing-page-as-conversion-machine.md`
 - **Frontmatter:** `week: week-03`, `day_of_cycle: 1`, `day_name: mon`, `session_slug: building-elegant-landing-pages`, `date_due: 2026-06-01`, `word_count_target: 6000`
 - **Title direction:** "The landing page as conversion machine — the anatomy, the math, and what 2026 benchmark data actually shows"
 - **Topic:** Strip away "make it pretty." A landing page is a function with a measurable output: visitor → intended action (sign-up, demo, purchase, waitlist). Cover: the modular anatomy (hero value-prop / proof / objection-handling / pricing / CTA stack), Julian Shapiro's copy hierarchy (hook → promise → proof → action), Unbounce's Conversion Benchmark Report 2025 numbers per industry, eye-flow / F-pattern / Z-pattern research (Nielsen Norman 2024/25 eye-tracking), the proof stack (customer logos vs quantified case studies vs social proof numbers), when long-form beats short-form (Unbounce/Welsh debate), mobile-first reality (75%+ traffic in 2026). End with the conversion math: a 1% → 2% lift on 10k monthly visits is worth how much over 12 months at $X LTV.
@@ -30,7 +30,7 @@ Named operators for Week 3 reviewer-lens rotation: Julian Shapiro (copy + conver
 
 ## Day 2 — Tuesday — How v0, Lovable, Bolt, Replit actually work — and where they fail
 
-- **Output path:** `D:\Work\ClaudeCode\AICatalyst\vault\block-2-ai-employees\week-03-building-elegant-landing-pages--how-to-build-micro-prototypes\02-tue-how-ai-code-gen-tools-work.md`
+- **Output path:** `D:\Work\ClaudeCode\AIProCourse\vault\block-2-ai-employees\week-03-building-elegant-landing-pages--how-to-build-micro-prototypes\02-tue-how-ai-code-gen-tools-work.md`
 - **Frontmatter:** `week: week-03`, `day_of_cycle: 2`, `day_name: tue`, `session_slug: building-elegant-landing-pages`, `date_due: 2026-06-02`, `word_count_target: 6000`
 - **Title direction:** "Under the hood of v0, Lovable, Bolt, and Replit — the prompt-to-UI pipeline, failure taxonomy, and the taste layer"
 - **Topic:** The mechanics of AI-code-gen tools. How each one translates a natural-language prompt into deployed UI: v0's generate→edit→deploy flow built on shadcn/ui and Tailwind; Lovable's plan→scaffold→iterate loop with Supabase integration; Bolt.new's in-browser StackBlitz-WebContainer execution; Replit Agent's checkpoint-diff-commit model. What each does well: v0 for polished component composition on Vercel stack; Lovable for full-stack scaffolding with auth/db; Bolt for zero-setup dev environments; Replit for collaborative deploys. Where each fails at scale: v0 with complex routing and state; Lovable with nuanced design taste; Bolt with large codebases (context bleed); Replit Agent with bespoke design systems. The prompt engineering patterns that actually matter (give them a design reference, a pattern library, an example of the voice). The taste problem: AI-gen defaults are "Vercel-template" — how to push toward Linear/Rauno/Raycast taste on purpose.
@@ -45,7 +45,7 @@ Named operators for Week 3 reviewer-lens rotation: Julian Shapiro (copy + conver
 
 ## Day 3 — Wednesday — Design system literacy — overriding AI-gen defaults
 
-- **Output path:** `D:\Work\ClaudeCode\AICatalyst\vault\block-2-ai-employees\week-03-building-elegant-landing-pages--how-to-build-micro-prototypes\03-wed-design-system-literacy.md`
+- **Output path:** `D:\Work\ClaudeCode\AIProCourse\vault\block-2-ai-employees\week-03-building-elegant-landing-pages--how-to-build-micro-prototypes\03-wed-design-system-literacy.md`
 - **Frontmatter:** `week: week-03`, `day_of_cycle: 3`, `day_name: wed`, `session_slug: building-elegant-landing-pages`, `date_due: 2026-06-03`, `word_count_target: 6000`
 - **Title direction:** "Design-system literacy for operators who don't draw — the seven variables that separate a Vercel template from a Linear page"
 - **Topic:** The taste layer. You're not going to become a designer, but you need enough design-system literacy to brief Claude Code / v0 / Lovable toward a specific aesthetic and to override default outputs when the taste is wrong. Cover the seven load-bearing variables: typography (one typeface or two, scale ratio, line-height, measure), color (hue count, saturation ceiling, contrast math — Refactoring UI's approach), spacing (4/8px grid, vertical rhythm), component density (Linear vs Notion vs Stripe — each is coherent), motion (when static beats animated), imagery (illustration vs photo vs 3D, generated vs stock), and voice (copy as design surface). The "default is Vercel template" problem — how to identify when you've landed there and push out. The design-system corpus: shadcn/ui, Radix, Tailwind UI, Vercel Geist, Linear Design System (public), Rauno Freiberg's interactions library. Which to adopt wholesale vs plunder for components.
@@ -60,7 +60,7 @@ Named operators for Week 3 reviewer-lens rotation: Julian Shapiro (copy + conver
 
 ## Day 4 — Thursday — The micro-prototype ladder — pretotyping, smoke tests, fake-door, concierge
 
-- **Output path:** `D:\Work\ClaudeCode\AICatalyst\vault\block-2-ai-employees\week-03-building-elegant-landing-pages--how-to-build-micro-prototypes\04-thu-micro-prototype-ladder.md`
+- **Output path:** `D:\Work\ClaudeCode\AIProCourse\vault\block-2-ai-employees\week-03-building-elegant-landing-pages--how-to-build-micro-prototypes\04-thu-micro-prototype-ladder.md`
 - **Frontmatter:** `week: week-03`, `day_of_cycle: 4`, `day_name: thu`, `session_slug: how-to-build-micro-prototypes`, `date_due: 2026-06-04`, `word_count_target: 6000`
 - **Title direction:** "The micro-prototype ladder — pretotyping → smoke test → fake-door → concierge → MVP, and which rung to start on"
 - **Topic:** Alberto Savoia's pretotyping framework (Google, 2011 → 2020s updates) applied rigorously. The ladder of validation from cheapest to most expensive: (1) pretotyping on paper (the "Japanese wife" test: would you, the operator, commit a week and $X?), (2) smoke-test landing page with no product (fake signup → "coming soon" + email list, measure opt-in rate), (3) fake-door (button that leads to a survey or paywall instead of the promised feature — Gmail's Priority Inbox famously), (4) concierge / Wizard-of-Oz (manual fulfillment, AI-mediated through Claude Code to test demand before automation), (5) painted-door feature in existing product, (6) MVP. Each rung's measurable output (conversion %, signup %, willingness-to-pay signal, qualitative tape). When to skip rungs (strong prior + cheap MVP) vs when to strictly climb (unknown willingness-to-pay). Teresa Torres's opportunity-solution tree applied.
@@ -75,7 +75,7 @@ Named operators for Week 3 reviewer-lens rotation: Julian Shapiro (copy + conver
 
 ## Day 5 — Friday — The 4–8 hour prototype pipeline — Claude Code + v0 + Figma Make + instrumentation
 
-- **Output path:** `D:\Work\ClaudeCode\AICatalyst\vault\block-2-ai-employees\week-03-building-elegant-landing-pages--how-to-build-micro-prototypes\05-fri-prototype-pipeline.md`
+- **Output path:** `D:\Work\ClaudeCode\AIProCourse\vault\block-2-ai-employees\week-03-building-elegant-landing-pages--how-to-build-micro-prototypes\05-fri-prototype-pipeline.md`
 - **Frontmatter:** `week: week-03`, `day_of_cycle: 5`, `day_name: fri`, `session_slug: how-to-build-micro-prototypes`, `date_due: 2026-06-05`, `word_count_target: 6000`
 - **Title direction:** "The 4–8 hour shippable-prototype pipeline — Claude Code as orchestrator, v0/Lovable as UI, Figma Make for design, n8n for glue"
 - **Topic:** The end-to-end workflow: from hypothesis to deployed, instrumented, measurable prototype in one workday. The role of each tool as an "AI employee": Claude Code is the orchestrator (reads the hypothesis, scaffolds the plan, writes prompts, manages the codebase); v0 / Lovable / Bolt is the UI shop (takes a design brief, returns components); Figma Make (announced Config 2024/25, multimodal UI-to-code) for design assets; Cursor or Claude Code for code edits; Vercel for deploy; n8n or Make for glue (form → email list → slack notification → conversion tracking); PostHog / Microsoft Clarity / Plausible for instrumentation. The hand-off protocol between tools. The prompt patterns that compound (briefing the taste, briefing the state shape, briefing the data contract). The "stop condition" for a 4-hour prototype (when is it shippable vs when are you gold-plating).
@@ -90,7 +90,7 @@ Named operators for Week 3 reviewer-lens rotation: Julian Shapiro (copy + conver
 
 ## Day 6 — Saturday — Validation instrumentation — tracking, session replay, AI-moderated interviews
 
-- **Output path:** `D:\Work\ClaudeCode\AICatalyst\vault\block-2-ai-employees\week-03-building-elegant-landing-pages--how-to-build-micro-prototypes\06-sat-validation-instrumentation.md`
+- **Output path:** `D:\Work\ClaudeCode\AIProCourse\vault\block-2-ai-employees\week-03-building-elegant-landing-pages--how-to-build-micro-prototypes\06-sat-validation-instrumentation.md`
 - **Frontmatter:** `week: week-03`, `day_of_cycle: 6`, `day_name: sat`, `session_slug: how-to-build-micro-prototypes`, `date_due: 2026-06-06`, `word_count_target: 6000`
 - **Title direction:** "Validation instrumentation — the measurement layer that decides whether your prototype actually validated anything"
 - **Topic:** The most common prototype failure isn't the build — it's the measurement. Cover: event model design (what events, what properties, what funnels — PostHog/Amplitude/Mixpanel patterns), session replay (Microsoft Clarity's free tier, Hotjar, FullStory, PostHog session replay), funnels + cohort analysis basics, when qualitative beats quantitative (N<200 traffic), AI-moderated 1:1 interviews (Outset.ai, Maze AI Interviewer, Strella, Listen Labs — the 2024/25 category), the Rob Fitzpatrick Mom Test applied to AI-moderated scripts, the "100-visitor minimum / 10-conversation maximum" heuristic for early prototypes, how to read a funnel when N=50 (binomial confidence intervals, stop trying to A/B test). The validation math: what signal strength justifies level-up, kill, pivot.
@@ -105,10 +105,10 @@ Named operators for Week 3 reviewer-lens rotation: Julian Shapiro (copy + conver
 
 ## Day 7 — Sunday — Week 3 Synthesis + quiz + flashcards
 
-- **Output path:** `D:\Work\ClaudeCode\AICatalyst\vault\block-2-ai-employees\week-03-building-elegant-landing-pages--how-to-build-micro-prototypes\07-sun-synthesis-quiz-flashcards.md`
+- **Output path:** `D:\Work\ClaudeCode\AIProCourse\vault\block-2-ai-employees\week-03-building-elegant-landing-pages--how-to-build-micro-prototypes\07-sun-synthesis-quiz-flashcards.md`
 - **Frontmatter:** `type: synthesis`, `week: week-03`, `day_of_cycle: 7`, `day_name: sun`, `title: 'Week 3 Synthesis — The landing-page × prototype pipeline'`, `study_date: 2026-06-07`, `date_due: 2026-06-07`, `word_count_target: 3800`
 - **Topic:** Tie Mon–Sat into one shipping pipeline: conversion anatomy (Mon) → tool stack mechanics (Tue) → taste layer (Wed) → validation ladder (Thu) → 4-hour pipeline (Fri) → measurement layer (Sat). Mirror the shape of prior synthesis days: opening thesis, unifying frame, where-each-day-goes-forward table, 12–14 mental-move table, 20-question quiz (mix of multiple-choice + short-written + code/prompt-completion), ~40 flashcards, 3–5 "what's not yet settled" items.
-- **Reference shape:** `D:\Work\ClaudeCode\AICatalyst\vault\block-1-problem-solving-outreach\week-01-getting-your-first-client--how-to-plan-scope-and-sell-ai-projects\07-sun-synthesis-quiz-flashcards.md` — copy shape only, not content.
+- **Reference shape:** `D:\Work\ClaudeCode\AIProCourse\vault\block-1-problem-solving-outreach\week-01-getting-your-first-client--how-to-plan-scope-and-sell-ai-projects\07-sun-synthesis-quiz-flashcards.md` — copy shape only, not content.
 - **Quiz format:** Every question has a right answer OR a defensible position with a clearly-stated rubric. No "think about how you might..." questions.
 - **Flashcards:** Q/A style. Concepts, numbers, named operators, named controversies, tool-mechanic specifics (e.g., "v0 default stack: Next.js + shadcn/ui + Tailwind on Vercel, optimized for X, weak at Y").
 - **Runnable closing exercise:** "Pick one real hypothesis. Design the landing page (Mon anatomy) → pick your tool (Tue tradeoffs) → apply taste brief (Wed variables) → position on validation ladder (Thu rung) → ship in 4 hours (Fri pipeline) → instrument (Sat event model) → set go/no-go (Sat math). Commit to running the test in the next 14 days."

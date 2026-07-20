@@ -5,7 +5,7 @@ Rocks, instructed by Claude Opus 4.6/4.7). It's a hybrid:
 
 - `vault/` — plain markdown, one file per lesson (the source of truth)
 - `app/` — Next.js 15 reader at `http://localhost:3000`
-- `scripts/` — Python utilities (curriculum parser, Anki/NotebookLM exports)
+- `scripts/` — Python utilities (curriculum parser, Anki/NotebookLM/EPUB exports)
 - `.claude/commands/` — slash commands for lesson generation
 - `curriculum.json` — parsed 9-block / 26-week schedule
 
@@ -64,7 +64,24 @@ soft targets — longer is fine if tight.
 
 Content pipeline (proven across Weeks 1-5): parallel generation →
 multi-persona review → surgical polish → citation verification. Each phase
-gets its own subagent dispatch.
+gets its own subagent dispatch. Reviewer roster as of July 2026: Karpathy,
+Chip Huyen, Jerry Liu, Hamel Husain, Simon Willison, Seibel, Boris Cherny,
+cohort peer + Mira Murati, swyx, Ethan Mollick, Lilian Weng, Jeremy Howard
+(see `vault/00-program/_refresh-2026-07-master-report.md`).
+
+## EPUB output (replaces the old Notion mirror)
+
+The course's read-elsewhere output is a single Kindle-ready EPUB, not Notion.
+After generating or refreshing content, rebuild it:
+
+```
+> /export-epub            # all blocks -> exports/ai-pro-level-course.epub
+python scripts/export_epub.py [--block <block-dir-name>]
+```
+
+Send the resulting file to the user (they load it via Send-to-Kindle).
+`exports/` is gitignored — the EPUB is a build artifact, regenerated from the
+vault. Do not push course content to Notion.
 
 ## Chat feature
 
@@ -84,10 +101,12 @@ working.
 - Don't add calendar dates back to the app surface. The schedule is
   slug-based (block / week-in-program / day-of-cycle) — see
   `app/src/lib/schedule.ts`. Calendar dates were intentionally removed.
-- Don't refer to "AI Catalyst" or "Outskill" in user-facing copy. The
-  brand is "AI Pro-level Course" by "Renegade Rocks". (The xlsx filename
-  on disk still says "AI Catalyst C3" — that's the real filename, leave
-  it alone.)
+- The brand is "AI Pro-level Course" by "Renegade Rocks". Never use the
+  program's old names ("AI Catalyst", "AI Catalyst C3", "Outskill") anywhere
+  — content, slugs, filenames, tooling, or launcher scripts. This line is the
+  only place the old name is retained, so the rule itself is enforceable; the
+  July-2026 purge removed it everywhere else (the schedule xlsx and the
+  week-00 folder slug were renamed too).
 
 ## Project conventions
 

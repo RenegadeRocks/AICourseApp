@@ -35,7 +35,7 @@ sources:
   - guillermo-rauch-vibe-code-production-2025
   - pieter-levels-flight-simulator-2025
   - cursor-vs-claude-code-vs-windsurf-2026
-last_verified: 2026-04-17
+last_verified: 2026-07-17
 word_count_target: 6000
 ---
 
@@ -43,13 +43,13 @@ word_count_target: 6000
 
 ## Why this matters
 
-After this lesson you will have a repeatable end-to-end pipeline that moves a hypothesis to a deployed, instrumented landing-or-prototype surface in a single workday — with named tool roles, named prompt handoffs, and named stop conditions. Not "here are the tools"; you already know the tools. The delta a sharp generalist does not have: a **protocol** — Claude Code as orchestrator, v0/Lovable as UI shop, Figma Make as asset atelier, n8n or a Cloudflare Worker as glue, PostHog/Clarity as observation, Vercel as deploy — plus three memorized prompts that survive the handoffs.
+After this lesson you will have a repeatable end-to-end pipeline that moves a hypothesis to a deployed, instrumented landing-or-prototype surface in a single workday — with named tool roles, named prompt handoffs, and named stop conditions. You already know the tools; this lesson is about the wiring between them. The delta a sharp generalist does not have: a **protocol** — Claude Code as orchestrator, v0/Lovable as UI shop, Figma Make as asset atelier, n8n or a Cloudflare Worker as glue, PostHog/Clarity as observation, Vercel as deploy — plus three memorized prompts that survive the handoffs.
 
-The capability delta is not "can build a landing page." Every generalist can do that in 2026. The delta is: when your client says at 9am "we need to know by end of day whether legal buyers click on the 'draft answer to discovery requests' CTA," can you ship a running, instrumented smoke test by 5pm with evidence you can defend Monday? This lesson is the shipping diary of that workday — literal timestamps, prompt pivots, moment-of-truth "good enough."
+The capability delta lives past "can build a landing page" — every generalist can do that in 2026. It shows up here: when your client says at 9am "we need to know by end of day whether legal buyers click on the 'draft answer to discovery requests' CTA," can you ship a running, instrumented smoke test by 5pm with evidence you can defend Monday? This lesson is the shipping diary of that workday — literal timestamps, prompt pivots, moment-of-truth "good enough."
 
 ## Prerequisites
 
-- You have spent ≥4 hours in v0 or Lovable or Bolt in the last 30 days and have produced at least one deployed surface (Tuesday's lesson covered the failure modes you'll recognize here).
+- You have spent ≥4 hours in v0 or Lovable or Bolt in the last 30 days and have produced at least one deployed surface ([[02-tue-how-ai-code-gen-tools-work|Tuesday's lesson]] covered the failure modes you'll recognize here).
 - You have Claude Code installed and have run at least one multi-file edit session with it (not just ask-and-paste).
 
 That is the prereq list. If you also already run a PostHog or Clarity project, you will save 20 minutes in Phase 4; if not, you'll install them during the pipeline. Everything else we teach inline.
@@ -73,7 +73,7 @@ The framing that matters: **the prompts you write are not instructions to a sing
 
 Before the timestamps, resolve the argument you'll have with yourself at hour two: should the conductor be Claude Code, or Cursor, or Windsurf, or Aider?
 
-The 2026 benchmark comparisons across Dec 2025 – Jan 2026 agree on tradeoff shape. Shareuhack ranks Cursor best overall, Windsurf best for beginners, Claude Code "best for CLI" and large-refactor work, with "1M token context window (Opus 4.6) analyzes ~30,000 lines... Cursor and Windsurf typically work within 128K-256K tokens" ([shareuhack 2026][6]). The DEV "5 ways" showdown rates Claude Code's output "most maintainable, with clear separation of concerns... and actual try/catch blocks with meaningful error messages," while noting Cursor's tighter inner-loop ([DEV showdown][7]).
+The 2026 benchmark comparisons agree on tradeoff shape even as the model names churn under them. Late-2025/early-2026 write-ups ranked Cursor best overall, Claude Code "best for CLI" and large-refactor work, on the strength of a 1M-token context window vs Cursor's typical 128K–256K ([shareuhack 2026][6]). That snapshot is now two model generations stale on the specifics: by mid-2026 **Claude Code defaults to Claude Sonnet 5 with a 1M-token context** (and can run on Fable 5 / Opus 4.8), while Cursor was acquired by SpaceX in June 2026 — so read those comparisons for the *shape* (one orchestrator with a large window vs a tight inner loop), not the version numbers. The DEV "5 ways" showdown rates Claude Code's output "most maintainable, with clear separation of concerns... and actual try/catch blocks with meaningful error messages," while noting Cursor's tighter inner-loop ([DEV showdown][7]).
 
 - **Swyx/Simon Willison multi-tool position** (see Willison's Agentic Engineering Patterns, [substack][8]): Cursor for inner loop, Claude Code for autonomous multi-file refactors, v0/Lovable for UI scaffolds. No one tool wins all three.
 - **Cherny one-agent-to-rule-them-all position**: subagents + skills inside Claude Code eliminate the inner-loop advantage once specialists are in the same session ([Cherny workflow][9]).
@@ -82,12 +82,12 @@ The 2026 benchmark comparisons across Dec 2025 – Jan 2026 agree on tradeoff sh
 
 **n8n vs Cloudflare Worker.** The 2025 Medium landscape piece and the Latenode comparison frame it this way ([n8n landscape][10]; [Latenode alternatives][11]):
 
-- **Pro-n8n**: you pay for workflow executions, not per-node operations — a 100k-task flow is ~$50/mo vs "$500+/month on other platforms" (n8n landscape). Native integrations to 1000+ services. Lovable's MCP integration (Sept 2025, [Lovable blog][12]) now speaks n8n.
-- **Pro-Worker**: fetch handler + KV + D1 replaces ~90% of n8n in 50 lines of TypeScript. No node graph, no self-hosting, edge latency.
+- **Pro-n8n**: you pay for whole-workflow *executions*, not per-node operations, which keeps multi-step flows cheap. Verified mid-2026 cloud tiers: **Starter €24/mo for 2,500 executions, Pro €60/mo for 10,000, Business €800/mo for 40,000** ([n8n pricing][11b]) — every plan includes unlimited workflows and users, so the cost scales with run count, not graph complexity. (An execution is one run of the entire workflow regardless of node count.) Native integrations to 1,000+ services; Lovable's MCP integration (Sept 2025, [Lovable blog][12]) now speaks n8n.
+- **Pro-Worker**: fetch handler + KV + D1 replaces ~90% of n8n in 50 lines of TypeScript. No node graph, no self-hosting, edge latency, no per-execution metering.
 
 Rule: **use n8n when the glue involves >2 third-party services and one of them has a clicky UI the client wants to edit later**. Use a Worker when the glue is "form submit → Resend → Slack → PostHog" in 30 lines. The pipeline specifies both.
 
-**Figma Make vs v0.** Forrester's Config 2025 analysis called Figma Make the first serious threat to the vibe-coding category precisely because of design-system fidelity ([Forrester][13]). Rauch's counter in the ChatPRD interview ([Rauch how-i-ai][14]): Figma Make is an asset tool, not a deploy tool — v0 + Git + Vercel is where the production pipeline lives. I use Figma Make as asset atelier inside the pipeline; the handoff friction is real and we'll flag it.
+**Figma Make vs v0.** Forrester's Config 2025 analysis called Figma Make the first serious threat to the vibe-coding category precisely because of design-system fidelity ([Forrester][13]). Figma Make is now **generally available and multi-model** — you pick the latest Claude (including Opus 4.7), Gemini, or GPT via Figma AI credits, and it supports MCP connections ([Figma Make model selection][5b]) — and with **Claude Design shipped (April 2026)** the field is a three-way asset atelier now, not a duel. Rauch's counter in the ChatPRD interview ([Rauch how-i-ai][14]) still holds: Figma Make is an asset tool, not a deploy tool — v0 + Git + Vercel is where the production pipeline lives. I use Figma Make as asset atelier inside the pipeline; the handoff friction is real and we'll flag it.
 
 ## Layer 3 — The shipping diary, literal timestamps
 
@@ -252,7 +252,7 @@ checklist, plus the curl one-liner I can use to test locally.
 
 For Case A and Case C, Claude Code recommended path (a) — Cloudflare Worker — and returned a 63-line worker with KV-backed dedup. For Case B (the legal-intake prototype where the attorney client explicitly wanted to see-and-edit the flow before the pilot) Claude Code recommended path (b) and returned n8n JSON you import directly into the n8n UI.
 
-n8n's Cloudflare integration set is documented at [n8n Cloudflare integrations][15] and explicitly supports the Workflow-executions pricing model that makes complex flows affordable. n8n's own 2025 landscape piece on the no-code/low-code automation space, written by the community, reports n8n's pro plan starts "around $50" for 100k task flows vs "other platforms might charge $500+/month" — the gap matters when the client is going to run the flow in production ([2025 landscape piece][10]).
+n8n's Cloudflare integration set is documented at [n8n Cloudflare integrations][15] and explicitly supports the workflow-executions pricing model that makes complex flows affordable — because you pay per whole-workflow run, a graph with twenty nodes costs the same as one with three. On the verified mid-2026 cloud tiers (Starter €24 / Pro €60 / Business €800, [n8n pricing][11b]) the per-execution model is what keeps a client-run production flow cheap relative to per-operation platforms.
 
 At 3:18 I tested the curl one-liner. The PostHog event fired (I verified in the PostHog Live Events view). The Slack webhook posted. The Resend welcome email landed in my inbox. Total glue time for Case A: 42 minutes, of which ~15 minutes was fighting a CORS issue on the Worker route (Claude Code's first version didn't set `Access-Control-Allow-Origin: *` because the spec didn't specify cross-origin would be needed — the landing is on the same origin as the Worker in production, but localhost `:3000` calling `:8787` is cross-origin. Lesson: put "CORS-safe for localhost dev" in the brief).
 
@@ -277,13 +277,13 @@ I used Claude Code at 3:58 to add session replay via PostHog's built-in replay (
 
 `vercel --prod` from the terminal. Claude Code had the `vercel.json` config ready (routing rules, env vars listed). The first deploy failed because the Resend API key was set as `RESEND_API_KEY` in the Worker env and `RESEND_KEY` in the Next.js env — inconsistent naming. Claude Code caught this on the second attempt and unified the name. Total deploy time: 13 minutes, of which 9 was waiting on the initial Vercel cold build and 4 on the env-var fix.
 
-Vercel's 2024–26 changelog is worth keeping open in a tab on deploy day — the "new deployments of vulnerable Next.js applications blocked by default" policy from CVE-2025-66478 can silently fail a deploy if you're on an older pinned Next version ([Vercel changelog][19]). Claude Code bumped Next to 15.4 in the `package.json` during the spec phase specifically because I asked it to pin to the latest stable — worth doing even on smoke tests, because the CVE-blocking policy has already bitten me once.
+Vercel's changelog is worth keeping open on deploy day — the "new deployments of vulnerable Next.js applications blocked by default" policy from **CVE-2025-66478** (a CVSS-10.0 RSC remote-code-execution flaw affecting Next.js 15.0.0 through 16.0.6) will hard-fail a deploy if you're on any unpatched version in that range ([Vercel changelog][19]; [Next.js advisory][19b]). The fix is to pin to a **patched release — 15.4.8, 15.5.7, or 16.0.7 (or later)**, not just "15.x." Claude Code bumped Next to the latest patched stable in `package.json` during the spec phase specifically because I asked it to pin to the latest stable — worth doing even on smoke tests, because the CVE-blocking policy has already bitten me once. (Note: `15.4` alone is still in the vulnerable range; you need `15.4.8`.)
 
 ### Hour 4:25 → 4:40 — Sanity traffic and observation
 
 Fire 20 real visits — 5 from your own devices across two networks to verify events, 15 from a warm-network ping (a Slack channel, a small X post, an email to two friends). Open the PostHog dashboard. Within 5 minutes you should see: 20 `page viewed`, ~14 `hero viewed` (70% scroll-through is typical), ~4–6 `cta hovered`, ~2–3 `cta clicked`, ~0–2 `form submitted`. The shape tells you the event model is firing end-to-end. Any zero from this list is a bug in instrumentation, not a real signal — do not interpret the funnel until the sanity-check 20 visitors have all logged.
 
-At 4:40 you are done. The prototype is live, instrumented, observing. Tomorrow's lesson is the measurement layer: what you do with the funnel data and how you run the AI-moderated interviews. Saturday closes the loop.
+At 4:40 you are done. The prototype is live, instrumented, observing. Tomorrow's lesson is the measurement layer: what you do with the funnel data and how you run the AI-moderated interviews. [[06-sat-validation-instrumentation|Saturday]] closes the loop.
 
 ## Operator case studies — three real 4-to-8-hour ships, named and dated
 
@@ -291,7 +291,7 @@ At 4:40 you are done. The prototype is live, instrumented, observing. Tomorrow's
 
 **Guillermo Rauch — v0 to production, 2025 ChatPRD demo.** In "How I AI" (2025) Rauch takes a v0-generated prototype through v0's Git integration to a production Vercel deploy — branch, PR, CI, preview, merge ([ChatPRD][14]). Per Lenny's Newsletter profile: "v0 has grown to 3 million users by focusing on reliability and quality, with ChatGPT becoming their fastest-growing customer acquisition channel" ([Lenny][22]). Our pipeline is a subset — we truncate at smoke-test validation — but the v0 → Git → Vercel spine is the same. We use copy-paste instead of PR-review for <8-hour ships because branch management costs more than it saves under that window.
 
-**Anton Osika / Lovable — AI-generated prototype-as-startup-funnel, 2024–2026.** Lovable went $100M → $200M ARR between July and November 2025 and raised a $330M Series B at $6.6B valuation ([Lovable one-year][12]). Lovable Cloud (Sept 2025) auto-provisions auth/DB/files/AI without API keys; MCP integration lets it call n8n, Linear, Jira, Notion from a chat prompt. For Case B (the legal-intake client who wanted to edit the page themselves next week) I redid the prototype in Lovable instead of v0+Claude-Code — the client handoff is materially easier. Tradeoff: codebase is less inspectable, less portable. Pick per-client.
+**Anton Osika / Lovable — AI-generated prototype-as-startup-funnel, 2024–2026.** Lovable closed a **$330M Series B at $6.6B in December 2025**, then crossed **~$400M ARR (Feb 2026) and $500M annualized (June 2026)** at ~146 headcount, and by July 2026 was in talks to raise ~$300M at a **$13.2B valuation** ([Lovable $13.2B talks][12b]). Lovable Cloud (Sept 2025) auto-provisions auth/DB/files/AI without API keys; MCP integration lets it call n8n, Linear, Jira, Notion from a chat prompt. For Case B (the legal-intake client who wanted to edit the page themselves next week) I redid the prototype in Lovable instead of v0+Claude-Code — the client handoff is materially easier. Tradeoff: codebase is less inspectable, less portable. Pick per-client.
 
 ## Runnable experiment — ship a prototype end-to-end in one session
 
@@ -334,7 +334,7 @@ Do this exactly:
 - **PostHog events that say they fired but don't show.** Adblockers. Switch to PostHog's reverse-proxy mode (`/ingest` rewrite to PostHog) — documented in the Next.js PostHog docs ([PostHog Next.js][23]).
 - **Lovable or v0 quota exhaustion.** Lovable's new user ramps and v0's token bucket both throttle heavy-iteration sessions. Budget the pipeline so you do <25 v0 iterations; if you're doing more the brief is wrong, not the tool.
 - **Session-replay GDPR friction.** If your traffic includes EU visitors, session replay (PostHog or Clarity) needs cookie consent. Both vendors document consent-gated replay; Clarity's GDPR guide is explicit ([Clarity GDPR guide][24]).
-- **"Looks fine on desktop, broken on mobile."** Mobile traffic is 75%+ in 2026. Always first-render test at 360px, not 1280px.
+- **"Looks fine on desktop, broken on mobile."** Mobile is the majority of landing-page traffic in 2026 (~83% per Monday's Unbounce figure). Always first-render test at 360px, not 1280px.
 
 ## Open questions / what's not settled
 
@@ -345,19 +345,19 @@ Do this exactly:
 
 ## Reviewer lens — named critics with specific disagreements
 
-- **Boris Cherny** (creator of Claude Code; public Threads + substack workflow posts) would push back on the line "Claude Code's 1M token context... means the pipeline stays in one tool." Cherny explicitly argues the protection-of-context via *subagents* is what makes the orchestrator scale, not the raw context window — the window is a fallback for when decomposition fails. His specific counter: "Treat every phase of the pipeline as a subagent invocation, not a conversation turn in the main Claude Code session. Otherwise the main context fills with v0 iteration noise and the glue-layer debug loses resolution." ([Cherny workflow writeup][9]).
+- **Boris Cherny** (creator of Claude Code; his current public record is fleet-scale agent management) would push back on the line "Claude Code's 1M token context... means the pipeline stays in one tool." Cherny argues the protection-of-context via *subagents* — and, in the 2026 Claude Code, **agent teams and `/goal`-style autonomous completion conditions** — is what makes the orchestrator scale, not the raw context window; the window is a fallback for when decomposition fails. His counter: "Treat every phase of the pipeline as a subagent (or a `/goal` with an explicit done-condition), not a conversation turn in the main session. Otherwise the main context fills with v0 iteration noise and the glue-layer debug loses resolution." The version of his public setup this lesson cites has itself moved on — re-read the source, not the April snapshot ([Cherny workflow writeup][9]).
 
-- **Erik Schluntz** (Anthropic engineer on Claude Code) would push back on the claim "Claude Code is the conductor for the full pipeline." Schluntz has emphasized in public engineering posts that Claude Code is strongest when the task is *constrained* — a well-scoped PR, a well-scoped refactor. For a 4-hour prototype where the scope mutates hour-to-hour, his counter would be that a lighter-weight terminal agent (or Cursor's inner-loop) is faster when the scope is fluid, and Claude Code shines only once the scope stabilizes at hour 3.
+- **Erik Schluntz** (Anthropic engineer on Claude Code) would challenge "Claude Code is the conductor for the full pipeline." Schluntz has emphasized in public engineering posts that Claude Code is strongest when the task is *constrained* — a well-scoped PR, a well-scoped refactor. For a 4-hour prototype where the scope mutates hour-to-hour, his counter would be that a lighter-weight terminal agent (or Cursor's inner-loop) is faster when the scope is fluid, and Claude Code shines only once the scope stabilizes at hour 3.
 
-- **Swyx (Shawn Wang)** would push back on the line "skip n8n when the glue is 30 lines." Swyx has argued the opposite — that even simple flows benefit from a visual node graph because the *client handoff* is the expensive moment, not the engineering moment. His counter: "The question isn't `how many lines of TypeScript` — it's `who has to read this in 3 months, and do they read TypeScript?`. For a client-facing prototype the node graph is the more generous artifact."
+- **Swyx (Shawn Wang)** would contest the line "skip n8n when the glue is 30 lines." Swyx has argued the opposite — that even simple flows benefit from a visual node graph because the *client handoff* is the expensive moment, not the engineering moment. His counter: "The question isn't `how many lines of TypeScript` — it's `who has to read this in 3 months, and do they read TypeScript?`. For a client-facing prototype the node graph is the more generous artifact."
 
-- **Simon Willison** would push back on "memorize these three prompts." In his Agentic Engineering Patterns essay ([Simon substack][8]) Willison argues memorized prompts become stale because the models change underneath — the Nov 2025 inflection point he flagged means a prompt that was tight for Sonnet 4.4 is over-specified for Sonnet 4.6. His counter: version the prompts, date-stamp them, and expect to rewrite on every model release.
+- **Simon Willison** takes aim at "memorize these three prompts." In *Agentic Engineering Patterns* — the chapter-shaped guide he began publishing **February 23, 2026** ([Simon substack][8]) — his through-line is that the ground shifts under coding agents fast enough that today's tight prompt is tomorrow's over-specified one: a brief tuned for one Claude generation drifts once the default model changes (Sonnet 5 became the Claude Code default June 30, 2026). His counter: version the prompts, date-stamp them, and expect to rewrite on every model release. (The broader "capability inflection" framing that a prompt-and-review discipline now separates professionals is **Karpathy's**, from Sequoia Ascent 2026 — "vibe coding raises the floor, agentic engineering raises the ceiling" — not Willison's; don't conflate the two.)
 
 - **Amjad Masad** (Replit) would push back on "Vercel as deploy target." His position: Replit Agent's checkpoint-diff-commit plus hosted dev env collapses deploy to ~0 minutes; Vercel only wins when the target is Next.js-specific. Shaves 15 min for Case A/C; for Case B (attorney wanted inspectable Vercel-hosted code for IT review) Vercel still wins.
 
-- **Guillermo Rauch** (Vercel CEO) would push back on the line "skip branch management for <8h ships." Rauch's Git-integration-in-v0 demo explicitly shipped a pull-request-reviewed build to production in a sub-hour workflow, arguing the branch-management cost is actually *negative* (PR review catches bugs cheaper than production debugging). For client deliverables I'd concede this; for solo smoke-tests I hold the original position.
+- **Guillermo Rauch** (Vercel CEO) would object to the line "skip branch management for <8h ships." Rauch's Git-integration-in-v0 demo explicitly shipped a pull-request-reviewed build to production in a sub-hour workflow, arguing the branch-management cost is actually *negative* (PR review catches bugs cheaper than production debugging). For client deliverables I'd concede this; for solo smoke-tests I hold the original position.
 
-- **Justin Welsh** would push back on "the prototype validates a hypothesis." Welsh's thesis: the artifact's job is to force a calendar meeting, not a conversion. A 0% waitlist can still be a successful ship if three warm contacts reply "tell me more when live."
+- **Justin Welsh** would reframe "the prototype validates a hypothesis." Welsh's thesis: the artifact's job is to force a calendar meeting, not a conversion. A 0% waitlist can still be a successful ship if three warm contacts reply "tell me more when live."
 
 ## Further reading
 
@@ -379,7 +379,7 @@ Do this exactly:
 
 **Optional:**
 
-- Bolt.new release notes 2025: [support.bolt.new/release-notes][26] — Sonnet 4 lock-in + Figma import + Supabase-native flows.
+- Bolt.new release notes: [support.bolt.new/release-notes][26] — Standard/Max agents on Claude Agent, MCP connections, and the August 3 2026 v1-project cutoff.
 - n8n Cloudflare integrations: [n8n.io/integrations/cloudflare][15] — the two-tier glue argument.
 - Resend pricing 2025: [resend.com/pricing][27] — free-tier 3k/mo and 100/day limits.
 - Vercel changelog: [vercel.com/changelog][19] — CVE blocking + Fluid compute.
@@ -399,11 +399,13 @@ All URLs verified 2026-04-17.
 
 [5]: https://www.figma.com/blog/config-2025-press-release/ — Figma Blog, "Config 2025 Launches," May 7, 2025. Primary launch announcement for Figma Make.
 
+[5b]: https://help.figma.com/hc/en-us/articles/36400680326551-Select-an-AI-model-to-use-in-Figma-Make — Figma Help Center, "Select an AI model to use in Figma Make" (2026). GA + multi-model (latest Claude incl. Opus 4.7, Gemini, GPT) via Figma AI credits. Verified 2026-07-17.
+
 [6]: https://www.shareuhack.com/en/posts/cursor-vs-claude-code-vs-windsurf-2026 — Shareuhack, "Cursor vs Claude Code vs Windsurf 2026" (2026). 1M vs 128K-256K context window claim; pricing tiers.
 
 [7]: https://dev.to/paulthedev/i-built-the-same-app-5-ways-cursor-vs-claude-code-vs-windsurf-vs-replit-agent-vs-github-copilot-50m2 — Paul (DEV), "I Built the Same App 5 Ways" (2026). Maintainability-of-output ranking across 5 tools.
 
-[8]: https://simonw.substack.com/p/agentic-engineering-patterns — Simon Willison, "Agentic Engineering Patterns" (2025). Nov 2025 model-capability inflection claim.
+[8]: https://simonwillison.net/2026/Feb/23/agentic-engineering-patterns/ (also https://simonw.substack.com/p/agentic-engineering-patterns) — Simon Willison, "Agentic Engineering Patterns," first chapters published **February 23, 2026**. Coding practices for agents like Claude Code and Codex; "writing code is cheap now." (The "Nov 2025 capability inflection" the earlier draft attributed here is not Willison's — the floor/ceiling inflection framing is Karpathy's, Sequoia Ascent 2026.) Verified 2026-07-17.
 
 [9]: https://getpushtoprod.substack.com/p/how-the-creator-of-claude-code-actually — Push to Prod, "How the Creator of Claude Code Actually Uses Claude Code" (2025). Cherny's leaked internal workflow.
 
@@ -411,7 +413,11 @@ All URLs verified 2026-04-17.
 
 [11]: https://latenode.com/blog/platform-comparisons-alternatives/n8n-alternatives/n8n-alternatives-2025-12-open-source-self-hosted-workflow-automation-tools-compared — Latenode, "n8n Alternatives 2025" (2025). Cross-check of 12 alternatives.
 
-[12]: https://lovable.dev/blog/one-year-of-lovable — Lovable Blog, "One year of Lovable" (Nov 2025). Lovable Cloud (Sep 2025), MCP integrations, $100M→$200M ARR, $6.6B valuation.
+[11b]: https://n8n.io/pricing/ — n8n Plans and Pricing (2026). Verified mid-2026 cloud tiers: Starter €24/mo (2,500 executions), Pro €60/mo (10,000), Business €800/mo (40,000); execution = one whole-workflow run regardless of node count; unlimited users/workflows on every plan. Verified 2026-07-17.
+
+[12]: https://lovable.dev/blog/one-year-of-lovable — Lovable Blog, "One year of Lovable" (Nov 2025). Lovable Cloud (Sep 2025), MCP integrations.
+
+[12b]: https://techcrunch.com/2026/07/08/lovable-reportedly-in-talks-to-double-its-valuation-to-13-2b/ — TechCrunch (July 8 2026). Dec 2025 Series B $330M at $6.6B; ~$400M ARR Feb 2026; $500M annualized June 2026 at ~146 headcount; July 2026 talks at $13.2B. Verified 2026-07-17.
 
 [13]: https://www.forrester.com/blogs/figma-config-2025-in-an-ai-world-design-matters-more-than-ever/ — Forrester Blog, "Figma Config 2025" (May 2025). Figma Make as threat to vibe-coding category.
 
@@ -425,7 +431,9 @@ All URLs verified 2026-04-17.
 
 [18]: https://clarity.microsoft.com/blog/august-2025-recap/ — Microsoft Clarity Blog, Aug 2025. 250-session AI summary; AI Platform traffic channels.
 
-[19]: https://vercel.com/changelog — Vercel Changelog (2024–26). CVE-2025-66478 deploy-blocking policy.
+[19]: https://vercel.com/changelog/new-deployments-of-vulnerable-next-js-applications-are-now-blocked-by — Vercel Changelog. New deployments of Next.js versions vulnerable to CVE-2025-66478 auto-fail (override via DANGEROUSLY_DEPLOY_VULNERABLE_CVE_2025_66478=1). Verified 2026-07-17.
+
+[19b]: https://nextjs.org/blog/CVE-2025-66478 — Next.js Security Advisory, CVE-2025-66478 (CVSS 10.0 RSC RCE; affects 15.0.0–16.0.6; patched in 15.4.8 / 15.5.7 / 16.0.7 and later). Verified 2026-07-17.
 
 [20]: https://www.indiehackers.com/post/tech/pieter-levels-used-ai-to-build-a-viral-flight-simulator-in-3-hours-with-no-background-in-game-development-7CPfMr1yRLEwH6cC8xhE — Indie Hackers (Feb 2025). Levels 3-hour flight sim stack + timing.
 
@@ -439,6 +447,8 @@ All URLs verified 2026-04-17.
 
 [25]: https://www.anthropic.com/news/skills — Anthropic News, "Introducing Agent Skills" (2025). Skills launch announcement.
 
-[26]: https://support.bolt.new/release-notes — Bolt.new Release Notes (2025). Sonnet 4 lock-in; Supabase default; Figma-import mid-project.
+[26]: https://support.bolt.new/release-notes — Bolt.new Release Notes. Standard/Max two-agent model on "Claude Agent" default; MCP connections; v1 (legacy) unselectable since April 13 2026 and v1 projects/sites inaccessible after August 3 2026. Verified 2026-07-17.
 
 [27]: https://resend.com/pricing — Resend Pricing (2025). Free 3k/mo + 100/day; Pro $20/mo 50k; Scale $90/mo 100k.
+
+_last_verified: 2026-07-17_

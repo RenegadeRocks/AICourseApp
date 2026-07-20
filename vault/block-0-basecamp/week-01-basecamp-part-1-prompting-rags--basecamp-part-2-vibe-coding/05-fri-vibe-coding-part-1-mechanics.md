@@ -18,7 +18,8 @@ sources:
   - simon-willison-vibe-engineering
   - piebald-claude-code-system-prompts
   - alexop-claude-code-full-stack
-last_verified: 2026-04-15
+  - karpathy-2026-agentic-engineering
+last_verified: 2026-07-17
 word_count_target: 6500
 ---
 
@@ -32,18 +33,18 @@ This lesson gives you the mechanical model that separates the signal from the no
 
 By the end of today:
 
-1. You will know exactly what Karpathy said and what he was hedging — and be able to apply his hedge as a design test for any system you are about to build.
+1. You will know exactly what Karpathy said in 2025 — and what he said in **February 2026**, when he declared vibe coding passé and renamed the serious version *agentic engineering*. You'll be able to apply that distinction as a design test for any system you are about to build.
 2. You will have a mechanical model of the agentic loop at the level Claude Code runs it: observe → plan → act → observe result → iterate, with the context window as the scratchpad.
 3. You will understand what Claude Code's tool definitions actually do, how the model decides when to invoke them, and how results flow back into the conversation.
 4. You will know when to use subagent parallelism, when it breaks, and what the Task tool costs you in terms of context isolation.
 5. You will have a tested mental model of CLAUDE.md, hooks, slash commands, and MCP as control surfaces — not features to toggle, but leverage points in the loop.
-6. You will have read and formed a position on the live controversy: when is vibe coding a legitimate building strategy, and when is it irresponsible?
+6. You will have read and formed a position on the live controversy — now shifted, post-April 2026, from "is vibe coding responsible?" to "what does agentic engineering actually require, and what happens when teams skip it?"
 
 ## Prerequisites
 
-- Claude Code installed (any recent version — v2.x or later). Active Claude Max subscription.
+- Claude Code installed (any recent version — v2.1.x or later). Active Claude Max subscription.
 - You have run at least one multi-step Claude Code task before. You know what the tool output stream looks like.
-- Optional but useful: Monday's lesson on prompting first principles. The mechanics of the agentic loop extend directly from the context-window-as-computation model you built there.
+- Optional but useful: [[01-mon-prompting-first-principles]]. The mechanics of the agentic loop extend directly from the context-window-as-computation model you built there. The RAG failure taxonomy from [[04-thu-rag-failure-modes-and-long-context-debate]] also connects: agentic RAG is this same loop with retrieval as the tool.
 
 ---
 
@@ -65,9 +66,15 @@ Read that hedge as a precise technical specification, not a caveat. Karpathy was
 
 The viral meme reframed this as "the future of software development." That is not what Karpathy wrote. He described a specific mode of building that is genuinely powerful within its domain. He also told you the domain boundary.
 
-A second, less-quoted Karpathy post from a few days later reinforced this. When asked about applying vibe coding to production systems, he declined to endorse it. The original tweet was a personal experiment report, not a manifesto.[^1b]
+### And what Karpathy said one year later
 
-The question this lesson is actually answering: given that Karpathy's framing is correct, what are the conditions under which you can responsibly extend vibe-coding-adjacent workflows to things that aren't throwaway weekend projects? That requires understanding the mechanism.
+On February 4, 2026 — almost exactly a year after the coinage — Karpathy posted a retrospective that reset the vocabulary again. He declared vibe coding, in its original accept-everything-without-reading-the-diffs sense, effectively over as a serious way to build, and proposed a successor term for the professional version:[^1b]
+
+> "Many people have tried to come up with a better name for this to differentiate it from vibe coding. Personally, my current favorite is *agentic engineering.* 'Agentic' because the new default is that you are not writing the code directly 99% of the time — you are orchestrating agents who do, and acting as oversight. 'Engineering' to emphasize that there is an art and science and expertise to it."
+
+His framing of the distinction: **vibe coding raises the floor** — anyone can now produce something that runs — **but it has no quality bar; you can ship fast and ship slop. Agentic engineering raises the ceiling** — it preserves the quality bar of professional software while using agents to do the typing. This is the pivotal document of the post-April-2026 discourse, and the rest of this lesson (and Saturday's) is organized around it. The mechanical understanding you build today is exactly what separates the two: you cannot provide competent oversight of a loop you don't understand.
+
+The question this lesson is actually answering: given Karpathy's own move from vibe coding to agentic engineering, what does that oversight actually require — mechanically — so you can extend agent-directed workflows to things that aren't throwaway weekend projects?
 
 ---
 
@@ -134,7 +141,7 @@ Claude Code's built-in tools fall into five categories:[^3]
 | Search | Glob, Grep | Find files by pattern, search content by regex |
 | Execution | Bash | Run any shell command with your permissions |
 | Web | WebSearch, WebFetch | Search the web, fetch a URL |
-| Orchestration | Task, AskUser | Spawn subagents, ask you a question |
+| Orchestration | Task (Agent), AskUserQuestion | Spawn subagents, ask you a structured question |
 
 The mechanism by which Claude Code decides when to call `Bash` vs `Read` vs `Grep` is not a rule engine or a decision tree. It is the language model reading the tool descriptions in its context and predicting, given the current conversation state, which tool call token sequence maximizes the quality of the next action. This is important to internalize: the model is not following a program. It is pattern-completing, guided by the tool schemas and by the system prompt.
 
@@ -147,7 +154,7 @@ Every tool Claude Code can call is defined as a JSON schema in the system prompt
 - An `input_schema` (the parameters the model must provide, with types and descriptions)
 - Which parameters are required
 
-When Anthropic constructs Claude Code's system prompt, it includes approximately 24 built-in tool schemas that together consume 14–17K tokens of context.[^5] Those tokens are not wasted: they are the interface contract the model reads in order to know how to act.
+When Anthropic constructs Claude Code's system prompt, it includes roughly two dozen built-in tool schemas that together consume on the order of 15K tokens of context.[^5] (Exact counts drift release to release — the July 2026 toolset added LSP and the Monitor tool, among others — so treat these as ballpark, version-pinned figures, not constants.) Those tokens are not wasted: they are the interface contract the model reads in order to know how to act.
 
 When Claude Code decides to read a file, the model emits something like:
 
@@ -190,7 +197,7 @@ When you add a custom MCP tool with a poorly written description, the model is w
 
 ### The system prompt
 
-Claude Code's system prompt at session start is approximately 2.5K tokens of instructions plus 14–17K tokens of tool definitions.[^5] The Piebald-AI GitHub project has reverse-engineered and published all parts of Claude Code's system prompt for every version, including sub-agent prompts (Plan, Explore, Task) and utility prompts.[^5]
+Claude Code's system prompt at session start is roughly 2.5K tokens of instructions plus ~15K tokens of tool definitions (both version-dependent).[^5] The Piebald-AI GitHub project has reverse-engineered and published Claude Code's system prompts across versions, including sub-agent prompts (Plan, Explore, Task) and utility prompts — a useful artifact, but a version-pinned snapshot, not documentation. The product has shipped ~100 releases since April; verify any specific number against the current build before relying on it.[^5]
 
 The system prompt instructs the model to:
 - Work autonomously and use tools to gather context before acting
@@ -215,7 +222,7 @@ What belongs in CLAUDE.md: conventions the model would otherwise have to re-lear
 
 What does not belong: one-off task descriptions, things you only need for this session, or long background stories about the project. CLAUDE.md competes for context. Be aggressive about keeping it focused.
 
-Auto-memory (available from v2.1.59) means Claude Code can write to a MEMORY.md file automatically when it learns something useful about your project during a session. The first 200 lines or 25KB of MEMORY.md load at session start.[^3]
+Auto-memory means Claude Code can write to a memory file automatically when it learns something useful about your project during a session, loading a bounded prefix of it at session start.[^3] Note this is a distinct mechanism from the three CLAUDE.md tiers above — a fourth persistence surface, not a fourth tier. (Saturday and Sunday reference the same three-tier model; if you see a "4-tier CLAUDE.md hierarchy" anywhere, it has folded auto-memory into the tier count incorrectly.)
 
 ### Hooks
 
@@ -231,7 +238,7 @@ If you are building a workflow where Claude Code touches production infrastructu
 
 Slash commands (files in `.claude/commands/`) and skills (files in `.claude/skills/`) give Claude Code reusable capabilities. A skill is a markdown file describing a workflow — the equivalent of a stored procedure for agent behavior. When you invoke `/validate-schema`, Claude Code reads the skill definition, follows its steps, and reports back.
 
-The skills system as of Claude Code 2.5 unifies slash commands into the skills interface: every skill gets a slash-command entry point, and frontmatter controls whether Claude can auto-invoke the skill, whether it appears in the `/` menu, and whether it runs in a subagent context.[^6]
+In current Claude Code (v2.1.x as of July 2026), the skills system unifies slash commands into one interface: every skill can get a slash-command entry point, and frontmatter controls whether Claude can auto-invoke the skill, whether it appears in the `/` menu, and whether it runs in a subagent context.[^6]
 
 This is the correct pattern for workflows you run repeatedly: write a skill once, invoke it by name. Marketing directors who run a weekly competitive-intelligence pipeline, finance analysts who pull and validate a monthly data extract, operations leads who audit a vendor list — all of these are skill candidates.
 
@@ -259,10 +266,10 @@ A subagent cannot see the main agent's conversation history. The main agent cann
 
 - Tasks touch shared files. If two subagents are editing the same file, one will clobber the other. The official documentation is explicit: "Parallel only works when agents touch different files."[^7]
 - The task requires iterative clarification. Because subagents return only a summary, any ambiguity that would normally trigger a clarifying question goes unasked, and the subagent makes its best guess.
-- The main agent's plan depends on subagent results before proceeding. Subagents run in batches; the main agent waits for each batch to complete before proceeding.[^7] If you are depending on strict ordering, sequential execution is safer.
+- The main agent's plan depends on subagent results before proceeding. As of mid-2026 subagents run in the background by default and surface permission prompts back to the main session, but the orchestrator still waits on results it depends on.[^7] If you are depending on strict ordering, sequential execution is safer.
 - Context overhead on the main agent. Each subagent summary that comes back gets appended to the main context. A dozen subagents each returning a 500-token summary adds 6,000 tokens before the main agent makes its next decision.
 
-Practical configuration note: Claude Code parallelism is capped at 10 subagents per batch. If you specify more, they run in batches of 10.[^7] You can set `CLAUDE_CODE_SUBAGENT_MODEL` to run subagents on a lighter model (Sonnet rather than Opus) to save tokens on tasks where the subtask is mechanical.
+Practical configuration note: the per-session subagent fan-out is bounded, but by a configurable session cap — not a hard "10 per batch" limit (that specific number was a third-party claim). Opus 4.8's "dynamic workflows" preview explicitly orchestrates *hundreds* of parallel subagents from a script Claude writes, and background sub-agents can themselves spawn sub-agents, capped a few levels deep.[^7] You can also point subagents at a lighter model to save tokens on mechanical subtasks. Check `/usage` and the current docs for your build's exact caps rather than trusting a fixed number.
 
 The correct mental model for subagents: a specialist team you brief and then wait for. You don't watch them work. You get a report. That's the abstraction. Design tasks that produce useful reports, and you will get value. Design tasks where you need to supervise mid-execution, and you will be frustrated.
 
@@ -270,27 +277,32 @@ The correct mental model for subagents: a specialist team you brief and then wai
 
 ## 6. Benchmark numbers with appropriate context
 
-Claude Opus 4.5, released November 24, 2025, scores 80.9% on SWE-bench Verified — the first AI model to break the 80% barrier on that benchmark.[^8] Claude Sonnet 4.5, released September 29, 2025, scores 77.2% on the standard configuration (10 trials, 200K thinking budget) and 82.0% with parallel test-time compute.[^9]
+As of July 2026, the frontier on SWE-bench Verified sits far above where this course originally pinned it. Claude Fable 5 (the Mythos-class tier released June 9, 2026) is reported at ~95% on the independent vals.ai leaderboard; Claude Opus 4.8 (May 28, 2026) at 88.6%; earlier Opus 4.7 at 87.6%.[^8] For context, the "first model over 80%" milestone — Opus 4.5 at 80.9% in late 2025 — is now two-plus generations of history.[^9] Treat those older scores as history, not as the current bar; the useful lesson is that this number moves every couple of months, which is itself the point.
 
 SWE-bench Verified is a set of 500 real GitHub issues from popular Python repositories. A model (or agent) must read the repo, understand the bug, write a fix, and pass the existing test suite. It is a meaningful benchmark for software engineering capability, closer to real work than HumanEval or similar coding benchmarks that test isolated function completion.
 
 Three things worth understanding about these numbers before you cite them:
 
-**The harness matters.** The SWE-bench score is not the model score alone. The eval infrastructure — how the agent is prompted, what tools it has, how many attempts it gets, how results are aggregated — contributes substantially to the number. Anthropic's Sonnet 4.5 benchmark notes specify the methodology: "64K thinking budget, interleaved scratchpads, 200K context window" with parallel compute for the high score.[^9] A different harness on the same model weights would produce a different number. When you read SWE-bench leaderboard comparisons, always ask: were the harnesses controlled?
+**The harness matters.** The SWE-bench score is not the model score alone. The eval infrastructure — how the agent is prompted, what tools it has, how many attempts it gets, how results are aggregated — contributes substantially to the number. A different harness on the same model weights produces a different number, which is exactly why vendor-reported and independent-leaderboard figures for the same model often disagree (Fable 5's SWE-bench Pro number, for instance, is contested between Anthropic's own scaffolding and neutral harnesses). When you read leaderboard comparisons, always ask: were the harnesses controlled?
 
-**Performance improvements between models are partly harness improvements.** The Opus 4.5 announcement notes that improved hosting environments reduced infrastructure failures, which "benefited comparative benchmarks."[^8] Model capability and system reliability are compounding — you cannot easily separate how much of a score improvement is a smarter model vs. a more reliable executor.
+**Score jumps are partly harness and reliability improvements.** Model capability and executor reliability compound — reduced infrastructure failures alone can move a comparative benchmark. You cannot easily separate how much of a gain is a smarter model versus a more reliable runner.
 
 **SWE-bench Verified is Python-repository bugs.** It does not measure: data pipeline robustness, MCP integration quality, cross-application agent coordination, business-logic correctness in domains with few training examples (legal, medical, specialized finance). Your use case may be dramatically easier or dramatically harder than the benchmark suggests.
 
-The practical takeaway: Opus 4.5 and Sonnet 4.5 are genuinely capable at complex, autonomous software tasks. The numbers support using them for serious agentic work. The numbers do not support believing the model will reliably complete any arbitrary multi-step task you describe without well-designed tooling, clear CLAUDE.md context, and a review pass on the output.
+The practical takeaway: the current Claude models are genuinely capable at complex, autonomous software tasks, and the numbers support using them for serious agentic work. They do not support believing the model will reliably complete any arbitrary multi-step task you describe without well-designed tooling, clear CLAUDE.md context, and a review pass on the output — which is precisely the agentic-engineering point from Section 1.
 
 ---
 
-## 7. The live controversy — vibe coding as a building strategy
+## 7. The live controversy — from "is vibe coding responsible?" to "what does agentic engineering require?"
 
-The field is not settled on this. Here are the two serious positions, with named proponents.
+Through 2025 the live argument was whether vibe coding — accept-all, don't-read-the-diffs building — was a legitimate professional strategy. By mid-2026 that specific argument is largely settled, and *against* the no-review version. Two things closed it:
 
-### Position A: Vibe coding extends the legitimate surface area of who can build
+- **Karpathy himself moved on** (Section 1): the person who coined "vibe coding" renamed the serious practice *agentic engineering* and called the original mode's lack of a quality bar its defining limitation.[^1b]
+- **The evidence base turned quantitative.** Veracode's 2025 GenAI Code Security Report had over 100 models complete 80 coding tasks and found **45% of the AI-generated code introduced an OWASP Top-10 vulnerability** — and, pointedly, that scaling the model up did not improve security, so this is systemic, not a small-model artifact.[^13] The same period produced the CodeRabbit AI-vs-human PR study (Saturday covers it) and, in May 2026, the WSJ-reported **"vibe slop" crisis** warnings from Mario Zechner and Armin Ronacher — the engineers behind the Pi harness inside OpenClaw — that companies are trading near-term speed for buggier software, outages, security holes, and cloud bills startups can't afford.[^14]
+
+So the interesting question is no longer "is vibe coding OK?" It's the agentic-engineering question: *what does competent oversight of AI-written code actually require, and what happens when teams skip it?* The two positions below are the durable poles of that question.
+
+### Position A: Agent-directed building genuinely extends who can ship
 
 The optimist case, stated carefully: LLMs have lowered the floor for software construction far enough that competent domain experts can now build working tools for their own workflows without a software engineer in the loop. A marketing operations analyst who can describe precisely what a customer segmentation pipeline should do — including edge cases, error handling, what "good output" looks like — can direct Claude Code to build it, review the output, and ship it. The constraint was never whether they understood the domain. The constraint was that they needed someone else to translate the domain knowledge into code. That constraint is materially weaker now.
 
@@ -298,17 +310,15 @@ This position has empirical support: Anthropic's internal report on how teams us
 
 The tech-optimist version of this position overstates it. "Anyone can build anything" is not what the evidence supports. What the evidence supports is: "domain experts with precise mental models of the problem can direct capable AI tools to build solutions within that domain, if they can read and evaluate the output."
 
-### Position B: Vibe coding is irresponsible on systems with users, money, or security surface
+### Position B: No-review building is irresponsible on systems with users, money, or security surface
 
-Simon Willison, who has written more carefully about this than almost anyone, put it directly: "Vibe coding is irresponsibly building software through dice rolls, not caring what code is produced."[^11] He has also noted: "I'm sure we will see all sorts of horrifying data breaches from irresponsible vibe coding in the future."[^11]
-
-Willison is not arguing that AI-assisted development is wrong. He proposed a complementary term — *vibe engineering* — for "where seasoned professionals accelerate their work with LLMs while staying proudly and confidently accountable for the software they produce."[^11] The distinction is accountability and comprehension, not the tools used.
+Simon Willison put this directly, and early: "Vibe coding is irresponsibly building software through dice rolls, not caring what code is produced," and "I'm sure we will see all sorts of horrifying data breaches from irresponsible vibe coding in the future."[^11] He proposed his own complementary term — *vibe engineering* — for "where seasoned professionals accelerate their work with LLMs while staying proudly and confidently accountable for the software they produce."[^11] Karpathy's "agentic engineering" and Willison's "vibe engineering" are converging labels for the same corrective: the distinction that matters is accountability and comprehension, not the tools used. The Veracode 45% number and the vibe-slop-crisis warnings are Position B's ammunition — the horrifying breaches Willison predicted in 2025 became a measured failure rate in 2026.
 
 The security failure mode is concrete. An AI agent building a web app will by default trust user input, will not implement rate limiting unless asked, will not audit authentication edge cases systematically, and will not catch logic errors in payment flows that only manifest under specific conditions. Karpathy's description of his own vibe coding workflow included: "The code grows beyond my usual comprehension, I'd have to really read through it for a while." On a throwaway weekend project, that is amusing. On a tool handling someone else's data, it is an incident waiting to happen.
 
 ### The nuanced position this lesson endorses
 
-Vibe coding is a legitimate building strategy under three conditions, all of which must hold simultaneously:
+Agent-directed building crosses from vibe coding into agentic engineering — and becomes safe to ship — under three conditions, all of which must hold simultaneously:
 
 1. **You can evaluate the output at the level that matters.** If the system processes financial data, you can run the output against known-correct test cases, audit the validation logic, and confirm the edge cases are handled. If you cannot do this evaluation, you are trusting output you cannot verify.
 
@@ -391,15 +401,15 @@ This failure is not Claude Code's fault. It is a design failure: no audit gate b
 
 ### How much of the SWE-bench improvement is model vs. harness?
 
-The field does not have a rigorous decomposition of how much of the improvement from GPT-4-era baselines to Opus 4.5's 80.9% is attributable to base model capability vs. better agentic scaffolding, vs. better test-time compute strategies, vs. better training data for tool use. This matters for how you design your own agent harnesses: if most of the gain is in the scaffolding, your harness design decisions matter more than your model choice.
+The field does not have a rigorous decomposition of how much of the climb from GPT-4-era baselines to the current frontier (Opus 4.8 at 88.6%, Fable 5 at ~95%) is attributable to base model capability vs. better agentic scaffolding, vs. better test-time compute strategies, vs. better training data for tool use. This matters for how you design your own agent harnesses: if most of the gain is in the scaffolding, your harness design decisions matter more than your model choice.
 
 ### Does the ReAct loop scale to tasks with unclear termination conditions?
 
 The canonical ReAct loop exits when the model emits `end_turn`. On well-defined tasks (fix this bug, write this function, validate these rows), termination is clear. On open-ended tasks (improve this codebase, audit this system for security issues, refactor this module), the model's notion of "done" may not match yours. There is active work on evaluator-optimizer loops (Anthropic's *Building Effective Agents* describes this as a workflow pattern) where a second model judges task completion, but this is not yet standard in Claude Code's out-of-the-box behavior.[^12]
 
-### Is "vibe engineering" stable as a category, or will better tools dissolve the distinction?
+### Is the "agentic engineering" / "vibe engineering" distinction stable, or will better tools dissolve it?
 
-Willison's distinction between vibe coding (irresponsible, no comprehension) and vibe engineering (responsible, accountable) depends on the human reviewing and understanding the output. If models improve to the point where their self-review is more reliable than human review for specific task classes (which the SWE-bench numbers suggest is approaching for certain software engineering tasks), the category boundaries will shift. The question of when to trust AI self-review vs. require human review is not settled.
+The Karpathy/Willison distinction between vibe coding (no quality bar, no comprehension) and agentic engineering (accountable oversight) depends on a human reviewing and understanding the output. If models improve to the point where their self-review is more reliable than human review for specific task classes — and Opus 4.8 is already reported ~4x less likely to let flaws in its own code pass unremarked — the category boundary shifts. The question of when to trust AI self-review versus require human review is not settled, and the vibe-slop-crisis warnings are a bet that teams are already trusting it too early.
 
 ---
 
@@ -452,34 +462,40 @@ The Anthropic *Building Effective Agents* post recommends: "find the simplest so
 Run the experiment in Section 8. After Claude Code finishes, ask it: "Show me a count of every tool you called during this task and how many times you called each one." Then ask: "Which of those tool calls could have been eliminated with better upfront context from me?" This is how you build the habit of trace analysis. Report what you found.
 
 **Problem 5 — Position defense.**
-Read Simon Willison's *Vibe engineering* post (Oct 2025) and the Karpathy tweet thread. Write a 200-word position: where exactly do you disagree with Willison's framing, if anywhere, and why? If you agree with it entirely, name one specific context from your own work where the distinction between vibe coding and vibe engineering would have changed a decision you made.
+Read Simon Willison's *Vibe engineering* post (Oct 2025) and Karpathy's February 2026 "agentic engineering" thread.[^1b] Write a 200-word position: Willison's "vibe engineering" and Karpathy's "agentic engineering" name nearly the same corrective from different angles — where do the two framings actually differ, and does the difference matter for how you'd decide whether a given system of yours is safe to ship? Name one specific context from your own work where the vibe-coding / agentic-engineering line would have changed a decision you made.
 
 ---
 
 ## Citations
 
-[^1]: Andrej Karpathy, tweet, February 2, 2025. https://x.com/karpathy/status/1886192184808149383 — Primary source coining "vibe coding." Full text quoted in Section 1. Verified live 2026-04-15. The hedge "not too bad for throwaway weekend projects" appears in the body of the tweet, not in a reply.
+[^1]: Andrej Karpathy, tweet, February 2, 2025. https://x.com/karpathy/status/1886192184808149383 — Primary source coining "vibe coding." Full text quoted in Section 1. The hedge "not too bad for throwaway weekend projects" appears in the body of the tweet. Verified 2026-07-17.
 
-[^1b]: Andrej Karpathy, retrospective tweet on vibe-coding engagement, February 2025. https://x.com/karpathy/status/2019137879310836075 — Karpathy's commentary on how the original tweet was received. Verified URL in memory file, referenced for context on hedging intent.
+[^1b]: Andrej Karpathy, retrospective thread, **February 4, 2026** (one-year anniversary of the coinage). https://x.com/karpathy/status/2019137879310836075 — Declares vibe coding passé and proposes "agentic engineering" for the professional practice: "you are not writing the code directly 99% of the time — you are orchestrating agents who do, and acting as oversight." Frames vibe coding as *raising the floor* (no quality bar; ship fast, ship slop) versus agentic engineering *raising the ceiling* (preserving the professional quality bar). Corroborating coverage: https://thenewstack.io/vibe-coding-is-passe/ ; https://www.forbes.com/sites/jodiecook/2026/06/12/is-vibe-coding-already-dead-even-karpathy-is-moving-on/ ; https://aiagentssimplified.substack.com/p/from-vibe-coding-to-agentic-engineering . Verified 2026-07-17. (Correction: an earlier draft misdated this to Feb 2025 and described it as "declining to endorse" production vibe coding — the opposite of its actual content.)
 
 [^2]: Shunyu Yao, Jeffrey Zhao, Dian Yu, Nan Du, Izhak Shafran, Karthik Narasimhan, Yuan Cao. "ReAct: Synergizing Reasoning and Acting in Language Models." arXiv:2210.03629, October 6, 2022. https://arxiv.org/abs/2210.03629 — Section 2 describes the Thought/Action/Observation loop. Section 4 reports 34% and 10% improvements on ALFWorld and WebShop. Verified 2026-04-15.
 
-[^3]: Anthropic. "How Claude Code works." Claude Code Documentation. https://code.claude.com/docs/en/how-claude-code-works — Primary source on the agentic loop phases, built-in tools, context window management, CLAUDE.md, and auto-memory. Verified 2026-04-15.
+[^3]: Anthropic. "How Claude Code works." Claude Code Documentation. https://code.claude.com/docs/en/how-claude-code-works — Primary source on the agentic loop phases, built-in tools, context window management, CLAUDE.md (three tiers), and auto-memory. Verified 2026-07-17.
 
-[^4]: Anthropic. "Tool use: how it works." Claude API Documentation. https://platform.claude.com/docs/en/agents-and-tools/tool-use/how-tool-use-works — Describes the tool-use contract, the client-side `while (stop_reason == "tool_use")` loop, the three tool execution categories (user-defined, Anthropic-schema, server-executed), and the JSON `tool_use` / `tool_result` message structure. Verified 2026-04-15.
+[^4]: Anthropic. "Tool use: how it works." Claude API Documentation. https://platform.claude.com/docs/en/agents-and-tools/tool-use/how-tool-use-works — Describes the tool-use contract, the client-side `while (stop_reason == "tool_use")` loop, the three tool execution categories (user-defined, Anthropic-schema, server-executed), and the JSON `tool_use` / `tool_result` message structure. Verified 2026-07-17.
 
-[^5]: Piebald-AI. "Claude Code System Prompts." GitHub repository. https://github.com/Piebald-AI/claude-code-system-prompts — Reverse-engineered and published system prompt contents for each Claude Code version. 24 built-in tool descriptions, sub-agent prompts, CLAUDE.md loading. System prompt: ~2.5K tokens; tool definitions: ~14-17K tokens. Verified 2026-04-15.
+[^5]: Piebald-AI. "Claude Code System Prompts." GitHub repository. https://github.com/Piebald-AI/claude-code-system-prompts — Reverse-engineered system prompt contents across Claude Code versions: ~two dozen built-in tool descriptions, sub-agent prompts, CLAUDE.md loading; system prompt ~2.5K tokens, tool definitions ~15K tokens. Version-pinned snapshot, not documentation — the current build (v2.1.x, July 2026) differs. Verified 2026-07-17.
 
-[^6]: alexop.dev. "Understanding Claude Code's Full Stack: MCP, Skills, Subagents, and Hooks Explained." https://alexop.dev/posts/understanding-claude-code-full-stack/ — Published 2025-2026. Details on hooks, skills system unification as of Claude Code 2.5, MCP tool-name-only loading with on-demand schema fetch via ToolSearch. Verified 2026-04-15.
+[^6]: alexop.dev. "Understanding Claude Code's Full Stack: MCP, Skills, Subagents, and Hooks Explained." https://alexop.dev/posts/understanding-claude-code-full-stack/ — Hooks, skills-system unification, MCP tool-name-only loading with on-demand schema fetch. Third-party blog; mechanism corroborated by the current harness's deferred-tool behavior, but treat version-specific claims as dated. Verified 2026-07-17.
 
-[^7]: claudefa.st. "Claude Code Sub-Agents: Parallel vs Sequential Patterns." https://claudefa.st/blog/guide/agents/sub-agent-best-practices — Details on Task tool parallelism cap (10 agents per batch), file-collision constraint, summary-only return, subagent model configuration via CLAUDE_CODE_SUBAGENT_MODEL. Verified 2026-04-15. Cross-referenced with official Claude Code subagents docs at https://code.claude.com/docs/en/sub-agents.
+[^7]: Claude Code subagents documentation. https://code.claude.com/docs/en/sub-agents — File-collision constraint, summary-only return, background-by-default execution (2026), lighter-model configuration, and per-session fan-out caps. The earlier "10 subagents per batch" figure came from a third-party blog and does not match current behavior; Opus 4.8 "dynamic workflows" orchestrate hundreds of parallel subagents (https://www.anthropic.com/news/claude-opus-4-8). Verified 2026-07-17.
 
-[^8]: Anthropic. "Introducing Claude Opus 4.5." Anthropic News. November 24, 2025. https://www.anthropic.com/news/claude-opus-4-5 — 80.9% on SWE-bench Verified; 10.6% improvement over Sonnet 4.5 on Aider Polyglot; 76% fewer output tokens at medium effort vs. Sonnet 4.5 best. Eval methodology: 64K thinking budget, interleaved scratchpads, 200K context window, parallel compute aggregation. Verified 2026-04-15.
+[^8]: SWE-bench Verified, July 2026 frontier. Claude Fable 5 ~95.0% (independent vals.ai leaderboard; https://www.morphllm.com/claude-benchmarks , https://www.vals.ai/benchmarks/swebench); Claude Opus 4.8 88.6% (https://www.anthropic.com/news/claude-opus-4-8 , https://www.vellum.ai/blog/claude-opus-4-8-benchmarks-explained); Opus 4.7 87.6% (https://www.vellum.ai/blog/claude-opus-4-7-benchmarks-explained). Verified 2026-07-17.
 
-[^9]: Anthropic. "Introducing Claude Sonnet 4.5." Anthropic News. September 29, 2025. https://www.anthropic.com/news/claude-sonnet-4-5 — 77.2% on SWE-bench Verified (10 trials, 200K thinking budget, no test-time compute); 82.0% with parallel attempts. OSWorld: 61.4% (up from 42.2%). Sustained focus on tasks exceeding 30 hours. Verified 2026-04-15.
+[^9]: Anthropic. "Introducing Claude Opus 4.5." November 24, 2025. https://www.anthropic.com/news/claude-opus-4-5 — 80.9% on SWE-bench Verified; the "first model over 80%" milestone, cited here only as historical context. Verified 2026-07-17.
 
 [^10]: Anthropic. "How Anthropic teams use Claude Code." Internal case study PDF. https://www-cdn.anthropic.com/58284b19e702b49db9302d5b6f135ad8871e7658.pdf — Reports on cross-functional (non-engineering) teams building and maintaining tools using Claude Code. Verified URL in search results 2026-04-15.
 
-[^11]: Simon Willison. "Vibe engineering." Simon Willison's Newsletter / Substack. October 7, 2025. https://simonwillison.net/2025/Oct/7/vibe-engineering/ — Defines vibe coding as "irresponsibly building software through dice rolls, not caring what code is produced." Proposes "vibe engineering" as the responsible alternative. Quote on data breaches from https://fedi.simonwillison.net/@simon/114920467223772328. Verified 2026-04-15.
+[^11]: Simon Willison. "Vibe engineering." October 7, 2025. https://simonwillison.net/2025/Oct/7/vibe-engineering/ — Defines vibe coding as "irresponsibly building software through dice rolls, not caring what code is produced." Proposes "vibe engineering" as the responsible alternative. Quote on data breaches from https://fedi.simonwillison.net/@simon/114920467223772328. Verified 2026-07-17.
 
-[^12]: Anthropic. "Building effective agents." Anthropic Research. December 20, 2024. https://www.anthropic.com/research/building-effective-agents — Describes the evaluator-optimizer workflow pattern and the broader taxonomy of agentic workflows. Recommendation to start simple and add agentic complexity only when needed. Verified 2026-04-15.
+[^12]: Anthropic. "Building effective agents." December 20, 2024. https://www.anthropic.com/research/building-effective-agents — Describes the evaluator-optimizer workflow pattern and the broader taxonomy of agentic workflows. Recommendation to start simple and add agentic complexity only when needed. Verified 2026-07-17.
+
+[^13]: Veracode. "2025 GenAI Code Security Report." https://www.veracode.com/blog/genai-code-security-report/ — Over 100 LLMs on 80 coding tasks; 45% of AI-generated code introduced an OWASP Top-10 vulnerability; failure rate did not improve with model scale (systemic, not a small-model artifact); Java worst (>70%). See also the Spring 2026 update: https://www.veracode.com/blog/spring-2026-genai-code-security/ . Verified 2026-07-17.
+
+[^14]: "The AI Superstars Who Say a 'Vibe Slop' Crisis Is Coming" (WSJ-reported, May 2026). https://medium.com/newsarticulated/the-ai-superstars-who-say-a-vibe-slop-crisis-is-coming-and-what-it-means-for-software-s-future-f276c4d875b2 ; https://cryptobriefing.com/vibe-slop-crisis-ai-generated-code/ — Mario Zechner and Armin Ronacher (Pi harness / OpenClaw) warn that companies are trading near-term productivity for buggier software, outages, security vulnerabilities, and unsustainable cloud costs. Verified 2026-07-17.
+
+_last_verified: 2026-07-17_

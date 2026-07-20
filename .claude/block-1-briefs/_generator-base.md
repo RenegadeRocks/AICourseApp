@@ -22,17 +22,17 @@ If probe passes, delete the probe file with Bash `rm`, and proceed.
 
 Read these before writing. They define audience, voice, experiment medium, quality bar, and structural shape.
 
-1. `C:\Users\satsi\.claude\projects\D--Work-ClaudeCode-AICatalyst\memory\user_profile.md`
-2. `C:\Users\satsi\.claude\projects\D--Work-ClaudeCode-AICatalyst\memory\feedback_audience_framing.md`
-3. `C:\Users\satsi\.claude\projects\D--Work-ClaudeCode-AICatalyst\memory\feedback_experiment_medium.md`
-4. `C:\Users\satsi\.claude\projects\D--Work-ClaudeCode-AICatalyst\memory\feedback_content_standards.md`
-5. `C:\Users\satsi\.claude\projects\D--Work-ClaudeCode-AICatalyst\memory\feedback_l3_content_spec.md`
-6. `C:\Users\satsi\.claude\projects\D--Work-ClaudeCode-AICatalyst\memory\feedback_course_is_the_content.md`
+1. `C:\Users\satsi\.claude\projects\D--Work-ClaudeCode-AIProCourse\memory\user_profile.md`
+2. `C:\Users\satsi\.claude\projects\D--Work-ClaudeCode-AIProCourse\memory\feedback_audience_framing.md`
+3. `C:\Users\satsi\.claude\projects\D--Work-ClaudeCode-AIProCourse\memory\feedback_experiment_medium.md`
+4. `C:\Users\satsi\.claude\projects\D--Work-ClaudeCode-AIProCourse\memory\feedback_content_standards.md`
+5. `C:\Users\satsi\.claude\projects\D--Work-ClaudeCode-AIProCourse\memory\feedback_l3_content_spec.md`
+6. `C:\Users\satsi\.claude\projects\D--Work-ClaudeCode-AIProCourse\memory\feedback_course_is_the_content.md`
 
 ## 3. SHAPE TEMPLATE
 
 Read this as structural reference (frontmatter shape, section rhythm, citation density, reviewer-lens format, problem-set shape):
-`D:\Work\ClaudeCode\AICatalyst\vault\block-0-basecamp\week-03-decoding-real-business-problems-with-ai-i--decoding-real-business-problems-with-ai-ii\01-mon-problem-discovery-frameworks.md`
+`D:\Work\ClaudeCode\AIProCourse\vault\block-0-basecamp\week-03-decoding-real-business-problems-with-ai-i--decoding-real-business-problems-with-ai-ii\01-mon-problem-discovery-frameworks.md`
 
 Copy the **shape** (section order, density, voice). Do NOT copy the subject matter — that lesson is technical JTBD, you are writing business/sales/branding content.
 

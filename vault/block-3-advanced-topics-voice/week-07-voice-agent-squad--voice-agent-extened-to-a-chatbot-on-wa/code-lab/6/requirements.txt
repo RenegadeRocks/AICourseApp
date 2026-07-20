@@ -1,0 +1,8 @@
+# Code-lab 6 — pinned deps (July 2026)
+fastapi==0.118.0
+uvicorn[standard]==0.37.0
+httpx==0.28.1
+pydantic==2.11.7
+python-dotenv==1.1.1
+# optional: local voice-note STT (only if you don't use Meta's transcription)
+deepgram-sdk==4.9.0

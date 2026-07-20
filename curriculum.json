@@ -5,7 +5,7 @@
     "provider": "Renegade Rocks",
     "duration_weeks": 26,
     "self_paced": true,
-    "source_file": "AI Catalyst C3 - Tentative Schedule.xlsx",
+    "source_file": "AI Pro-level Course - Tentative Schedule.xlsx",
     "parsed_at": "2026-04-14T17:01:59.851187Z"
   },
   "blocks": [
@@ -20,7 +20,7 @@
           "live_week_number": 0,
           "sessions": [
             {
-              "slug": "ai-catalyst-program-onboarding",
+              "slug": "program-onboarding",
               "title": "Program Onboarding",
               "date": "2026-04-18",
               "kind": "onboarding"

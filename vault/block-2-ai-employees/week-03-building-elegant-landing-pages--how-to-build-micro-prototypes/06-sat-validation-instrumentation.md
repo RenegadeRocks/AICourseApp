@@ -28,7 +28,7 @@ sources:
   - fitzpatrick-mom-test-rules
   - torres-producttalk-weekly-2024
   - julian-shapiro-startup-handbook-landing
-last_verified: 2026-04-17
+last_verified: 2026-07-17
 word_count_target: 6000
 ---
 
@@ -36,13 +36,13 @@ word_count_target: 6000
 
 ## Why this matters
 
-You have shipped a prototype by Friday night. A landing page, a fake-door, a concierge scaffold — something live on the internet with traffic pointed at it. The week has taught you how to compose conversion copy, how to pick a code-gen tool, how to override AI taste defaults, how to position a hypothesis on the pretotyping ladder, how to run the whole pipeline in a workday. None of it matters if by Wednesday morning you cannot *read* the thing you shipped.
+You have shipped a prototype by Friday night. A landing page, a fake-door, a concierge scaffold — something live on the internet with traffic pointed at it. The week has taught you how to compose conversion copy, how to pick a code-gen tool, how to override AI taste defaults, how to position a hypothesis on [[04-thu-micro-prototype-ladder|the pretotyping ladder]], how to run [[05-fri-prototype-pipeline|the whole pipeline in a workday]]. None of it matters if by Wednesday morning you cannot *read* the thing you shipped.
 
 The single most common prototype failure in 2026 is not "the page looked wrong" or "the tool was bad." It is that the operator deployed a prototype with no instrumentation beyond a Google Analytics tag and a half-read funnel chart, ran a hundred visitors through it, watched twelve of them "convert," told themselves the hypothesis had validated, and burned the next quarter building the wrong thing. The entire discipline of validation instrumentation exists to prevent that story — to force a prototype to earn its "validated" label with a numerator, a denominator, a confidence interval, a qualitative tape, and an explicit sunset condition.
 
 By the end you will be able to (1) design a compact event model for a prototype across four reader domains — B2B SaaS, ecommerce, creator platform, consulting leadgen — with verb+object naming, funnel steps, and health metrics that survive contact with messy small-N data, (2) pick between PostHog, Microsoft Clarity, Hotjar, and a bare web-analytics stack on a cost / insight / compliance tradeoff, (3) use an AI-moderated interview platform (Outset, Listen Labs, Strella, Maze) with a Mom-Test-hardened script that keeps the AI from collapsing into survey theater, (4) compute Wilson-score confidence intervals for 6/50, 12/100, 60/500 and explain why three observations with the same point estimate tell you very different things, (5) write a go / iterate / kill decision rule *before* data arrives, such that the decision is forced by data rather than argued out of it afterward, and (6) navigate the 2024–26 GDPR/CCPA landscape for session replay without triggering a wiretap class action on your own prototype.
 
-The capability delta is precise. A sharp generalist ships a prototype and asks "did it work?" An AI-catalyst lead ships one and can say, before data arrives, *what observation will count as success, failure, or ambiguous, and what the next experiment is for each outcome*.
+The capability delta is precise. A sharp generalist ships a prototype and asks "did it work?" An AI operator ships one and can say, before data arrives, *what observation will count as success, failure, or ambiguous, and what the next experiment is for each outcome*.
 
 ## Prerequisites
 
@@ -109,7 +109,7 @@ Pattern across all four: *conversion alone is not enough*. The confirming event 
 
 Properties are what turn an event from a counter into a pivotable object. Three rules.
 
-**Attach what makes a cohort.** Variant label (for A/B splits), utm_source (for channel attribution), viewport class (mobile vs desktop splits matter — we know from Friday that 75%+ of 2026 traffic is mobile), bucketed firmographic where available (company_size_bucket rather than raw company name).
+**Attach what makes a cohort.** Variant label (for A/B splits), utm_source (for channel attribution), viewport class (mobile vs desktop splits matter — Monday's Unbounce figure puts mobile at ~83% of landing-page visit volume), bucketed firmographic where available (company_size_bucket rather than raw company name).
 
 **Standardize once, propagate everywhere.** PostHog and Amplitude both warn that inconsistent naming is the single highest-leverage data-quality failure mode.[^1][^2] Decide `utm_source` vs `source` vs `channel` on day one, write it in the tracking plan, and have Claude Code enforce it on every new event it helps instrument. This is the kind of discipline that is cheap on day one and nearly impossible to retrofit on day ninety.
 
@@ -150,7 +150,7 @@ Separate from quantitative instrumentation is the qualitative layer: 1:1 convers
 Four platforms anchor the AI-moderated-interview category in 2024–2026, each with verifiable customer disclosures:
 
 - **Outset.ai** — $17M Series A (June 2025, 8VC lead) + $30M Series B (Dec 2025, Radical Ventures lead, M12/Microsoft participating), total $51M, 8x 2025 revenue growth.[^10] Disclosed customers: Microsoft, WeightWatchers, Away, Nestlé, HubSpot, Uber. The Nestlé deployment is the deepest public case: 100+ concepts, 7+ brands, 5+ countries, "10x" the participant count of traditional qual (benchmarked at 20–30 people), and Michael Widenmeyer (Nestlé Consumer Insights Sr Manager) disclosing "participants shared more than twice as much depth with the AI moderator" as with their next-best method.[^11]
-- **Listen Labs** — $27M (Sequoia, 2025) + $69M Series B (Ribbit lead, 2025), $500M+ valuation.[^12] Disclosed: Microsoft, Sweetgreen, Perplexity, Robinhood, Canva, Chubbies. eWeek profile: "quietly interviewing customers for Microsoft."
+- **Listen Labs** — $27M (Sequoia, 2025) + **$69M Series B (Ribbit lead, January 2026; Sequoia/Conviction/Pear participating), ~$100M raised total**.[^12] Disclosed: Microsoft, Sweetgreen, Perplexity, Robinhood, Canva, Chubbies; 30M-participant pool. eWeek profile: "quietly interviewing customers for Microsoft."
 - **Strella** — out of stealth Oct 2024, $14M Series A (Oct 2025, Bessemer lead).[^13] Disclosed: Amazon, Duolingo, Apollo GraphQL, Chobani. Ritual case study reports 24% revenue growth after AI-moderated pricing research. Brian Santiago (Apollo GraphQL): "Before Strella, studies took weeks. Now we get insights in a day."
 - **Maze** — Interview Studies launched June 2024, AI transcripts/summaries/highlights on top of moderated or unmoderated video, with recruitment + scheduling + conferencing in one workflow.[^14] Positioning: AI-augmented human moderation rather than full AI moderation — which matters for the controversy below.
 
@@ -164,7 +164,7 @@ Two positions, both held seriously.
 
 Teresa Torres's weekly-interview discipline assumes human moderation because the exploratory work (pushing past three whys, sensing performance vs disclosure) is what AI currently cannot do.[^17] Rob Fitzpatrick's Mom Test is structurally *harder* for an AI interviewer, not easier, because every Mom Test rule is about *what the interviewer must not do in the moment* based on a signal only a human can currently read.[^18]
 
-**Resolution for a prototype-stage operator.** Run AI-moderated interviews for the *structured-feedback* surface — "tell me what you expected, what confused you, what would stop you from using it" — where the question scope is defined in advance and reach matters. Run human-moderated interviews (yourself, five calls) for the *generative* surface — "tell me about the last time you dealt with [job]; what did you try, what did you switch away from, what almost made you give up." Mixing the two is a division of labor, not a hedge. Reach and consistency on the structured surface; depth and adaptation on the generative. Do not substitute one for the other.
+**Resolution for a prototype-stage operator.** Run AI-moderated interviews for the *structured-feedback* surface — "tell me what you expected, what confused you, what would stop you from using it" — where the question scope is defined in advance and reach matters. Run human-moderated interviews (yourself, five calls) for the *generative* surface — "tell me about the last time you dealt with [job]; what did you try, what did you switch away from, what almost made you give up." Split them deliberately: reach and consistency on the structured surface, depth and adaptation on the generative. Do not substitute one for the other.
 
 ### A Mom-Test-hardened AI interview script
 
@@ -200,19 +200,19 @@ where z = 1.96 for a 95% confidence level. You do not need to compute this by ha
 
 ### The three 12%-point-estimates, worked
 
-**Case A — 6 / 50.** Wilson 95% CI = [5.6%, 24.2%]. Width ≈ 18.6 percentage points.
+**Case A — 6 / 50.** Wilson 95% CI = [5.6%, 23.8%]. Width ≈ 18.2 percentage points.
 
 **Case B — 12 / 100.** Wilson 95% CI = [7.0%, 19.8%]. Width ≈ 12.8 percentage points.
 
-**Case C — 60 / 500.** Wilson 95% CI = [9.4%, 15.2%]. Width ≈ 5.8 percentage points.
+**Case C — 60 / 500.** Wilson 95% CI = [9.4%, 15.1%]. Width ≈ 5.7 percentage points.
 
-All three are "12%." The first says "the true conversion rate of this prototype, given the data, is plausibly anywhere from 5.6% to 24.2% — a 4x range." The second narrows that to roughly a 3x range. The third narrows it to a ~1.6x range. The inference differs completely.
+All three are "12%." The first says "the true conversion rate of this prototype, given the data, is plausibly anywhere from 5.6% to 23.8% — a 4x range." The second narrows that to roughly a 3x range. The third narrows it to a ~1.6x range. The inference differs completely.
 
-**Case A (6/50) inference.** You have seen a 12% conversion rate. You have *not* excluded the hypothesis that the real rate is 6%, which in most B2B contexts would kill the project. You have also not excluded the hypothesis that it is 24%, which in most B2B contexts would be a clear green-light. The 6/50 result, by itself, tells you essentially nothing that could drive a go/no-go decision. The correct next action is almost always *more traffic* — not "ship it," not "kill it." If your decision threshold was 10%, you cannot tell from 6/50 whether you cleared it. If your decision threshold was 15%, you also cannot tell. The only decision 6/50 reliably supports is "run it to 200 visitors before reading again."
+**Case A (6/50) inference.** You have seen a 12% conversion rate. You have *not* excluded the hypothesis that the real rate is 6%, which in most B2B contexts would kill the project. You have also not excluded the hypothesis that it is 23%, which in most B2B contexts would be a clear green-light. The 6/50 result, by itself, tells you essentially nothing that could drive a go/no-go decision. The correct next action is almost always *more traffic* — not "ship it," not "kill it." If your decision threshold was 10%, you cannot tell from 6/50 whether you cleared it. If your decision threshold was 15%, you also cannot tell. The only decision 6/50 reliably supports is "run it to 200 visitors before reading again."
 
 **Case B (12/100) inference.** Tighter, but not much. You have roughly excluded rates below 7% and above 20%. If your decision threshold was "kill below 5%," you can now kill or continue. If your threshold was "ship above 20%," you can make that call. If your threshold was somewhere in the middle — as almost all real thresholds are — you still cannot force the decision from this data alone, and more traffic or a qualitative supplement is the right next step.
 
-**Case C (60/500) inference.** Now the interval is tight enough to drive a decision. You have excluded rates below 9.4% and above 15.2%. If your pre-registered threshold was "ship at 10% or better," this data ships it. If it was "kill below 8%," this data continues. If it was "ship above 18%," this data kills it. 500-visitor sample sizes are where prototype-stage A/B thinking starts to become tractable.
+**Case C (60/500) inference.** Now the interval is tight enough to drive a decision. You have excluded rates below 9.4% and above 15.1%. If your pre-registered threshold was "ship at 10% or better," this data ships it. If it was "kill below 8%," this data continues. If it was "ship above 18%," this data kills it. 500-visitor sample sizes are where prototype-stage A/B thinking starts to become tractable.
 
 ### The operator rule
 
@@ -352,7 +352,7 @@ Expected observation pattern: at N=50 the quantitative layer is almost always in
 
 [^11]: Outset.ai, "Nestle Uses AI to Accelerate Product Innovation." https://outset.ai/resources/stories/nestle-ai-research-accelerated-product-innovation — Claim: 100+ concepts tested, 7+ brands, 5+ countries, "10x" participant count vs traditional qual (benchmark 20–30 people); Widenmeyer statement on "more than twice as much depth." Verified 2026-04-17 via WebFetch.
 
-[^12]: Listen Labs, Series B announcement via PRNewswire, 2025. https://www.prnewswire.com/news-releases/listen-labs-raises-69-million-series-b-to-bring-customer-voices-into-every-decision-302661000.html and founders' letter https://listenlabs.ai/founders-letter — Claim: $69M Series B, Ribbit-led, $500M+ valuation, customer list Microsoft/Sweetgreen/Perplexity/Robinhood/Canva/Chubbies. Verified 2026-04-17.
+[^12]: Listen Labs, Series B announcement via PRNewswire, January 14 2026. https://www.prnewswire.com/news-releases/listen-labs-raises-69-million-series-b-to-bring-customer-voices-into-every-decision-302661000.html ; Pear VC, listen-labs-series-b. — Claim: $69M Series B, Ribbit-led (Sequoia/Conviction/Pear participating), ~$100M total raised, 30M-participant pool; customers Microsoft/Sweetgreen/Perplexity/Robinhood/Canva/Chubbies. Verified via WebSearch 2026-07-17.
 
 [^13]: Strella, Series A announcement via VentureBeat and PRNewswire, Oct 2025. https://venturebeat.com/technology/amazon-and-chobani-adopt-strellas-ai-interviews-for-customer-research-as and https://www.prnewswire.com/news-releases/strella-raises-14m-in-series-a-led-by-bessemer-venture-partners-to-re-design-customer-research-for-the-ai-era-302586024.html — Claim: $14M Series A Bessemer-led, October 2024 stealth exit; Amazon/Duolingo/Apollo GraphQL/Chobani customer list; Apollo GraphQL Santiago quote; Ritual 24% revenue growth case study. https://www.strella.io/blog/how-ritual-used-strellas-ai-moderated-interviews-to-optimize-pricing-and-drive-24-revenue-growth. Verified 2026-04-17.
 
@@ -377,3 +377,5 @@ Expected observation pattern: at N=50 the quantitative layer is almost always in
 [^23]: Evan Miller, "Sample Size Calculator (Evan's Awesome A/B Tools)." https://www.evanmiller.org/ab-testing/sample-size.html — Claim: interactive sample-size calculator with MDE, baseline, power, significance parameters. Verified 2026-04-17.
 
 [^24]: Julian Shapiro, "Startup Handbook: Landing Page Copywriting." https://www.julian.com/guide/startup/landing-pages and Demand Curve "above the fold" playbook https://www.demandcurve.com/playbooks/above-the-fold — Claim: copy-hierarchy framework and demand-test / smoke-test pattern for landing pages. Referenced for cross-week continuity with Monday's lesson. Verified 2026-04-17.
+
+_last_verified: 2026-07-17_

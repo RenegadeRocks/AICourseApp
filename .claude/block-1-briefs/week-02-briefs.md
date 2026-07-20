@@ -10,7 +10,7 @@ Named operators for Week 2 reviewer-lens rotation: Daniel Priestley, April Dunfo
 
 ## Day 1 — Monday — Why brand matters for AI consultants — asymmetric trust, decision latency, premium positioning
 
-- **Output path:** `D:\Work\ClaudeCode\AICatalyst\vault\block-1-problem-solving-outreach\week-02-importance-of-personal-branding--niche-discovery\01-mon-why-brand-matters-for-ai-consultants.md`
+- **Output path:** `D:\Work\ClaudeCode\AIProCourse\vault\block-1-problem-solving-outreach\week-02-importance-of-personal-branding--niche-discovery\01-mon-why-brand-matters-for-ai-consultants.md`
 - **Frontmatter:** `week: week-02`, `day_of_cycle: 1`, `day_name: mon`, `session_slug: importance-of-personal-branding`, `date_due: 2026-05-25`, `word_count_target: 6000`
 - **Title direction:** "Why brand matters for AI consultants — asymmetric trust, decision latency, and the premium-positioning floor"
 - **Topic:** The economic case for personal brand in an AI-services market. Akerlof-style lemons-market analysis applied to AI consulting (buyers cannot distinguish good from bad). Brand as the trust substitute that collapses buyer decision latency and pulls pricing above the commodity floor. Daniel Priestley's "Key Person of Influence" framework. The three pillars: proof (artifacts, receipts), taste (aesthetic/intellectual discrimination), opinion (stake in live debates). Why "be helpful online" is not a brand — it's content; brand is what buyers say about you when you're not in the room.
@@ -25,7 +25,7 @@ Named operators for Week 2 reviewer-lens rotation: Daniel Priestley, April Dunfo
 
 ## Day 2 — Tuesday — Content strategy + platform choice for AI-services operators
 
-- **Output path:** `D:\Work\ClaudeCode\AICatalyst\vault\block-1-problem-solving-outreach\week-02-importance-of-personal-branding--niche-discovery\02-tue-content-strategy-and-platform-choice.md`
+- **Output path:** `D:\Work\ClaudeCode\AIProCourse\vault\block-1-problem-solving-outreach\week-02-importance-of-personal-branding--niche-discovery\02-tue-content-strategy-and-platform-choice.md`
 - **Frontmatter:** `week: week-02`, `day_of_cycle: 2`, `day_name: tue`, `session_slug: importance-of-personal-branding`, `date_due: 2026-05-26`, `word_count_target: 6000`
 - **Title direction:** "Content strategy for AI-services operators — platform, cadence, and the publish-to-teach vs publish-to-demo split"
 - **Topic:** Where AI buyers actually pay attention (X, LinkedIn, YouTube, Substack, podcasts, TikTok) and how to choose. The cadence question (daily vs weekly, compounding vs sprint). The publish-to-teach vs publish-to-demo tradeoff — both work, they attract different buyers and build different books of business. Short-form vs long-form as a strategic choice. The content-as-ads-for-content flywheel. The India-market specifics (LinkedIn + YouTube dominance for AI services, Substack/X secondary).
@@ -40,7 +40,7 @@ Named operators for Week 2 reviewer-lens rotation: Daniel Priestley, April Dunfo
 
 ## Day 3 — Wednesday — Building in public — case studies, receipts, content-as-moat (and the counter)
 
-- **Output path:** `D:\Work\ClaudeCode\AICatalyst\vault\block-1-problem-solving-outreach\week-02-importance-of-personal-branding--niche-discovery\03-wed-building-in-public.md`
+- **Output path:** `D:\Work\ClaudeCode\AIProCourse\vault\block-1-problem-solving-outreach\week-02-importance-of-personal-branding--niche-discovery\03-wed-building-in-public.md`
 - **Frontmatter:** `week: week-02`, `day_of_cycle: 3`, `day_name: wed`, `session_slug: importance-of-personal-branding`, `date_due: 2026-05-27`, `word_count_target: 6000`
 - **Title direction:** "Building in public for AI consultants — case studies, receipts, and whether content is actually a moat"
 - **Topic:** The "building in public" movement applied rigorously to AI services: the mechanics of publishing case studies with numbers, the "receipts shelf" as the proof pillar operationalized, the artifacts-over-abstractions rule. The content-as-moat thesis (each post is a permanent asset) vs the counter (content is a treadmill; the moat is the relationships content catalyzes, not the content itself). The cognitive-dissonance trap of creator-consultants: the incentive to make the content itself the product rather than the service.
@@ -55,7 +55,7 @@ Named operators for Week 2 reviewer-lens rotation: Daniel Priestley, April Dunfo
 
 ## Day 4 — Thursday — Niche as a hypothesis — vertical × capability × buyer-seniority
 
-- **Output path:** `D:\Work\ClaudeCode\AICatalyst\vault\block-1-problem-solving-outreach\week-02-importance-of-personal-branding--niche-discovery\04-thu-niche-as-a-hypothesis.md`
+- **Output path:** `D:\Work\ClaudeCode\AIProCourse\vault\block-1-problem-solving-outreach\week-02-importance-of-personal-branding--niche-discovery\04-thu-niche-as-a-hypothesis.md`
 - **Frontmatter:** `week: week-02`, `day_of_cycle: 4`, `day_name: thu`, `session_slug: niche-discovery`, `date_due: 2026-05-28`, `word_count_target: 6000`
 - **Title direction:** "Niche as a hypothesis — the three-axis model and why most AI freelancers fail on one axis"
 - **Topic:** The three-axis niche model: vertical (industry) × capability (AI primitive/domain like RAG, voice, coding-agent, LLM-ops, eval/QA) × buyer seniority (operator vs manager vs VP vs CXO). Why most AI freelancers describe themselves on the capability axis only and then lose on the vertical and seniority axes. Niche as a falsifiable hypothesis you run experiments against (LOI gating, pre-sales, interview quotas) rather than a poetic statement. The "everything store" failure mode for first-year operators.
@@ -70,7 +70,7 @@ Named operators for Week 2 reviewer-lens rotation: Daniel Priestley, April Dunfo
 
 ## Day 5 — Friday — Niche validation — micro-TAM, unit economics, and the LOI-gating test
 
-- **Output path:** `D:\Work\ClaudeCode\AICatalyst\vault\block-1-problem-solving-outreach\week-02-importance-of-personal-branding--niche-discovery\05-fri-niche-validation-and-unit-economics.md`
+- **Output path:** `D:\Work\ClaudeCode\AIProCourse\vault\block-1-problem-solving-outreach\week-02-importance-of-personal-branding--niche-discovery\05-fri-niche-validation-and-unit-economics.md`
 - **Frontmatter:** `week: week-02`, `day_of_cycle: 5`, `day_name: fri`, `session_slug: niche-discovery`, `date_due: 2026-05-29`, `word_count_target: 6000`
 - **Title direction:** "Niche validation — micro-TAM, unit economics, and the LOI-gating test"
 - **Topic:** Quantitative niche validation for AI services. Bottom-up micro-TAM sizing (100-account math): who are the 100 accounts that fit this niche, at what contract size, with what probability of close. Unit economics per niche (CAC, LTV, contract length, upsell rate, churn). The LOI (letter of intent) gating test: pre-selling a niche before building it. AI-mediated scale-interviewing to validate niche urgency without burning months. What validation actually predicts revenue vs what's validation theater.
@@ -85,7 +85,7 @@ Named operators for Week 2 reviewer-lens rotation: Daniel Priestley, April Dunfo
 
 ## Day 6 — Saturday — Niche positioning + category creation — Dunford, Raskin, Lochhead
 
-- **Output path:** `D:\Work\ClaudeCode\AICatalyst\vault\block-1-problem-solving-outreach\week-02-importance-of-personal-branding--niche-discovery\06-sat-niche-positioning-and-category-creation.md`
+- **Output path:** `D:\Work\ClaudeCode\AIProCourse\vault\block-1-problem-solving-outreach\week-02-importance-of-personal-branding--niche-discovery\06-sat-niche-positioning-and-category-creation.md`
 - **Frontmatter:** `week: week-02`, `day_of_cycle: 6`, `day_name: sat`, `session_slug: niche-discovery`, `date_due: 2026-05-30`, `word_count_target: 6000`
 - **Title direction:** "Niche positioning and category creation — Dunford's structure, Raskin's narrative, Lochhead's escape"
 - **Topic:** From a validated niche (Friday) to a defensible position. Dunford's 5-component positioning structure (competitive alternatives, unique attributes, value, best-fit customers, market category) applied to AI-services offers. Andy Raskin's "strategic narrative" frame. Christopher Lochhead's category-creation thesis from Play Bigger. When to niche-down within an existing category vs when to create a new one. Repositioning moves for operators who ended up in the wrong category. Why most category-creation attempts fail and which succeed.
@@ -100,10 +100,10 @@ Named operators for Week 2 reviewer-lens rotation: Daniel Priestley, April Dunfo
 
 ## Day 7 — Sunday — Week 2 Synthesis + quiz + flashcards
 
-- **Output path:** `D:\Work\ClaudeCode\AICatalyst\vault\block-1-problem-solving-outreach\week-02-importance-of-personal-branding--niche-discovery\07-sun-synthesis-quiz-flashcards.md`
+- **Output path:** `D:\Work\ClaudeCode\AIProCourse\vault\block-1-problem-solving-outreach\week-02-importance-of-personal-branding--niche-discovery\07-sun-synthesis-quiz-flashcards.md`
 - **Frontmatter:** `type: synthesis`, `week: week-02`, `day_of_cycle: 7`, `day_name: sun`, `title: 'Week 2 Synthesis — The brand × niche system'`, `study_date: 2026-05-31`, `date_due: 2026-05-31`, `word_count_target: 3800`
 - **Topic:** Tie Mon–Sat into one system: brand (Mon–Wed, trust / content / receipts) × niche (Thu–Sat, hypothesis / validation / positioning). Mirror the shape of Block 0 Week 3 synthesis: opening thesis, unifying frame, where-each-day-goes-forward table, 12–14 mental-move table, 20-question quiz (mix of multiple-choice + short-written), ~40 flashcards covering all 6 lessons, 3–5 "what's not yet settled" items the reader should keep watching.
-- **Reference shape:** `D:\Work\ClaudeCode\AICatalyst\vault\block-0-basecamp\week-03-decoding-real-business-problems-with-ai-i--decoding-real-business-problems-with-ai-ii\07-sun-synthesis-quiz-flashcards.md` — copy shape only, not content.
+- **Reference shape:** `D:\Work\ClaudeCode\AIProCourse\vault\block-0-basecamp\week-03-decoding-real-business-problems-with-ai-i--decoding-real-business-problems-with-ai-ii\07-sun-synthesis-quiz-flashcards.md` — copy shape only, not content.
 - **Quiz format:** Every question has a right answer OR a defensible position with a clearly-stated rubric.
 - **Flashcards:** Q/A style. Concepts, numbers, named operators, named controversies.
 - **Runnable closing exercise:** One practical workflow that ties brand + niche + outbound (Week 1 Tuesday) together — e.g., "Pick one niche. Map your receipts shelf. Draft a category positioning. Produce 5 outbound messages that depend on the positioning. Predict reply-rate delta vs your last batch."

@@ -8,7 +8,7 @@ title: 'Week 2 Synthesis — Agent engineering as runtime selection'
 study_date: 2026-05-10
 date_due: 2026-05-10
 tags: [synthesis, quiz, flashcards, mcp, voice-agents, n8n, agent-fundamentals, lethal-trifecta, react, tau-bench, runtime-selection]
-last_verified: 2026-04-15
+last_verified: 2026-07-17
 word_count_target: 3800
 ---
 
@@ -59,7 +59,7 @@ Thirteen highest-leverage operational moves drawn from the six lessons. Each row
 | # | Move | Mechanism | Apply when | Do NOT apply when |
 |---|------|-----------|------------|-------------------|
 | 1 | Treat MCP as a JSON-RPC 2.0 protocol with four primitives (tools, resources, prompts, sampling), three transports, and two auth revisions — not as "the USB-C of AI" | Every field in the `initialize` handshake is load-bearing; `protocolVersion` negotiation is your compatibility reflex | Any server/client you ship or evaluate | Marketing conversations where "USB-C of AI" is the level of detail requested |
-| 2 | Speak 2025-06-18 on the client, negotiate down to 2024-11-05 | The spec defines a handshake specifically for this; unilateral upgrades break deployed servers | Shipping a new MCP client in 2026 | Prototyping against a single known server |
+| 2 | Speak 2025-11-25 on the client (the current stable revision), negotiate down to 2024-11-05 | The spec defines a handshake specifically for this; unilateral upgrades break deployed servers. The 2026-07-28 stateless-core RC is upcoming, not shipped | Shipping a new MCP client in 2026 | Prototyping against a single known server |
 | 3 | Match tool granularity to LLM-useful operations, not to REST routes — one to three tool calls for the 80% use case | Tool descriptions eat context tokens on every turn; too-thin tools burn compose cycles; too-fat tools hide failure modes | Designing any MCP server from scratch | Wrapping an API for one-off personal use |
 | 4 | Write the tool description as if it were a system-prompt instruction: triggers, anti-triggers, return shape, every parameter described | The description IS a prompt fragment the model reads on every turn it's in context; enums eliminate invented values | Any tool exposed to an agent | Internal debug tools not consumed by a model |
 | 5 | Apply Willison's lethal trifecta check: private data + untrusted content + exfiltration channel = no reliable defense | The transformer has no architectural way to distinguish instruction sources; this is mechanism, not policy | Threat-modeling any multi-server MCP deployment | Purely local, single-tenant, no-egress scripts |
@@ -156,9 +156,9 @@ Thirteen highest-leverage operational moves drawn from the six lessons. Each row
 
 **Q16** — Ship ~20–30 tools, not 200. Collapse CRUD verbs into intent-named bundles: `POST /accounts` + `GET /accounts/{id}` + `PATCH /accounts/{id}` become `create_account_with_primary_contact` and `update_account_details` (separate, because the 80% call patterns differ). Collapse paginated list endpoints into `search_<entity>` with explicit filter parameters. **Refuse** bulk-delete, schema-migration, workspace-admin routes entirely — put them behind human-in-loop or don't expose at all. Every tool has a description with triggers/anti-triggers; every parameter has a `describe()`; every enum is constrained. Version the tool surface; add tools, don't reshape.
 
-**Q17** — Defensible either side. **"Agree" defense**: Sesame CSM listening tests show participants rate generated speech as equivalent to real recordings without context; gpt-realtime went GA August 2025 at 20% lower cost than preview; prosody preservation (`[whispers]`, `[laughs]`, pitch, pace) is architecturally impossible in pipelined where the text bottleneck destroys the signal; cost is on a predictable downtrend. **"Disagree" defense (stronger)**: per-minute cost gap is still ~10× (pipelined ~$0.02–0.06/min vs gpt-realtime ~$0.30–0.50/min for typical calls); pipelined enables per-language best-of-breed STT/TTS which matters for multilingual consumer products; compliance and observability (separate text transcript as record) are still better on pipelined; hybrid stacks (end-to-end for conversation + pipelined transcript for logging) are the common production compromise. Strong answer splits by use case rather than pretending one wins everywhere.
+**Q17** — Defensible either side. **"Agree" defense**: Sesame CSM listening tests show participants rate generated speech as equivalent to real recordings without context; OpenAI's Realtime line now ships GPT-Realtime-2 (May 2026) with GPT-5-class reasoning *inside* the voice model, closing the old "e2e can't think" objection, plus a July-2026 latency cut; prosody preservation (`[whispers]`, `[laughs]`, pitch, pace) is architecturally impossible in pipelined where the text bottleneck destroys the signal. **"Disagree" defense (stronger)**: the cost gap persists — a token-metered model like GPT-Realtime-2 runs ~$0.30–0.50/min vs raw components ~$0.02–0.06/min (and managed platforms like Retell/VAPI ~$0.13–0.36/min all-in); pipelined enables per-language best-of-breed STT/TTS (Deepgram Flux, Cartesia Sonic 3.5, ElevenLabs v3) for multilingual products; compliance and observability (separate text transcript as record) are still better on pipelined; hybrid stacks (end-to-end for conversation + pipelined transcript for logging) are the common production compromise. Strong answer splits by use case rather than pretending one wins everywhere.
 
-**Q18** — Defensible either side but "disagree" is stronger. **"Disagree" defense**: the 2025-06-18 revision fixed audience-binding (RFC 8707) and discovery (RFC 9728), closing the confused-deputy hole — but it did not address tool-output sanitization, tool-description poisoning (Invariant Labs PoC, April 2025), or cross-server tool shadowing. The disclosed CVEs (CVE-2025-6514 mcp-remote, CVE-2025-59536 Claude Code hooks, the Supabase MCP incident, the postmark-mcp supply-chain incident with 1,643 downloads) all post-date or operate outside the scope of the auth revision. Parecki's "Let's fix OAuth in MCP" argued the auth fixes were necessary; neither he nor the spec authors argued they were sufficient. **"Agree" defense (Position B from Wednesday)**: MCP correctly offloads sanitization and sandboxing to the client layer where context exists (who the user is, what surface the output renders to, is a human approving). Protocol-level sanitization would produce an LCD spec that serves neither personal installs nor multi-tenant SaaS. Anthropic's sandboxing posture is the practical vote for this view.
+**Q18** — Defensible either side but "disagree" is stronger, and mid-2026 events tilted it further that way. **"Disagree" defense**: the 2025-06-18 revision fixed audience-binding (RFC 8707) and discovery (RFC 9728), and 2025-11-25 layered on more OAuth (OIDC discovery, M2M client-credentials) — but none of it addressed tool-output sanitization, tool-description poisoning (Invariant Labs PoC, April 2025), or cross-server shadowing. The 2026 evidence is damning: OX Security's "Mother of All AI Supply Chains" showed a systemic command-execution flaw baked into every official MCP SDK (150M+ downloads, up to ~200K vulnerable instances) that Anthropic confirmed as *intentional*; 30+ CVEs landed in a single 60-day window (~43% command-injection); Windsurf shipped a zero-click RCE (CVE-2026-30615); and the Unicode TAG-block concealment class (arXiv 2607.05744) defeats the human approval view entirely. Auth fixes were necessary, never sufficient. **"Agree" defense (Position B from Wednesday)**: MCP correctly offloads sanitization and sandboxing to the client layer where context exists (who the user is, what surface renders the output, is a human approving). Protocol-level sanitization would produce an LCD spec serving neither personal installs nor multi-tenant SaaS. Anthropic's sandboxing posture — and its refusal to change the SDK behavior OX flagged — is the practical vote for this view. The OWASP Top 10 for Agentic Applications (2026) is the framework to structure either argument.
 
 **Q19** — Defensible either side. **"Agree" defense**: SWE-bench Verified (Opus 4.5 at 80.9%, Opus 4.6 exceeding it) and SWE-bench Pro both reward long-horizon planning; plan-heavy agents dominate both leaderboards. Cognition's technical report argues interleaved ReAct accumulates context errors past ~20 steps. The nightly-reconciliation war story (Saturday §Layer 3) showed plan-first cut aborts from 8% to <1% on a real client workload. **"Disagree" defense (stronger)**: Yao's original 2022 result on HotpotQA and ALFWorld showed interleaved beat planning-heavy baselines precisely because it adapted to observations the plan couldn't anticipate. TAU-bench airline (policy-heavy conversational domain) rewards local adaptation; plan-first loses on short user interactions because the plan is longer than the execution. The real axis is task horizon and reversibility — Saturday's table — not a binary. GPT-5's 45% fewer tool calls on TAU-bench telecom suggests model-level efficiency progress matters at least as much as scaffold choice.
 
@@ -174,21 +174,23 @@ Thirteen highest-leverage operational moves drawn from the six lessons. Each row
 2. Q: The three MCP transports? → A: stdio (local subprocess), HTTP+SSE (2024-11-05, deprecated), Streamable HTTP (2025-03-26, current).
 3. Q: What RFC does MCP 2025-06-18 require clients to use for token requests? → A: RFC 8707 Resource Indicators — scoping tokens to the specific MCP server.
 4. Q: What discovery document does a 2025-06-18 MCP server publish? → A: `/.well-known/oauth-protected-resource` (RFC 9728 Protected Resource Metadata).
+4b. Q: MCP spec revisions and governance as of mid-2026? → A: Revisions 2024-11-05 → 2025-03-26 → 2025-06-18 → **2025-11-25** (current stable: async Tasks, OIDC/M2M OAuth, JSON Schema 2020-12); the **2026-07-28 stateless-core RC** is upcoming. MCP is governed by the Linux Foundation's **Agentic AI Foundation** (Dec 9 2025), co-hosted with A2A, goose, and AGENTS.md — the "A2A faded" story is inverted.
 5. Q: The lethal trifecta? → A: Private data + untrusted content + exfiltration channel = no reliable defense.
 6. Q: Willison's one-line on MCP and the trifecta? → A: MCP encourages users to mix and match tools from different sources — many access private data, many pull in untrusted content, and exfiltration paths are almost limitless.
 7. Q: CVE-2025-59536? → A: Claude Code hooks in `.claude/settings.json` executing on session events before user approval — triggered by `cd`-ing into a malicious repo.
 8. Q: CVE-2025-6514? → A: `mcp-remote` npm proxy (437k downloads) — malicious server could return a `file:` URI as `authorization_endpoint` triggering arbitrary OS command execution during OAuth handshake. CVSS 9.6. Fixed in 0.1.16.
 9. Q: The postmark-mcp supply-chain incident? → A: Sept 2025 — counterfeit npm package BCC'd every outgoing email to attacker-controlled address; 1,643 downloads before removal.
 10. Q: Anthropic's `sandbox-runtime` primitives? → A: macOS `sandbox-exec` + Seatbelt profiles; Linux `bubblewrap` + network namespaces. Declare allowed paths and hosts; everything else fails closed.
+10b. Q: The 2026 MCP security escalation (four facts)? → A: (1) OX Security "Mother of All AI Supply Chains" — systemic command-exec flaw in every official MCP SDK, ~200K vulnerable instances, Anthropic calls it intentional; (2) 30+ CVEs in 60 days (~43% command-injection); (3) Windsurf zero-click RCE CVE-2026-30615; (4) Unicode TAG-block concealment (arXiv 2607.05744) defeats the human approval view. Framework: OWASP Top 10 for Agentic Applications 2026.
 11. Q: The seven components of a pipelined voice agent? → A: Capture/transport, VAD, endpointing, streaming STT, LLM inference (TTFT), streaming TTS (TTFA), playback + echo cancellation.
 12. Q: End-to-end voice-agent latency target on wired web? → A: ≤800 ms end-of-user-speech to start-of-agent-speech; >1000 ms spikes abandonment ~40%.
 13. Q: PSTN telephony voice-agent latency reality? → A: 900–1400 ms because of ~100–200 ms each direction on the PSTN-to-cloud bridge plus codec transcoding.
 14. Q: Why does endpointing matter more than any other single knob? → A: Pure VAD silence-timeout (500–800 ms) is the biggest single source of perceived rudeness; transformer turn detectors cut it to 150–300 ms and use partial-transcript semantics.
 15. Q: LiveKit's 2025 turn detector numbers? → A: 85% true-positive rate holding during mid-sentence pauses; 97% true-negative firing on real ends-of-turn. 135M-param model fine-tuned from SmolLM v2.
-16. Q: Cartesia Sonic Turbo TTFA? → A: 40–90 ms model-internal, sub-200 ms end-to-end including network.
-17. Q: ElevenLabs v2.5 Flash vs v3 positioning? → A: v2.5 Flash (~75 ms) for real-time calls; v3 (300+ ms) for expressive produced audio with inline tags like `[whispers]`, `[laughs]`.
-18. Q: Deepgram Nova-3's killer feature for enterprise? → A: `keyterm` prompting — boost named entities/vocab at inference without retraining.
-19. Q: Gpt-realtime pricing? → A: $32/1M audio input tokens ($0.40 cached), $64/1M audio output tokens (GA Aug 28 2025, 20% cheaper than preview). ~$0.30–0.50/min typical.
+16. Q: Cartesia Sonic 3.5 TTFA? → A: ~75–90 ms first audio over WebSocket from US-East (GA 2026, out of preview); State-Space-Model architecture.
+17. Q: ElevenLabs v2.5 Flash vs v3 positioning (2026)? → A: Flash v2.5 (~75 ms) for real-time calls; v3 — now GA — at ~500–800 ms for expressive produced audio with inline tags like `[whispers]`, `[laughs]`.
+18. Q: Deepgram's 2026 STT shift and its enterprise killer feature? → A: **Flux** folds turn detection into the transcription model itself (turn-complete transcripts, no separate VAD/endpointing stitching); Nova-3's `keyterm` prompting still boosts named entities at inference without retraining. Deepgram also ships Aura-2 TTS.
+19. Q: OpenAI Realtime pricing (2026)? → A: `gpt-realtime` (GA Aug 2025) was superseded by **GPT-Realtime-2** (May 7 2026): $32/1M audio input ($0.40 cached), $64/1M audio output (~$0.30–0.50/min typical); companion Realtime-Translate $0.034/min and Realtime-Whisper $0.017/min are per-minute. Legacy Beta removed May 12 2026.
 20. Q: Anthropic's five workflow patterns? → A: Prompt chaining, routing, parallelization, orchestrator-workers, evaluator-optimizer.
 21. Q: The one Anthropic sentence every agent practitioner should memorize? → A: *When building applications with LLMs, we recommend finding the simplest solution possible, and only increasing complexity when needed. This might mean not building agentic systems at all.*
 22. Q: Four types of agent memory? → A: Working (context window), episodic (past conversations), semantic (facts about the world), procedural (skills/routines).
@@ -208,9 +210,9 @@ Thirteen highest-leverage operational moves drawn from the six lessons. Each row
 **Must-read (from the six lessons):**
 - Anthropic, *Building Effective Agents* (2024-12-20) — https://www.anthropic.com/research/building-effective-agents. The single most operationally useful agent doc. Read before every new agent project. (see Fri/Sat)
 - Willison, S., *The Lethal Trifecta for AI Agents* (2025-06) and *MCP has prompt injection security problems* (2025-04) — https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/ and https://simonwillison.net/2025/Apr/9/mcp-prompt-injection/ (see Wed)
-- MCP Specification (2025-06-18 revision) — https://modelcontextprotocol.io/specification (see Mon/Tue/Wed)
+- MCP Specification (current stable 2025-11-25; 2026-07-28 stateless-core RC upcoming) — https://modelcontextprotocol.io/specification/2025-11-25/changelog (see Mon/Tue/Wed)
 - Yao et al., *ReAct: Synergizing Reasoning and Acting in Language Models* (2022, arXiv 2210.03629) (see Sat)
-- OpenAI, *Introducing gpt-realtime and Realtime API updates* (2025-08-28) — https://openai.com/index/introducing-gpt-realtime/ (see Thu)
+- OpenAI, *Introducing gpt-realtime* (2025-08-28) and the GPT-Realtime-2 release (2026-05-07) — https://openai.com/index/introducing-gpt-realtime/ (see Thu)
 - Anthropic, *Writing Tools for Agents* (2025) engineering post (see Tue)
 
 **Recommended:**
@@ -227,13 +229,13 @@ Thirteen highest-leverage operational moves drawn from the six lessons. Each row
 
 **Optional / supplementary:**
 - Sesame CSM-1B release notes (2025-03-13) (see Thu)
-- Cartesia Sonic 3 and Deepgram Nova-3 model cards (see Thu)
+- Cartesia Sonic 3.5, Deepgram Flux/Nova-3, ElevenLabs v3 (GA) model cards (see Thu)
 - LangGraph 1.0 release post (October 2025) (see Fri)
 - ZenML and OrangeLoops n8n-vs-LangGraph comparisons (2025) (see Fri)
 - Delivery Hero and SanctifAI n8n case studies (see Fri)
 - AgentSeal scan of 1,808 public MCP servers (Nov 2025) (see Wed)
 
-The six lessons' own citation blocks carry the full URL trails; this section points at the must-reads a reviewer would ask you to have already internalized.
+The six lessons' own citation blocks carry the full URL trails; this section points at the must-reads a reviewer would ask you to have already internalized. For the mid-2026 refresh specifically, add: the Linux Foundation AAIF announcement (MCP + A2A co-governance, Dec 2025), the MCP 2025-11-25 changelog and 2026-07-28 RC, OX Security's "Mother of All AI Supply Chains," and the OpenAI GPT-Realtime-2 release — all cited in Mon/Wed/Thu.
 
 ---
 
@@ -243,7 +245,7 @@ A Willison, a Karpathy, a Huyen, a Liu, or an Anthropic security researcher re-r
 
 1. **The "runtime selection" framing is a didactic simplification.** Karpathy would point out that in practice MCP-vs-bespoke, pipelined-vs-end-to-end, and workflow-vs-agent are continuous spectra with hybrid options at every level (hybrid voice stacks with parallel text transcription; n8n-outer + LangGraph-inner production pattern; MCP-over-code-execution-sandbox per Anthropic's late-2025 pattern). If your answer to any runtime question is a clean binary, you probably haven't shipped enough of them. Use the dichotomies in this synthesis as starting heuristics, not taxonomies.
 
-2. **You probably have not actually read the 2025-06-18 spec.** Willison would call this out. Everyone nods at RFC 8707 and RFC 9728 — few have traced the audience-binding rejection path end-to-end through a real client. If asked "show me the exact place in the handshake where a mis-audienced token is rejected, and which client SDK enforces it," you should be able to produce a file path. If not, spend 30 minutes with the spec this week.
+2. **You probably have not actually read the spec.** Willison would call this out. Everyone nods at RFC 8707 and RFC 9728 (2025-06-18) and the 2025-11-25 M2M/OIDC additions — few have traced the audience-binding rejection path end-to-end through a real client. If asked "show me the exact place in the handshake where a mis-audienced token is rejected, and which client SDK enforces it," you should be able to produce a file path. If not, spend 30 minutes with the current (2025-11-25) spec this week.
 
 3. **The lethal-trifecta defense stack you wrote above is only as strong as the weakest link — and the weakest link is usually the human.** Huyen would note: permission-prompt fatigue is the single biggest real-world defeater of Layer 4.1; Anthropic's 84%-prompt-reduction target (from the sandboxing launch) is an *admission* of this. If your production deployment relies on the user reading every prompt carefully, you have not deployed a defense.
 
@@ -261,4 +263,4 @@ If any of the above felt uncomfortable, it should. That discomfort is the calibr
 
 ---
 
-_last_verified: 2026-04-15_
+_last_verified: 2026-07-17_

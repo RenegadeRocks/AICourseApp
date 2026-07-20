@@ -20,7 +20,10 @@ sources:
   - dunford-obviously-awesome-2024-edition
   - welsh-saturday-solopreneur-2024-revenue
   - signalvnoise-basecamp-ab-testing-fried
-last_verified: 2026-04-17
+  - unbounce-cro-intelligence-report-2026
+  - splitbase-neuromd-case-study
+  - totheweb-ensighten-case-study
+last_verified: 2026-07-17
 word_count_target: 6000
 ---
 
@@ -28,7 +31,7 @@ word_count_target: 6000
 
 ## Why this matters
 
-You are about to ship your first AI worker. In nine cases out of ten that worker's first day of life is a landing page — either because the product *is* a page (a waitlist, a fake-door, a smoke test) or because the product *lives behind* a page (the only entrance to your agent / prototype / service). The landing page is not a communication artifact. It is a function with one measurable output: a visitor arrives, and some percentage of visitors perform the intended action. Everything else — the gradient, the typeface, the illustration, the hero video — is an input variable to that function, and an input variable that is not measured is not an input; it is vanity.
+You are about to ship your first AI worker. In nine cases out of ten that worker's first day of life is a landing page — either because the product *is* a page (a waitlist, a fake-door, a smoke test) or because the product *lives behind* a page (the only entrance to your agent / prototype / service). Treat the landing page as a function with one measurable output: a visitor arrives, and some percentage of visitors perform the intended action. Everything else — the gradient, the typeface, the illustration, the hero video — is an input variable to that function, and an input variable that is not measured is not an input; it is vanity.
 
 The central 2026 fact is this. Julian Shapiro, Peep Laja, Oli Gardner, Rob Hope, Justin Welsh — none of these people disagree that copy is the load-bearing wall of a landing page. They disagree about length, proof type, and CTA friction. Those disagreements are inside-the-arena fights; the ring they fight in is *"clarity + relevance + desire − labor − confusion."* The AI-gen era (v0, Lovable, Bolt, Cursor, Claude Code) has collapsed the cost of *producing* a page to near zero and has thereby raised — not lowered — the stakes on the two things AI cannot generate by default: a specific hypothesis about who the visitor is and a measurement apparatus that proves the hypothesis right or wrong. This lesson installs both.
 
@@ -36,7 +39,7 @@ By the end of it you will be able to (1) decompose any landing page you or a pee
 
 ## Prerequisites
 
-- You have shipped *something* to the internet this year — a waitlist, a course, an agency page, a plugin listing. If you have never shipped a landing page, this lesson is still readable; it becomes operational in Thursday and Friday's sessions when you build one.
+- You have shipped *something* to the internet this year — a waitlist, a course, an agency page, a plugin listing. If you have never shipped a landing page, this lesson is still readable; it becomes operational in [[04-thu-micro-prototype-ladder|Thursday]]'s and [[05-fri-prototype-pipeline|Friday]]'s sessions when you build one.
 - You can read HTML well enough to know which block is a hero vs a pricing table. You are not required to hand-write any of it; Claude Code will.
 - You are comfortable with elementary probability — specifically, that *3 conversions out of 27 visitors* is noise.
 
@@ -46,15 +49,15 @@ Anything more is covered inline.
 
 Before anything else, strip the object down to a specification. A landing page takes a population of visitors (segmented by source, device, intent) and produces a distribution over outcomes: bounce, scroll-and-leave, secondary action, primary action. The primary action — the one the page was made for — could be sign-up, demo booked, waitlist join, purchase, upload, call-request. Conversion rate is the count of primary actions divided by the count of visitors over some well-defined window.
 
-That sounds trivial. It is the first place practitioners silently fail. The 2024 Unbounce Conversion Benchmark Report — the largest public dataset on this topic, covering 41,000 unique landing pages, 464 million visits, and 57 million conversions over July 2023 to July 2024 — reports a median *6.6 percent* conversion rate across all industries, with **SaaS at 3.8 percent**, **ecommerce at 4.2 percent**, **financial services at 8.4 percent**, and **events and entertainment at 12.3 percent**.[^1] Those numbers immediately tell you three things:
+That sounds trivial. It is the first place practitioners silently fail. Two Unbounce datasets bracket the current picture. The 2024 Conversion Benchmark Report covered 41,000 pages, 464 million visits, and 57 million conversions and put the cross-industry median at 6.6 percent. The **mid-2026 CRO Intelligence Report — 68,000 landing pages, 89 million conversions — moved the global median to 8.1 percent, the largest single-year jump in Unbounce's benchmark history, which Unbounce attributes to AI-assisted A/B testing crossing majority adoption among mid-market brands.**[^1] Answer Monday's own open question about the 2026 report: it arrived, and it moved the number up, not down. The 2024 industry split still describes the *shape* — **SaaS around 3.8 percent, ecommerce 4.2 percent, financial services 8.4 percent, events and entertainment 12.3 percent** — so treat 8.1 percent as the global anchor and the per-industry figures as the relative structure.[^1][^2] Those numbers immediately tell you three things:
 
-1. **Industry baselines vary by more than 3× between the bottom and top quartile.** A 6 percent conversion is spectacular for SaaS (above the 75th percentile) and mediocre for events. If you report your page performance without naming the industry reference class, you are reporting noise.
-2. **"Good" is roughly 2× the median in every segment.** To crack the top quartile in SaaS you need about **11.6 percent**; overall, above 10 percent starts being "good"; 40 percent is the upper tail that appears only in narrow verticals like "waitlist for a free AI tool your target market is already searching for."[^1]
-3. **Mobile is 82.9 percent of visit volume but converts at 11.2 percent vs desktop at 12.1 percent.**[^2] The conversion *gap* is small; the attention-quality gap is not. We will come back to this.
+1. **Industry baselines vary by more than 3× between the bottom and top quartile.** A 6 percent conversion is strong for SaaS and mediocre for events. If you report your page performance without naming the industry reference class, you are reporting noise.
+2. **"Good" is roughly 2× the median in every segment.** To crack the top quartile in SaaS you need about **11.6 percent**; against the 8.1 percent global median, above ~12 percent starts being "good"; 40 percent is the upper tail that appears only in narrow verticals like "waitlist for a free AI tool your target market is already searching for."[^1]
+3. **Attention ratio shows up in the 2026 data directly: single-CTA pages convert at 13.5 percent vs 10.5 percent for pages with three or more CTAs** (from Unbounce's analysis of 18,639 pages), with two-CTA pages at 11.9 percent in between.[^1] This is the cleanest public number for the attention-ratio argument below — fewer choices, higher conversion. Separately, **mobile is 82.9 percent of visit volume but converts at 11.2 percent vs desktop at 12.1 percent**;[^2] the conversion *gap* is small, the attention-quality gap is not. We come back to both.
 
-The second unavoidable number: **attention spans on landing pages fell from roughly 2.5 minutes in 2004 to 47 seconds in 2024.**[^3] The Unbounce report pairs that decline with a 62 percent *stronger* negative correlation between "difficult words on the page" and conversion rate, compared to 2020. Landing pages written at a 5th–7th grade reading level convert at **11.1 percent** — 56 percent better than pages written at an 8th–9th grade level, and more than 2× better than "professional" prose.[^3] Reading level is not a stylistic choice. It is a conversion lever.
+The second unavoidable number: **attention spans on landing pages fell from roughly 2.5 minutes in 2004 to 47 seconds in 2024.**[^3] The Unbounce report pairs that decline with a 62 percent *stronger* negative correlation between "difficult words on the page" and conversion rate, compared to 2020. Landing pages written at a 5th–7th grade reading level convert at **11.1 percent** — 56 percent better than pages written at an 8th–9th grade level, and more than 2× better than "professional" prose.[^3] Reading level is a conversion lever, not a matter of taste.
 
-Third, the architecture of *where* conversion actually happens. Oli Gardner (Unbounce co-founder) formalised *attention ratio* a decade ago and it has only sharpened: the number of clickable elements on a page divided by the number of campaign goals. A homepage has an attention ratio of 40:1 or worse — nav links, footer links, secondary CTAs, social icons. A dedicated landing page should be 1:1. An Unbounce internal test moving a page from 6:1 to 1:1 lifted conversions over 40 percent.[^4] An AI-gen tool will almost always produce a 6:1 or worse page because its training data is full of homepages; fixing this is one of the cheapest wins available and it is entirely a measurement problem, not a design problem.
+Third, the architecture of *where* conversion actually happens. Oli Gardner (Unbounce co-founder) formalised *attention ratio* a decade ago and it has only sharpened: the number of clickable elements on a page divided by the number of campaign goals. A homepage has an attention ratio of 40:1 or worse — nav links, footer links, secondary CTAs, social icons. A dedicated landing page should be 1:1. An Unbounce internal test moving a page from 6:1 to 1:1 lifted conversions over 40 percent.[^4] An AI-gen tool will almost always produce a 6:1 or worse page because its training data is full of homepages; fixing this is one of the cheapest wins available, and it turns on counting tappable elements — a measurement move, not a design one.
 
 Hold these three numbers together as you read the rest. Every design decision we discuss either moves conversion, moves attention ratio, or moves reading level. If it moves none of the three, it is costume.
 
@@ -83,11 +86,11 @@ Peep Laja's Wynter framework — derived from the message-testing results of tho
 
 Shapiro's hero header carries *clarity*; his subheader carries *value*; his proof stack carries *differentiation*; *relevance* is carried by the segmentation of the traffic source (which is why running paid ads to a generic homepage converts so poorly — the relevance wall is unbuilt).
 
-Where the two frameworks diverge is on pacing. Shapiro is prescriptive about structure. Laja is prescriptive about hierarchy and explicitly says that testing reveals which layer is broken — sometimes it's value, sometimes it's clarity, sometimes it's relevance. For an AI-catalyst lead, the synthesis is operational: **use Shapiro's modular skeleton as your default skeleton; use Laja's four-layer test to diagnose which module is failing when a page under-converts.**
+Where the two frameworks diverge is on pacing. Shapiro is prescriptive about structure. Laja is prescriptive about hierarchy and explicitly says that testing reveals which layer is broken — sometimes it's value, sometimes it's clarity, sometimes it's relevance. For an AI operator, the synthesis is operational: **use Shapiro's modular skeleton as your default skeleton; use Laja's four-layer test to diagnose which module is failing when a page under-converts.**
 
 ### The value proposition engine
 
-Shapiro's value-prop table is the most-copied and least-executed piece of his handbook. It is not a framework; it is a three-column spreadsheet. Column 1: *Bad Alternative* — what your prospect resorts to now. Column 2: *Better Solution* — how your product fixes it. Column 3: *Action Statement* — column 2 rewritten as something a person would say out loud.[^5] Fill twenty rows. The value props that land are always from the action-statement column.
+Shapiro's value-prop table is the most-copied and least-executed piece of his handbook — a three-column spreadsheet, not a framework. Column 1: *Bad Alternative* — what your prospect resorts to now. Column 2: *Better Solution* — how your product fixes it. Column 3: *Action Statement* — column 2 rewritten as something a person would say out loud.[^5] Fill twenty rows. The value props that land are always from the action-statement column.
 
 Cross-domain examples, each generated with this table:
 
@@ -135,13 +138,13 @@ Here is the math that makes landing-page work rigorous rather than aesthetic. Fo
 
 Same half-point lift, four orders of magnitude in dollars. Where you *spend* iteration budget depends entirely on this math. Scenario 1: ceiling ~$25K/year; invest a week, not a month. Scenario 2: a month of disciplined optimisation is trivially paid back.
 
-Equally decisive: **sample size to detect a lift** (binomial power calculation, 80% power / 95% confidence):
+Equally decisive: **sample size to detect a lift** (two-sided binomial power calculation, 80% power / 95% confidence, standard pooled formula — the one Evan Miller's calculator at evanmiller.org/ab-testing/sample-size.html implements):
 
-- 0.5-point lift from 2.5% baseline (relative +20%): **≈9,500 visitors per variant**.
-- 1.0-point lift from 3.0% baseline (relative +33%): **≈3,900 per variant**.
-- 2.0-point lift from 3.0% baseline (relative +67%): **≈1,100 per variant**.
+- 0.5-point lift from 2.5% baseline (relative +20%): **≈16,800 visitors per variant**.
+- 1.0-point lift from 3.0% baseline (relative +33%): **≈5,300 per variant**.
+- 2.0-point lift from 3.0% baseline (relative +67%): **≈1,500 per variant**.
 
-If you are a solo operator with 1,200 monthly visitors, **you cannot A/B test at all** with confidence. You are doing directional optimisation — picking a position, measuring 30-day before/after, accepting a wide noise floor. Anyone telling you otherwise is selling a dashboard. Mid-market SaaS with 25,000 visitors can run 2–3 tests/month at meaningful power. Tool and process follow from the math, not preference.
+These are larger than intuition suggests — detecting a half-point move on a low base rate is genuinely expensive. If you are a solo operator with 1,200 monthly visitors, **you cannot A/B test at all** with confidence. You are doing directional optimisation — picking a position, measuring 30-day before/after, accepting a wide noise floor. Anyone telling you otherwise is selling a dashboard. Mid-market SaaS with 25,000 visitors can run 2–3 tests/month at meaningful power. Tool and process follow from the math, not preference.
 
 ## Layer 5 — Operator case studies, with numbers
 
@@ -151,7 +154,7 @@ The canonical public case study remains TruckersReport, a community for long-hau
 
 ### NeuroMD, Ensighten, and dynamic personalisation
 
-NeuroMD (medical device e-commerce) tested multiple variants; the winning hero rewrite lifted conversion **55.3%**, re-specifying the H1 from a brand-forward claim to a specific functional promise.[^10] Ensighten (enterprise software) simplified layout and above-the-fold hierarchy: **+35% on-page conversion and −20% ad spend** for the same lead volume[^10] — better on-page conversion meant fewer paid clicks per lead, compounding the effect.
+NeuroMD (medical device e-commerce) tested multiple variants; per SplitBase's own case study the winning landing page lifted conversion **55.3% against the pages it was tested against**, re-specifying the H1 from a brand-forward claim to a specific functional promise.[^10] Ensighten (enterprise software) simplified layout and above-the-fold hierarchy: ToTheWeb's A/B test reports **+35% on-page conversion, +9% total conversions, and −20% ad spend** for the same lead volume[^10] — better on-page conversion meant fewer paid clicks per lead, compounding the effect. (The Ensighten study is a ~2021 case; treat it as an evergreen structural lesson, not a 2026 data point.)
 
 Dynamic personalisation — swapping headline, hero imagery, or testimonial based on traffic source, geography, or industry — produces **9–18% lift** when segments are *meaningful* and variants *genuinely differ*.[^3] Pseudo-personalisation (injecting the prospect's city into the H1) produces cosmetic lift at best and trust erosion at worst.
 
@@ -235,7 +238,7 @@ Design a hypothesis about your hero copy that you could A/B test (or directional
 - The monthly visitor volume you have — and, honestly, whether the required sample is achievable in 30 days, 90 days, or never.
 - What you will do if the test is underpowered: run it directionally, wait longer, pick a larger-lift hypothesis, or change the page unilaterally and measure before/after.
 
-If your page has 800 monthly visitors and the required sample size is 9,500 per variant, *that* is the binding constraint and the finding you must live with.
+If your page has 800 monthly visitors and the required sample size is ~16,800 per variant, *that* is the binding constraint and the finding you must live with.
 
 ## Common failure modes at scale
 
@@ -249,15 +252,15 @@ If your page has 800 monthly visitors and the required sample size is 9,500 per 
 
 **(e) The desktop-first mobile hero.** On mobile the CTA is below the fold because the hero image pushes it down. View on an actual phone (not DevTools emulator); rebuild with CTA-first composition. 82.9% of your traffic is mobile.[^1] Named failure mode: a Q2 2024 agency teardown I ran on three AI-services sites all passed DevTools mobile emulation at iPhone-14-Pro-Max (430×932) but broke on an actual iPhone SE 2022 (375×667) — the hero clamp math rendered the H1 at a larger line-height on the real Safari than Chrome DevTools emulated, pushing the CTA 40–80px below the real fold. The pattern is industry-wide: Chrome DevTools device mode uses CSS-pixel math, not the actual WebKit layout engine, so iOS Safari type rasterisation and `-webkit-text-size-adjust` behavior is systematically under-reported. Operator rule: before shipping, open the staging URL on an actual iPhone SE or equivalent 375-wide device, and scroll from the top — if you can't see the CTA without scrolling, it's broken regardless of what DevTools said.
 
-**(f) The concierge-level claim with no proof.** "Save 10 hours a week." Where does 10 come from? Unsourced claims are trust-depressors, not trust-builders.
+**(f) The concierge-level claim with no proof.** "Save 10 hours a week." Where does 10 come from? An unsourced claim depresses trust rather than building it.
 
 **(g) Optimising bounce rate instead of primary action.** A 40-second engaged session that doesn't convert is no better than a 5-second bounce. Measure the action; bounce is a leading indicator at best.
 
 ## Open questions — what is not settled in 2026
 
-**(1) Does AI-personalised copy outperform segment-level copy by enough to justify the inference cost?** On paper, an LLM rewriting the H1 per visitor should beat a static H1 segmented by source. In practice, early 2025 implementations from Mutiny and Intellimize produced lifts in the 5–15 percent range — often below the 9–18 percent range of well-designed static personalisation — while adding noticeable TTFB (time-to-first-byte) latency that costs its own conversion. The jury is out whether frontier-model personalisation (served from Claude Sonnet 4.6 or similar at 200ms median) changes the calculus; results through Q1 2026 are inconclusive.
+**(1) Does AI-personalised copy outperform segment-level copy by enough to justify the inference cost?** On paper, an LLM rewriting the H1 per visitor should beat a static H1 segmented by source. In practice, early 2025 implementations from Mutiny and Intellimize produced lifts in the 5–15 percent range — often below the 9–18 percent range of well-designed static personalisation — while adding noticeable TTFB (time-to-first-byte) latency that costs its own conversion. The jury is out whether frontier-model personalisation (served from a fast tier like Claude Sonnet 5 at low-hundreds-of-ms median) changes the calculus; results through mid-2026 are inconclusive.
 
-**(2) Does the short-form trend reverse as LLMs make long-form cheap?** Unbounce's data from 2020–2024 shows short-form winning. The counter-hypothesis: because AI-gen lowers the cost of producing good long-form, a new generation of sites will deploy long-form at scale and retrain user scanning behavior. Too early to call; watch the 2026 CBR.
+**(2) Does the short-form trend reverse as LLMs make long-form cheap?** Unbounce's data from 2020–2024 showed short-form winning. The 2026 mid-year report doesn't overturn that, but it reframes the driver: the median jump to 8.1 percent is attributed to *AI-assisted A/B testing adoption*, not to a form-factor shift — the machine that got better is the testing loop, not the copy length. The counter-hypothesis (AI-gen makes good long-form cheap enough to redeploy at scale and retrain scanning behavior) is still live; the 2026 data neither confirms nor kills it.
 
 **(3) What is the AI-buyer's tolerance for "made with AI" branding?** Some waitlists in 2025–2026 (most visibly Cursor and Perplexity) leaned into the AI-native aesthetic (monospaced fonts, terminal colorways, dense information architecture) and outperformed peer landing pages that hid the AI-ness. Others (notably in regulated verticals) underperformed when the page read as "AI-first" because buyers discounted trust. The signal is industry-specific and is not yet a rule.
 
@@ -287,7 +290,7 @@ If your page has 800 monthly visitors and the required sample size is 9,500 per 
 
 - Dunford, April. *Obviously Awesome: How to Nail Product Positioning* (updated 2026 edition).[^13] Treat as positioning prerequisite before any serious landing-page rewrite.
 - GoodUI. *Patterns library and A/B data stories* at goodui.org/patterns/ and goodui.org/datastories/.[^7] 141 patterns grounded in 610 tests.
-- Fitzpatrick, Rob. *The Mom Test* (revised and expanded edition, 2024).[^14] For the Thursday/Saturday validation lessons, but worth pre-reading here.
+- Fitzpatrick, Rob. *The Mom Test* (revised and expanded edition, 2024).[^14] For the [[04-thu-micro-prototype-ladder|Thursday]] and [[06-sat-validation-instrumentation|Saturday]] validation lessons, but worth pre-reading here.
 - Chartbeat + Poool. *Essential Engagement KPIs for Optimizing Conversion Rates* whitepaper (April 2024).[^15] For the reader who wants the engagement-to-conversion math deepened.
 
 **Optional:**
@@ -298,7 +301,7 @@ If your page has 800 monthly visitors and the required sample size is 9,500 per 
 
 ## Citations
 
-[^1]: Unbounce. *"What is the average landing page conversion rate? (Q4 2024 data)."* Published Q4 2024, updated 2025. URL: https://unbounce.com/average-conversion-rates-landing-pages/. Claim supported: overall median 6.6 percent across 41,000 pages / 464M visits / 57M conversions; industry breakdowns (SaaS 3.8%, ecommerce 4.2%, financial services 8.4%, events 12.3%); mobile share 82.9 percent; desktop converting at 12.1 percent vs mobile 11.2 percent. Verified 2026-04-17.
+[^1]: Unbounce. *Conversion Benchmark Report* (2024, https://unbounce.com/average-conversion-rates-landing-pages/) and the *2026 mid-year CRO Intelligence Report* (https://unbounce.com/conversion-benchmark-report/). The 2024 CBR: median 6.6 percent across 41,000 pages / 464M visits / 57M conversions; industry breakdowns (SaaS 3.8%, ecommerce 4.2%, financial services 8.4%, events 12.3%). The 2026 mid-year report: **global median 8.1 percent across 68,000 landing pages and 89 million conversions** — the largest single-year benchmark jump, attributed to AI-assisted A/B testing adoption; single-CTA pages 13.5%, two-CTA 11.9%, three-or-more-CTA 10.5% (analysis of 18,639 pages). The Unbounce primary was not directly fetchable through this session's egress; the 8.1% median, page/conversion counts, and single-vs-multi-CTA figures were cross-confirmed via multiple 2026 secondary reports (foundrycro.com/blog/landing-page-conversion-rate-benchmarks-2026/, searchlab.nl/en/statistics/conversion-optimization-statistics-2026). Verified via WebSearch 2026-07-17.
 
 [^2]: Unbounce. *"Average SaaS conversion rate benchmark report."* URL: https://unbounce.com/conversion-benchmark-report/saas-conversion-rate/. Claim supported: SaaS median conversion 3.8 percent; top-25-percent threshold 11.6 percent; correlation between difficult words and conversion -24.3 percent; 62 percent increase in that negative correlation since 2020. Verified 2026-04-17.
 
@@ -316,7 +319,7 @@ If your page has 800 monthly visitors and the required sample size is 9,500 per 
 
 [^9]: CXL / ConversionXL. *"Landing Page Case Study: How We Improved Conversions by 79.3%."* Client: TruckersReport. URL: https://cxl.com/blog/case-study-how-we-improved-landing-page-conversion/. Claim supported: 6 rounds of testing; 12.1 percent → 21.7 percent conversion; +79.3 percent relative lift at 99.7 percent confidence; specific levers (imagery, headline rewrite, mobile simplification); 4 failed tests before the winning insight. Verified via WebSearch 2026-04-17.
 
-[^10]: Multiple landing-page optimisation case studies aggregated by Landingi and digitalapplied.com (2024–2026): NeuroMD +55.3 percent on hero rewrite; Ensighten redesign +35 percent on-page conversion and -20 percent ad spend. URLs: https://landingi.com/landing-page/optimization-case-studies/ and https://www.digitalapplied.com/blog/landing-page-statistics-2026-conversion-data-points. Verified 2026-04-17.
+[^10]: Primary sources: SplitBase, *How Landing Page Testing Was a "Game-Changer" for This Medical Device Company* (NeuroMD, https://splitbase.com/case-studies/landing-pages-neuromd) — the winning landing page produced a 55.3% conversion increase against the pages it was tested against. ToTheWeb, *Ensighten PPC Landing Page Optimization Case Study* (~2021, https://totheweb.com/wp-content/uploads/2021/08/totheweb-ensighten-ppc-landing-page-optimization-case-study.pdf) — +35% conversion rate, +9% total conversions, −20% ad spend. Both verified via WebSearch 2026-07-17; the Ensighten case is ~2021 vintage and should not be dressed as recent data.
 
 [^11]: Fried, Jason / 37signals. *"How We Lost (And Found) Millions by Not A/B Testing."* Signal v. Noise (2014, republished on Medium). URL: https://medium.com/signal-v-noise/how-we-lost-and-found-millions-by-not-a-b-testing-e70f27dd783e. Claim supported: removing the signup form from the homepage during the 2014 rebrand caused a conversion drop not detected for months; public estimate "millions of dollars" in foregone revenue; used as the canonical example of the cost of shipping conversion-element changes without instrumentation. Verified 2026-04-17.
 
@@ -327,3 +330,5 @@ If your page has 800 monthly visitors and the required sample size is 9,500 per 
 [^14]: Fitzpatrick, Rob. *The Mom Test: How to Talk to Customers and Learn If Your Business Is a Good Idea When Everyone Is Lying to You.* Revised and expanded edition (2024). URL: https://www.momtestbook.com. Claim supported: validation-interview protocol referenced in problem-set and Thursday lesson; book used as training manual at Shopify, SkyScanner, Harvard, MIT. Verified 2026-04-17.
 
 [^15]: Chartbeat + Poool. *"The Essential Engagement KPIs for Optimizing Conversion Rates."* Whitepaper, April 2024. URL: https://chartbeat.com/wp-content/uploads/2024/04/ChartbeatxPoool-Whitepaper-Engagement-KPIs-Optimize-Conversion-Rates.pdf. Claim supported: engaged-time thresholds (25s → 9% return; 75s → 14%; 125s → 22%); 5-second inactivity threshold for attention; the engagement-to-return-visit ladder used implicitly in the conversion-math discussion. Verified 2026-04-17.
+
+_last_verified: 2026-07-17_

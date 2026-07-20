@@ -28,7 +28,7 @@ sources:
   - measuringu-adjusted-wald-calculator
   - wikipedia-binomial-proportion-ci
   - lennys-superhuman-rahul-vohra-podcast
-last_verified: 2026-04-17
+last_verified: 2026-07-17
 word_count_target: 6000
 ---
 
@@ -36,7 +36,7 @@ word_count_target: 6000
 
 ## Why this matters
 
-You will ship a lot of AI prototypes in 2026. The tool stack is now cheap enough — Claude Code as orchestrator, v0/Lovable/Bolt for UI, n8n for glue, Vercel for hosting, PostHog for instrumentation — that a week's worth of hypothesis can become a deployed, trackable surface in four to eight hours. Tuesday and Wednesday taught you how to build one cleanly; Friday teaches you the pipeline end-to-end. Today's lesson is the question that sits upstream of all of that and silently decides whether any of the work matters: **which experiment, at which rung of the validation ladder, for which hypothesis?**
+You will ship a lot of AI prototypes in 2026. The tool stack is now cheap enough — Claude Code as orchestrator, v0/Lovable/Bolt for UI, n8n for glue, Vercel for hosting, PostHog for instrumentation — that a week's worth of hypothesis can become a deployed, trackable surface in four to eight hours. [[02-tue-how-ai-code-gen-tools-work|Tuesday]] and [[03-wed-design-system-literacy|Wednesday]] taught you how to build one cleanly; [[05-fri-prototype-pipeline|Friday]] teaches you the pipeline end-to-end, and [[06-sat-validation-instrumentation|Saturday]] closes the measurement loop this lesson's CI math opens. Today's lesson is the question that sits upstream of all of that and silently decides whether any of the work matters: **which experiment, at which rung of the validation ladder, for which hypothesis?**
 
 The capability delta you will have after internalizing this lesson, which a sharp AI-native generalist does not already have, is this: you will stop defaulting to "ship an MVP and see." You will be able to place any AI-product hypothesis on the six-rung ladder from Alberto Savoia's pretotyping framework[^1], name the rung it currently sits at, name the *next* cheaper-than-MVP experiment that would materially de-risk it, write a falsifiable hypothesis with a pre-committed success threshold and sample-size math, and — this is the one most operators miss — tell the difference between a "go" signal, a "no-go" signal, and an "ambiguous signal that demands a second round," without post-hoc rationalizing whichever direction you were already leaning. By the end you will also have a defensible position on two 2026-live controversies: whether fake-door testing is still ethical in a regulatory climate where the California Privacy Protection Agency is actively enforcing against dark-pattern deception[^2], and whether pretotyping's "demand validation" is real user validation or Marty Cagan's "not enough."[^3]
 
@@ -71,7 +71,7 @@ Operational output: signup rate, CTA-click-through rate, time-on-page, and — i
 
 The rung that causes the most 2026 debate. The operator adds a button, menu item, or feature card inside an *existing* product (or a mocked-up dashboard) that looks like it leads to a new feature but actually leads to a survey, a "coming soon" explanation, or a waitlist. Clicks measure *latent demand among existing users who already trust the brand*, which a cold-traffic smoke test cannot isolate.
 
-The canonical case: Gmail's Priority Inbox in 2010, PM'd by Todd Jackson on the Gmail team[^7], reportedly used painted-door-style internal Labs probes before the feature shipped — though the exact mechanics were never fully disclosed. More operationally explicit is the ongoing GoodUI / Chameleon / ProdPad pattern library[^8][^9], which documents fake-door tests as a standard conversion-research discipline. *Critical 2026 constraint:* the California Privacy Protection Agency's Enforcement Advisory 2024-02 (September 4 2024) specifically names dark-pattern design as subject to civil penalties of up to $2,500 per violation and $7,500 for willful violations[^2]. Fake-door tests that do not immediately disclose ("thanks for your interest — this feature is in research, we'll tell you if we ship it") risk landing inside that enforcement surface. We come back to this in the controversy section.
+The canonical case: Gmail's Priority Inbox in 2010, PM'd by Todd Jackson on the Gmail team[^7], reportedly used painted-door-style internal Labs probes before the feature shipped — though the exact mechanics were never fully disclosed. More operationally explicit is the ongoing GoodUI / Chameleon / ProdPad pattern library[^8][^9], which documents fake-door tests as a standard conversion-research discipline. *Critical 2026 constraint:* the California Privacy Protection Agency's Enforcement Advisory 2024-02 (September 4 2024) specifically names dark-pattern design as subject to CCPA civil penalties, which are CPI-adjusted every odd January — the **2026 caps are $2,663 per unintentional violation and $7,988 per intentional or minor-related violation** (up from the $2,500/$7,500 statutory floor), **per violation, per consumer**[^2]. Fake-door tests that do not immediately disclose ("thanks for your interest — this feature is in research, we'll tell you if we ship it") risk landing inside that enforcement surface. We come back to this in the controversy section.
 
 Operational output: click-through rate on the nonfunctional element, delta vs. sibling features, follow-up survey response rate.
 
@@ -129,22 +129,23 @@ For a 2026 AI-product reader, the takeaway is sharper: if your AI product's diff
 
 ## Sample-size math — what you actually infer from N=50
 
-This is the single most common failure mode at rungs 2 and 3: operators look at "6/50 visitors signed up — 12% conversion!" and either ship or kill based on it. Neither is warranted. A conversion of 6/50 has a *95% Wilson confidence interval* of roughly **5.6% to 24.2%** — meaning the true conversion rate could plausibly be as low as ~6% or as high as ~24%, and the eight-percentage-point difference between those endpoints is often the difference between "kill" and "scale." A single number at N=50 is not a signal; the interval is.
+This is the single most common failure mode at rungs 2 and 3: operators look at "6/50 visitors signed up — 12% conversion!" and either ship or kill based on it. Neither is warranted. A conversion of 6/50 has a *95% Wilson confidence interval* of roughly **5.6% to 23.8%** — meaning the true conversion rate could plausibly be as low as ~6% or as high as ~24%, an 18-percentage-point span that straddles nearly every threshold you might set. A single number at N=50 is a point estimate; the interval is the signal.
 
 The math you should carry in your head (approximate Wilson score intervals, 95%, binomial proportion CI[^26][^27]):
 
 | Conversions / N | Point rate | 95% CI (approx Wilson) | Operator read |
 |---|---|---|---|
-| 6 / 50 | 12% | ~5.6% – 24.2% | Ambiguous — run more |
+| 6 / 50 | 12% | ~5.6% – 23.8% | Ambiguous — run more |
 | 3 / 50 | 6% | ~2.1% – 16.2% | Likely weak but cannot rule out 15% true rate |
 | 12 / 100 | 12% | ~7.0% – 19.8% | Narrower but still ambiguous for A/B comparison |
 | 60 / 500 | 12% | ~9.4% – 15.1% | Actionable — conversion in roughly this band |
-| 10 / 50 | 20% | ~11.2% – 32.9% | Strong directional; likely level-up, not yet ship |
+| 10 / 50 | 20% | ~11.2% – 33.0% | Strong directional; lower bound clears 10% |
+| 2 / 50 | 4% | ~1.1% – 13.5% | Ambiguous, not dead — upper bound still spans 10% |
 | 1 / 50 | 2% | ~0.4% – 10.5% | Almost certainly dead — but "almost" is doing work |
 
 A few load-bearing implications:
 
-**Sample-size math box — the go / no-go / ambiguous cuts at N=50.** For a smoke test with 50 visitors, if you pre-commit to a 10% conversion threshold as your "level up" signal: observing 8+/50 (≥16% observed) gives you a lower CI bound above 7%, which is diagnostic for "true rate plausibly ≥10%" — level up. Observing ≤2/50 (≤4% observed) gives you an upper CI bound below 11%, diagnostic for "true rate plausibly <10%" — kill. Anything between 3/50 and 7/50 is the **ambiguous zone** and should be read as "run to N=200 before deciding." This is why operator rule 1 is: **pre-commit the threshold in writing before traffic starts, not after.** Otherwise the ambiguous zone gets retrospectively interpreted as whichever direction you already wanted.
+**Sample-size math box — the go / no-go / ambiguous cuts at N=50.** Take a 10% conversion threshold as your "level up" bar and hold every read to the Wilson 95% interval. At N=50: observing **≥10/50 (≥20% observed)** puts the lower bound at ~11.2% — the whole interval clears 10%, so level up. Observing **≤1/50 (≤2% observed)** puts the upper bound at ~10.5% — the interval sits at or below the bar, so kill. **Everything from 2/50 to 9/50 straddles 10%** — for instance 2/50 → [1.1%, 13.5%] and 8/50 → [8.3%, 28.5%] — and must be read as "run to N=200 before deciding," never talked into a verdict. Watch the trap: 2/50 *looks* like a kill at 4% observed, but its Wilson upper bound is **13.5%**, which does not exclude a true 10% rate — 2/50 is ambiguous, not dead. The kill line at N=50 genuinely sits at ≤1/50 and the level-up line at ≥10/50; the band between them is wide precisely because 50 visitors carry little information. This is why operator rule 1 is: **pre-commit the threshold in writing before traffic starts, not after** — otherwise that wide ambiguous band gets retrospectively read as whichever direction you already wanted.
 
 **Second load-bearing implication:** the adjusted Wald / Wilson interval is the right tool for N<150 landing-page tests. The standard Wald ("conversion ± 1.96 × √(p(1-p)/n)") gives nonsense bounds at small N — for 1/50 it produces a lower bound below zero. MeasuringU's adjusted-Wald calculator[^26] is the operator reference. For very small N (N<30, rung-4 concierge), use exact Clopper-Pearson or just accept you have qualitative data, not quantitative.
 
@@ -184,9 +185,9 @@ Four phases, designed to end with a deployed experiment by end of session.
 
 **3. Fake-door without post-click disclosure, in a 2026 enforcement climate.** The CPPA's 2024-02 advisory makes the legal cost real, but the more durable cost is brand: users who feel tricked by a fake-door feature tell other users, and the trust cost compounds across all future rollouts. The fix is the "immediate post-click disclosure + survey" pattern. Chameleon's 2024 fake-door guide, the ProdPad glossary, and Amplitude's pattern docs all converge on this[^8][^9][^23].
 
-**4. Concierge that never gets automated (the "consulting trap").** Rung 4 is a test, not a product. Operators who find the concierge profitable often stay there and miss that the *product* thesis was scale. Superhuman's team spent years at concierge, but they were explicitly *watching* for the patterns that would automate; most consulting-flavored AI tools in 2024–2025 stayed at concierge because the founder enjoyed the client work and never forced the automation question. The fix is a *pre-committed automation criterion per sub-step* — "we automate variance classification after 20 runs where the human reclassification rate drops below 10%." If you don't have that criterion in writing, you're probably running a consultancy.
+**4. Concierge that never gets automated (the "consulting trap").** Rung 4 exists to test a thesis, then hand off to automation. Operators who find the concierge profitable often stay there and miss that the *product* thesis was scale. Superhuman's team spent years at concierge, but they were explicitly *watching* for the patterns that would automate; most consulting-flavored AI tools in 2024–2025 stayed at concierge because the founder enjoyed the client work and never forced the automation question. The fix is a *pre-committed automation criterion per sub-step* — "we automate variance classification after 20 runs where the human reclassification rate drops below 10%." If you don't have that criterion in writing, you're probably running a consultancy.
 
-**5. Skipping to rung 6 because "AI makes MVPs cheap."** The Block 0 Week 3 lesson's Humane Pin and Rabbit R1 case studies are the cautionary tale. 2026 AI tools do make MVPs cheaper, but "cheap to build" is not the same as "cheap to learn from if the hypothesis is wrong." An MVP that takes 4 hours and produces no validation signal is still more expensive than a rung-2 smoke test that takes 4 hours and tells you the demand isn't there.
+**5. Skipping to rung 6 because "AI makes MVPs cheap."** The Block 0 Week 3 lesson's Humane Pin and Rabbit R1 case studies are the cautionary tale. 2026 AI tools do make MVPs cheaper to build, but cheap to build says nothing about cheap to *learn from* when the hypothesis is wrong. An MVP that takes 4 hours and produces no validation signal is still more expensive than a rung-2 smoke test that takes 4 hours and tells you the demand isn't there.
 
 **6. Confusing demand signal with user signal.** A smoke-test signup is a *demand* signal: someone was interested enough to convert. It is not yet *user* signal: that they would retain, pay, or derive ongoing value. This is Marty Cagan's critique of pretotyping in its extreme form[^3][^28] — we come back to it immediately.
 
@@ -210,7 +211,7 @@ Four phases, designed to end with a deployed experiment by end of session.
 
 ### Controversy 3 — Has the concierge rung changed shape in the Claude Code era?
 
-Partially unresolved. The 2024–2025 pattern that a concierge service *is now a Claude Code orchestration operated by a founder* blurs Savoia's original distinction between "manual work behind a UI" and "automated work." If the founder is driving Claude Code, is that concierge (human-operated) or pretotyped automation (AI-operated)? Andrew Chen's 2024–2025 a16z writing[^29] on consumer AI suggests the "AI-in-the-loop concierge" is the dominant rung-4 shape for AI products now, because the founder can iterate the Claude workflow between customers in ways a purely manual concierge could not. The open question is whether this shortens the concierge phase (patterns stabilize faster when Claude is already capturing them) or lengthens it (founders over-trust Claude's outputs and automate prematurely). Public data is thin; the operator judgment is still being formed.
+Partially unresolved, and less "thin on data" than it was even a quarter ago. The pattern that a concierge service *is now a Claude Code orchestration operated by a founder* blurs Savoia's original distinction between "manual work behind a UI" and "automated work." If the founder is driving Claude Code, is that concierge (human-operated) or pretotyped automation (AI-operated)? The line got blurrier in April–July 2026: **Claude Cowork went cross-platform (web + mobile, July 7 2026), and its own usage data shows more than 90% of Cowork work is non-coding knowledge work** — the founder-driving-an-agent concierge now has a productized form, with Managed-Agent patterns running scheduled tasks in the cloud between customers.[^29b] Andrew Chen's a16z writing on the "AI-in-the-loop concierge"[^29] aged well as the dominant rung-4 shape. The open question is whether this shortens the concierge phase (patterns stabilize faster when the agent is already capturing them) or lengthens it (founders over-trust the outputs and automate prematurely). The operator judgment is still forming, but the productized-concierge tooling is now real, not speculative.
 
 ## Reviewer lens — named critics with specific disagreements
 
@@ -249,7 +250,7 @@ Partially unresolved. The 2024–2025 pattern that a concierge service *is now a
 
 [^1]: Alberto Savoia, *Pretotype It: Make sure you are building The Right It before you build It right*, 10th Anniversary Edition, 2022; pretotyping.org. https://www.pretotyping.org/ — framework origin, six-rung ladder vocabulary, "YODa" (Your Own Data) rule.
 
-[^2]: California Privacy Protection Agency, *Enforcement Advisory No. 2024-02*, September 4 2024 — dark-pattern enforcement under the CCPA; civil penalties up to $2,500 per violation and $7,500 for willful violations. https://cppa.ca.gov/pdf/enfadvisory202402.pdf
+[^2]: California Privacy Protection Agency, *Enforcement Advisory No. 2024-02*, September 4 2024 — dark-pattern enforcement under the CCPA (https://cppa.ca.gov/announcements/2024/20240904.html). Penalty caps are CPI-adjusted: the 2026 maxima are **$2,663 per unintentional violation and $7,988 per intentional or minor-related violation** (statutory floor $2,500/$7,500; CPPA recalibrates every odd-numbered January, next update 2027). Amounts confirmed via clym.io/blog/ccpa-penalties-and-fines-what-businesses-need-to-know and the CPPA's own December 2024 adjustment announcement. Verified 2026-07-17.
 
 [^3]: Marty Cagan / Silicon Valley Product Group, *Product Validation*, 2024. https://www.svpg.com/product-validation/ — four-risk (value, viability, usability, feasibility) framework, critique of demand-only validation.
 
@@ -305,6 +306,8 @@ Partially unresolved. The 2024–2025 pattern that a concierge service *is now a
 
 [^29]: Andrew Chen / a16z speedrun, 2024–2025 writing on consumer AI and viral loops. https://a16z.com/author/andrew-chen/ ; https://andrewchen.com/ — context for AI-in-the-loop concierge and user-acquisition math.
 
+[^29b]: TechCrunch, *The coding agent wars are spilling into the rest of the office: Claude Cowork* (July 7 2026, https://techcrunch.com/2026/07/07/the-coding-agent-wars-are-spilling-into-the-rest-of-the-office-claude-cowork/); VentureBeat, *Anthropic brings Claude Cowork to mobile and web as usage data shows most users aren't coding* (https://venturebeat.com/technology/anthropic-brings-claude-cowork-to-mobile-and-web-as-usage-data-shows-most-users-arent-coding). — support Claude Cowork's July 2026 web+mobile launch, the >90%-non-coding usage figure, and cloud-run scheduled/Managed-Agent tasks. Verified 2026-07-17.
+
 [^30]: Rob Fitzpatrick, *The Mom Test — Revised and Expanded Edition*, Simon & Schuster (2024). https://www.simonandschuster.com/books/The-Mom-Test/Rob-Fitzpatrick/9798893312577 — interview discipline; the three commandments (life not idea, past not hypothetical, listen more).
 
 [^31]: Lenny Rachitsky, *Lenny's Newsletter*, ongoing validation and product teardowns, 2024–2026. https://www.lennysnewsletter.com/ — case-selection reference.
@@ -313,4 +316,4 @@ Partially unresolved. The 2024–2025 pattern that a concierge service *is now a
 
 [^33]: AlexanderJarvis.com, *Zappos doing things that don't scale*. https://www.alexanderjarvis.com/zappos-doing-things-that-dont-scale/ — corroborating Swinmurn Wizard-of-Oz account with operational detail.
 
-_last_verified: 2026-04-17_
+_last_verified: 2026-07-17_

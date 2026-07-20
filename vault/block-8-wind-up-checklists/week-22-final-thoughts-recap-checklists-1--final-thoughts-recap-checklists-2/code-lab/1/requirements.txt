@@ -1,0 +1,3 @@
+# Graduation-audit tool — Week 22 Saturday.
+# No third-party dependencies. Standard library only.
+# Requires Python 3.10+ (uses X | Y unions and list[...] generics).

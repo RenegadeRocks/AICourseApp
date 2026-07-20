@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REPO_ROOT="${HOME}/Work/AICatalyst"
+REPO_ROOT="${HOME}/Work/AIProCourse"
 
 cd "${REPO_ROOT}/app"
 

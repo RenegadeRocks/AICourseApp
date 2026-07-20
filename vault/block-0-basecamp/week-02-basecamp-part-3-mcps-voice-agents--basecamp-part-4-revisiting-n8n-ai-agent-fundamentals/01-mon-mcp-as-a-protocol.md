@@ -19,11 +19,13 @@ sources:
   - notion-mcp-server-hosted
   - supabase-mcp-server
   - google-a2a-launch-2025-04
-  - fka-dev-a2a-faded-2025-09
+  - linux-foundation-aaif-2025-12
   - auth0-mcp-auth-update-2025-06
+  - mcp-spec-2025-11-25-changelog
+  - mcp-2026-07-28-release-candidate
   - modelcontextprotocol-spec-site
   - workos-mcp-features-guide
-last_verified: 2026-04-15
+last_verified: 2026-07-17
 word_count_target: 6000
 ---
 
@@ -33,7 +35,7 @@ word_count_target: 6000
 
 You already use MCP. If you've clicked *"connect a server"* in Claude Desktop, opened a local filesystem in Claude Code, wired Cursor to a Linear workspace, or used ChatGPT's Developer Mode connectors, you're driving the Model Context Protocol whether you've read a line of the spec or not.[^1][^13] Every major model vendor ships a client now; every serious SaaS is either shipping an MCP server or explaining to analysts why it hasn't.[^13]
 
-That is the surface. Underneath, MCP is a JSON-RPC protocol with four primitives, three transports, two auth revisions shipped in 2025, at least one well-publicised exfiltration vector discovered in production, and an open design debate about whether the whole thing is even the right abstraction — whether the interoperability layer belongs at *tool-to-model* (MCP) or at *agent-to-agent* (A2A, ACP, AGNTCY).[^11][^12][^18]
+That is the surface. Underneath, MCP is a JSON-RPC protocol with four primitives, three transports, four spec revisions (through 2025-11-25, with a 2026-07-28 release candidate now public), at least one well-publicised exfiltration vector discovered in production, and — as of December 2025 — a home inside the Linux Foundation's new Agentic AI Foundation, where it is now co-governed alongside the *agent-to-agent* protocols (A2A, ACP, AGNTCY) that were once framed as its rivals.[^11][^12][^18]
 
 If you ship AI systems, you cannot afford to treat MCP as "the USB-C of AI" (Anthropic's own marketing framing) and stop there.[^1] You need a working model of:
 
@@ -83,13 +85,16 @@ This is a sharper formulation than the LSP analogy gives you. When you design an
 
 ## Layer 2 — What the spec actually says
 
-The current spec lives at [modelcontextprotocol.io](https://modelcontextprotocol.io) under `/specification/<revision-date>/`.[^14] The three versions you will encounter in the wild:
+The current spec lives at [modelcontextprotocol.io](https://modelcontextprotocol.io) under `/specification/<revision-date>/`.[^14] The revisions you will encounter in the wild:
 
 - **2024-11-05** — the launch spec. Stdio transport; HTTP+SSE transport; the initial four-primitive model. Claude Desktop 0.x speaks this.
 - **2025-03-26** — the first major revision. Introduced the **Streamable HTTP** transport, deprecating the older HTTP+SSE dual-endpoint design.[^6] Reworked tool annotation semantics.
 - **2025-06-18** — the authorization revision. Formally classified MCP servers as OAuth 2.0 **Resource Servers**, mandated RFC 8707 **Resource Indicators** in token requests, and introduced authorization-server-discovery metadata.[^4]
+- **2025-11-25** — the async-and-identity revision, and the current stable spec as of mid-2026. Added experimental **Tasks** (SEP-1686: any request can be augmented with a task the client polls for status and fetches deferred results), a batch of OAuth upgrades (OpenID Connect Discovery 1.0 support, OAuth Client ID Metadata Documents for registration-free clients, a client-credentials M2M / "no human in the loop" flow, RFC 9728 alignment that makes the `WWW-Authenticate` header optional with `.well-known` fallback, and incremental scope consent), JSON Schema 2020-12 as the default dialect, `icons` metadata, and formalized Working Groups.[^21]
 
-If you are building a client today, you want to speak 2025-06-18 but negotiate down to 2024-11-05 for servers that haven't migrated — the spec itself defines a `protocolVersion` field exchanged in the `initialize` handshake for exactly this reason.
+Beyond that, a **2026-07-28 release candidate** is now public (RC locked 2026-05-21; the final publishes on 2026-07-28, eleven days from this refresh). Its headline change makes the protocol **stateless at the core** — horizontal server scaling with round-robin load balancing and no sticky sessions, plus `.well-known` metadata for connection-less capability discovery — and it adds an **Extensions framework**, **MCP Apps**, six SEPs hardening OAuth for real-world deployment, and a formal **deprecation policy** (SEP-2596: Active/Deprecated/Removed lifecycle). Treat it as upcoming, not shipped — if you are reading this before July 28 2026, the 2025-11-25 revision is still the one your clients speak.[^22]
+
+If you are building a client today, you want to speak 2025-11-25 but negotiate down to 2024-11-05 for servers that haven't migrated — the spec itself defines a `protocolVersion` field exchanged in the `initialize` handshake for exactly this reason.
 
 ### Wire shape
 
@@ -99,19 +104,19 @@ A handshake looks like this, abbreviated:
 
 ```json
 → {"jsonrpc":"2.0","id":1,"method":"initialize","params":{
-    "protocolVersion":"2025-06-18",
+    "protocolVersion":"2025-11-25",
     "capabilities":{"sampling":{},"roots":{"listChanged":true}},
-    "clientInfo":{"name":"claude-code","version":"1.x"}}}
+    "clientInfo":{"name":"claude-code","version":"2.x"}}}
 
 ← {"jsonrpc":"2.0","id":1,"result":{
-    "protocolVersion":"2025-06-18",
+    "protocolVersion":"2025-11-25",
     "capabilities":{"tools":{"listChanged":true},"resources":{},"prompts":{}},
     "serverInfo":{"name":"notion-mcp","version":"2.0.0"}}}
 
 → {"jsonrpc":"2.0","method":"notifications/initialized"}
 ```
 
-Both sides declare capabilities. The client tells the server *I can do sampling and roots.* The server tells the client *I expose tools, resources, prompts.* Neither side assumes; every capability the other will use is advertised up front. This is the mechanism that lets the protocol evolve without breaking old clients. Note the `protocolVersion` downgrade rule: if the server echoes back an older version than the client requested (e.g., client asks for `2025-06-18`, server returns `2024-11-05`), the client speaks the server's version for the rest of the session or disconnects.
+Both sides declare capabilities. The client tells the server *I can do sampling and roots.* The server tells the client *I expose tools, resources, prompts.* Neither side assumes; every capability the other will use is advertised up front. This is the mechanism that lets the protocol evolve without breaking old clients. Note the `protocolVersion` downgrade rule: if the server echoes back an older version than the client requested (e.g., client asks for `2025-11-25`, server returns `2024-11-05`), the client speaks the server's version for the rest of the session or disconnects.
 
 ### The four primitives
 
@@ -179,7 +184,7 @@ Read three servers side by side and you start to see the common failures. All th
 
 MCP has no protocol-level server discovery. If you want Claude Desktop to connect to Notion, someone (you, or the Notion docs) has to paste a URL and an auth config into a JSON file or a settings panel. There's no equivalent of *npm search* for servers, and the closest thing — the `modelcontextprotocol/servers` reference repo[^16] and the community "awesome-mcp" lists — depends on community curation with no trust signals.
 
-This matters because *discovery determines what tool surfaces users actually assemble*. In 2026, the working answer is: vendors publish their server, clients hard-code (or recommend) well-known servers, and the long tail is chaos. The MCP Registry — previewed in September 2025 and API-frozen at v0.1 in October — is the protocol team's first attempt at a central, open catalog with sub-registry support for enterprise and client-specific curation, but it is still early and does not yet carry trust signals that resolve the "random server with a plausible description" problem. OpenAI's ChatGPT Developer Mode and Anthropic's Desktop Extensions both solve it at the client level by curating a list. Neither is a protocol-level solution. This is one of the places where A2A/ACP advocates argue the agent-to-agent layer is the right place to solve discovery, rather than tool-layer MCP.
+This matters because *discovery determines what tool surfaces users actually assemble*. In 2026, the working answer is: vendors publish their server, clients hard-code (or recommend) well-known servers, and the long tail is chaos. The official **MCP Registry** — previewed September 2025, still labelled preview and running live at `registry.modelcontextprotocol.io` as of mid-2026 (~9,600 records by May 2026; the `server.json` format it defines is now referenced by the spec itself) — is the protocol team's central, open catalog with sub-registry support for enterprise and client-specific curation. But it is still pre-GA and does not yet carry trust signals that resolve the "random server with a plausible description" problem. The scale around it is no longer small: third-party registries like Glama index roughly **19,800 servers**, the SDKs see about **97M downloads a month**, and the Agentic AI Foundation's own count puts active public servers north of 10,000. OpenAI's ChatGPT Developer Mode and Anthropic's Desktop Extensions both curate a list at the client level; neither is a protocol-level solution. Under the pre-December-2025 framing this was where A2A/ACP advocates argued the agent-to-agent layer should own discovery — a framing that reads differently now that MCP and A2A sit under one foundation (Layer 5).
 
 ### Versioning
 
@@ -201,31 +206,30 @@ In May 2025, Invariant Labs published a working exploit against GitHub's officia
 
 The GitHub team responded with Lockdown mode and content sanitization, but the researchers' own public position is that the architectural issue has *no easy fix*; mitigation is per-session scoping, least-privilege tokens, and human review of cross-repo writes.[^11] This is not a bug to be patched; it is an inherent property of "models follow instructions in their input, and MCP puts more input in front of the model."
 
-For anyone shipping an MCP-backed agent in 2026, this is the first thing on the threat model: *what's the worst a malicious document flowing through a tool response can do, given the authorities the agent has?* If the answer is "exfiltrate private code via a PR comment" or "send email as the user" or "charge a card," you need explicit human-in-the-loop approval for those classes of action. Protocol-layer auth fixes (2025-06-18) help by tightening token scope. They do not fix the confused-deputy-at-the-model-level problem, because that problem is not at the protocol layer.
+For anyone shipping an MCP-backed agent in 2026, this is the first thing on the threat model: *what's the worst a malicious document flowing through a tool response can do, given the authorities the agent has?* If the answer is "exfiltrate private code via a PR comment" or "send email as the user" or "charge a card," you need explicit human-in-the-loop approval for those classes of action. Wednesday's [[03-wed-mcp-security]] lesson is the full treatment — the lethal trifecta, the 2026 CVE wave, and the mitigation stack. Protocol-layer auth fixes (2025-06-18) help by tightening token scope. They do not fix the confused-deputy-at-the-model-level problem, because that problem is not at the protocol layer.
 
-## Layer 5 — The live controversy
+## Layer 5 — The live controversy (and how it resolved differently than April predicted)
 
-**Is MCP the lasting standard, or a transient Anthropic-led artifact?**
+**Is MCP the lasting standard, or a transient Anthropic-led artifact?** This is the debate the April 2026 version of this lesson taught — and the honest thing to do in July 2026 is tell you where that framing was *wrong*, because the correction is more instructive than the original argument.
 
-**Position A — MCP wins and the ecosystem converges on it.** The empirical case is strong:
+**What the April lesson got wrong.** It leaned on a September-2025 analyst read that Google's A2A had "quietly faded into the background while MCP became the de facto standard," and used that as evidence for a winner-take-all race MCP was winning. That read did not survive the winter. A2A did the opposite of fade: Google **donated A2A to the Linux Foundation** (mid-2025), and by its first anniversary it reported **150+ organizations, 22k+ GitHub stars, and production use across Google, Microsoft, and AWS**.[^18] Then, on **December 9, 2025**, MCP itself was contributed to the newly-formed **Linux Foundation Agentic AI Foundation (AAIF)** — alongside A2A, Block's goose, and OpenAI's AGENTS.md — with AWS, Anthropic, Block, Bloomberg, Cloudflare, Google, Microsoft, and OpenAI as platinum members.[^12] The two protocols the lesson framed as rivals are now governed under one foundation as complementary layers. "Does A2A survive?" was the wrong question; "how do MCP and A2A compose under shared governance?" is the right one.
+
+**Position A — MCP is the durable tool-layer standard.** This part held up:
 
 - OpenAI adopted MCP across the Agents SDK, Responses API, and the ChatGPT desktop app in March 2025, with Sam Altman framing it as "people love MCP."[^12][^17]
 - Microsoft shipped MCP support for VS Code Copilot and ships an official catalog of Microsoft MCP servers.
-- The Anthropic–OpenAI joint "MCP Apps Extension" announcement in 2025 suggested the two frontier labs are collaborating on the standard rather than forking it.
-- By September 2025, independent analysts writing on the state of agent protocols noted that Google's A2A "seems to have quietly faded into the background while the Model Context Protocol (MCP) has become the de facto standard" — with the explanation that MCP had Claude integration from day one and A2A required building new infrastructure.[^18]
+- Donation to a vendor-neutral foundation is the move that *retires* the "transient Anthropic-led artifact" worry: MCP is now developed in the open under the same governance model as A2A and AGENTS.md, with spec revisions (through 2025-11-25) accepted from non-Anthropic contributors.
 
-Under this view, MCP is the TCP/IP moment for AI tool use: an open standard that won because the alternatives cost more to adopt, blessed by the vendor that invented it but not controlled by them (the 2025-06-18 spec is developed in an open GitHub-based process, and the spec revisions are accepted from non-Anthropic contributors).
+Under this view MCP is the TCP/IP moment for AI tool use: an open standard that won because the alternatives cost more to adopt, and that has now been handed to a neutral steward rather than controlled by its inventor.
 
-**Position B — fragmentation is already here, you just haven't noticed.** The counter-case:
+**Position B — the interoperability story was always multi-layer, and now the layers are explicit.** The counter-case, restated for mid-2026:
 
-- Google shipped **Agent2Agent (A2A)** in April 2025 with a deliberately different framing: MCP is tool-layer, A2A is agent-to-agent, and "they complement each other."[^19] Whether or not A2A has "faded" in general analysts' view, Google, IBM and others continue to maintain A2A-adjacent protocols (ACP, AGNTCY, AGP, Zed's ACP). At least six protocols are alive in the agent interoperability space.[^20]
-- OpenAI's adoption is of *a subset* of MCP in *its shape*. ChatGPT Developer Mode Connectors are MCP-flavored, but OpenAI's Apps SDK and Responses-API tools introduced OpenAI-specific surface that isn't 1:1 with the MCP spec. Fragmentation in the long tail of semantics is already here.
-- The 2025-06-18 authorization revision is, from a pessimist's angle, evidence that the protocol is still being designed in production — which is a sign of early-standard maturity, not TCP/IP-level stability.
-- Vendor-specific extensions (Cursor's custom `listResources` behaviors, Claude Desktop's prompt-template UI) mean that a "compliant" MCP server may not behave identically across clients. Willison's coverage of MCP security problems is in part a catalog of places where implementations diverge.[^5]
+- MCP and A2A were never competing for the same slot. MCP is tool-to-model; A2A is agent-to-agent. Google said "they complement each other" at A2A's April-2025 launch,[^19] and the AAIF made that complementarity a governance fact rather than a marketing claim.
+- Other protocols remain alive in the agent-interoperability space — ACP, AGNTCY, AGP, Zed's ACP — and consolidation under the foundation is a bet that these converge rather than proliferate.[^20]
+- OpenAI's adoption is still of *a subset* of MCP in *its shape*; ChatGPT Developer Mode Connectors are MCP-flavored, but the Apps SDK and Responses-API tools carry OpenAI-specific surface. Semantic fragmentation in the long tail persists even under shared governance.
+- Vendor-specific extensions (Cursor's custom `listResources` behaviors, Claude Desktop's prompt-template UI) mean a "compliant" server may not behave identically across clients. Willison's coverage of MCP security problems is in part a catalog of where implementations diverge.[^5]
 
-Under this view, MCP has *won* the tool-layer protocol race but the protocol-for-AI story extends beyond tools — agent discovery, agent auth, agent-to-agent task delegation — and those layers are still being fought for. Expect a world where MCP is table-stakes at the tool layer and fragmentation lives one layer up.
-
-**My read** (label this an opinion, not a citation): Position A is right about the *tool layer*, because once OpenAI and Microsoft adopted MCP the network effect became locked-in. Position B is right about the *agent-to-agent layer*, because no single vendor has the same incentive to concede that layer that Anthropic had for tools. Plan your stack assuming MCP is stable at the tool-to-model boundary and assuming agent-to-agent interop is going to be a three-to-five-year standards fight.
+**My read** (label this an opinion, not a citation): the 2025 winner-take-all framing was a category error, and the AAIF resolved it in the direction Position B always implied — MCP owns the tool-to-model boundary, A2A owns agent-to-agent, and both now evolve under one foundation. The lasting lesson is not "bet on MCP over A2A." It is: the interoperability stack has at least two layers, they are governed together as of December 2025, and your architecture should assume *both* are stable enough to build on — while still expecting semantic drift in each until the foundation's working groups grind it out.
 
 ## Experiment — watch the protocol live
 
@@ -318,14 +322,14 @@ Have Claude Code write a small eval harness: given a list of twenty file content
 - Notion ships a *hosted* MCP server; Supabase initially shipped a *local-subprocess* one and later added a hosted variant. For a new database-ish SaaS you're building, which would you ship first, and what decides it?
 - Your team is writing a new MCP server with 40 candidate tools. The Anthropic engineering blog has argued that 40 tools degrades model selection accuracy. What are the two coarsest and two finest-grained ways to reduce that, and which would you ship first?
 - In what scenario is sampling (server-initiated model calls) a better design than just having the client do multiple tool calls in sequence?
-- If you had to bet on one of A2A, ACP, or "MCP grows up the stack" becoming the lasting agent-to-agent layer, which would you bet on and why?
+- MCP and A2A now sit under one Linux Foundation body (the AAIF). Does shared governance make you *more* or *less* worried about lock-in and semantic fragmentation, and why? What would you watch to tell whether the foundation is actually converging the protocols or just co-hosting them?
 
 ## My take (reviewer lens)
 
 Three places this lesson is soft and one counter-lens on each, so you can argue back to me honestly:
 
 - **On "LSP analogy is load-bearing."** I pushed back on Willison's original framing, but an Anthropic engineer would probably push back on my pushback — the LSP analogy is a *pedagogical* framing aimed at people approaching the protocol for the first time, not a formal equivalence claim. For teaching, the LSP analogy is fine. For *operating* a production MCP integration, it misleads in the ways I described. Both can be true.
-- **On "position B in the controversy."** A Google engineer on the A2A team would say I'm unfairly grading A2A by September 2025 adoption numbers when the protocol's entire pitch is a 3-5 year horizon problem (cross-org agent delegation), not a 12-month tool integration race. They'd be right. Fragmentation at the agent-to-agent layer will get decided on different timescales than MCP-at-the-tool-layer, and I cheated by mixing them.
+- **On the controversy framing.** The April version of this lesson graded A2A by September-2025 adoption numbers and implied it was losing a race to MCP. A Google engineer on the A2A team would have said the pitch was always a 3-5 year horizon problem (cross-org agent delegation), not a 12-month tool-integration race — and events proved them right when A2A landed in the Linux Foundation and then co-founded the AAIF with MCP. I've rewritten Layer 5 to own that miss. The residual honest point stands: tool-layer and agent-to-agent interop resolve on different timescales, and mixing them into a single "who wins" question was the original error.
 - **On the security threat model.** Invariant Labs' own fix recommendations — per-session scoping, least-privilege tokens, human review — are operational mitigations, not architectural fixes, and they rely on *operators doing the right thing*.[^11] A sharper lens would say: until the protocol layer offers content-provenance tags (so the model can distinguish "instruction from user" from "text returned from a tool"), this will keep happening, and the right response is not to harden MCP further but to *not give AI agents broadly-scoped authority over sensitive systems*. That's a more uncomfortable operational position than "add lockdown mode." It's also the one that matches what I've seen break in production.
 
 ## Further reading
@@ -340,11 +344,12 @@ Three places this lesson is soft and one counter-lens on each, so you can argue 
 
 **Recommended**
 
+- [MCP spec 2025-11-25 — Key Changes changelog](https://modelcontextprotocol.io/specification/2025-11-25/changelog)[^21]
+- [Model Context Protocol Blog — The 2026-07-28 Specification Release Candidate](https://blog.modelcontextprotocol.io/posts/2026-07-28-release-candidate/)[^22]
+- [Anthropic — Donating the Model Context Protocol and establishing the Agentic AI Foundation](https://www.anthropic.com/news/donating-the-model-context-protocol-and-establishing-of-the-agentic-ai-foundation)[^12]
 - [Auth0 — MCP specs update, all about auth (2025-06-18)](https://auth0.com/blog/mcp-specs-update-all-about-auth/)[^4]
-- [fka.dev — Why MCP deprecated SSE and went with Streamable HTTP](https://blog.fka.dev/blog/2025-06-06-why-mcp-deprecated-sse-and-go-with-streamable-http/)[^6]
 - [WorkOS — Understanding MCP features](https://workos.com/blog/mcp-features-guide)[^7]
 - [Google Developers — Announcing the Agent2Agent Protocol](https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/)[^19]
-- [fka.dev — What happened to Google's A2A?](https://blog.fka.dev/blog/2025-09-11-what-happened-to-googles-a2a/)[^18]
 
 **Optional**
 
@@ -356,7 +361,7 @@ Three places this lesson is soft and one counter-lens on each, so you can argue 
 
 ## Citations
 
-[^1]: Model Context Protocol specification site, landing page. https://modelcontextprotocol.io — accessed 2026-04-15. Phrase "the USB-C of AI" appears in Anthropic's own launch communications.
+[^1]: Model Context Protocol specification site, landing page. https://modelcontextprotocol.io — accessed 2026-07-17. Phrase "the USB-C of AI" appears in Anthropic's own launch communications.
 
 [^2]: Anthropic. "Introducing the Model Context Protocol." https://www.anthropic.com/news/model-context-protocol — November 25, 2024. The launch thesis: "an open standard for connecting AI assistants to the systems where data lives."
 
@@ -378,7 +383,7 @@ Three places this lesson is soft and one counter-lens on each, so you can argue 
 
 [^11]: Invariant Labs. "GitHub MCP Exploited: Accessing private repositories via MCP." https://invariantlabs.ai/blog/mcp-github-vulnerability — disclosed May 26, 2025. Details the issue-based prompt injection that causes a legitimate agent with a broadly-scoped PAT to exfiltrate private repo data via public PR comments. Coverage also at https://devclass.com/2025/05/27/researchers-warn-of-prompt-injection-vulnerability-in-github-mcp-with-no-obvious-fix/ .
 
-[^12]: OpenAI Developers (Sam Altman / OpenAI Devs account). "MCP and OpenAI Agents SDK" announcement, March 26, 2025. Coverage: TechCrunch, "OpenAI adopts rival Anthropic's standard for connecting AI models to data," https://techcrunch.com/2025/03/26/openai-adopts-rival-anthropics-standard-for-connecting-ai-models-to-data/ .
+[^12]: OpenAI Developers (Sam Altman / OpenAI Devs account). "MCP and OpenAI Agents SDK" announcement, March 26, 2025. Coverage: TechCrunch, "OpenAI adopts rival Anthropic's standard for connecting AI models to data," https://techcrunch.com/2025/03/26/openai-adopts-rival-anthropics-standard-for-connecting-ai-models-to-data/ . For the December 9, 2025 governance move — MCP contributed to the Linux Foundation's new Agentic AI Foundation (AAIF) alongside A2A, goose, and AGENTS.md, with AWS/Anthropic/Block/Bloomberg/Cloudflare/Google/Microsoft/OpenAI as platinum members — see Linux Foundation, "Linux Foundation Announces the Formation of the Agentic AI Foundation (AAIF)," https://www.linuxfoundation.org/press/linux-foundation-announces-the-formation-of-the-agentic-ai-foundation , and Anthropic, "Donating the Model Context Protocol," https://www.anthropic.com/news/donating-the-model-context-protocol-and-establishing-of-the-agentic-ai-foundation .
 
 [^13]: InfoQ. "OpenAI Adds Full MCP Support to ChatGPT Developer Mode." https://www.infoq.com/news/2025/10/chat-gpt-mcp/ — October 2025. Developer Mode connectors with read and write actions inside chats; rollout to Pro/Plus/Business/Enterprise/Education tiers.
 
@@ -390,10 +395,14 @@ Three places this lesson is soft and one counter-lens on each, so you can argue 
 
 [^17]: SiliconANGLE. "OpenAI adds support for Anthropic's MCP LLM connectivity protocol." https://siliconangle.com/2025/03/27/openai-adds-support-anthropics-mcp-llm-connectivity-protocol/ — March 27, 2025.
 
-[^18]: fka.dev. "What happened to Google's A2A?" https://blog.fka.dev/blog/2025-09-11-what-happened-to-googles-a2a/ — September 11, 2025. Argues A2A faded because MCP had Claude integration from day one and A2A required new infrastructure.
+[^18]: Linux Foundation. "A2A Protocol Surpasses 150 Organizations, Lands in Major Cloud Platforms, and Sees Enterprise Production Use in First Year." https://www.linuxfoundation.org/press/a2a-protocol-surpasses-150-organizations-lands-in-major-cloud-platforms-and-sees-enterprise-production-use-in-first-year — Google donated A2A to the Linux Foundation in 2025; 150+ orgs, 22k+ GitHub stars, production use across Google/Microsoft/AWS. (Supersedes the April version's fka.dev "A2A faded" citation, which events invalidated.)
 
 [^19]: Google Developers Blog. "Announcing the Agent2Agent Protocol (A2A)." https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/ — April 2025. Positioning A2A as an agent-to-agent complement to MCP's tool-layer focus.
 
 [^20]: 4sysops. "Comparing AI protocols: MCP, A2A, AGP, AGNTCY, IBM ACP, Zed ACP." https://4sysops.com/archives/comparing-ai-protocols-mcp-a2a-agp-agntcy-ibm-acp-zed-acp/ — catalog of protocols in the agent-interop space.
 
-_last_verified: 2026-04-15_
+[^21]: Model Context Protocol. "Key Changes — spec revision 2025-11-25." https://modelcontextprotocol.io/specification/2025-11-25/changelog — experimental Tasks (SEP-1686), OAuth upgrades (OIDC Discovery, Client ID Metadata Documents, M2M client-credentials SEP-1046, RFC 9728 alignment, incremental scope consent), JSON Schema 2020-12 default dialect, icons metadata, formalized Working Groups. Corroborated by WorkOS, "MCP 2025-11-25 is here," https://workos.com/blog/mcp-2025-11-25-spec-update .
+
+[^22]: Model Context Protocol Blog. "The 2026-07-28 MCP Specification Release Candidate." https://blog.modelcontextprotocol.io/posts/2026-07-28-release-candidate/ — RC locked 2026-05-21, final publishes 2026-07-28: stateless protocol core, Extensions framework, MCP Apps, six authorization SEPs, formal deprecation policy (SEP-2596). Frame as upcoming until it publishes. Corroborated by Stacktree, "MCP 2026-07-28 spec: what changed, what breaks," https://stacktr.ee/blog/mcp-2026-spec-changes .
+
+_last_verified: 2026-07-17_

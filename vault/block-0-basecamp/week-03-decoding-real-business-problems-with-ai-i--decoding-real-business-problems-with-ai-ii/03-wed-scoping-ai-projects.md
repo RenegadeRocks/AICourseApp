@@ -22,7 +22,7 @@ sources:
   - zylos-token-economics-2026
   - microsoft-foundry-fine-tuning-ignite-2025
   - anthropic-applied-ai-engineering
-last_verified: 2026-04-15
+last_verified: 2026-07-17
 word_count_target: 6000
 ---
 
@@ -30,18 +30,18 @@ word_count_target: 6000
 
 ## Why this matters
 
-Your job, if you are a catalyst lead and not just a prompt engineer, is to decide what to ship, what to kill, and when to kill it. Everything else — evals, cost curves, retrieval precision, fine-tune vs prompt, human fallback design — is downstream of that one decision.
+Your job, if you are an operator and not just a prompt engineer, is to decide what to ship, what to kill, and when to kill it. Everything else — evals, cost curves, retrieval precision, fine-tune vs prompt, human fallback design — is downstream of that one decision.
 
-In April 2026 that decision is much harder than it looks, and much easier than the industry is making it. It is harder because frontier capability shifts every six weeks, which means a scoped project can become obsolete before it reaches staging. It is easier because a short list of people (Hamel Husain, Shreya Shankar, Eugene Yan, the Anthropic Applied AI team, the OpenAI cookbook maintainers) have converged on a single operational pattern — *walking skeleton with eval harness, hard eval gates, weekly iteration, ruthless scope discipline* — that works. If you adopt that pattern you will kill projects faster, ship the survivors faster, and spend roughly half what your peers spend doing it.
+In mid-2026 that decision is much harder than it looks, and much easier than the industry is making it. It is harder because frontier capability shifts every six weeks, which means a scoped project can become obsolete before it reaches staging. It is easier because a short list of people (Hamel Husain, Shreya Shankar, Eugene Yan, the Anthropic Applied AI team, the OpenAI cookbook maintainers) have converged on a single operational pattern — *walking skeleton with eval harness, hard eval gates, weekly iteration, ruthless scope discipline* — that works. If you adopt that pattern you will kill projects faster, ship the survivors faster, and spend roughly half what your peers spend doing it.
 
-MIT's State of AI in Business 2025 report — the one everyone has been quoting for the "95% of GenAI pilots fail" stat — explicitly traces the failure pattern to scope and integration, not model quality.[^10] Gartner projects that over 40% of agentic AI projects will be cancelled by end of 2027, and their stated reasons are the ones this lesson is about: unclear business value, cost surprises, absent risk controls.[^8] HBR's October 2025 analysis of agentic failures lands on the same cluster: no measurable outcome, no kill trigger, no end-state definition.[^9]
+MIT's State of AI in Business 2025 report — the one everyone has been quoting for the "95% of GenAI pilots fail" stat — explicitly traces the failure pattern to scope and integration, not model quality.[^10] (This lesson is the course's one full treatment of that figure; hold it carefully. The evidence base is 300 publicly disclosed pilots, 150 leadership interviews, and 350 employee surveys, and the actual finding is "no measurable P&L impact yet," which is not the same claim as "failed." The headline is directionally useful and methodologically soft — read it the way you'd want a client to read a vendor benchmark.) Gartner projects that over 40% of agentic AI projects will be cancelled by end of 2027, and their stated reasons are the ones this lesson is about: unclear business value, cost surprises, absent risk controls.[^8] HBR's October 2025 analysis of agentic failures lands on the same cluster: no measurable outcome, no kill trigger, no end-state definition.[^9]
 
 This lesson gives you the scoping pattern, the eval-gate thresholds to wire into it, the cost model to build before you commit an engineer, and the kill criteria to pull the plug on. You will leave with a one-page scope doc for a real project on your plate.
 
 ## Prerequisites
 
 - [[01-mon-prompting-first-principles]] — you need the mechanical model of what a prompt is doing, or your evals will measure the wrong thing.
-- [[week-02]] exercises on problem decomposition (pending) — the problem has to be decomposable before it's scopable.
+- [[02-tue-when-ai-fits-a-problem|Tuesday's fit rubric]] — you scope only what has already passed the fit test; the partition you drew there is the input to the walking skeleton here.
 - Operational exposure to at least one production AI system you or your team have shipped or tried to ship. The examples in this lesson will land differently if you've watched a project limp through eval drift in real time.
 
 ## Part 1 — The AI-MVP frame vs classic lean-startup MVP
@@ -124,7 +124,7 @@ Suggested gate structure for a first-pass RAG MVP on internal enterprise documen
 
 Miss any of the three at the 4-week checkpoint → you don't graduate to production pilot; you rescope retrieval (different chunker, different embedding, different query rewriter, hybrid search) or you kill the project.
 
-Frontier practice (per Anthropic's contextual retrieval work and multiple 2025 RAG post-mortems) shows that teams without this gate ship RAG systems that look fine on demo queries and catastrophically hallucinate on the long tail — the *80% RAG failure rate* figure circulating in 2025 traces to MIT Media Lab's NANDA initiative *State of AI in Business 2025* report, which found roughly 95% of enterprise generative-AI pilots producing zero measurable P&L impact, a population dominated by teams who never gated on retrieval quality as a prerequisite to generation quality.[^10][^9]
+Frontier practice (per Anthropic's contextual retrieval work and multiple 2025 RAG post-mortems) shows that teams without this gate ship RAG systems that look fine on demo queries and catastrophically hallucinate on the long tail. Two different numbers get muddled here, so keep them separate. The "*most enterprise RAG deployments underperform*" claim circulating among practitioners is an engineering observation about retrieval quality, not a measured statistic. Distinct from it is MIT's NANDA *State of AI in Business 2025* figure — roughly **95% of enterprise generative-AI pilots produce no measurable P&L impact** — which is a *business-outcome* stat covering all pilot types, not a RAG-specific failure rate.[^10] Do not fuse them into an "80% RAG failure rate that traces to MIT NANDA"; that bridge conflates a retrieval-engineering intuition with a pilot-ROI survey. What *is* fair to say: the NANDA population is dominated by pilots that never gated on retrieval quality as a prerequisite to generation quality, so retrieval gating is one concrete lever against being in the 95%.
 
 ### Tool-call success rate (agentic projects)
 
@@ -158,13 +158,20 @@ For systems that route to a human (legal drafting, clinician-facing medical summ
 
 ## Part 4 — The cost model you have to build before you commit
 
-If you start building before you've costed, you are not scoping; you're gambling. Here is the cost model in the form I use when advising catalyst leads. Fill in the blanks *before* the walking skeleton ships, not after.
+If you start building before you've costed, you are not scoping; you're gambling. Here is the cost model in the form I use when advising operators. Fill in the blanks *before* the walking skeleton ships, not after.
 
 ### Cost surface 1 — Token costs (inference)
 
 Per-query cost = (input_tokens × input_rate) + (output_tokens × output_rate), summed over the call graph. For agentic systems multiply by expected trajectory length. Don't forget: retrieval call context, tool-call arguments, intermediate reasoning tokens, and reflection turns all count.
 
-As of April 2026, the spread is large:[^11] Claude Opus 4.5 and GPT-5-class models sit at $10–15/M input, $50–75/M output; Sonnet/Haiku-class and GPT-5-mini in the $1–3/M range; Grok, Gemini Flash, open models under $0.50/M. For agent trajectories averaging 30k tokens in / 6k out, per-trajectory cost ranges from $0.02 on cheap models to $0.75 on frontier. Multiply by expected monthly trajectory count, add a 2× safety factor for the retry/error path you haven't budgeted for yet.
+As of July 2026, the spread is large — and one worked number is worth pinning because people quote it wrong constantly. **Verify the current card yourself before every pricing meeting** (https://platform.claude.com/docs/en/about-claude/pricing); as of 2026-07-17 the Anthropic frontier tier is:[^11]
+
+- **Claude Opus 4.8** (and 4.5/4.6/4.7): **$5/M input, $25/M output.** (Fast Mode, research preview, is $10/$50.) Note: $15/$75 is *deprecated Opus 4.1* pricing — do not quote it for any current Opus.
+- **Claude Fable 5 / Mythos 5** (the new Mythos-class tier *above* Opus, June 2026): **$10/$50** — exactly 2× Opus.
+- **Claude Sonnet 5** (default model since June 30 2026): **$2/$10 introductory through Aug 31 2026, then $3/$15**; Haiku 4.5 at $1/$5.
+- GPT-5.5/5.6 family and Gemini 3.5 Flash occupy comparable and lower tiers; Grok, Gemini Flash, and open-weight models (Kimi K3, Qwen) run well under $0.50/M input.
+
+**The tokenizer trap.** Opus 4.7+, Sonnet 5, Fable 5, and Mythos 5 use a newer tokenizer that produces **~30% more tokens for the same text** (the exact increase depends on content).[^11] Same nominal per-token price, ~30% more billed tokens — a novel COGS variable with no SaaS analog. If you built a cost model on an Opus-4.5-era token count, re-count against the new tokenizer before you trust the margin. For agent trajectories averaging ~30k tokens in / ~6k out (post-tokenizer), per-trajectory cost ranges from a couple of cents on cheap models to roughly $0.30 on Opus-class frontier (~$0.15 in + ~$0.15 out) and ~$0.60 on Mythos-class. Multiply by expected monthly trajectory count, add a 2× safety factor for the retry/error path you haven't budgeted for yet, and add ~30% if you sized the workload on old-tokenizer counts.
 
 ### Cost surface 2 — Eval-run costs
 
@@ -176,7 +183,7 @@ You need real labels. At senior-analyst rates ($80–150/hr fully loaded), 200 l
 
 ### Cost surface 4 — Fine-tuning costs (if applicable)
 
-As of late 2025, Microsoft Foundry and OpenAI's fine-tuning prices are low enough that a fine-tune is often cheaper than a prompt engineer's month.[^13] Training a GPT-4.1-mini fine-tune on 10k examples is ~$100–500 in training; serving adds a 50% premium on input tokens for OpenAI but no premium on Gemini 2.0 Flash tunes.[^11] The non-obvious cost is *re-tuning cadence*: when the base model version deprecates, you re-tune. Budget for 2–3 re-tunes over a 12-month product lifecycle.
+The fine-tuning landscape shifted materially in mid-2026, and the shift is itself a scoping signal: **OpenAI began winding down its self-serve fine-tuning API on May 7, 2026** — new orgs already blocked, all new job creation ending January 2027 — steering customers toward prompt caching plus small base models (GPT-5.x-mini / Nano class) instead.[^13] The historical anchor still worth knowing: pre-wind-down, a GPT-4.1-mini fine-tune on 10k examples ran ~$100–500 in training. But do not scope a 2026 project around OpenAI self-serve fine-tuning as an available path; verify what's live (open-weight tuning via providers like Together/Fireworks, Google Vertex tuning, or Thinking Machines' Tinker for open models) before you commit. The non-obvious cost that survives regardless is *re-tuning cadence*: when the base model version deprecates, you re-tune. Budget for 2–3 re-tunes over a 12-month product lifecycle — and note that a base-model deprecation can now strand a fine-tune entirely if the provider has exited self-serve tuning.
 
 ### Cost surface 5 — Fallback-to-human costs
 
@@ -188,7 +195,7 @@ The combined cost surface is the number the scope doc needs. *"This project is v
 
 Three scope-creep phrases, each of which sounds innocent and each of which detonates the cost model.
 
-**"Just add RAG."** Naïve framing: it's a retrieval call, it's fast. Real cost: you now have a retrieval system to evaluate (retrieval precision@k is a whole eval regime), a chunking strategy to maintain, an embedding model that silently deprecates, ingestion pipelines for ongoing document updates, stale-data invalidation, per-query retrieval cost, and a new failure mode (the retriever pulls the wrong chunk and the model confabulates confidently). RAG is never "just" anything. If you're scoping RAG, assume 30–50% of the engineering cost of the project will be retrieval quality, not generation quality. The 80% RAG failure stat is real and it's dominated by teams who under-scoped the retrieval problem.[^9]
+**"Just add RAG."** Naïve framing: it's a retrieval call, it's fast. Real cost: you now have a retrieval system to evaluate (retrieval precision@k is a whole eval regime), a chunking strategy to maintain, an embedding model that silently deprecates, ingestion pipelines for ongoing document updates, stale-data invalidation, per-query retrieval cost, and a new failure mode (the retriever pulls the wrong chunk and the model confabulates confidently). RAG is never "just" anything. If you're scoping RAG, assume 30–50% of the engineering cost of the project will be retrieval quality, not generation quality — because retrieval quality, not generation quality, is where under-scoped RAG projects die (see Part 3 on chunk-level gating, and the caution there against inventing a single "80% RAG failure rate" statistic).[^9]
 
 **"Add multi-modal."** Naïve framing: the model now supports images, we just pass images in. Real cost: your eval set triples (you now need image-input test cases, OCR test cases, chart-reading test cases, screenshot test cases). Input token counts for images can be 1000–3000 per image; cost per query can 5–10×. Your judge has to be re-calibrated for vision outputs. Your annotation cost doubles because reviewers need longer to grade image-grounded outputs. Multi-modal is a new project, not an increment.
 
@@ -262,7 +269,7 @@ Self-check when done: can a smart stranger read your scope doc and predict withi
 3. A stakeholder asks you to add multi-modal support "since the new models all do it." Your MVP is 6 weeks in, week 10 checkpoint is in 4 weeks. How do you respond in writing?
 4. Your week-8 checkpoint misses the kill criterion by a small margin (82% vs 85% threshold). The team has a plausible theory about a fix that would take 2 more weeks. Do you extend, rescope, or kill? What would a rigid Husain-style discipline say; what would a capability-optimist say; which do you side with and why?
 5. You're advising a team whose scope doc has one eval gate: "overall user satisfaction >4.0/5." What do you change, in order of priority, and why?
-6. Walk through the cost model for an agentic coding assistant that averages 50k tokens input / 10k output per task at Opus pricing, used 200 times/day by a 30-person engineering team. At what monthly spend does the project need to show productivity gains, and how would you measure those gains as a kill criterion?
+6. Walk through the cost model for an agentic coding assistant that averages 50k tokens input / 10k output per task at **current Opus 4.8 pricing ($5/M input, $25/M output — verify the live card first)**, used 200 times/day by a 30-person engineering team. Per-task cost is (50k × $5/M) + (10k × $25/M) = $0.25 + $0.25 = **$0.50/task raw**; before you present that number, (a) apply the ~30% new-tokenizer inflation to the token counts, and (b) redo it once at Sonnet 5 intro pricing ($2/$10) to show the model-choice sensitivity. At 200 tasks/day × ~21 working days that's ~$2,100/month raw at Opus, ~$840 at Sonnet 5 — before caching, retries, and the 2× safety factor. At what monthly spend does the project need to show productivity gains, and how would you measure those gains as a kill criterion?
 
 ## Reviewer lens — where specific experts would push back
 
@@ -272,7 +279,7 @@ Self-check when done: can a smart stranger read your scope doc and predict withi
 
 **Eugene Yan would probably push back on:** the weight I've put on LLM-as-judge relative to process fixes. His April 2025 post *"An LLM-as-Judge Won't Save The Product — Fixing Your Process Will"* is literally about this: teams over-invest in judge sophistication and under-invest in labeling process, error analysis cadence, and hypothesis discipline. He'd say: spend less time calibrating the judge, more time in the weekly error-analysis session.[^6]
 
-**An Anthropic Applied AI engineer would probably push back on:** the explicit cost-model framing as a scoping artifact. In their internal work, the cost model tends to be a constraint on architecture choice (which model, which retrieval, which agent pattern) rather than a separate scoping document. My take: the cost model belongs in the scope doc for catalyst-leads-turned-advisors, because clients won't architect around it unless you show it to them. For an internal team with strong architectural judgment, it can be implicit.
+**An Anthropic Applied AI engineer would probably push back on:** the explicit cost-model framing as a scoping artifact. In their internal work, the cost model tends to be a constraint on architecture choice (which model, which retrieval, which agent pattern) rather than a separate scoping document. My take: the cost model belongs in the scope doc for operators-turned-advisors, because clients won't architect around it unless you show it to them. For an internal team with strong architectural judgment, it can be implicit.
 
 **A capability-optimist (Gwern-style, or any of several 2026 YC founders)** would push back on the whole frame. They'd say: hard kill criteria, evaluated at week 6, systematically underweight the fact that models get materially better every 8–12 weeks. A project that fails today might succeed against a frontier model in three months. My counter: that's an argument for shorter kill cycles, not weaker kill criteria. If model capability is moving fast, test against the new model when it ships, not against a hope. The discipline survives; the baseline moves.
 
@@ -320,14 +327,14 @@ Self-check when done: can a smart stranger read your scope doc and predict withi
 
 [^10]: MIT NANDA / "State of AI in Business 2025" — widely cited 95% pilot-failure figure. Primary report summary via Fortune, "MIT report: 95% of generative AI pilots at companies are failing" (Aug 18 2025): <https://fortune.com/2025/08/18/mit-report-95-percent-generative-ai-pilots-at-companies-failing-cfo/>. See also HBR, "Beware the AI Experimentation Trap" (Aug 2025): <https://hbr.org/2025/08/beware-the-ai-experimentation-trap>.
 
-[^11]: *LLM API Pricing Comparison (2025): OpenAI, Gemini, Claude*, IntuitionLabs. <https://intuitionlabs.ai/articles/llm-api-pricing-comparison-2025>
+[^11]: Anthropic, *Pricing — Claude Developer Platform*, https://platform.claude.com/docs/en/about-claude/pricing (fetched 2026-07-17): Opus 4.5–4.8 at $5/$25 per MTok (Fast Mode $10/$50); Opus 4.1 deprecated at $15/$75; Fable 5 / Mythos 5 at $10/$50; Sonnet 5 at $2/$10 intro through Aug 31 2026, then $3/$15; Haiku 4.5 at $1/$5. Same page's tokenizer note: "Claude Opus 4.7 and later Opus models, Claude Fable 5, Claude Mythos 5, Claude Mythos Preview, and Claude Sonnet 5 use a newer tokenizer … approximately 30% more tokens for the same text." Cross-ref: CloudZero, *Claude Opus 4.8 pricing* https://www.cloudzero.com/blog/claude-opus-4-8-pricing/.
 
 [^12]: *AI Agent Cost Optimization: Token Economics and FinOps in Production*, Zylos Research, February 2026. <https://zylos.ai/research/2026-02-19-ai-agent-cost-optimization-token-economics>
 
-[^13]: *Fine-tuning at Ignite 2025: new models, new tools, new experience*, Microsoft Tech Community, 2025. <https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/fine-tuning-at-ignite-2025-new-models-new-tools-new-experience/4476642>
+[^13]: OpenAI fine-tuning wind-down (announced May 7 2026; new-org access blocked immediately, all new job creation ending January 2027): OpenAI Deprecations, https://developers.openai.com/api/docs/deprecations ; coverage: ExplainX, *OpenAI Winds Down Fine-Tuning API* https://explainx.ai/blog/openai-gpt-55-pricing-fine-tuning-api-wind-down-2026 and Tessl, *OpenAI is shutting down self-serve fine-tuning* https://tessl.io/blog/openai-shutting-fine-tuning-signals-for-enterprise-ai/. Historical Microsoft Foundry fine-tuning context: *Fine-tuning at Ignite 2025*, Microsoft Tech Community, 2025, https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/fine-tuning-at-ignite-2025-new-models-new-tools-new-experience/4476642. All verified 2026-07-17.
 
 [^14]: Anthropic Engineering blog and Applied AI public materials. <https://www.anthropic.com/engineering> — the Applied AI team's scoping pattern is inferred from engineering talks and public engagement case material; as of April 2026 there is no single canonical published scoping methodology document.
 
 [^ret-gate]: Thresholds are operator-level defaults, not a published benchmark. Anthropic's *Introducing Contextual Retrieval* (2024) https://www.anthropic.com/news/contextual-retrieval reports failure-rate reductions via chunk-level retrieval eval; Hamel Husain and Shreya Shankar, *LLM Evals* and related 2024–2025 writing https://hamel.dev/blog/posts/evals/ argue for retrieval-quality gating as the prerequisite to generation-quality measurement.
 
-_last_verified: 2026-04-15_
+_last_verified: 2026-07-17_

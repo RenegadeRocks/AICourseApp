@@ -24,7 +24,9 @@ sources:
   - latenode-n8n-2025-reality-check
   - simon-willison-building-effective-agents-summary
   - anthropic-cookbook-agent-patterns
-last_verified: 2026-04-15
+  - n8n-2-0-nodesify-2026
+  - n8n-sap-investment-2026
+last_verified: 2026-07-17
 word_count_target: 6000
 ---
 
@@ -34,9 +36,9 @@ word_count_target: 6000
 
 By this point in the week you have built MCP servers, wired voice agents, and stood up a small LangGraph graph from scratch. Today the question gets uncomfortably practical: when a stakeholder at your company asks you to ship an "AI agent" for their team — ingest a signal, reason about it, take an action, tell someone — which primitive do you reach for?
 
-The defensible answer in April 2026 is almost never *"LangGraph, obviously."* It is almost never *"Temporal, obviously."* It is almost always *"what can the operating team maintain six months from now when I have moved on to the next project, and which of these tools is the cheapest thing that still satisfies the real durability, observability, and SLA requirements of the workload?"*
+The defensible answer in 2026 is almost never *"LangGraph, obviously."* It is almost never *"Temporal, obviously."* It is almost always *"what can the operating team maintain six months from now when I have moved on to the next project, and which of these tools is the cheapest thing that still satisfies the real durability, observability, and SLA requirements of the workload?"*
 
-n8n is, in 2025–2026, the single most under-respected tool in the AI-catalyst-lead toolbox. It is the workflow engine that a marketing ops person can keep alive on Monday morning when your pager goes off at 3 a.m. It has shipped a credible LangChain-based AI Agent node,[^1] MCP Client and MCP Trigger nodes,[^2][^3] and a self-hostable execution model that lets you put the whole thing inside your VPC without a vendor negotiation. It is also not the right tool for a dynamic, self-directed agent that has to replan itself across hundreds of steps under a five-nines SLA.
+n8n is, in 2025–2026, the single most under-respected tool in the AI-operator toolbox. It is the workflow engine that a marketing ops person can keep alive on Monday morning when your pager goes off at 3 a.m. It has shipped a credible LangChain-based AI Agent node,[^1] MCP Client and MCP Trigger nodes,[^2][^3] and a self-hostable execution model that lets you put the whole thing inside your VPC without a vendor negotiation. It is also not the right tool for a dynamic, self-directed agent that has to replan itself across hundreds of steps under a five-nines SLA.
 
 Your job today is to develop the taste to tell those cases apart — mechanically, not by vibe — so that when you walk into a leadership meeting you can defend your framework choice in a single paragraph. By the end of the lesson you will have:
 
@@ -53,7 +55,7 @@ The goal is not to turn you into an n8n enthusiast. It is to get you to the poin
 - n8n installed somewhere you can reach a browser UI: self-hosted Docker container on your laptop (`docker run -it --rm -p 5678:5678 docker.n8n.io/n8nio/n8n` is the canonical one-liner from n8n's docs), or a free n8n Cloud trial.
 - Anthropic API key with credit (any tier), and a Claude Code install on the same machine.
 - A GitHub account with a sandbox repo you are willing to fire test issues at, and a Slack workspace where you can add an incoming webhook or install a Slack app.
-- You have read or skimmed [[../week-01-basecamp-part-1-prompting-rags--basecamp-part-2-vibe-coding/01-mon-prompting-first-principles|Monday Week 1 (prompting mechanics)]] and [[02-tue-mcp-deep-dive|Tuesday's MCP deep dive]]. MCP shows up directly today because n8n's MCP nodes are what let Claude Code drive an n8n instance from the outside.
+- You have read or skimmed [[../week-01-basecamp-part-1-prompting-rags--basecamp-part-2-vibe-coding/01-mon-prompting-first-principles|Monday Week 1 (prompting mechanics)]] and [[02-tue-building-an-mcp-server|Tuesday's MCP server build]]. MCP shows up directly today because n8n's MCP nodes are what let Claude Code drive an n8n instance from the outside.
 
 ## Layer 1 — The workflow-engine category, demystified
 
@@ -79,9 +81,9 @@ Three things made n8n the runaway shelf-B story in the AI era, and none of them 
 
 1. **Fair-code, self-hostable license.** n8n uses the Sustainable Use License, which is not OSI-open-source but is close enough that a security-conscious enterprise can run it inside their own VPC with their own data. This single fact is why I see n8n deployed in regulated industries where Zapier is a non-starter.
 2. **Node-level code escape hatch.** Any time the UI runs out of expressiveness, you drop into a Code node and write JavaScript or Python. Unlike Zapier's Formatter-and-Filter grammar, n8n does not force you back onto a vendor-specific mini-language; you write the language you already know.
-3. **An integrations directory approaching 500 nodes in 2025**, including an AI and LangChain cluster that ships dozens of LLM, embedding, vector-store, and agent nodes as first-class primitives.[^7][^1]
+3. **An integrations directory well past 500 nodes** (n8n's own 2026 materials put it at 1,000+), including an AI and LangChain cluster that ships dozens of LLM, embedding, vector-store, and agent nodes as first-class primitives.[^7][^1]
 
-Add to that the 2025 AI-first push — the v1.113.3 release alone shipped more than seventy AI-related nodes across LLMs, embeddings, vector databases, speech, OCR, and image models[^8] — and n8n has credibly repositioned itself from "SaaS glue" to "the workflow engine you use to ship agents your operations team can actually maintain."
+Add to that the AI-first product arc — from the 2025 release train (the v1.113.3 release alone shipped 70+ AI-related nodes across LLMs, embeddings, vector databases, speech, OCR, and image models[^8]) through the **n8n 2.x** line, which added native AI Agent nodes, multi-agent orchestration and RAG out of the box, and a June-2026 execution-replay debugging engine. Version **2.19 (released 2026-05-19)** added **no-setup MCP-server connections** for a curated set — Apify, Linear, monday.com, Notion, PostHog — that you attach from the nodes panel without hand-configuring an MCP Client node. The commercial signal underneath it: SAP took a strategic investment in n8n at a **$5.2B valuation** (May 2026, up from $2.5B in Oct 2025), embedding n8n into SAP Joule Studio.[^17] n8n has credibly repositioned itself from "SaaS glue" to "the workflow engine you use to ship agents your operations team can actually maintain."
 
 That repositioning is also the source of the most interesting live controversy in this space, which we will hit in Layer 4.
 
@@ -118,7 +120,7 @@ Anthropic's guidance is explicit on this point: *start with the simplest solutio
 
 ## Layer 3 — n8n's 2025 AI surface area in detail
 
-Let's get mechanical. What does n8n actually ship for AI and agent use cases, as of the current release train in early 2026?
+Let's get mechanical. What does n8n actually ship for AI and agent use cases, as of the n8n 2.0 release train in mid-2026?
 
 ### The AI Agent node
 
@@ -140,7 +142,7 @@ n8n's 2025 MCP release was the strategically important one. Two nodes matter:
 - **MCP Client Tool node**,[^2] used as a sub-node of the AI Agent. It exposes any MCP server's tools to the agent as callable tools. You point it at an MCP endpoint (SSE or streamable HTTP), and every tool the server advertises becomes available to the Claude or GPT model inside the Agent node.
 - **MCP Server Trigger node**,[^3] which does the inverse: it lets your *n8n workflow* act as an MCP server that external clients — Claude Desktop, Claude Code, Cursor, Lovable — can connect to. Every workflow you expose through the trigger becomes a tool those clients can call.
 
-The community announcement in early 2025[^11] landed this as a major unlock: n8n went from "a workflow engine that can call LLMs" to "a workflow engine that is a first-class MCP citizen on both sides of the protocol." For the agent use case this is the piece that closes the loop: you can now drive an n8n instance from Claude Code through MCP, and an n8n agent node can reach out to any MCP server in the world for tools.
+The community announcement in early 2025[^11] landed this as a major unlock: n8n went from "a workflow engine that can call LLMs" to "a workflow engine that is a first-class MCP citizen on both sides of the protocol." n8n 2.0 pushed it further with **no-setup MCP-server connections** (May 2026) for a curated set — Notion, Linear, monday.com, Apify, PostHog — so common servers attach without hand-editing endpoints. For the agent use case this is the piece that closes the loop: you can drive an n8n instance from Claude Code through MCP, and an n8n agent node can reach out to any MCP server in the world for tools.
 
 ### Memory and vector-store nodes
 
@@ -237,14 +239,14 @@ We will build the canonical "new GitHub issue → Claude summarizes it → posts
 > I am connected to a local n8n instance on `http://localhost:5678` via the n8n-mcp server. I want you to create a workflow in that n8n instance with the following shape:
 >
 > 1. Trigger: GitHub webhook, firing on `issues.opened` for the repository `<your-org>/<your-repo>`.
-> 2. Node 2: AI Agent node using Anthropic Claude Sonnet 4.5 as the chat model. Give it this system prompt: *"You are a triage assistant. Given a GitHub issue body and title, produce a one-paragraph summary (max 80 words) and classify it as one of: bug, feature, question, noise. Output strict JSON with keys `summary`, `classification`, `confidence` (0-1)."* Attach a Structured Output Parser that enforces that JSON schema. No tools for now.
+> 2. Node 2: AI Agent node using a current Anthropic chat model (Claude Sonnet 5 is the default agent tier as of mid-2026; pin a dated snapshot, not the alias). Give it this system prompt: *"You are a triage assistant. Given a GitHub issue body and title, produce a one-paragraph summary (max 80 words) and classify it as one of: bug, feature, question, noise. Output strict JSON with keys `summary`, `classification`, `confidence` (0-1)."* Attach a Structured Output Parser that enforces that JSON schema. No tools for now.
 > 3. Node 3: a Switch node that routes on `classification`. The `noise` branch terminates silently. The other three branches continue.
 > 4. Node 4: a Slack node that posts the summary to a `#triage` channel, with the issue link, classification, confidence, and summary in a formatted block.
 > 5. Activate the workflow.
 >
 > Before you execute anything, show me the graph you are going to build, the node types, and the prompts you will set. I want to approve the plan before you run the tool calls that mutate my n8n instance.
 
-The reason to do it this way: you will *see*, in Claude Code's plan, exactly what a visual agent workflow looks like expressed as a declarative spec. When Claude Code executes the MCP calls, n8n's UI will update in real time. This is the shape of the "AI-catalyst-lead directs AI through MCP" pattern, not the "vibe-code a Python script" pattern.
+The reason to do it this way: you will *see*, in Claude Code's plan, exactly what a visual agent workflow looks like expressed as a declarative spec. When Claude Code executes the MCP calls, n8n's UI will update in real time. This is the shape of the "AI-operator directs AI through MCP" pattern, not the "vibe-code a Python script" pattern.
 
 ### Path B — build it in the n8n UI by hand
 
@@ -258,7 +260,7 @@ Things to check — these are the failure modes that separate a toy from a syste
 
 - **Structured output enforcement.** Does every run return valid JSON, or does Claude occasionally break schema? If you see drift, tighten the system prompt and add a retry branch on JSON parse failure. This is the n8n equivalent of the output-parser pattern in LangChain.
 - **Confidence calibration.** Look at the `confidence` field across runs. Is it pinned at 0.95 for every classification? That is a red flag — the model is not actually expressing uncertainty, and your Switch node will route based on noise. You need an eval, which is Saturday in Week 1's cycle, not today.
-- **Latency and cost per execution.** n8n shows per-node timing. A single AI Agent step on Sonnet 4.5 against a typical issue body should be under three seconds and well under a cent. If it is not, you are either passing too much context or calling a slower model than you need.
+- **Latency and cost per execution.** n8n shows per-node timing. A single AI Agent step on a Sonnet-class model against a typical issue body should be under three seconds and well under a cent (Sonnet 5's intro pricing is $2/$10 per Mtok through 2026-08-31). If it is not, you are either passing too much context or calling a slower model than you need.
 - **What happens when Anthropic 429s you.** Set the AI Agent node's retry policy to exponential backoff with three attempts. Fire fifty webhook events at once using a small shell loop (`for i in {1..50}; do gh issue create --title "test $i" --body "..."; done`) and watch how the queue behaves. This is where n8n's queue-mode shape becomes important; a single-process Docker install will serialize these, a queue-mode deployment will parallelize.
 - **Observability for the non-author.** Imagine a teammate who did not build this workflow getting paged at 3 a.m. because the Slack posts stopped. Can they open n8n's execution log, find the failed run, see the exact input to the AI Agent node, see the exact output, and identify the failure mode without reading your code? This is the ops-maintainability property that justifies choosing n8n over LangGraph in the first place. If the answer is no, the workflow is not production-ready *regardless* of whether it functions.
 
@@ -268,13 +270,13 @@ An EU-regulated Series B fintech I advised in late 2025 (details composited acro
 
 Then the regulator's turn came. During a routine audit, the compliance officer was asked: *"for this specific escalation on March 14, can you reproduce the exact reasoning the system used, and demonstrate that the decision was deterministic given the inputs available at the time?"*
 
-The team could not. n8n's execution logs by default retain thirty days of run data at the free tier; the specific run had rolled off. The AI Agent node had made four tool calls in that run, and the intermediate tool-call arguments and results were only partially captured because the team had not turned on full agent-step logging. The model was Claude Sonnet 4.5 at the time of the run but had since been updated to 4.7; the run was not reproducible because the exact model snapshot was not pinned.
+The team could not. n8n's execution logs by default retain thirty days of run data at the free tier; the specific run had rolled off. The AI Agent node had made four tool calls in that run, and the intermediate tool-call arguments and results were only partially captured because the team had not turned on full agent-step logging. The model had been the then-current Sonnet at the time of the run but had since been silently updated a generation (this was the Sonnet-4.x-to-Sonnet-5 window); the run was not reproducible because the exact model snapshot was not pinned.
 
 The regulator did not shut them down, but the remediation was painful. The team:
 
 1. Moved execution history to a mandatory-retention Postgres instance with seven-year retention.
 2. Turned on verbose agent-step logging for every AI Agent node, capturing every tool call's inputs and outputs with content hashes.
-3. Pinned specific model snapshots (`claude-sonnet-4-5-20260315` style identifiers) and added a version-check step that fails the workflow if the deployed model ID drifts.
+3. Pinned specific model snapshots (dated `claude-sonnet-5-YYYYMMDD` style identifiers, never the bare alias) and added a version-check step that fails the workflow if the deployed model ID drifts.
 4. Wrapped the actual decision in a separate LangGraph service that emits a structured, replayable trace to an immutable audit log in S3, so the *decision* was auditable even if the n8n orchestration layer was not.
 
 The war-story lesson is not *"n8n is bad for regulated workloads."* It is *"n8n's defaults are tuned for ops-team maintainability, not for regulatory auditability, and if your workload is on the regulated side of that line you have to change defaults explicitly."* The specific failure mode — a visual workflow engine that does not retain full agent-step traces by default — is the single most underrated production risk of the shelf-B choice. Find it before the regulator does.
@@ -350,5 +352,6 @@ Where **a senior n8n engineer** would push back, which is the disagreement most 
 [^14]: OrangeLoops, *Building AI Agents with LangGraph vs n8n: A Hands-On Comparison* (June 2025). https://orangeloops.com/2025/06/building-ai-agents-with-langgraph-vs-n8n-a-hands-on-comparison/
 [^15]: n8n Blog, *15 best practices for deploying AI agents in production*. https://blog.n8n.io/best-practices-for-deploying-ai-agents-in-production/
 [^16]: Latenode Blog, *N8N AI Agents 2025: Complete Capabilities Review + Implementation Reality Check*. https://latenode.com/blog/low-code-no-code-platforms/n8n-setup-workflows-self-hosting-templates/n8n-ai-agents-2025-complete-capabilities-review-implementation-reality-check
+[^17]: n8n no-setup MCP-server connections landed in **v2.19 (released 2026-05-19)** for Apify, Linear, monday.com, Notion, PostHog — per n8n Docs, *Connect to n8n MCP server* / *Release notes 2.x*, https://docs.n8n.io/connect/connect-to-n8n-mcp-server and https://docs.n8n.io/changelog/release-notes-2.x . Node-count (1,000+), multi-agent/RAG, and execution-replay debugging per Nodesify, *n8n Workflow Automation Guide 2026*, https://nodesify.com/blog/n8n-workflow-automation-guide-2026 . SAP strategic investment at $5.2B valuation (May 12 2026, up from $2.5B Oct 2025) per Bloomberg, https://www.bloomberg.com/news/articles/2026-05-12/sap-invests-in-ai-automation-startup-n8n-at-5-2-billion-value .
 
-_last_verified: 2026-04-15_
+_last_verified: 2026-07-17_

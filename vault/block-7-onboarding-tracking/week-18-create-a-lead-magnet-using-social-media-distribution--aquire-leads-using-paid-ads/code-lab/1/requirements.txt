@@ -1,0 +1,2 @@
+# Week 18 code-lab 1 — no third-party dependencies.
+# Standard library only. Requires Python 3.10+ (uses `X | None` union syntax).

@@ -1,0 +1,9 @@
+# Week 15 launch runner — no third-party dependencies.
+# Pure Python 3.10+ standard library (argparse, json, pathlib, dataclasses).
+# Pinned here only to document the tested interpreter floor:
+#   python >= 3.10
+#
+# There is intentionally nothing to pip install. The lab must run offline and
+# must never depend on a mailer/sender library — it drafts for human review and
+# never sends. If you later add an LLM drafting backend, pin it here and keep
+# the "draft-for-review, never send" invariant in personalizer.py intact.

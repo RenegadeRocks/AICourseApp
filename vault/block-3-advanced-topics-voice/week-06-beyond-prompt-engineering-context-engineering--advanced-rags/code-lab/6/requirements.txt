@@ -1,0 +1,8 @@
+# Verified current on PyPI 2026-07-17 (see lesson citations).
+# After install, run `pip freeze > requirements.lock` and commit the lock
+# alongside your results so every ablation row is reproducible.
+anthropic==0.116.0
+chromadb==1.5.9
+bm25s>=0.2.0
+cohere>=5.0.0        # optional: reranker lane only
+numpy>=1.26

@@ -1,0 +1,3 @@
+# Week 21 planner — no third-party dependencies.
+# Requires Python 3.10+ (uses match-free dataclasses and PEP 604 unions).
+# Everything is standard library: json, argparse, datetime, dataclasses.

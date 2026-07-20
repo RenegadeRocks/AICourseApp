@@ -25,7 +25,7 @@ sources:
   - husain-context-rot-notes-2025
   - kamradt-niah-github-2023
   - tang-multihop-rag-colm-2024
-last_verified: 2026-04-17
+last_verified: 2026-07-17
 word_count_target: 6000
 ---
 
@@ -35,7 +35,7 @@ word_count_target: 6000
 
 Yesterday you built the retrieval stack: chunking, embeddings, hybrid search, reranking, and Anthropic's contextual retrieval preprocessing. That stack handles the problem of *"find me the three paragraphs that contain the answer to this specific question."* It is necessary and not sufficient. The four problems it does not solve are the ones that now eat most enterprise RAG deployments.
 
-First, **global sensemaking.** A question like "what are the three recurring failure patterns across the last two years of incident reports?" is not retrievable by any single query — the answer is latent in the structure of the whole corpus. Second, **multi-hop reasoning.** A question like "of the customers who churned in Q3, which of them had filed a severity-1 ticket in the prior six months, and which account executive owned the relationship?" requires three retrievals stitched by logic, and a single top-k fetch returns garbage. Third, **when long-context obsoletes RAG.** Gemini 1.5 Pro has been at 1M and 2M tokens since 2024;[^gem15] Claude Opus 4.6 and Sonnet 4.6 went generally available at 1M context on March 13, 2026 at standard pricing;[^claude1m] if your corpus fits in-window, why run a retriever at all? Fourth, **claim-level grounding.** A RAG system that answers "yes, the policy covers this" without pointing to the sentence it's inferring from is not deployable in legal, healthcare, insurance, or financial services. The retrieval-then-generation two-step is structurally unable to produce per-claim citations; the model invents a plausible sentence that happens to agree with the context.
+First, **global sensemaking.** A question like "what are the three recurring failure patterns across the last two years of incident reports?" is not retrievable by any single query — the answer is latent in the structure of the whole corpus. Second, **multi-hop reasoning.** A question like "of the customers who churned in Q3, which of them had filed a severity-1 ticket in the prior six months, and which account executive owned the relationship?" requires three retrievals stitched by logic, and a single top-k fetch returns garbage. Third, **when long-context obsoletes RAG.** By July 2026 a 1M-token context window is table stakes — Gemini 3 (Nov 2025) and Gemini 2.5 Pro both ship 1M, and Claude Fable 5, Opus 4.8, and Sonnet 5 are all at 1M standard;[^gem15][^claude1m] if your corpus fits in-window, why run a retriever at all? Fourth, **claim-level grounding.** A RAG system that answers "yes, the policy covers this" without pointing to the sentence it's inferring from is not deployable in legal, healthcare, insurance, or financial services. The retrieval-then-generation two-step is structurally unable to produce per-claim citations; the model invents a plausible sentence that happens to agree with the context.
 
 By the end of this lesson you will be able to (1) explain what GraphRAG actually is — entity extraction, Leiden community detection, pre-generated community reports — and defend when its 10–100× ingestion cost is worth paying vs when LazyGraphRAG or plain contextual retrieval wins, (2) design an agentic-retrieval loop (Self-RAG or Chain-of-RAG) with defensible stop conditions, and know which operators argue it's a net loss vs a net win, (3) run a cost-per-correct-answer comparison across RAG, GraphRAG, and pure long-context on a real corpus and make a defensible routing decision, (4) wire Anthropic's Citations API into a RAG pipeline and understand why operator-level citation correctness ≠ claim-level grounding, (5) hold a rigorous position in the "long-context obsoletes RAG" debate with named primary sources on both sides.
 
@@ -43,8 +43,8 @@ This is the lesson where RAG stops being a pipeline you assemble and starts bein
 
 ## Prerequisites
 
-- Thursday's lesson on RAG fundamentals — you know what chunking, hybrid BM25+dense retrieval, reranking, and Anthropic's contextual retrieval do, and you have a baseline pipeline you can modify.
-- Tuesday's lesson on agent architectures — you know the five patterns from Anthropic's *Building Effective Agents* post, and you can tell an evaluator-optimizer workflow from an autonomous agent loop.
+- Thursday's lesson on RAG fundamentals ([[04-thu-rag-fundamentals]]) — you know what chunking, hybrid BM25+dense retrieval, reranking, and Anthropic's contextual retrieval do, and you have a baseline pipeline you can modify.
+- Tuesday's lesson on agent architectures ([[02-tue-agent-architectures]]) — you know the five patterns from Anthropic's *Building Effective Agents* post, and you can tell an evaluator-optimizer workflow from an autonomous agent loop.
 
 If either is absent the lesson will still land, but the experiment section assumes both.
 
@@ -64,7 +64,7 @@ GraphRAG's indexing pipeline runs four stages over a corpus before the first que
 
 **Stage 4 — Community report generation.** For every community at every level, the LLM writes a *community report* — a prose summary of what the community is about, its key entities, its internal structure. These reports are the new retrieval unit. A query asking "what are the top themes in this corpus?" doesn't fetch chunks; it fetches community reports, generates a partial answer per report, and map-reduces the partials.
 
-The ingestion cost is the story. On a public 1M-token News Articles dataset in the paper, GraphRAG indexing ran roughly 610,000 input + 19,000 output tokens to build the graph and generate community summaries at the highest level, before any queries.[^graphrag] At Anthropic or OpenAI flagship rates this is tens of dollars for a 1M-token corpus — roughly 10–100× the cost of a pure embedding pipeline for the same corpus, which needs only the embedding-model cost (fractions of a cent per 1K tokens with text-embedding-3-small or voyage-3). The paper is candid about this. The trade is not "graphs make RAG better for free"; it is "graphs make RAG *answer a different class of question*, at a structural cost multiplier."
+The ingestion cost is the story. On a public 1M-token News Articles dataset in the paper, GraphRAG indexing ran roughly 610,000 input + 19,000 output tokens to build the graph and generate community summaries at the highest level, before any queries.[^graphrag] At Anthropic or OpenAI flagship rates this is tens of dollars for a 1M-token corpus — roughly 10–100× the cost of a pure embedding pipeline for the same corpus, which needs only the embedding-model cost (fractions of a cent per 1K tokens with text-embedding-3-small or voyage-3). The paper is candid about this. What graphs buy you is the ability to *answer a different class of question* — global sensemaking — at a structural cost multiplier; they are not a free quality lift on the questions vanilla RAG already handles.
 
 ### The result in numbers
 
@@ -74,11 +74,11 @@ Microsoft's benchmark on global sensemaking questions over two 1M-token corpora 
 
 On November 25, 2024, Microsoft Research released *LazyGraphRAG* — a retort to its own earlier system. LazyGraphRAG's construction cost is reported at **0.1% of full GraphRAG's** — a 1000× reduction — and identical to vector RAG.[^lazygraph] The mechanism: it doesn't pre-generate community summaries. It extracts concepts and their co-occurrences into a light graph at ingestion, then *at query time* it retrieves the relevant communities on the fly and summarizes them just-in-time using a cheap LLM. The paper claims LazyGraphRAG at 4% of GraphRAG's query cost outperforms GraphRAG Global Search on global queries *and* outperforms vanilla RAG on local queries.[^lazygraph]
 
-Operator read: the original GraphRAG is a good fit only if (a) your corpus is relatively stable — you index once and query many times, (b) global sensemaking queries are a meaningful fraction of the workload, and (c) the up-front token cost is amortizable. LazyGraphRAG is the better default for exploratory workloads, streaming corpora, or pilots — because the ingestion cost is effectively free. A third-party *unbiased evaluation* paper (arxiv 2506.06331, Jun 2025, *"How Significant Are the Real Performance Gains?"*) has challenged the transferability of GraphRAG's headline numbers across corpora and question types; the paper is worth reading before you commit to the full system on a new domain. Darren Edge's team would push back that those benchmarks were run with default untuned configurations, but the asymmetry of the evidence is now clear: GraphRAG's wins are domain-sensitive.
+Operator read: the original GraphRAG is a good fit only if (a) your corpus is relatively stable — you index once and query many times, (b) global sensemaking queries are a meaningful fraction of the workload, and (c) the up-front token cost is amortizable. LazyGraphRAG is the better default for exploratory workloads, streaming corpora, or pilots — because the ingestion cost is effectively free. A third-party *unbiased evaluation* paper (arxiv 2506.06331, Jun 2025, *"How Significant Are the Real Performance Gains? An Unbiased Evaluation Framework for GraphRAG"*) has challenged the transferability of GraphRAG's headline numbers: applying a bias-corrected framework, it found LightRAG's reported win rates on the Agriculture dataset (66.70% vs NaiveRAG, 56.38% vs MGRAG) collapse to 39.06% and 32.33%, with high tie rates shrinking the real gaps between methods.[^graphgains] Darren Edge's team would push back that those benchmarks were run with default untuned configurations, but the asymmetry of the evidence is now clear: GraphRAG's wins are domain-sensitive and smaller than first reported.
 
 ### Cross-domain: where GraphRAG earns its cost, and where it doesn't
 
-Earns it: *legal/compliance archives* (cross-regulation queries like "which regulations touch data-residency across APAC and have overlapping enforcement bodies?" — no single chunk answers it; the graph's cross-regulation links do real work); *multi-year consulting research libraries* where recurring recommendation patterns are latent in structure; *biomedical literature* with dense entity-relationship structure (Writer's 2024 RobustQA reported knowledge-graph approaches at 86.31% vs 59–75% for RAG baselines).[^lazygraph]
+Earns it: *legal/compliance archives* (cross-regulation queries like "which regulations touch data-residency across APAC and have overlapping enforcement bodies?" — no single chunk answers it; the graph's cross-regulation links do real work); *multi-year consulting research libraries* where recurring recommendation patterns are latent in structure; *biomedical literature* with dense entity-relationship structure. On the biomedical/knowledge-graph point, the most-cited number — knowledge-graph RAG at **86.31% on RobustQA vs 32.74–75.89% for vector-RAG baselines** — comes from **Writer's own RobustQA marketing benchmark**, not from Microsoft's LazyGraphRAG post; treat it as a vendor-disclosed figure on a vendor-run benchmark.[^writerkg]
 
 Doesn't: *product-documentation RAG for SaaS support*, where users ask local questions ("how do I set up SSO?") and contextual-retrieval + rerank Pareto-dominates on cost and latency; *dynamic corpora* (news, email, messaging) where re-indexing is operationally painful and LazyGraphRAG is the honest choice; *moderate corpora that fit in a 1M window*, where the comparison shifts from "GraphRAG vs vector RAG" to "GraphRAG vs no retrieval at all" — Layer 3.
 
@@ -108,7 +108,7 @@ Eugene Yan's *Patterns for Building LLM-based Systems & Products*[^eugeneyan] in
 
 ### The latency math operators actually care about
 
-A single-shot RAG query on a Claude Sonnet 4.6 generation call is typically 1.5–3 seconds end-to-end with a warm cache. A 3-hop agentic loop is 5–12 seconds. If your product is an interactive chat UI, the second number is user-hostile. If your product is an overnight batch job, the second number is invisible. This is not a technical trade-off — it is a product trade-off. Named operators are split: Jerry Liu of LlamaIndex has argued in talks through 2024 that *small-to-big* retrieval (retrieve small precise chunks, then expand to surrounding context via document metadata) is the right middle ground, keeping latency down while recovering multi-hop gains for a subset of queries.[^jerryliu] Ben Hylak at Raindrop has argued publicly that agent UX degrades at any loop count >1 for interactive products, period, and that the right answer is to move the work to background pipelines. Both are right for different products.
+A single-shot RAG query on a Claude Sonnet 5 generation call is typically 1.5–3 seconds end-to-end with a warm cache. A 3-hop agentic loop is 5–12 seconds. If your product is an interactive chat UI, the second number is user-hostile. If your product is an overnight batch job, the second number is invisible — the trade-off is a product decision, not a technical one. Named operators are split: Jerry Liu of LlamaIndex has argued in talks through 2024 that *small-to-big* retrieval (retrieve small precise chunks, then expand to surrounding context via document metadata) is the right middle ground, keeping latency down while recovering multi-hop gains for a subset of queries.[^jerryliu] Ben Hylak at Raindrop has argued publicly that agent UX degrades at any loop count >1 for interactive products, period, and that the right answer is to move the work to background pipelines. Both are right for different products.
 
 ### Cross-domain: when the loop earns its cost
 
@@ -125,11 +125,11 @@ A single-shot RAG query on a Claude Sonnet 4.6 generation call is typically 1.5�
 
 This is the live frontier debate. Hold both sides.
 
-### The context-window reality, as of April 2026
+### The context-window reality, as of July 2026
 
-Gemini 1.5 Pro shipped with 1M tokens in production in February 2024 and a 2M-token variant later that year, the Google DeepMind technical report (Reid et al., arxiv 2403.05530, March 2024)[^gem15] reporting >99.7% recall on needle-in-a-haystack retrieval at 1M tokens and 99.2% at 10M tokens in internal evaluations. Claude 3.5 and Claude 4 were originally 200K. On August 12, 2025 Anthropic announced a 1M-token beta for Claude Sonnet 4; on March 13, 2026 Anthropic announced 1M context GA for Claude Opus 4.6 and Sonnet 4.6 at standard pricing — no per-request multiplier beyond the 200K mark.[^claude1m] Opus 4.7 as of April 2026 runs at 1M input / 128K output with standard $5/$25 per million token pricing.
+Gemini 1.5 Pro shipped with 1M tokens in production in February 2024 and a 2M-token variant later that year, the Google DeepMind technical report (Reid et al., arxiv 2403.05530, March 2024)[^gem15] reporting >99.7% recall on needle-in-a-haystack retrieval at 1M tokens and 99.2% at 10M tokens in internal evaluations. Gemini 3 (November 2025) and Gemini 2.5 Pro both ship 1M-token windows. Claude 3.5 and Claude 4 were originally 200K; Anthropic moved to 1M context GA over 2026, and the **current lineup — Claude Fable 5, Opus 4.8, and Sonnet 5 — all run 1M context by default**, with 128K max output.[^claude1m] The pricing is where the frontier moved: the widely-available frontier is **Opus 4.8 at $5/$25 per Mtok**, and the *capability* frontier is **Claude Fable 5 at $10/$50 per Mtok — 2× the price the older cost tables assumed** (Opus 4.7/4.8 sat at $5/$25). Sonnet 5 is the cheap-agentic default at $2/$10 intro (through Aug 31 2026), then $3/$15. Two things every cost table below has to absorb: Fable 5's 2× pricing, and the **new tokenizer** (introduced on Opus 4.7 and shared by Opus 4.8 / Sonnet 5 / Fable 5) that tokenizes the same text to **~30% more tokens** than pre-4.7 models — so a corpus that "fit" or "cost X" on an old tokenizer costs more now.[^claude1m]
 
-The 2024–2025 framing was "long-context is close to obsoleting RAG." The 2026 framing has shifted, for reasons below.
+The 2024–2025 framing was "long-context is close to obsoleting RAG." The 2026 framing has shifted, for reasons below — and the price and tokenizer changes *sharpen* the anti-long-context case rather than soften it.
 
 ### The pro-long-context position
 
@@ -156,19 +156,19 @@ Hamel Husain hosted Kelly Hong of Chroma on his blog; his write-up (P6 of his RA
 
 ### The cost side of the debate
 
-The cost asymmetry is the decisive factor most casual discussions skip. Consider a 500K-token corpus and a single user question.
+The cost asymmetry is the decisive factor most casual discussions skip, and the July-2026 price sheet plus the new tokenizer make it starker than the 2025 version of this table. Consider a corpus that measured ~500K tokens on the pre-4.7 tokenizer. On the current tokenizer (Opus 4.7/4.8, Sonnet 5, Fable 5) the *same text* is **~650K tokens** — the ~30% inflation is not free, it multiplies the pure-long-context input bill.[^claude1m] Per single user question (assume a ~1K-token answer, which is ~1.3K tokens on the new tokenizer):
 
-| Architecture | Input tokens per query | Approx. cost per query (Claude Opus 4.7 at $5/M input, $25/M output) |
-|---|---|---|
-| Vanilla RAG (top-20 chunks @ 500 tokens) | ~10,000 + query + output | ~$0.05 + output |
-| GraphRAG global search | ~15,000 report tokens + output | ~$0.08 + output |
-| Pure long-context (500K window) | 500,000 + query + output | ~$2.50 + output |
+| Architecture | Input tokens/query (new tokenizer) | Cost/query — Opus 4.8 ($5/$25) | Cost/query — Fable 5 ($10/$50) |
+|---|---|---|---|
+| Vanilla RAG (top-20 chunks @ ~500 tok) | ~13K in + ~1.3K out | ~$0.10 | ~$0.20 |
+| GraphRAG global search | ~19.5K report tok + out | ~$0.13 | ~$0.26 |
+| Pure long-context (whole corpus in-window) | ~650K in + ~1.3K out | ~$3.28 | ~$6.57 |
 
-For a typical 1K-output-token answer (≈$0.025 output cost), pure long-context is **30–50× the per-query cost** of retrieval-based approaches. For a SaaS support bot serving 10K queries/day, that's $250/day vs $500+ per day — a $90K/year swing for one workflow. Kiela's "RAG plus long context" framing exists because it's the only way to preserve long-context's reasoning win without paying the full window cost on every query.
+Pure long-context runs **~30–50× the per-query cost** of retrieval-based approaches — and that multiplier holds on both the $5/$25 Opus 4.8 tier and the $10/$50 Fable 5 tier, because both the retrieval and the stuffing rows scale with the same price. For a SaaS support bot serving 10K queries/day on that corpus: vanilla RAG runs ~$1,000/day on Opus 4.8, pure long-context runs ~$32,800/day — a swing north of **$11M/year for a single workflow**, and roughly double that if you run the frontier Fable 5 tier. (An earlier draft of this lesson quoted "$250/day vs $500/day" here; that was arithmetically wrong by two orders of magnitude — 10K queries at $3.28 each is ~$32.8K/day, not $250.) Kiela's "RAG plus long context" framing exists because it's the only way to preserve long-context's reasoning win without paying the full-window cost on every query — and the new tokenizer only widens the gap.
 
 ### The cost-per-correct-answer unifier
 
-The right metric across all these architectures is not accuracy alone and not cost alone — it's **cost per correct answer**: (total cost over N queries) / (number of queries answered correctly by a rubric-grounded LLM-judge). Under this metric:
+The right metric across all these architectures is **cost per correct answer**: (total cost over N queries) / (number of queries answered correctly by a rubric-grounded LLM-judge). Accuracy alone hides the price of the wins; cost alone hides which architecture actually answers the question. Under the combined metric:
 
 - Vanilla RAG on a local-QA workload beats everything on cost-per-correct-answer, often by 5–10×.
 - GraphRAG on a global-sensemaking workload beats vanilla RAG by 2–3× on cost-per-correct-answer (it costs more per query but answers many more correctly).
@@ -201,7 +201,7 @@ The production pattern used by teams that can't afford citation failures:
 
 1. **Layer 1 — Structural.** Every claim must carry a structured citation (Anthropic Citations API, or instructor-enforced Pydantic schema). No claim without a citation is allowed to reach the user.
 2. **Layer 2 — Span match.** The quoted text must match a verbatim substring of a retrieved passage (deterministic check, no LLM needed). Catches quote-drift.
-3. **Layer 3 — Entailment.** An LLM-judge (Claude Opus 4.7, rubric-grounded, pairwise when possible) checks whether each claim is entailed by its cited span. Catches plausible-but-unsupported claims.
+3. **Layer 3 — Entailment.** An LLM-judge (Claude Opus 4.8, rubric-grounded, pairwise when possible — the judge should be at least as capable as the generator) checks whether each claim is entailed by its cited span. Catches plausible-but-unsupported claims.
 
 Layers 1 and 2 are free and deterministic. Layer 3 is the one that costs real eval budget — but it's the one that catches the production failures that matter in regulated domains.
 
@@ -234,7 +234,7 @@ The goal: produce a three-column table showing cost-per-correct-answer across th
 >
 > *(a) My best baseline RAG from Thursday — whatever interventions won on that corpus: chunking, hybrid BM25+dense, reranker, contextual retrieval preprocessing.*
 >
-> *(b) Pure long-context — load the entire corpus into a single Claude Opus 4.7 context and answer each query with no retrieval.*
+> *(b) Pure long-context — load the entire corpus into a single Claude Opus 4.8 context (or Fable 5 if you want the frontier tier) and answer each query with no retrieval. Log real token counts on the current tokenizer — do not estimate from an old model.*
 >
 > *(c) A minimal GraphRAG-style pipeline — extract entities and relationships per chunk with Claude, cluster into communities (a cheap approximation of Leiden using any clustering library), generate a community summary per cluster, and answer global queries by retrieving community summaries and local queries by retrieving raw chunks. Use `microsoft/graphrag` library defaults if available; otherwise approximate.*
 >
@@ -242,7 +242,7 @@ The goal: produce a three-column table showing cost-per-correct-answer across th
 
 **Phase 3 — Grade with an LLM-judge.** Ask Claude Code:
 
-> *"For each of the 60 (query, architecture, answer) triples, run an LLM-as-judge with Claude Opus 4.7 using this rubric: [supply your rubric]. Grade each answer 0/1 against the ground truth or rubric. Output a table: query_id × architecture × answer_grade × latency × total_tokens × dollar_cost (using current Anthropic pricing)."*
+> *"For each of the 60 (query, architecture, answer) triples, run an LLM-as-judge with Claude Opus 4.8 using this rubric: [supply your rubric]. Grade each answer 0/1 against the ground truth or rubric. Output a table: query_id × architecture × answer_grade × latency × total_tokens × dollar_cost (using current Anthropic pricing — Opus 4.8 $5/$25, Fable 5 $10/$50, Sonnet 5 $2/$10 intro; count tokens on the current tokenizer)."*
 
 **Phase 4 — Compute cost-per-correct-answer per architecture per query class.** Ask Claude Code to produce a 3×2 table: architectures × {local, global}, cells containing (total cost) / (number of correct answers) for that architecture and query class.
 
@@ -264,7 +264,7 @@ The goal: produce a three-column table showing cost-per-correct-answer across th
 
 **Problem 3 — Name GraphRAG's earn-its-cost zone.** Name one specific query class (in a specific domain — legal, finance, marketing, healthcare, ops, or your own Block 1 niche) where GraphRAG's 10–100× ingestion cost is *strictly* worth paying, and one specific query class where it is *strictly* not. Defend each with a sentence on why the graph structure is or isn't load-bearing. If the first one is "global sensemaking" you need to be more specific than that — what global sensemaking query in what domain.
 
-**Problem 4 — Reproduce a Lost-in-the-Middle-style finding on Claude Opus 4.7.** Ask Claude Code to construct a 500K-token synthetic document with 5 target facts inserted at depths of 5%, 25%, 50%, 75%, and 95% of the way through. Query Claude Opus 4.7 for each fact and report accuracy by depth across at least 10 trials per position. Does the U-shape hold? Does it hold as strongly as on earlier models, or has frontier-model improvement flattened it? Write 200 words on your result and what it implies for long-context routing decisions.
+**Problem 4 — Reproduce a Lost-in-the-Middle-style finding on Claude Opus 4.8.** Ask Claude Code to construct a 500K-token synthetic document with 5 target facts inserted at depths of 5%, 25%, 50%, 75%, and 95% of the way through. Query Claude Opus 4.8 (or Fable 5) for each fact and report accuracy by depth across at least 10 trials per position. Does the U-shape hold? Does it hold as strongly as on earlier models, or has frontier-model improvement flattened it? Write 200 words on your result and what it implies for long-context routing decisions.
 
 **Problem 5 — Design the minimal agentic-retrieval loop with stop conditions.** Write the prompt + tool schema for a 3-hop retrieval loop with explicit stop conditions. The agent should retrieve, decide whether to retrieve again, and stop when either (a) it can answer the query confidently, (b) three retrievals have occurred, or (c) the cumulative retrieved-token budget has exceeded a threshold you name. Defend the stop criteria in 200 words. This is writeable as a JSON tool-schema block + a system prompt — you don't need to run it to complete the problem.
 
@@ -317,7 +317,7 @@ The goal: produce a three-column table showing cost-per-correct-answer across th
 - **Asai et al., "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection" (arxiv 2310.11511).**[^selfrag] The learned-retrieval paper.
 - **Wang et al., "Chain-of-Retrieval Augmented Generation" (arxiv 2501.14342).**[^corag] Multi-hop at scale.
 - **Gemini 1.5 Technical Report (Reid et al., arxiv 2403.05530).**[^gem15] The needle-in-a-haystack near-perfect recall results at 1M and 10M tokens.
-- **Anthropic, "1M context is now generally available for Opus 4.6 and Sonnet 4.6" (March 13, 2026).**[^claude1m]
+- **Anthropic model docs / pricing (July 2026) — Fable 5, Opus 4.8, Sonnet 5 at 1M context; the new tokenizer note.**[^claude1m]
 - **Jerry Liu, "Towards Long Context RAG" (LlamaIndex blog, 2024).**[^jerryliu] The hybrid architecture position.
 - **Simon Willison, "Anthropic's new Citations API" (January 24, 2025).**[^simonwillison] The operator's take on limits.
 
@@ -336,13 +336,17 @@ The goal: produce a three-column table showing cost-per-correct-answer across th
 
 [^lazygraph]: Microsoft Research (November 25, 2024). *LazyGraphRAG: Setting a new standard for quality and cost.* <https://www.microsoft.com/en-us/research/blog/lazygraphrag-setting-a-new-standard-for-quality-and-cost/>. Supports: 0.1% indexing cost, 4% query cost, comparable-or-better quality on global and local queries.
 
+[^writerkg]: Writer, *RAG benchmarking: Writer Knowledge Graph ranks #1*, engineering blog. <https://writer.com/engineering/rag-benchmark/> — source for the RobustQA knowledge-graph-RAG number (86.31%) vs vector-RAG baselines (32.74–75.89%). This is Writer's own benchmark on its own product — a vendor-disclosed figure, not the Microsoft LazyGraphRAG post an earlier draft of this vault misattributed it to. Verified 2026-07-17.
+
+[^graphgains]: Wu et al., *How Significant Are the Real Performance Gains? An Unbiased Evaluation Framework for GraphRAG*, arxiv 2506.06331, June 2025. <https://arxiv.org/abs/2506.06331> — bias-corrected re-evaluation of GraphRAG methods; LightRAG's reported Agriculture-dataset win rates (66.70% vs NaiveRAG, 56.38% vs MGRAG) drop to 39.06% and 32.33% under the unbiased framework, with high tie rates shrinking real gaps. Verified 2026-07-17.
+
 [^lim]: Liu, N. F., Lin, K., Hewitt, J., Paranjape, A., Bevilacqua, M., Petroni, F., Liang, P. (2024). *Lost in the Middle: How Language Models Use Long Contexts.* Transactions of the Association for Computational Linguistics (TACL), February 2024. <https://aclanthology.org/2024.tacl-1.9/>. Original arxiv 2307.03172. Supports: U-shaped accuracy curve with ~30% drop when answer document is at position 10 of 20.
 
 [^ruler]: Hsieh, C.-P., Sun, S., Kriman, S., Acharya, S., Rekesh, D., Jia, F., Ginsburg, B. (NVIDIA, 2024). *RULER: What's the Real Context Size of Your Long-Context Language Models?* arxiv 2404.06654, April 2024. <https://arxiv.org/abs/2404.06654>. Supports: 13 long-context tasks across 4 categories; most 32K-claimed models fail to maintain performance at 32K.
 
-[^gem15]: Gemini Team, Google DeepMind (2024). *Gemini 1.5: Unlocking multimodal understanding across millions of tokens of context.* arxiv 2403.05530. <https://arxiv.org/abs/2403.05530>. Supports: >99.7% needle-in-haystack recall at 1M tokens; 99.2% at 10M tokens.
+[^gem15]: Gemini Team, Google DeepMind (2024). *Gemini 1.5: Unlocking multimodal understanding across millions of tokens of context.* arxiv 2403.05530. <https://arxiv.org/abs/2403.05530>. Supports: >99.7% needle-in-haystack recall at 1M tokens; 99.2% at 10M tokens. Currency note (2026-07-17): the current Google frontier is **Gemini 3 Pro** (released Nov 18 2025, 1M-token window); Gemini 2.5 Pro also ships 1M (not the 2M sometimes attributed to it — 2M was a 1.5-Pro-era spec). Sources: https://blog.google (Gemini 3 launch), https://ai.google.dev/gemini-api/docs/long-context.
 
-[^claude1m]: Anthropic (March 13, 2026). *1M context is now generally available for Opus 4.6 and Sonnet 4.6.* <https://claude.com/blog/1m-context-ga>. Supports: GA at standard $5/M input and $25/M output for Opus 4.6; $3/$15 for Sonnet 4.6; no premium multiplier beyond 200K.
+[^claude1m]: Anthropic model docs and pricing, July 2026. <https://platform.claude.com/docs/en/about-claude/models/overview> and <https://www.anthropic.com/news/claude-fable-5-mythos-5>. 1M context is standard across the current lineup — Claude Fable 5 ($10/$50 per Mtok), Opus 4.8 ($5/$25), Sonnet 5 ($2/$10 intro through Aug 31 2026, then $3/$15) — 128K max output. The 1M-GA lineage traces to Anthropic's March 13, 2026 "1M context GA for Opus 4.6 and Sonnet 4.6" (<https://claude.com/blog/1m-context-ga>). New tokenizer: Opus 4.7 introduced a tokenizer (shared by Opus 4.8 / Sonnet 5 / Fable 5) that tokenizes the same text to ~30% more tokens than pre-4.7 models — re-baseline token counts and cost with `count_tokens`. Verified 2026-07-17.
 
 [^selfrag]: Asai, A., Wu, Z., Wang, Y., Sil, A., Hajishirzi, H. (2023). *Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection.* arxiv 2310.11511, October 17, 2023. <https://arxiv.org/abs/2310.11511>. Supports: reflection-token architecture; 7B/13B variants outperforming ChatGPT and retrieval-augmented Llama2-chat.
 
@@ -373,3 +377,5 @@ The goal: produce a three-column table showing cost-per-correct-answer across th
 [^jxnl]: Liu, J. (jxnl.co). *Systematically Improving RAG Applications* course and *Applications RAG* documentation. <https://jxnl.co/systematically-improve-your-rag/>, <https://jxnl.github.io/instructor/tutorials/3-0-applications-rag/>. Supports: Instructor library for schema-enforced structured outputs; Pydantic-based validation; 6M+ monthly downloads.
 
 [^eugeneyan]: Yan, E. *Patterns for Building LLM-based Systems & Products.* <https://eugeneyan.com/writing/llm-patterns/>. Supports: pattern catalog for production LLM systems, including critique of self-reflection loops under production constraints.
+
+_last_verified: 2026-07-17_

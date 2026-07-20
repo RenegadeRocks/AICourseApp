@@ -43,3 +43,6 @@ Thumbs.db
 # Playwright screenshot artifacts from dev auditing
 .playwright-mcp/
 /*.png
+exports/
+# Regenerable code-lab demo fixtures (make_fixtures.py)
+vault/**/code-lab/**/example/assets/

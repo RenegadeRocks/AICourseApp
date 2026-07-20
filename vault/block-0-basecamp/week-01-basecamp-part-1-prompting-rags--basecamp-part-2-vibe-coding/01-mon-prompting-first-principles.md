@@ -21,7 +21,8 @@ sources:
   - simon-willison-lethal-trifecta
   - anthropic-opus-4-5
   - anthropic-sonnet-4-5
-last_verified: 2026-04-15
+  - chen-2025-reasoning-models-faithfulness
+last_verified: 2026-07-17
 word_count_target: 6500
 ---
 
@@ -47,6 +48,7 @@ You will also have watched, on your own screen, how a two-word change to a promp
 - Claude.ai access (a Max subscription is more than enough).
 - Claude Code installed and working in any scratch folder. Where this lesson says *"run an experiment,"* you will do it by either directing Claude Code to execute something and report back, or by running a small set of prompts manually in Claude.ai. You do not write code by hand.
 - Optional but high-ROI: the first ~90 minutes of Karpathy's *Deep Dive into LLMs like ChatGPT* (3h31m, Feb 2025).[^1] This lesson composes with it; it does not require it.
+- This week's later lessons build directly on today: [[03-wed-rag-as-a-system]] couples prompting with retrieval, and [[05-fri-vibe-coding-part-1-mechanics]] extends the context-window-as-computation model into agentic loops.
 
 ## Layer 1 — What is a language model computing, mechanically?
 
@@ -56,7 +58,7 @@ An autoregressive transformer — which is what Claude, GPT, Gemini, and Llama a
 
 It takes a sequence of tokens (integers from a ~100–200k vocabulary, where tokens are roughly sub-word pieces like `comput`, `ing`, `.`) and returns a probability distribution over which token comes next. Sample one token from that distribution, append it to the sequence, and run `f` again. That is the entire inference loop. Chat, Claude Code, agents, MCP servers, voice assistants — everything is this loop with different wrappers on top.
 
-Three properties of this function matter for how you prompt it. Not three facts among many — just three. Everything else in this lesson falls out of them.
+Three properties of this function matter for how you prompt it — just three. Everything else in this lesson falls out of them.
 
 **Property 1. The function is a pure lookup conditioned on the entire input.** There is no hidden state "between calls." Every inference call sees the full input sequence. What you put into the context window *is* the model's memory for that call. The model does not "remember" anything from your previous chat unless it's part of the current context. This is why prompting works at all — you are conditioning a conditional probability. It's also why telling the model "remember what we discussed yesterday" cannot work in the absence of a retrieval system that pulls yesterday's conversation into today's context.
 
@@ -111,7 +113,7 @@ This cleanly explains things you already half-knew from practice:
 
 One reviewer-lens caveat, because this matters: *"induction heads = in-context learning"* is a pedagogical simplification, not a complete theory.
 
-Olsson and team were careful. They showed causal evidence in small, attention-only models. In frontier models the size of Opus 4.5 or Sonnet 4.5, with dozens of MLP layers, the evidence is correlational. The phase transition is still observed. Induction heads are still present and important. But in-context learning at that scale appears to be the emergent behavior of a *composition* of induction heads, previous-token heads, copy circuits, and MLP-based associative recall. Subsequent work from the transformer-circuits.pub group — the sparse-autoencoder and monosemanticity line — has begun mapping the richer structure, but the full picture is nowhere near closed.
+Olsson and team were careful. They showed causal evidence in small, attention-only models. In frontier models the size of the current Claude generation, with dozens of MLP layers, the evidence is correlational. The phase transition is still observed. Induction heads are still present and important. But in-context learning at that scale appears to be the emergent behavior of a *composition* of induction heads, previous-token heads, copy circuits, and MLP-based associative recall. Subsequent work from the transformer-circuits.pub group — the sparse-autoencoder and monosemanticity line — has begun mapping the richer structure, but the full picture is nowhere near closed.
 
 For your prompting practice, the 80/20 mental model — *"induction heads pick up patterns, so give them clean patterns"* — is a strong prior and gets you most of the way. Don't defend it as a complete theory in front of someone who reads transformer-circuits.pub on release day.
 
@@ -129,7 +131,7 @@ This explains several adjacent phenomena:
 
 - **Zero-shot CoT — just appending "Let's think step by step."** Works because it's a distribution-shifting prefix. No examples needed.
 - **Claude's `<thinking>` tag convention.** CoT with a Claude-specific scaffold. The model has been post-trained to treat the region inside `<thinking>` tags as a private scratchpad and emit a cleaner final answer outside it.
-- **Extended / adaptive thinking modes.** On Sonnet 4.5 and Opus 4.5, CoT has been scaled from a prompting trick into a training-time feature. The model budgets reasoning tokens internally before committing to an answer — part of why Opus 4.5 hits 80.9% on SWE-bench Verified, and Sonnet 4.5 hits 77.2% at a 200K thinking budget and 82.0% with parallel test-time compute.[^8][^9]
+- **Extended / adaptive thinking modes.** On the current Claude generation, CoT has been scaled from a prompting trick into a training-time feature — adaptive thinking is on by default, and the model budgets reasoning tokens internally before committing to an answer. This is part of why SWE-bench Verified scores climbed from Opus 4.5's late-2025 milestone of 80.9% (the first model over 80%) to Opus 4.8's 88.6% and Fable 5's reported ~95% by mid-2026.[^8][^9] One practical consequence you'll meet in the experiment: with thinking enabled, the API no longer accepts a prefilled assistant turn or a custom `temperature`, because the model owns the start of its own response.
 
 ### The faithfulness problem — the part most practitioners don't know is settled
 
@@ -150,6 +152,8 @@ Two papers from 2023 make this concrete. Read at least one of them this week —
 1. **Biased prompts drop accuracy by up to 36% across 13 tasks from BIG-Bench Hard**, tested on GPT-3.5 and Claude 1.0.
 2. **Models generate CoT explanations that justify the biased answer without ever mentioning the bias.** On social-bias tasks, the model produces plausible-sounding reasoning for stereotyped answers, never acknowledging it's pattern-matching on the stereotype.
 3. **The CoT in these cases is post-hoc, not generative.** The answer is determined by features the model doesn't mention; the reasoning is a plausible-looking cover story.
+
+**The result held up on the 2025 reasoning models.** A natural hope after o1/R1/extended-thinking was that RL-trained reasoning models — which are rewarded for correct reasoning, not just correct answers — would be faithful by construction. Anthropic's *Reasoning Models Don't Always Say What They Think* (Chen et al., 2025) tested this directly: they slipped hints into prompts and checked whether the model's chain-of-thought admitted using them. Claude 3.7 Sonnet verbalized the hints it demonstrably used only about 25% of the time; DeepSeek R1, about 39%. Outcome-based RL improved faithfulness at first, then plateaued well short of reliable. Their conclusion is the one to carry: CoT monitoring is a *useful* signal for catching undesired behavior during training and evals, but "not sufficient to rule out" that behavior — you cannot treat the trace as a trustworthy account of the model's actual computation, even on the newest reasoning models.[^17]
 
 What this means operationally, regardless of your field:
 
@@ -179,7 +183,7 @@ Anthropic's public prompt engineering guide[^12] lists six techniques. Here they
 
 5. **Give Claude a role (system prompt).** *Mechanism:* distribution steering via prior. *Consequence:* be specific. "Senior compliance officer at a mid-size bank, drafting a risk memo for the audit committee, writing in a tone calibrated for regulators" is a useful prior — it routes the model toward a specific region of the pretraining corpus. "Helpful assistant" is noise that buys you nothing over the default post-training behavior.
 
-6. **Prefill Claude's response.** *Mechanism:* you're appending tokens to the assistant turn before the model generates, forcing the next tokens to continue in that style. *Consequence:* prefilling `{` forces JSON-shaped output; prefilling `-` forces bullet lists; prefilling `<thinking>` forces a reasoning region. This is the single most under-used technique in the production prompts I've reviewed. It is a near-zero-effort way to remove an entire class of format-drift failures.
+6. **Prefill Claude's response.** *Mechanism:* you're appending tokens to the assistant turn before the model generates, forcing the next tokens to continue in that style. *Consequence:* prefilling `{` forces JSON-shaped output; prefilling `-` forces bullet lists. It is a near-zero-effort way to remove a class of format-drift failures — *with one large caveat for 2026*: prefilling is **incompatible with extended thinking**. When thinking is enabled (increasingly the default on frontier Claude), the API rejects a prefilled assistant turn, because the model must own the start of its own response. If you rely on thinking-on, reach for structured outputs / a strict output schema instead of prefill to lock the format. Prefill remains a clean tool when thinking is off (e.g., on fast, cheap classification calls).
 
 These are not independent. A production prompt composes all six at once. Tuesday's lesson is the composition.
 
@@ -191,7 +195,7 @@ Do this before moving on. The point is not to trust that outputs vary by prompt 
 
 > I want to run a variance experiment on a language model. Please:
 >
-> 1. Write a small Python script that calls Claude Sonnet 4.5 (check the current model ID on Anthropic's docs if unsure) **30 times at temperature=1.0** for each of three prompts. Extract the final integer from each response.
+> 1. Write a small Python script that calls the current Claude Sonnet model (Sonnet 5 as of July 2026 — check the model ID on Anthropic's docs) **30 times** for each of three prompts, sampling at the model's default temperature. (Note: if you enable extended thinking, the API fixes temperature and rejects a custom value — run these with thinking off so the sampling spread is visible.) Extract the final integer from each response.
 >
 >    - **direct:** *"A bat and a ball cost $1.10 total. The bat costs $1.00 more than the ball. How many cents does the ball cost? Answer with a single integer."*
 >    - **cot_hint:** same question, plus *"Think step by step."* appended at the end.
@@ -207,7 +211,7 @@ Claude Code will write it, run it, and explain the output. (If you don't have an
 
 **Step 1b — manual fallback.** Open Claude.ai. Paste each of the three prompts into ten fresh conversations each (start a new chat each time so there's no context bleed), and tally the final answer each time. Thirty minutes of work, same mechanism visible at coarser resolution.
 
-**Expected shape** (numbers are from my own N=30 run on Sonnet 4.5, 2026-04-15; yours will be close but not identical because these are sampled):
+**Expected shape** (illustrative distribution from an N=30 run on a recent Sonnet; yours will be close but not identical because these are sampled):
 
     direct     -> [('5', 24), ('10', 5), ('0', 1)]
     cot_hint   -> [('5', 29), ('10', 1)]
@@ -247,16 +251,16 @@ Five problems. Each either requires a live model (Claude.ai or Claude Code direc
 
 Operational consequence for anything you build this year: **if your AI system has no eval harness, the "better prompt" you just shipped is a belief, not a measurement.** Tuesday's lesson builds a small one.
 
-**Anthropic's Contextual Retrieval — and what the 49% number doesn't say.**[^14] In September 2024, Anthropic published that adding chunk-specific contextual prefixes before embedding reduced top-20 retrieval failure from 5.7% to 2.9% — a 49% relative reduction. Adding a reranker pushed that to 67%. These are real, replicable numbers, and the technique is sound. But read carefully: the evaluation was done on a small set of technical-document domains. A 49% improvement on a 5-domain technical eval does not mechanically transfer to a hundred-million-token legal archive, a multi-language customer-support corpus, or any specific distribution that doesn't match theirs. It's a strong method and a weak benchmark. *On any published RAG improvement claim you encounter this year, ask: what eval set, what baseline, what confidence interval, does the distribution match mine?*
+**Anthropic's Contextual Retrieval — and what the 49% number doesn't say.**[^14] Anthropic's September 2024 result — a 5.7% baseline top-20 failure rate cut to 2.9% (49% *relative* reduction) by contextual prefixes, and 1.9% (67% relative) with a reranker — is the canonical RAG number of this course, and [[03-wed-rag-as-a-system]] is its home; the full ladder and methodology live there. The reason it belongs in a *prompting* lesson at all is the reading discipline: those are relative reductions, not absolute failure rates (a distinction routinely mangled in secondary coverage), and the eval was a small set of technical-document domains. A 49% improvement on a 5-domain technical eval does not mechanically transfer to a hundred-million-token legal archive or a multi-language support corpus. *On any published RAG-improvement claim you meet this year, ask: what eval set, what baseline, relative or absolute, does the distribution match mine?*
 
-**SWE-bench Verified and what the headline numbers omit.**[^8][^9] In late 2025, Sonnet 4.5 hit 77.2% on SWE-bench Verified at a 200K thinking budget (10-trial average, full 500-problem set). The same model reaches 82.0% with parallel test-time compute and rejection sampling. Opus 4.5 became the first model over 80% at 80.9%. These are the best publicly reported scores at time of writing. Two builder-level caveats:
+**SWE-bench Verified and what the headline numbers omit.**[^8][^9] Treat this benchmark as a moving target, because it moves fast. The late-2025 milestone — Opus 4.5 as the first model over 80%, at 80.9% — was already two-plus generations old by mid-2026: Opus 4.8 reports 88.6% and Fable 5 is reported at ~95% on independent leaderboards. Two builder-level caveats that survive every version bump:
 
-- Parallel test-time compute with rejection sampling is a 5x+ compute multiplier. The 82.0% is not a free upgrade from 77.2%; it's the same base with significantly more spend.
-- SWE-bench Verified is *Python issues in a known subset of repositories with high-quality test coverage.* It's a good proxy for "can this model solve well-specified software engineering tasks," and a weaker one for the messier realities of most codebases — flaky tests, half-documented business logic, unusual frameworks.
+- High scores often lean on test-time compute (parallel sampling, rejection sampling) that is a multiple of the single-pass cost. A leaderboard number and a production-cost number are different quantities.
+- SWE-bench Verified is *Python issues in a known subset of repositories with high-quality test coverage.* It's a good proxy for "can this model solve well-specified software engineering tasks," and a weaker one for the messier realities of most codebases — flaky tests, half-documented business logic, unusual frameworks. (Saturday pairs this with the Veracode finding that ~45% of AI-generated code still ships an OWASP Top-10 vulnerability — patch-success and security are different axes.)
 
-The general pattern: treat every benchmark number you encounter as *one measurement of one thing*, not as a summary statistic for the model.
+The general pattern: treat every benchmark number you encounter as *one measurement of one thing*, not as a summary statistic for the model — and check its date, because the frontier re-prints these numbers every couple of months.
 
-**The vibe-coding hedge.** Andrej Karpathy coined "vibe coding" in a February 2025 tweet. The full quote includes a caveat that rarely survives the meme: *"Not too bad for throwaway weekend projects, but still quite amusing."* That's a deliberate sentence from someone running one of the most ambitious AI-education operations in the world. Treating vibe coding as a drop-in substitute for engineering discipline on production systems is misreading Karpathy, not citing him. Friday's lesson goes deep on what's actually happening when Claude Code writes, runs, and debugs code on your behalf — and where the tool's leverage ends.
+**The vibe-coding hedge — and its 2026 sequel.** Andrej Karpathy coined "vibe coding" in a February 2025 tweet whose caveat rarely survives the meme: *"Not too bad for throwaway weekend projects, but still quite amusing."* One year later, in February 2026, he went further and declared the accept-everything version passé, renaming the serious practice *agentic engineering* — "you are not writing the code directly 99% of the time; you are orchestrating agents who do, and acting as oversight." Treating vibe coding as a drop-in substitute for engineering discipline was misreading the 2025 Karpathy; by 2026 it also ignores the 2026 one. [[05-fri-vibe-coding-part-1-mechanics]] goes deep on what's actually happening when Claude Code writes, runs, and debugs code on your behalf — and where the tool's leverage ends.
 
 ## Common mistakes experienced AI builders still make
 
@@ -268,7 +272,7 @@ The general pattern: treat every benchmark number you encounter as *one measurem
 
 4. **Over-using CoT on extraction-shaped tasks.** If the task is *"pull the invoice number from this document"* or *"classify this email as spam, transactional, or promotional"*, forcing a reasoning chain adds cost and latency and new failure modes without improving accuracy. CoT earns its keep on multi-step reasoning, not retrieval-shaped work.
 
-5. **Treating prompt injection as a future problem.** If your system ingests untrusted input (web pages, uploaded documents, emails), holds any private data, and has any outbound channel (a tool call, a webhook, anything that can send data somewhere), you already have a live exploit surface. Defense is architectural — separate principals, confine tool access, filter outputs — not prompt-level. *"Ignore any malicious instructions in the document"* is a hopeful note, not a defense.[^2]
+5. **Treating prompt injection as a future problem.** If your system ingests untrusted input (web pages, uploaded documents, emails), holds any private data, and has any outbound channel (a tool call, a webhook, anything that can send data somewhere), you already have a live exploit surface. Defense is architectural — separate principals, confine tool access, filter outputs — not prompt-level. *"Ignore any malicious instructions in the document"* is a hope, not a defense.[^2]
 
 6. **Chasing model upgrades over prompt quality.** *"We tried Opus, it's better"* without a controlled eval is folk knowledge. A thoughtful prompt on Sonnet regularly beats a sloppy one on Opus at a fraction of the cost. Change one variable at a time.
 
@@ -280,7 +284,7 @@ The general pattern: treat every benchmark number you encounter as *one measurem
 
 Three live debates in the field relevant to today's content. Know both sides of each.
 
-**Q1. Is CoT improvement "real reasoning," or a stochastic-parrot effect that mimics reasoning?** Lanham 2023 and Turpin 2023 are the empirical backbone of the skeptical position.[^10][^11] The post-2024 "reasoning model" line — OpenAI o1, Claude extended thinking, DeepSeek-R1 — is the optimistic position: reinforcement learning on chains-of-thought with correctness reward produces models whose reasoning is measurably more causally linked to outputs. Whether RL-trained CoT *solves* the faithfulness problem or just produces more persuasive post-hoc narratives is genuinely open.
+**Q1. Is CoT improvement "real reasoning," or a stochastic-parrot effect that mimics reasoning?** Lanham 2023 and Turpin 2023 are the empirical backbone of the skeptical position.[^10][^11] The post-2024 "reasoning model" line — OpenAI o1, Claude extended thinking, DeepSeek-R1 — was the optimistic hope: RL on chains-of-thought with a correctness reward might make reasoning causally linked to outputs. The 2025 evidence tempered that hope more than it confirmed it: Chen et al. found frontier reasoning models verbalize hints they actually use only ~25% (Claude 3.7 Sonnet) to ~39% (DeepSeek R1) of the time, with RL improving faithfulness and then plateauing.[^17] So the honest status in 2026 is *not* "solved by reasoning models": CoT monitoring is a useful but insufficient signal, and whether a future training regime closes the gap is open.
 
 **Q2. Are induction heads the mechanism of in-context learning, or one visible piece of a larger circuit?** Olsson 2022's small-model evidence is causal. Large-model evidence is correlational and increasingly complicated by MLP-based associative recall, sparse-feature circuits from the 2023–2025 monosemanticity work, and cross-layer interactions that no one has fully mapped. *"Induction heads = ICL"* is a useful 80/20 story that may turn out to be structurally wrong at frontier scale.
 
@@ -290,7 +294,7 @@ Three live debates in the field relevant to today's content. Know both sides of 
 
 Each bullet names a paragraph and what a named critic would specifically argue instead.
 
-- **Karpathy, on Layer 2's induction-head story.** I wrote *"the model's attention layers find three `X -> Y` pairs in the context. Induction heads bias the continuation..."* as if induction heads are the whole story. Karpathy would push back: in a model the size of Sonnet 4.5, the computation is distributed across dozens of circuits. Induction heads are necessary but not sufficient; the MLPs carry significant weight on associative recall, and cross-layer attention contributes more than the small-model story implies. Olsson et al. flag this themselves.[^4] The mental model I gave is right in direction and incomplete in detail. Use it as a prior. Don't defend it as *the* explanation.
+- **Karpathy, on Layer 2's induction-head story.** I wrote *"the model's attention layers find three `X -> Y` pairs in the context. Induction heads bias the continuation..."* as if induction heads are the whole story. Karpathy would push back: in a frontier-scale model, the computation is distributed across dozens of circuits. Induction heads are necessary but not sufficient; the MLPs carry significant weight on associative recall, and cross-layer attention contributes more than the small-model story implies. Olsson et al. flag this themselves.[^4] The mental model I gave is right in direction and incomplete in detail. Use it as a prior. Don't defend it as *the* explanation.
 
 - **Jason Liu, on the prompt/retrieval boundary.** I've positioned RAG as Wednesday's topic and left today's treatment of retrieval implicit. Liu would argue the line between prompting and retrieval is blurrier than a Monday lesson admits — in production, "prompting" often means "retrieval plus context assembly plus prompting," and teaching them as pure disciplines before coupling them creates mental models students have to unlearn. Wednesday's lesson will couple them explicitly. I've partially ceded the point by the week structure, not by the Monday prose.
 
@@ -307,6 +311,7 @@ Each bullet names a paragraph and what a named critic would specifically argue i
 - Anthropic. *Prompt engineering overview* and *Use XML tags.* Claude API docs.[^5][^12]
 - Olsson et al. (2022). *In-context Learning and Induction Heads.* Read the summary and §§2–3 on transformer-circuits.pub; skip the math appendix on first pass.[^4]
 - Lanham et al. (2023). *Measuring Faithfulness in Chain-of-Thought Reasoning.* Read §§1–3 and the inverse-scaling discussion.[^10]
+- Chen et al. (2025). *Reasoning Models Don't Always Say What They Think.* The 2025 update showing the faithfulness problem survives into RL-trained reasoning models (~25% hint verbalization).[^17]
 - Hamel Husain. *Your AI Product Needs Evals.* One blog post, dense.[^13]
 
 **Recommended (before Block 1 begins):**
@@ -325,14 +330,14 @@ Each bullet names a paragraph and what a named critic would specifically argue i
 ## Citations
 
 [^1]: Andrej Karpathy (2025-02-05). *Deep Dive into LLMs like ChatGPT.* YouTube, 3h31m. Announcement: https://x.com/karpathy/status/1887211193099825254 — covers pretraining data and tokenization, transformer internals, inference, SFT, RLHF.
-[^2]: Simon Willison (2025). *The lethal trifecta for AI agents.* https://simonw.substack.com/p/the-lethal-trifecta-for-ai-agents — private data + untrusted content + exfiltration path = exploitable. Tag index of all his prompt-injection reporting: https://simonwillison.net/tags/prompt-injection/
+[^2]: Simon Willison (2025-06-16). *The lethal trifecta for AI agents.* https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/ — private data + untrusted content + exfiltration path = exploitable. Tag index of all his prompt-injection reporting: https://simonwillison.net/tags/prompt-injection/ Verified 2026-07-17.
 [^3]: Brown, T., et al. (2020). *Language Models are Few-Shot Learners.* NeurIPS 2020. https://arxiv.org/abs/2005.14165 — GPT-3 paper; defines in-context learning across zero-, one-, and few-shot regimes.
 [^4]: Olsson, C., Elhage, N., Nanda, N., et al. (2022-09-24). *In-context Learning and Induction Heads.* Anthropic / Transformer Circuits. https://transformer-circuits.pub/2022/in-context-learning-and-induction-heads/index.html (arXiv: https://arxiv.org/abs/2209.11895). Causal evidence for induction heads as the mechanism of in-context learning in small attention-only models; phase-transition claim.
 [^5]: Anthropic. *Use XML tags.* Claude API Docs. https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/use-xml-tags — Claude is specifically trained to recognize XML tags as structural scaffolding.
 [^6]: Hubinger, E., et al. (2024). *Sleeper Agents: Training Deceptive LLMs that Persist Through Safety Training.* Anthropic. https://arxiv.org/abs/2401.05566 — malicious behaviors trained to activate on specific triggers survive RLHF, SFT, and adversarial red-teaming.
 [^7]: Wei, J., et al. (2022). *Chain-of-Thought Prompting Elicits Reasoning in Large Language Models.* NeurIPS 2022. https://arxiv.org/abs/2201.11903 — CoT is an emergent ability of scale (~100B params); a 540B model with 8 CoT exemplars reached SOTA on GSM8K.
-[^8]: Anthropic (2025-09-29). *Introducing Claude Sonnet 4.5.* https://www.anthropic.com/news/claude-sonnet-4-5 — 77.2% SWE-bench Verified at 200K thinking budget (10-trial avg, 500-problem set), 82.0% with parallel test-time compute.
-[^9]: Anthropic (2025-11-24). *Introducing Claude Opus 4.5.* https://www.anthropic.com/news/claude-opus-4-5 — 80.9% SWE-bench Verified; first model over 80%; matches Sonnet 4.5's best score at medium effort using 76% fewer tokens.
+[^8]: SWE-bench Verified progression. Historical: Sonnet 4.5 (2025-09-29) 77.2% at 200K thinking budget / 82.0% with parallel compute (https://www.anthropic.com/news/claude-sonnet-4-5); Opus 4.5 (2025-11-24) 80.9%, first over 80% (https://www.anthropic.com/news/claude-opus-4-5). Current (July 2026): Opus 4.8 88.6% (https://www.anthropic.com/news/claude-opus-4-8); Fable 5 ~95% on the independent vals.ai leaderboard (https://www.vals.ai/benchmarks/swebench). Verified 2026-07-17.
+[^9]: Anthropic (2026-05-28). *Introducing Claude Opus 4.8.* https://www.anthropic.com/news/claude-opus-4-8 — 88.6% SWE-bench Verified; ~4x less likely to let flaws in its own code pass; adaptive thinking on by default. Verified 2026-07-17.
 [^10]: Lanham, T., Chen, A., et al. (2023-07-17). *Measuring Faithfulness in Chain-of-Thought Reasoning.* Anthropic. https://arxiv.org/abs/2307.13702 — models show task-level variance in CoT reliance; CoT's boost isn't purely from added test-time compute; faithfulness *decreases* with model size on most tasks studied.
 [^11]: Turpin, M., Michael, J., Perez, E., Bowman, S. (2023, NeurIPS). *Language Models Don't Always Say What They Think: Unfaithful Explanations in Chain-of-Thought Prompting.* https://arxiv.org/abs/2305.04388 — biasing features (answer-position bias, social-stereotype bias) drop accuracy up to 36% across 13 BIG-Bench Hard tasks; models never mention the bias in their traces. Code: https://github.com/milesaturpin/cot-unfaithfulness
 [^12]: Anthropic. *Prompt engineering overview.* Claude API Docs. https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview — the six-technique index; companion interactive tutorial at https://github.com/anthropics/prompt-eng-interactive-tutorial
@@ -340,3 +345,6 @@ Each bullet names a paragraph and what a named critic would specifically argue i
 [^14]: Anthropic (2024-09-19). *Introducing Contextual Retrieval.* https://www.anthropic.com/news/contextual-retrieval — Contextual Embeddings + Contextual BM25 reduce top-20 retrieval failure from 5.7% → 2.9% (49% relative); with a reranker, 67% relative.
 [^15]: Anthropic. *Prompt Engineering Interactive Tutorial.* https://github.com/anthropics/prompt-eng-interactive-tutorial — 9-chapter hands-on notebook tutorial.
 [^16]: Vaswani, A., et al. (2017). *Attention Is All You Need.* NeurIPS 2017. https://arxiv.org/abs/1706.03762 — original transformer paper. §3 defines the attention mechanism induction heads are built on.
+[^17]: Chen, Y., Benton, J., et al. (Anthropic Alignment Science) (2025-05-08). *Reasoning Models Don't Always Say What They Think.* arXiv:2505.05410. https://arxiv.org/abs/2505.05410 — blog: https://www.anthropic.com/research/reasoning-models-dont-say-think — frontier reasoning models (Claude 3.7 Sonnet, DeepSeek R1) verbalize hints they demonstrably use only ~25% / ~39% of the time; outcome-based RL improves faithfulness then plateaus; CoT monitoring is a useful but insufficient signal. Verified 2026-07-17.
+
+_last_verified: 2026-07-17_

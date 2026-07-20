@@ -14,14 +14,14 @@ run it on your own schedule.
 - **`app/`** — a local Next.js 15 app at `http://localhost:3000`. Primary
   reader: today's lesson auto-routes by date, streak tracked locally,
   full-text search, chat-with-vault (via your `claude` CLI), and one-click
-  exports to NotebookLM / Anki.
+  exports to NotebookLM / Anki / a Kindle-ready EPUB.
 - **`.claude/commands/`** — slash commands you run inside Claude Code (uses
   your Claude Max subscription — zero API cost) to generate lessons,
   quizzes, flashcards, and NotebookLM bundles on demand.
 - **`launchers/`** — menu-bar (macOS / SwiftBar) and system-tray (Windows /
   AutoHotkey) shortcuts so opening today's lesson is one click.
 - **`scripts/`** — `parse_xlsx.py` (curriculum), `scaffold_vault.py` (folder
-  tree), `anki_export.py` (`.apkg` decks), `notebooklm_export.py` (bundles).
+  tree), `anki_export.py` (`.apkg` decks), `notebooklm_export.py` (bundles), `export_epub.py` (one Kindle-ready EPUB of every lesson).
 - **`curriculum.json`** — canonical parsed schedule (9 blocks, 26 weeks).
 
 ## Quick start
@@ -93,7 +93,7 @@ you want shared streaks — defer until you actually feel the friction.
 
 ```
 .
-├── AI Catalyst C3 - Tentative Schedule.xlsx   — upstream curriculum xlsx
+├── AI Pro-level Course - Tentative Schedule.xlsx   — upstream curriculum xlsx
 ├── curriculum.json                             — parsed, versioned
 ├── vault/                                      — study material
 │   ├── 00-program/                             — index, how-to-study, quality-standard

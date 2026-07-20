@@ -29,7 +29,7 @@ sources:
   - stripe-elements-appearance-api-docs-2024
   - raycast-developers-ui-2024
   - lexington-themes-andreuzza-tailwind-2025
-last_verified: 2026-04-17
+last_verified: 2026-07-17
 word_count_target: 6000
 ---
 
@@ -37,7 +37,7 @@ word_count_target: 6000
 
 ## Why this matters
 
-You ship conversion surfaces through Claude Code, v0, Lovable, Bolt. Yesterday you learned how those tools translate a prompt into a page; Monday you learned what makes a page convert. Today closes a gap that silently kills both: you cannot brief an AI code-gen tool toward a specific aesthetic without the vocabulary. You type "make it clean and modern," the tool gives you a Vercel template because Vercel templates are what the model has seen most, and you iterate in the dark — "more minimal," "more premium," "more like Linear" — while the model guesses. You lose hours. The page ends up looking like every other AI-generated SaaS page in 2026.
+You ship conversion surfaces through Claude Code, v0, Lovable, Bolt. [[02-tue-how-ai-code-gen-tools-work|Yesterday]] you learned how those tools translate a prompt into a page; [[01-mon-landing-page-as-conversion-machine|Monday]] you learned what makes a page convert. Today closes a gap that silently kills both: you cannot brief an AI code-gen tool toward a specific aesthetic without the vocabulary. You type "make it clean and modern," the tool gives you a Vercel template because Vercel templates are what the model has seen most, and you iterate in the dark — "more minimal," "more premium," "more like Linear" — while the model guesses. You lose hours. The page ends up looking like every other AI-generated SaaS page in 2026.
 
 Goal today: design-system **literacy**, not design. Enough vocabulary and variable-level control that you can (a) name the seven decisions that made any page look the way it does, (b) write a Claude Code brief that hits your intended aesthetic on the first or second pass, (c) identify exactly which variable is wrong when an AI-generated page looks off. A senior marketing director briefing a contractor can do this. A senior finance lead specifying a dashboard can do this. A 20-year creative director who ships via Claude Code absolutely can — provided the variables are named.
 
@@ -52,7 +52,7 @@ By the end you will be able to (1) audit any page on the seven load-bearing vari
 
 The default 2026 AI code-gen output for a "modern SaaS landing page" is predictable. Inter or Geist Sans, a slate-900-to-zinc-50 neutral ramp, one accent at hue 240–260 (indigo or violet), rounded-xl cards, shadow-sm elevation, lucide icons, 24-32px section padding, prefers-reduced-motion fade-ins, a stock hero illustration or gradient mesh, copy that says "Build better products, faster." Every YC W25 batch has eighty of these.
 
-That page is not bad. It is *generic* — a weighted average of the ten thousand pages that trained the model. To push a generated page toward a specific aesthetic — Linear's opinionated sharpness, Rauno's motion-rich restraint, Raycast's chromatic density, Stripe's quiet consistency — name the knobs the generator is turning. Those knobs are the same seven variables every design system, explicit or implicit, encodes. Refactoring UI names five of them explicitly (hierarchy, layout and spacing, typography, color, imagery) and two more implicitly under personality and detail; we treat all seven as first-class because each produces an override prompt you can paste.[^1]
+That page reads fine and signals *generic* — a weighted average of the ten thousand pages that trained the model. To push a generated page toward a specific aesthetic — Linear's opinionated sharpness, Rauno's motion-rich restraint, Raycast's chromatic density, Stripe's quiet consistency — name the knobs the generator is turning. Those knobs are the same seven variables every design system, explicit or implicit, encodes. Refactoring UI names five of them explicitly (hierarchy, layout and spacing, typography, color, imagery) and two more implicitly under personality and detail; we treat all seven as first-class because each produces an override prompt you can paste.[^1]
 
 ### Variable 1 — Typography
 
@@ -210,16 +210,16 @@ Shadcn/ui is the dominant UI layer in 2026 code-gen. v0 defaults to it, Lovable 
 **For wholesale adoption (shadcn-maximalist):**
 
 1. Copy-in-codebase. Unlike MUI or Ant Design, shadcn/ui is not an npm dependency — a CLI drops React source into your codebase; you own it.[^25] No version cliff, no locked styles, no vendor breaking your build.
-2. Accelerating surface area. February 2025 migration to Tailwind v4 brought OKLCH, `data-slot` selectors, forwardRef removal, with Anthropic-engineering-grade changelog.[^10] October 2025 shipped charts and form primitives that would have cost $50k to build custom.[^26]
+2. Accelerating surface area, now moving faster than most teams can track. February 2025 brought the Tailwind v4 migration (OKLCH, `data-slot` selectors, forwardRef removal);[^10] October 2025 shipped charts and form primitives; then the platform cycle accelerated: **`npx shadcn create` (December 12, 2025)** introduced five named visual styles — **Vega (classic), Nova (compact), Maia (soft/rounded), Lyra (boxy/sharp), Mira (dense)** — that *rewrite component code*, not just theme colors, and let you pick Radix or Base UI as the primitive base; **shadcn/cli v4 (March 2026)** added **presets** (your whole design-system config packed into a short code you build on shadcn/create, preview live, and `init --preset` into any project) and a registry-directory build for distribution.[^25b][^26b] This is a materially different tool than the one this lesson originally described.
 3. AI code-gen alignment. Every major code-gen tool is trained on shadcn components; briefing "build with shadcn/ui" gets higher-fidelity output than briefing a custom system the model has never seen. Alone, this is worth adoption for a solo operator.
 
 **Against wholesale adoption (shadcn-skeptic):**
 
-1. Maintainership concentration. 835+ open PRs as of early 2026 and a recurring single-maintainer bottleneck discussion.[^27] Issue #6417, "MORE MAINTAINERS," remains open. Radix UI — primary shadcn dependency — was built by Modulz, acquired by WorkOS, with original maintainers gone, creating upstream risk.[^28] Bus factor scales with product longevity.
+1. Maintainership concentration. The recurring single-maintainer bottleneck is real: Issue #6417 ("MORE MAINTAINERS," opened January 2025, citing 835+ open PRs) remains the canonical complaint.[^27] Radix UI — long the primary shadcn primitive — was built by Modulz, **acquired by WorkOS in June 2022**, after which many original maintainers left and contributions slowed; several went on to start Base UI at MUI, and **shadcn has since moved its default primitive toward Base UI**, which both mitigates and re-opens the upstream-risk question.[^28] Bus factor scales with product longevity.
 2. Enterprise-scale drift. Design Systems Collective's 2025 "Shadcn Isn't Ready for Enterprise Design Systems": copy-in-codebase means local edits diverge from upstream; merging accessibility or security patches becomes manual AST-diffing.[^27] Negligible for solo; job-scale for a 20-person team.
-3. Aesthetic homogeneity. Every shadcn-adopted page looks like every other until you override at least color and typography. The "Vercel template" default is heavily shadcn-default.
+3. Aesthetic homogeneity — the weakest of the three critiques in 2026. It used to be that every shadcn page looked like every other until you overrode color and typography. The **visual styles and presets now ship precisely to break that homogeneity**: Nova, Lyra, and Mira produce visibly different pages out of the box, and a preset *is* the shareable encoding of exactly the seven-variable taste brief this lesson teaches you to build by hand. The "Vercel template" default is still shadcn's Vega style — but it is now one of five, not the only one.
 
-**Operator synthesis:** for a solo 2026 AI-services engagement, wholesale shadcn adoption is correct — accelerating surface area and AI-tool alignment pay for maintainership risk, and homogeneity is soluble with a 200-word override prompt. For a multi-product team maintaining long-lived systems, plunder wins: take Radix primitives, form patterns, chart components; wrap them in your own tokens and typography; own the baseline.
+**Operator synthesis:** for a solo 2026 AI-services engagement, wholesale shadcn adoption is correct — accelerating surface area and AI-tool alignment pay for maintainership risk, and homogeneity is soluble with a preset or a 200-word override prompt. **The new operator move: encode your seven-variable taste brief as a shadcn preset, then hand that preset to your coding agents** — it is the same artifact, made portable. For a multi-product team maintaining long-lived systems, plunder still wins: take Base UI / Radix primitives, form patterns, chart components; wrap them in your own tokens and typography; own the baseline.
 
 Michael Andreuzza's Lexington Themes (2025, Astro + Tailwind v4 themes for freelancers) is the shadcn-adjacent alternative — same copy-in-codebase philosophy applied to full marketing compositions, not component primitives.[^29] Andreuzza deliberately does not use shadcn/ui — he layers on bare Tailwind with opinionated compositions. That's a plunder move at one level up.
 
@@ -395,10 +395,16 @@ Score honestly — the point is to find which variable your brief is under-speci
 
 [^26]: shadcn/ui, "October 2025 — New Components." ui.shadcn.com/docs/changelog/2025-10-new-components. Sourced for the Q4 2025 component wave. Verified 2026-04-17.
 
+[^25b]: shadcn/ui, "December 2025 — npx shadcn create." ui.shadcn.com/docs/changelog/2025-12-shadcn-create. Sourced for `shadcn create`, the five visual styles (Vega, Nova, Maia, Lyra, Mira), the code-rewriting (not just theming) behavior, and the Radix-or-Base-UI primitive choice. Verified via WebSearch 2026-07-17.
+
+[^26b]: shadcn/ui, "March 2026 — shadcn/cli v4." ui.shadcn.com/docs/changelog/2026-03-cli-v4, plus the registry directory at ui.shadcn.com/docs/directory. Sourced for presets (`init --preset`, build-and-share a design-system config as a short code) and the registry-directory build for distribution. Verified via WebSearch 2026-07-17.
+
 [^27]: Design Systems Collective, "Why Shadcn/ui Struggles at Enterprise Scale." designsystemscollective.com/why-shadcn-ui-struggles-at-enterprise-scale-9f7416f3af3f. 2025. Sourced for the drift / merge-cost critique. Also shadcn-ui/ui GitHub Issue #6417 "MORE MAINTAINERS" and Discussion #1374. Verified 2026-04-17.
 
-[^28]: Mashuk Tamim, "Is Your Shadcn UI Project at Risk? A Deep Dive into Radix's Future." mashuktamim.medium.com/is-your-shadcn-ui-project-at-risk-a-deep-dive-into-radixs-future-91af267c4bec. Sourced for the Radix / Modulz / WorkOS maintainership timeline. Verified 2026-04-17.
+[^28]: Mashuk Tamim, "Is Your Shadcn UI Project at Risk? A Deep Dive into Radix's Future." mashuktamim.medium.com/is-your-shadcn-ui-project-at-risk-a-deep-dive-into-radixs-future-91af267c4bec; Modulz, "Modulz has been acquired by WorkOS" (modulz.app/blog/modulz-acquired-by-workos). Sourced for the Radix / Modulz / WorkOS timeline (acquisition June 2022, original maintainers departing, contributions slowing, several founding Base UI at MUI) and shadcn's subsequent shift of its default primitive toward Base UI. Verified via WebSearch 2026-07-17.
 
 [^29]: Michael Andreuzza, Lexington Themes blog. lexingtonthemes.com/blog. 2025 posts on Tailwind v4 gradients, multi-theme toggles, and accessible carousels. Sourced as the shadcn-adjacent plunder alternative. Verified 2026-04-17.
 
 [^30]: Brian Lovin, personal site. brianlovin.com. Sourced for design-writing reviewer lens; Brian currently designs AI products at Notion (per public bio). Verified 2026-04-17.
+
+_last_verified: 2026-07-17_

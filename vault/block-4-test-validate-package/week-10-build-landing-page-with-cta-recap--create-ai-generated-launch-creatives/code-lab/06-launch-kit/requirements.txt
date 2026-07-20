@@ -1,0 +1,2 @@
+# Intentionally empty: brief_generator.py, qa_runner.py, and make_fixtures.py
+# use only the Python 3.10+ standard library. No API keys required.

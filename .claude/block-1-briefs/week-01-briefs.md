@@ -15,7 +15,7 @@ Named operators for Week 1 reviewer-lens rotation: Hamel Husain, Patrick McKenzi
 
 ## Day 1 — Monday — Where AI-services demand lives
 
-- **Output path:** `D:\Work\ClaudeCode\AICatalyst\vault\block-1-problem-solving-outreach\week-01-getting-your-first-client--how-to-plan-scope-and-sell-ai-projects\01-mon-where-ai-services-demand-lives.md`
+- **Output path:** `D:\Work\ClaudeCode\AIProCourse\vault\block-1-problem-solving-outreach\week-01-getting-your-first-client--how-to-plan-scope-and-sell-ai-projects\01-mon-where-ai-services-demand-lives.md`
 - **Frontmatter:** `week: week-01`, `day_of_cycle: 1`, `day_name: mon`, `session_slug: getting-your-first-client`, `date_due: 2026-05-18`, `word_count_target: 6000`
 - **Title direction:** "Where AI-services demand actually lives in 2026 — and why your first client will not be who you think"
 - **Topic:** Market-mapping for first-client prospecting. Who is actually paying for AI services in 2025–26, where, at what sizes, for what problems. The taxonomy of AI buyers (Fortune 500 AI practice, mid-market, SMB, VC-funded startup, agency-of-agencies, solo operator) and which wins/loses for a first-timer. Bottom-up ICP construction.
@@ -30,7 +30,7 @@ Named operators for Week 1 reviewer-lens rotation: Hamel Husain, Patrick McKenzi
 
 ## Day 2 — Tuesday — Outbound mechanics + positioning statements
 
-- **Output path:** `D:\Work\ClaudeCode\AICatalyst\vault\block-1-problem-solving-outreach\week-01-getting-your-first-client--how-to-plan-scope-and-sell-ai-projects\02-tue-outbound-mechanics-and-positioning.md`
+- **Output path:** `D:\Work\ClaudeCode\AIProCourse\vault\block-1-problem-solving-outreach\week-01-getting-your-first-client--how-to-plan-scope-and-sell-ai-projects\02-tue-outbound-mechanics-and-positioning.md`
 - **Frontmatter:** `week: week-01`, `day_of_cycle: 2`, `day_name: tue`, `session_slug: getting-your-first-client`, `date_due: 2026-05-19`, `word_count_target: 6000`
 - **Title direction:** "Outbound mechanics after the spam flood — positioning statements, personalization at scale, and what actually gets replies in 2026"
 - **Topic:** Cold email + LinkedIn + warm-intro mechanics for AI-services outbound, in a world where every buyer inbox is flooded with AI-generated personalization. The positioning-statement construct as pre-work for outbound. The signal/noise collapse of AI-personalized outreach. What replaces "personalization at scale" as the new moat.
@@ -45,7 +45,7 @@ Named operators for Week 1 reviewer-lens rotation: Hamel Husain, Patrick McKenzi
 
 ## Day 3 — Wednesday — Discovery calls + qualification for AI buyers
 
-- **Output path:** `D:\Work\ClaudeCode\AICatalyst\vault\block-1-problem-solving-outreach\week-01-getting-your-first-client--how-to-plan-scope-and-sell-ai-projects\03-wed-discovery-calls-and-qualification.md`
+- **Output path:** `D:\Work\ClaudeCode\AIProCourse\vault\block-1-problem-solving-outreach\week-01-getting-your-first-client--how-to-plan-scope-and-sell-ai-projects\03-wed-discovery-calls-and-qualification.md`
 - **Frontmatter:** `week: week-01`, `day_of_cycle: 3`, `day_name: wed`, `session_slug: getting-your-first-client`, `date_due: 2026-05-20`, `word_count_target: 6000`
 - **Title direction:** "Discovery calls for AI buyers — SPIN, MEDDIC, Command of the Message, and the diagnosis-vs-qualification split"
 - **Topic:** Structured discovery for AI engagements, where buyers often don't know what they want or what's possible. How classic B2B discovery frameworks (SPIN, MEDDIC, Challenger, Command of the Message) bend for AI engagements where the buyer's mental model of "what AI can do" is unreliable. The "discovery-as-diagnosis" vs "discovery-as-qualification" split. Disqualifying politely.
@@ -60,7 +60,7 @@ Named operators for Week 1 reviewer-lens rotation: Hamel Husain, Patrick McKenzi
 
 ## Day 4 — Thursday — Project planning: phases, risk model, and exit ramps for AI engagements
 
-- **Output path:** `D:\Work\ClaudeCode\AICatalyst\vault\block-1-problem-solving-outreach\week-01-getting-your-first-client--how-to-plan-scope-and-sell-ai-projects\04-thu-project-planning-phases-and-risk.md`
+- **Output path:** `D:\Work\ClaudeCode\AIProCourse\vault\block-1-problem-solving-outreach\week-01-getting-your-first-client--how-to-plan-scope-and-sell-ai-projects\04-thu-project-planning-phases-and-risk.md`
 - **Frontmatter:** `week: week-01`, `day_of_cycle: 4`, `day_name: thu`, `session_slug: how-to-plan-scope-and-sell-ai-projects`, `date_due: 2026-05-21`, `word_count_target: 6000`
 - **Title direction:** "Project planning for AI engagements — discovery → POC → pilot → production, risk models, and exit ramps"
 - **Topic:** The phased project structure for AI engagements: discovery → POC → pilot → production. How to sequence, price, and gate each phase. Risk models specific to AI (data-access risk, model-drift risk, vendor-lock risk, eval-gap risk). Designing exit ramps so the project can die cheaply. Why POC→production conversion rates matter more than POC itself.
@@ -75,7 +75,7 @@ Named operators for Week 1 reviewer-lens rotation: Hamel Husain, Patrick McKenzi
 
 ## Day 5 — Friday — Commercial SOW for AI projects — contracts, data, IP, model-drift SLA
 
-- **Output path:** `D:\Work\ClaudeCode\AICatalyst\vault\block-1-problem-solving-outreach\week-01-getting-your-first-client--how-to-plan-scope-and-sell-ai-projects\05-fri-commercial-sow-for-ai-projects.md`
+- **Output path:** `D:\Work\ClaudeCode\AIProCourse\vault\block-1-problem-solving-outreach\week-01-getting-your-first-client--how-to-plan-scope-and-sell-ai-projects\05-fri-commercial-sow-for-ai-projects.md`
 - **Frontmatter:** `week: week-01`, `day_of_cycle: 5`, `day_name: fri`, `session_slug: how-to-plan-scope-and-sell-ai-projects`, `date_due: 2026-05-22`, `word_count_target: 6000`
 - **Title direction:** "The commercial SOW for AI projects — what's different, what's load-bearing, what will wreck you in 6 months"
 - **Topic:** The commercial scope-of-work document for AI engagements, specifically the clauses that differ from a traditional dev SOW: eval harness as deliverable, data-access clauses, IP around fine-tuning and evals, model-drift SLA, cost pass-through for tokens, termination clauses tied to vendor ToS changes, kill criteria tied to eval metrics. The difference between "what we'll build" (traditional SOW) and "how we'll know it worked" (AI SOW). Change-order structures specifically for AI scope creep.
@@ -90,7 +90,7 @@ Named operators for Week 1 reviewer-lens rotation: Hamel Husain, Patrick McKenzi
 
 ## Day 6 — Saturday — Selling AI — objections, closing, and contracting
 
-- **Output path:** `D:\Work\ClaudeCode\AICatalyst\vault\block-1-problem-solving-outreach\week-01-getting-your-first-client--how-to-plan-scope-and-sell-ai-projects\06-sat-selling-ai-objections-and-closing.md`
+- **Output path:** `D:\Work\ClaudeCode\AIProCourse\vault\block-1-problem-solving-outreach\week-01-getting-your-first-client--how-to-plan-scope-and-sell-ai-projects\06-sat-selling-ai-objections-and-closing.md`
 - **Frontmatter:** `week: week-01`, `day_of_cycle: 6`, `day_name: sat`, `session_slug: how-to-plan-scope-and-sell-ai-projects`, `date_due: 2026-05-23`, `word_count_target: 6000`
 - **Title direction:** "Selling AI — the six objections that kill deals and the closing mechanics that survive them"
 - **Topic:** The actual sales conversation. The six most common AI-buyer objections (too risky / build in-house / price too high / why now / ROI unclear / tried ChatGPT already) and how each decomposes. Closing mechanics: Sandler bonding + up-front contract, Challenger commercial teaching, Voss "never split the difference" applied to AI pricing negotiation. Contract-stage dynamics: buyer counsel, procurement, the "vendor risk assessment" gauntlet. Offering a money-back or outcome-tied guarantee — when it makes sense, when it wrecks you. Note: this lesson is the PRICING CONVERSATION, not the pricing framework (Block 0 Week 3 Thu).
@@ -105,10 +105,10 @@ Named operators for Week 1 reviewer-lens rotation: Hamel Husain, Patrick McKenzi
 
 ## Day 7 — Sunday — Week 1 Synthesis + quiz + flashcards
 
-- **Output path:** `D:\Work\ClaudeCode\AICatalyst\vault\block-1-problem-solving-outreach\week-01-getting-your-first-client--how-to-plan-scope-and-sell-ai-projects\07-sun-synthesis-quiz-flashcards.md`
+- **Output path:** `D:\Work\ClaudeCode\AIProCourse\vault\block-1-problem-solving-outreach\week-01-getting-your-first-client--how-to-plan-scope-and-sell-ai-projects\07-sun-synthesis-quiz-flashcards.md`
 - **Frontmatter:** `type: synthesis`, `week: week-01`, `day_of_cycle: 7`, `day_name: sun`, `title: 'Week 1 Synthesis — The ICP → close pipeline'`, `study_date: 2026-05-24`, `date_due: 2026-05-24`, `word_count_target: 3800`
 - **Topic:** Tie Mon–Sat into one operator pipeline: ICP (Mon) → Outbound (Tue) → Discovery (Wed) → Planning (Thu) → SOW (Fri) → Close (Sat). Mirror the shape of Block 0 Week 3 synthesis: opening thesis, unifying frame, where-each-day-goes-forward table, 12–14 mental-move table, 20-question quiz (mix of multiple-choice + short-written), ~40 flashcards covering all 6 lessons, 3–5 "what's not yet settled" items the reader should keep watching.
-- **Reference shape:** `D:\Work\ClaudeCode\AICatalyst\vault\block-0-basecamp\week-03-decoding-real-business-problems-with-ai-i--decoding-real-business-problems-with-ai-ii\07-sun-synthesis-quiz-flashcards.md` — copy shape only, not content.
+- **Reference shape:** `D:\Work\ClaudeCode\AIProCourse\vault\block-0-basecamp\week-03-decoding-real-business-problems-with-ai-i--decoding-real-business-problems-with-ai-ii\07-sun-synthesis-quiz-flashcards.md` — copy shape only, not content.
 - **Quiz format:** Every question has a right answer OR a defensible position with a clearly-stated rubric. No "think about how you might..." questions.
 - **Flashcards:** Q/A style. Concepts, numbers, named operators, named controversies. Cards should compress the load-bearing claims of the week into recall-testable form.
 - **Runnable closing exercise:** One practical workflow the reader runs end-to-end to simulate the full pipeline (e.g., "Pick one company. Run ICP → draft outbound → simulate discovery with Claude → draft plan → draft SOW → simulate close. Capture where you stalled.")

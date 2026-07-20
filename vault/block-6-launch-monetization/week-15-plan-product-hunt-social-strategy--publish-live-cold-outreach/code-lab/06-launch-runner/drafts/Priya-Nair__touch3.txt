@@ -1,0 +1,24 @@
+=================================================================
+  DRAFT — FOR HUMAN REVIEW — DO NOT SEND AS-IS
+  Read every line. Verify the {signal} is true. Edit in your voice.
+  Then send by hand from your own email client.
+=================================================================
+
+To:      Priya Nair <priya@examplesaas.com>
+Role:    Head of Support @ ExampleSaaS
+Region:  US
+Send:    touch 3, +5 days
+Signal:  Your team posted last week about tier-1 ticket volume tripling after the v3 launch
+
+Subject: closing the loop, Priya
+
+Hi Priya,
+
+I'll stop here so I'm not cluttering your inbox. If tier-1 ticket volume ever becomes the thing you want to fix, Triage Agent will be here.
+
+Thanks for reading this far.
+
+--
+Alex Rivera
+Triage Labs, 12 Example St, Austin, TX 78701, USA
+Not relevant? Opt out here and I won't contact you again: https://triage.example/opt-out

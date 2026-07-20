@@ -1,0 +1,76 @@
+{
+  "_comment": "Vapi Squad as code (Wednesday: config-as-code, push via API, never hand-edit the console). Create with: POST https://api.vapi.ai/squad  Authorization: Bearer $VAPI_API_KEY. Replace <NGROK> with your tunnel URL. This is a minimal triage -> 2-specialist router with SILENT handoffs and one tool per specialist.",
+  "name": "week7-clinic-squad",
+  "members": [
+    {
+      "assistantId": null,
+      "assistant": {
+        "name": "triage",
+        "firstMessage": "Hi, I'm the AI assistant for the clinic. Calls are recorded. How can I help?",
+        "model": {
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are TRIAGE. Greet once, disclose you are an AI (already in firstMessage), classify the caller's need as booking or billing, then HAND OFF silently. Never collect the same fact twice. If the caller is calling about an appointment/scheduling -> handoff to booking. If about a bill/balance/payment -> handoff to billing. Keep every turn to one short sentence."
+            }
+          ]
+        },
+        "voice": { "provider": "cartesia", "voiceId": "sonic-english" }
+      },
+      "assistantDestinations": [
+        { "type": "assistant", "assistantName": "booking", "message": "" },
+        { "type": "assistant", "assistantName": "billing", "message": "" }
+      ]
+    },
+    {
+      "assistant": {
+        "name": "booking",
+        "model": {
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "messages": [
+            { "role": "system", "content": "You are the BOOKING specialist. The caller's identity and intent were already collected by triage — DO NOT re-ask. Immediately mask latency ('let me check that for you') then call lookup_appointment. Read back appointment details and offer confirm/reschedule. One short sentence per turn." }
+          ],
+          "tools": [
+            {
+              "type": "function",
+              "function": {
+                "name": "lookup_appointment",
+                "description": "Look up the caller's next appointment by phone number.",
+                "parameters": { "type": "object", "properties": { "phone": { "type": "string" } }, "required": ["phone"] }
+              },
+              "server": { "url": "https://<NGROK>/tools" }
+            }
+          ]
+        },
+        "voice": { "provider": "cartesia", "voiceId": "sonic-english" }
+      }
+    },
+    {
+      "assistant": {
+        "name": "billing",
+        "model": {
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "messages": [
+            { "role": "system", "content": "You are the BILLING specialist. Identity and intent already collected — DO NOT re-ask. For billing, verification posture is stricter (Thursday): before discussing balances, state you'll confirm identity. Mask latency then call lookup_balance. One short sentence per turn." }
+          ],
+          "tools": [
+            {
+              "type": "function",
+              "function": {
+                "name": "lookup_balance",
+                "description": "Look up the caller's balance due by phone number.",
+                "parameters": { "type": "object", "properties": { "phone": { "type": "string" } }, "required": ["phone"] }
+              },
+              "server": { "url": "https://<NGROK>/tools" }
+            }
+          ]
+        },
+        "voice": { "provider": "cartesia", "voiceId": "sonic-english" }
+      }
+    }
+  ]
+}

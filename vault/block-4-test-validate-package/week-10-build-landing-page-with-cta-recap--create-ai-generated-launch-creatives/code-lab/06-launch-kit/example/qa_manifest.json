@@ -1,0 +1,65 @@
+{
+  "claims_file": "claims.json",
+  "assets": [
+    {
+      "id": "hero_main",
+      "kind": "hero",
+      "file": "assets/hero_main.png",
+      "alt_text": "Isometric illustration of maintenance requests flowing through an automated triage pipeline, with one branch routed to a human reviewer",
+      "ai_generated": true,
+      "photorealistic_people": false,
+      "archive": {
+        "prompt": "Isometric illustration of maintenance requests flowing through a triage pipeline, one route branching to a human. Style: calm infrastructure... (full prompt archived)",
+        "tool": "recraft (brand style: anchor set A)",
+        "settings": "style=brand/anchorA, size=1920x1080, batch=18, selected=v07",
+        "license_basis": "Recraft paid plan, commercial terms read 2026-07-17"
+      }
+    },
+    {
+      "id": "og_card",
+      "kind": "og",
+      "file": "assets/og_card.png",
+      "alt_text": "Dispatch: every maintenance request answered in 60 seconds",
+      "copy_file": "assets/og_card_copy.txt",
+      "ai_generated": true,
+      "photorealistic_people": false,
+      "archive": {
+        "prompt": "Minimal card motif from the hero pipeline, single element, high contrast (full prompt archived)",
+        "tool": "ideogram (text pass) over recraft background",
+        "settings": "1200x630, batch=12, selected=v03",
+        "license_basis": "Ideogram paid plan + Recraft paid plan, terms read 2026-07-17"
+      }
+    },
+    {
+      "id": "ad_proof",
+      "kind": "ad",
+      "file": "assets/ad_proof_v01.png",
+      "alt_text": "Ad: 62% of maintenance requests resolved end-to-end, with methodology note",
+      "copy_file": "assets/ad_proof_copy.txt",
+      "ai_generated": true,
+      "photorealistic_people": false,
+      "disclosure": { "meta": false },
+      "archive": {
+        "prompt": "Single pipeline node with a completion checkmark, large negative space left (full prompt archived)",
+        "tool": "recraft",
+        "settings": "1080x1080, batch=16, selected=v11",
+        "license_basis": "Recraft paid plan, commercial terms read 2026-07-17"
+      }
+    },
+    {
+      "id": "og_card_bad",
+      "kind": "og",
+      "file": "assets/og_card_bad.png",
+      "alt_text": "Deliberately failing example: wrong dimensions and unsubstantiated copy",
+      "copy_file": "assets/og_card_bad_copy.txt",
+      "ai_generated": true,
+      "photorealistic_people": false,
+      "archive": {
+        "prompt": "(same as og_card)",
+        "tool": "recraft",
+        "settings": "1200x628 (export error)",
+        "license_basis": "Recraft paid plan"
+      }
+    }
+  ]
+}

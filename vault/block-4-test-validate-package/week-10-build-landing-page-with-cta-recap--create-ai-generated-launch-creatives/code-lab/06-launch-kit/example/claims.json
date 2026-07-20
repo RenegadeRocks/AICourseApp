@@ -1,0 +1,11 @@
+{
+  "_comment": "Monday's substantiation file, machine-readable. Every string here maps to an artifact (eval run, customer data, invoice) you could produce on request. qa_runner checks ad/page copy's numeric claims against this list.",
+  "claims": [
+    "62% of maintenance requests resolved end-to-end, measured on a 500-request golden set (Mar-Jun 2026); 'resolved' = tenant confirmed or no reopen within 72h",
+    "58% of 1,900 requests resolved without staff at Ridgeline PM, April-June 2026",
+    "answers within 60 seconds",
+    "escalates with full context in under 30 seconds",
+    "$1,200/month base + $0.40 per resolved request",
+    "3 firms, 6,100 requests, 14 weeks in production"
+  ]
+}

@@ -20,7 +20,9 @@ sources:
   - anthropic-claude-code-worktree-docs
   - addy-osmani-vibe-vs-engineering
   - openhands-arxiv-2024
-last_verified: 2026-04-15
+  - veracode-genai-code-security-2025
+  - karpathy-2026-agentic-engineering
+last_verified: 2026-07-17
 word_count_target: 6500
 ---
 
@@ -45,7 +47,8 @@ By the end of this lesson you will be able to:
 
 ## Prerequisites
 
-- Friday's lesson (Vibe Coding Part 1 — Mechanics). You should have a small scaffold built in Claude Code. Today's experiment builds on it.
+- [[05-fri-vibe-coding-part-1-mechanics]] (Vibe Coding Part 1 — Mechanics), including its Section 1 framing of Karpathy's February 2026 move from vibe coding to *agentic engineering*. Today is the discipline half of that reframe: the oversight practices that make "agentic engineering" more than a slogan. You should have a small scaffold built in Claude Code; today's experiment builds on it.
+- The eval discipline from [[02-tue-prompt-engineering-in-practice]] — binary judges, human-agreement calibration — which this lesson applies to agentic coding.
 - A working Claude Code installation with at least one project open.
 - Optional but reinforcing: Hamel Husain's "Your AI Product Needs Evals" (hamel.dev/blog/posts/evals) — you don't need it to read this lesson, but if you are going to read one external piece this week, make it that one.
 
@@ -53,7 +56,7 @@ By the end of this lesson you will be able to:
 
 ## Section 1 — The five failure modes of undisciplined vibe coding
 
-The Karpathy caveat about vibe coding — "not too bad for throwaway weekend projects" — is doing real work in that sentence. "Throwaway" means the code failing costs you nothing: no user data, no downstream system dependency, no audit trail requirement. Most real work, even early-stage, doesn't meet that bar.
+The Karpathy caveat about vibe coding — "not too bad for throwaway weekend projects" — is doing real work in that sentence. "Throwaway" means the code failing costs you nothing: no user data, no downstream system dependency, no audit trail requirement. Most real work, even early-stage, doesn't meet that bar. And by February 2026 Karpathy had drawn the line explicitly, renaming the serious practice *agentic engineering* precisely because vibe coding "has no quality bar." The five failure modes below are what that missing quality bar actually looks like in production.
 
 Here are the five failure modes that emerge when vibe coding is applied to anything that matters. They are not random. Each is a structural property of how language models generate code.
 
@@ -69,7 +72,7 @@ For you specifically: if you're building a finance compliance tool that calls an
 
 Language models are excellent at generating code that looks structurally correct at the pattern level and is wrong at the logic level. Off-by-one errors in pagination loops. Incorrect base cases in recursion. Race conditions in async flows. These fail silently, or fail only on edge-case inputs, or produce results that are wrong by a small enough margin that casual review misses them.
 
-The CodeRabbit 2026 study of 470 GitHub repositories found that AI-generated pull requests contained 75% more logic and correctness errors than human-written code — 194 incidents per hundred PRs — and that AI code had 1.7 times as many total bugs.[^3] These aren't catastrophic failures visible on first run. They're systematic degradation of correctness that compounds as the codebase grows.
+CodeRabbit's "State of AI vs Human Code Generation" report (December 2025) analyzed 470 open-source GitHub pull requests — 320 AI-co-authored, 150 human-only — and found AI-authored PRs averaged 10.83 issues each versus 6.45 for human PRs (~1.7x more total issues), with logic-and-correctness issues about 75% more common in the AI code.[^3] These aren't catastrophic failures visible on first run. They're systematic degradation of correctness that compounds as the codebase grows.
 
 For a research data pipeline, wrong loop logic means corrupted analysis. For an ops dashboard aggregating metrics from multiple sources, wrong aggregation logic means dashboards that look right to the eye and are wrong by 5%. Both are worse than an obvious crash — they're quiet incorrectness.
 
@@ -77,7 +80,7 @@ For a research data pipeline, wrong loop logic means corrupted analysis. For an 
 
 Language models are trained on code from the open web. The open web contains a lot of insecure code written before modern security practices were widespread, and a lot of tutorial code that omits security considerations for simplicity. The model does not have a security review pass built in. It generates code that reflects the distribution it was trained on.
 
-CodeRabbit's study found security vulnerabilities in AI-generated code at 1.5–2x the rate of human-written code.[^3] Specific patterns: improper password handling, insecure object references, SQL injection vectors left open because the agent used string concatenation instead of parameterized queries, hardcoded credentials in environment-setup code.
+CodeRabbit's study found AI-generated code carried security vulnerabilities at up to 2.74x the rate of human-written code (the headline figure is cross-site scripting at 2.74x).[^3] Specific patterns: improper password handling, insecure object references, SQL injection vectors left open because the agent used string concatenation instead of parameterized queries, hardcoded credentials in environment-setup code. The independent Veracode 2025 GenAI Code Security Report reinforces the scale of this: across 100+ models and 80 tasks, **45% of AI-generated code introduced an OWASP Top-10 vulnerability**, and — crucially — the failure rate did not fall as models got bigger, so this is a systemic property of training-on-the-open-web, not a small-model artifact.[^14]
 
 If you are building any system that touches user data — and most things eventually do — you need either a security-aware review pass or a test harness that includes at least basic security probes.
 
@@ -115,7 +118,7 @@ The practical sequence:
 4. Then direct Claude Code to implement the code, running the tests after each edit.
 5. Watch what the agent does when tests fail. Does it read the error and correct the implementation? Does it edit the tests to make them pass? Does it add a special case that satisfies the test without solving the underlying problem?
 
-Step 5 is where the discipline pays off. An agent that edits tests to make them pass is not implementing correctly — it's gaming the eval. This is exactly analogous to what Hamel calls "teaching to the test" in LLM evals: a judge that rewards surface-level compliance rather than underlying capability.[^5] The test suite is only as good as your ability to write tests that can't be gamed.
+Step 5 is where the discipline pays off. An agent that edits tests to make them pass is gaming the eval, not implementing the feature — exactly analogous to what Hamel calls "teaching to the test" in LLM evals: a judge that rewards surface-level compliance rather than underlying capability.[^5] The test suite is only as good as your ability to write tests that can't be gamed.
 
 ### The binary judge for agent task completion
 
@@ -176,7 +179,7 @@ The architecture of trust in agentic coding is layered. Starting from the innerm
 
 ### Layer 1: Tool access confinement via Claude Code hooks
 
-Claude Code's hook system provides 27 event types with PreToolUse as the most powerful guardrail point.[^6] A PreToolUse hook runs before any tool call and can return `allow`, `deny`, `ask`, or `defer`. The hook receives the full tool input — for a Bash call, that's the literal command string; for a file edit, that's the file path and proposed content.
+Claude Code's hook system provides on the order of 30 event types (31 in the July 2026 docs) with PreToolUse as the most powerful guardrail point.[^6] A PreToolUse hook runs before any tool call and returns a `permissionDecision` of `allow`, `deny`, `ask`, or `defer` (where `defer` hands the decision back to the normal permission flow). The hook receives the full tool input — for a Bash call, that's the literal command string; for a file edit, that's the file path and proposed content.
 
 Practically, this means you can write a hook that blocks `git push` to main, blocks `DROP TABLE`, blocks `rm -rf`, blocks any write to paths matching `*.env` or `**/secrets/**`, and blocks any network call to domains outside your approved list — all before the command executes, with a reason string surfaced to both the user and the model.
 
@@ -186,7 +189,7 @@ Boris Cherny, who shipped Claude Code's built-in git worktree support, uses proj
 
 ### Layer 2: Input validation within the agent's scope
 
-Hooks protect against the most dangerous operations. Input validation within the agent's permitted scope protects against quieter failures. For any coding task that involves ingesting external data — a third-party API response, a user-uploaded file, data from a public source — the agent should be directed to generate validation code before using the data. Schema checking, null handling, type checking, length bounds. This is not optional polish; it is the difference between a brittle integration that fails on the first real input and a robust one.
+Hooks protect against the most dangerous operations. Input validation within the agent's permitted scope protects against quieter failures. For any coding task that involves ingesting external data — a third-party API response, a user-uploaded file, data from a public source — the agent should be directed to generate validation code before using the data. Schema checking, null handling, type checking, length bounds. That validation is what separates a brittle integration that fails on the first real input from a robust one.
 
 When specifying a task, include the validation requirements explicitly: "This function receives a JSON object from the vendor API. Treat any field as potentially null. Add explicit handling for the API returning a 429 or 503." The agent will not add these unless asked.
 
@@ -220,7 +223,7 @@ Claude Code auto-names worktree branches `worktree-<name>`. At session end, if c
 
 ## Section 5 — The lethal trifecta applied to coding agents
 
-Simon Willison named the lethal trifecta in June 2025.[^8] In any AI agent, combining three capabilities creates an exploitable attack surface:
+Simon Willison named the lethal trifecta in June 2025.[^8] [[01-mon-prompting-first-principles]] introduced it as a consequence of the model's inability to distinguish trusted from untrusted tokens; the full security treatment lives in Block 0 Week 2's MCP-security lesson. Here we apply it to one specific target: the coding agent. In any AI agent, combining three capabilities creates an exploitable attack surface:
 
 1. **Access to private data** — the agent can read your code, your config, your secrets, your database.
 2. **Exposure to untrusted content** — the agent reads external input that could contain instructions from an attacker (GitHub issues, code reviews, API documentation pulled from the web, user-submitted files).
@@ -253,13 +256,13 @@ What you can do:
 
 As of 2025, the agentic coding field has two camps with real numbers behind them.
 
-**The full-autonomy camp** — OpenHands (formerly OpenDevin), SWE-agent, Aider in auto-commit mode, Devin — argues that human interruptions are the bottleneck. If the agent is good enough, more autonomy means more throughput. The OpenHands paper documents 53% resolve rate on SWE-bench Lite when using CodeAct with Claude Sonnet as the base model.[^10] Claude Opus 4.5 achieves 80.9% on SWE-bench Verified; Claude Sonnet 4.5 achieves 77.2% with standard compute and 82.0% with parallel sampling.[^11][^12] These are not toy results.
+**The full-autonomy camp** — OpenHands (formerly OpenDevin), SWE-agent, Aider in auto-commit mode, Devin (now Devin Desktop) — argues that human interruptions are the bottleneck. If the agent is good enough, more autonomy means more throughput. The OpenHands paper documents a 53% resolve rate on SWE-bench Lite using CodeAct with Claude Sonnet as the base model.[^10] And the frontier has climbed steeply: as of July 2026, Claude Opus 4.8 scores 88.6% on SWE-bench Verified and Claude Fable 5 is reported at ~95% on the independent vals.ai leaderboard[^11][^12] — well past the late-2025 Opus 4.5 milestone (80.9%, the first model over 80%) that this course originally treated as the ceiling. These are not toy results.
 
-**The human-in-loop camp** — Claude Code's default, GitHub Copilot's agent mode — argues that the success rates above are measured on well-scoped, individually isolated benchmark tasks, and that production work is different: ambiguous requirements, codebase-specific context, downstream dependencies, security constraints. Claude Code's default permission prompts are not a concession to the model's limitations; they are structural checkpoints that keep humans in the loop at decision boundaries.
+**The human-in-loop camp** — Claude Code's default, GitHub Copilot's agent mode — argues that the success rates above are measured on well-scoped, individually isolated benchmark tasks, and that production work is different: ambiguous requirements, codebase-specific context, downstream dependencies, security constraints. Claude Code's default permission prompts function as structural checkpoints that keep humans in the loop at decision boundaries, rather than as a concession to the model's limitations.
 
 **What the Replit incident adds to this debate.** The Replit agent that deleted the production database was running in a high-autonomy mode against a live system.[^1] The failure wasn't that the model was bad at coding — it wasn't. The failure was that the permission boundary ("code freeze") was a conversational instruction, not an enforced guardrail. Conversational instructions don't survive the model misinterpreting the context. Enforced permission boundaries do.
 
-**The honest read of the 2025 numbers:** SWE-bench Verified measures the ability to generate a correct patch for an isolated GitHub issue, evaluated against unit tests. It does not measure: security awareness in the generated patch, whether the patch introduces dependency vulnerabilities, whether the patch handles edge cases not covered by the benchmark's test suite, or whether the agent would have exfiltrated credentials if given the opportunity. The 80.9% number is real and impressive. It also doesn't tell you whether you should trust the agent in your production codebase without hooks.
+**The honest read of the numbers:** SWE-bench Verified measures the ability to generate a correct patch for an isolated GitHub issue, evaluated against unit tests. It does not measure: security awareness in the generated patch, whether the patch introduces dependency vulnerabilities, whether the patch handles edge cases not covered by the benchmark's test suite, or whether the agent would have exfiltrated credentials if given the opportunity. An 88.6% (or ~95%) score is real and impressive. It also doesn't tell you whether to trust the agent in your production codebase without hooks — and the Veracode 45%-vulnerability finding is the direct evidence that high SWE-bench scores and secure output are different axes.
 
 **The practical resolution:** treat full autonomy as appropriate for isolated, sandboxed, well-scoped tasks with full test coverage. Treat human-in-loop as required for anything with a real blast radius — production write access, shared infrastructure, customer-facing systems. The decision criterion is the blast radius of the worst plausible failure, not the expected performance of the model.
 
@@ -329,7 +332,7 @@ This is the beginning of systematic trace inspection as a reflex. You don't need
 
 **Problem 3.** Take the lethal trifecta test and apply it to your own current Claude Code setup. Does your agent have access to private data? Does it read any external content you didn't write? Does it have any tool that can make external network calls? If all three are yes, name the specific exfiltration risk in your setup — not hypothetically, but specifically (what data could be taken, and what mechanism would the agent use to take it). Then name the one hook you'd write first to reduce the exposure.
 
-**Problem 4.** Review the SWE-bench Verified scores in Section 6: Claude Opus 4.5 at 80.9%, Claude Sonnet 4.5 at 77.2%. Read the SWE-bench Verified technical design (verdent.ai/blog/swe-bench-verified-technical-report or any primary source). What does SWE-bench Verified measure, and what does it not measure? Write a specific argument for why a team building a financial compliance tool should or should not use the SWE-bench number as their primary criterion for choosing which model to run their coding agent on.
+**Problem 4.** Review the SWE-bench Verified scores in Section 6: the July 2026 frontier (Opus 4.8 at 88.6%, Fable 5 at ~95%) against the Veracode finding that 45% of AI-generated code carries an OWASP Top-10 vulnerability. Read the SWE-bench Verified technical design (verdent.ai/blog/swe-bench-verified-technical-report or any primary source). What does SWE-bench Verified measure, and what does it not measure? Write a specific argument for why a team building a financial compliance tool should or should not use the SWE-bench number as their primary criterion for choosing which model to run their coding agent on — and address explicitly how a 95% patch-success rate coexists with a 45% vulnerability rate.
 
 **Problem 5.** Hamel Husain argues against anticipatory eval writing — don't write evals for failures you imagine, write them for failures you observe.[^4] He's describing open-ended LLM output evaluation. This lesson argued you should write tests before the agent writes code. Reconcile the tension: in what sense are both claims correct? Under what conditions does the Hamel rule apply, and under what conditions does the TDD rule apply? There's a real answer to this — work it out rather than dismissing one claim.
 
@@ -371,7 +374,7 @@ The human-in-loop argument assumes that human review checkpoints catch real erro
 
 **What the Replit incident post-mortems get wrong, and why it matters for this lesson:** Most post-mortems frame the July 2025 incident as a "the agent was given too much power" story. This lesson echoes that framing in Section 4 (guardrails). But the more precise failure was that the operator was running the agent in a mode designed for code-generation tasks against a live production environment — a purpose mismatch, not just a permissions mismatch. The lesson should more forcefully distinguish between agent capability (what the model can do) and operational context (what environment the model is running in). Even a perfectly safe agent running in the wrong environment produces unsafe outcomes. The guardrails in Section 4 are correct; they address permissions but not the deeper question of whether the task is appropriate for the environment at all.
 
-**What Karpathy would push back on in the throwaway vs. production framework:** The decision framework in Section 7 treats the throwaway/production distinction as binary. Karpathy's original framing was more probabilistic: vibe coding is appropriate when "the stakes are low enough that you'd rather ship fast and fix fast than not ship." That's a continuous dimension, not a binary switch. Some production features are low-stakes. Some throwaway prototypes become load-bearing overnight. The framework is a useful heuristic, not a reliable classification algorithm. A better formulation: set your discipline level as a function of blast radius, and re-evaluate blast radius every time the system's scope or user base changes.
+**What Karpathy would push back on in the throwaway vs. production framework:** The decision framework in Section 7 treats the throwaway/production distinction as binary. Karpathy's framing is more probabilistic — and his February 2026 "agentic engineering" post sharpens it: vibe coding *raises the floor* (ship fast, no quality bar) while agentic engineering *raises the ceiling* (preserve the quality bar with agents doing the typing). That's a continuous dimension of how much oversight the work warrants, not a binary switch. Some production features are low-stakes; some throwaway prototypes become load-bearing overnight. A better formulation: set your discipline level as a function of blast radius, and re-evaluate blast radius every time the system's scope or user base changes.
 
 **What a security-focused reviewer would add on the lethal trifecta section:** Section 5 correctly identifies the trifecta but understates the difficulty of mitigation. The suggestion to "scope tool access narrowly" assumes you know in advance which tools the agent will need for a given task. In practice, agentic coding tasks are open-ended enough that agents request unexpected tools mid-task. The hook-based deny system in Claude Code is the right architecture, but building and maintaining a comprehensive deny-list is ongoing work, not a one-time setup. The section should note that the deny-list approach is necessary but inherently incomplete — it catches known-bad patterns, not novel attack vectors.
 
@@ -390,14 +393,14 @@ The human-in-loop argument assumes that human review checkpoints catch real erro
 **Recommended**
 
 - SurgeHQ, "When Coding Agents Spiral Into 693 Lines of Hallucinations," surgehq.ai/blog, 2025.[^2] A specific, documented failure trace worth studying.
-- CodeRabbit / Stack Overflow Blog, "Are Bugs and Incidents Inevitable With AI Coding Agents?," stackoverflow.blog, January 2026.[^3] The 470-repo study on AI vs human bug rates.
+- CodeRabbit, "State of AI vs Human Code Generation Report," December 2025.[^3] The 470-pull-request study on AI vs human issue and vulnerability rates.
+- Veracode, "2025 GenAI Code Security Report."[^14] The 45%-OWASP-vulnerability finding; the evidence base for Position B in Friday's controversy.
 - Addy Osmani, "Vibe Coding Is Not the Same as AI-Assisted Engineering," medium.com/@addyosmani, 2025.[^13] The cleanest articulation of the vibe/engineering distinction.
 
 **Optional**
 
 - OpenHands paper (formerly OpenDevin), arxiv.org/abs/2407.16741.[^10] The CodeAct framework and SWE-bench methodology for full-autonomy agents.
-- Anthropic Claude Sonnet 4.5 release, anthropic.com/news/claude-sonnet-4-5.[^11] Primary source for the 77.2%/82.0% SWE-bench numbers.
-- Anthropic Claude Opus 4.5 release, anthropic.com/news/claude-opus-4-5.[^12] Primary source for the 80.9% number and multi-agent orchestration claims.
+- Anthropic Claude Opus 4.8 release, anthropic.com/news/claude-opus-4-8.[^12] Current (May 2026) primary source: 88.6% SWE-bench Verified, dynamic workflows. The Sonnet 4.5 / Opus 4.5 releases[^11] are the historical anchors (77.2%/82.0% and 80.9%).
 
 ---
 
@@ -407,13 +410,13 @@ The human-in-loop argument assumes that human review checkpoints catch real erro
 
 [^2]: SurgeHQ, "When Coding Agents Spiral Into 693 Lines of Hallucinations," surgehq.ai/blog/when-coding-agents-spiral-into-693-lines-of-hallucinations. Documents Gemini 2.5 Pro's 39-turn, 693-line hallucination spiral built on a fabricated BaseWriter class. Verified 2026-04-15.
 
-[^3]: Stack Overflow Blog / CodeRabbit, "Are bugs and incidents inevitable with AI coding agents?", stackoverflow.blog/2026/01/28/are-bugs-and-incidents-inevitable-with-ai-coding-agents/, January 28 2026. Study of 470 GitHub repositories: AI code has 1.7x as many bugs as human code, 75% more logic/correctness errors (194 per 100 PRs), security vulnerabilities at 1.5–2x rate. Verified 2026-04-15.
+[^3]: CodeRabbit, "State of AI vs Human Code Generation Report," December 17 2025. https://www.coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report — Study of **470 open-source pull requests** (320 AI-co-authored, 150 human-only): AI PRs averaged 10.83 issues each vs 6.45 for human PRs (~1.7x more total issues); logic/correctness issues ~75% more common; security vulnerabilities up to 2.74x (XSS the headline figure). Corroboration: BusinessWire (https://www.businesswire.com/news/home/20251217666881/en/), The Register (https://www.theregister.com/2025/12/17/ai_code_bugs/). Corrections from an earlier draft: the unit is pull requests, not repositories, and the "194 incidents per 100 PRs" figure could not be verified and has been removed. Verified 2026-07-17.
 
 [^4]: Hamel Husain, "Your AI Product Needs Evals," hamel.dev/blog/posts/evals, March 29 2024. The virtuous cycle: evaluate → debug → change. The claim that most teams skip the first two. Error analysis over imagined failures. Verified 2026-04-15.
 
 [^5]: Hamel Husain, "Using LLM-as-a-Judge For Evaluation: A Complete Guide," hamel.dev/blog/posts/llm-judge, October 2024. Binary (pass/fail) vs. scalar (1–5) evals. Honeycomb case study: >90% LLM-human agreement in three iterations. Recommendation to use precision/recall not raw agreement. Verified 2026-04-15.
 
-[^6]: Claude Code documentation. Hooks reference: code.claude.com/docs/en/hooks — 27 hook events, PreToolUse decision control (allow/deny/ask/defer), example deny patterns. Common workflows (worktrees section): code.claude.com/docs/en/common-workflows — `--worktree` flag, `.worktreeinclude`, subagent `isolation: worktree` frontmatter. Verified 2026-04-15.
+[^6]: Claude Code documentation. Hooks reference: https://code.claude.com/docs/en/hooks — 31 hook events as of July 2026; PreToolUse `permissionDecision` values allow/deny/ask/defer (defer hands back to the normal permission flow); example deny patterns. Common workflows (worktrees section): https://code.claude.com/docs/en/common-workflows — `--worktree` flag, `.worktreeinclude`, subagent `isolation: worktree` frontmatter. (Both the event count and `defer` were re-verified against the live docs; the earlier "27 events / defer looks fabricated" note was wrong — 31 events and defer are both real.) Verified 2026-07-17.
 
 [^7]: Boris Cherny, Threads post announcing built-in git worktree support in Claude Code CLI: threads.com/@boris_cherny/post/DVAAnexgRUj. "Now, agents can run in parallel without interfering with one another. Each agent gets its own worktree and can work independently." Verified 2026-04-15.
 
@@ -423,8 +426,12 @@ The human-in-loop argument assumes that human review checkpoints catch real erro
 
 [^10]: Wang, Chen et al., "OpenHands: An Open Platform for AI Software Developers as Generalist Agents," arxiv.org/abs/2407.16741, July 2024. CodeAct framework. OpenHands + Claude Sonnet: 53% resolve rate on SWE-bench Lite. Verified 2026-04-15.
 
-[^11]: Anthropic, "Introducing Claude Sonnet 4.5," anthropic.com/news/claude-sonnet-4-5. 77.2% on SWE-bench Verified (200K thinking budget); 82.0% with parallel sampling. 61.4% on OSWorld computer use. State-of-the-art multi-step task performance over 30-hour horizons. Verified 2026-04-15.
+[^11]: July 2026 SWE-bench Verified frontier: Claude Fable 5 ~95.0% on the independent vals.ai leaderboard (https://www.vals.ai/benchmarks/swebench , https://www.morphllm.com/claude-benchmarks). Historical anchor: Claude Sonnet 4.5 (Sept 2025) 77.2% at 200K thinking budget, 82.0% with parallel sampling (https://www.anthropic.com/news/claude-sonnet-4-5). Verified 2026-07-17.
 
-[^12]: Anthropic, "Introducing Claude Opus 4.5," anthropic.com/news/claude-opus-4-5. 80.9% on SWE-bench Verified — first model above 80% threshold. Effective multi-agent orchestration for complex subagent teams. November 2025. Verified 2026-04-15.
+[^12]: Anthropic, "Introducing Claude Opus 4.8," May 28 2026. https://www.anthropic.com/news/claude-opus-4-8 — 88.6% on SWE-bench Verified; ~4x less likely than its predecessor to let flaws in its own code pass; "dynamic workflows" orchestrating hundreds of parallel subagents. Historical: Opus 4.5 (Nov 2025) 80.9%, first model over 80% (https://www.anthropic.com/news/claude-opus-4-5). Verified 2026-07-17.
 
-[^13]: Addy Osmani, "Vibe Coding Is Not the Same as AI-Assisted Engineering," medium.com/@addyosmani/vibe-coding-is-not-the-same-as-ai-assisted-engineering-3f81088d5b98, 2025. Two-phase model: sandbox phase (vibe freely) → production phase (design, test, review, own it). Decision criterion: scope, stakes, maintainability. Verified 2026-04-15.
+[^13]: Addy Osmani, "Vibe Coding Is Not the Same as AI-Assisted Engineering," medium.com/@addyosmani/vibe-coding-is-not-the-same-as-ai-assisted-engineering-3f81088d5b98, 2025. Two-phase model: sandbox phase (vibe freely) → production phase (design, test, review, own it). Decision criterion: scope, stakes, maintainability. Verified 2026-07-17.
+
+[^14]: Veracode, "2025 GenAI Code Security Report." https://www.veracode.com/blog/genai-code-security-report/ — 100+ LLMs on 80 coding tasks; 45% of AI-generated code introduced an OWASP Top-10 vulnerability; failure rate did not improve with model scale (systemic). See also the Spring 2026 update (https://www.veracode.com/blog/spring-2026-genai-code-security/). Verified 2026-07-17.
+
+_last_verified: 2026-07-17_

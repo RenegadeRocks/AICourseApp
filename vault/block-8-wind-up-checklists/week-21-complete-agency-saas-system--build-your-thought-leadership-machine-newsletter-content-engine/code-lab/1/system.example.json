@@ -1,0 +1,28 @@
+{
+  "subsystems": [
+    {
+      "name": "Demand",
+      "metric": "qualified leads / week",
+      "owner": "founder",
+      "sop": "content-engine SOP + weekly outreach cadence",
+      "built_in": "[[block-7-onboarding-tracking/week-18-.../02-tue-opt-in-funnel-and-list-hygiene|B7W18]] + Week 21 content engine",
+      "handoff_to": ["Delivery"]
+    },
+    {
+      "name": "Delivery",
+      "metric": "time-to-first-value; 30/90-day retention",
+      "owner": "engineer partner",
+      "sop": "onboarding sequence + productized delivery runbook",
+      "built_in": "[[block-7-onboarding-tracking/week-20-.../02-tue-onboarding-sops-the-first-30-days|B7W20]]",
+      "handoff_to": ["Money"]
+    },
+    {
+      "name": "Money",
+      "metric": "net revenue retention; runway (months)",
+      "owner": "founder",
+      "sop": "pricing + renewal + upsell-hook playbook",
+      "built_in": "[[block-6-launch-monetization/week-16-.../02-tue-pricing-strategy-value-metric-anchoring-packaging|B6W16]]",
+      "handoff_to": ["Demand"]
+    }
+  ]
+}

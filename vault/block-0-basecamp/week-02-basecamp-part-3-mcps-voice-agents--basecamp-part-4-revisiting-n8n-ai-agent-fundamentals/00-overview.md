@@ -7,7 +7,7 @@ live_sessions:
   - '2026-05-09 — Basecamp Part 3: MCPs & Voice Agents'
   - '2026-05-10 — Basecamp Part 4: Revisiting n8n & AI Agent Fundamentals'
 study_window: 2026-05-04 to 2026-05-10
-last_verified: 2026-04-15
+last_verified: 2026-07-17
 ---
 
 # Week 2 — MCPs, voice agents, and the agent-engineering substrate
@@ -38,7 +38,7 @@ You have finished Week 0 and Week 1. You can articulate why post-training is a t
 
 MCP, voice, and n8n look like three unrelated tools. They are not. They are three different answers to the same question: *"How do I let a language model act in the world without writing a bespoke integration every time?"*
 
-- **MCP** answers it via a standard protocol: one spec that Claude Code, Cursor, OpenAI desktop app, and others all implement, so a tool you build once runs everywhere.
+- **MCP** answers it via a standard protocol: one spec that Claude Code, Cursor, OpenAI desktop app, and others all implement, so a tool you build once runs everywhere. As of December 2025 MCP is no longer an Anthropic-led artifact — it was donated to the Linux Foundation's new Agentic AI Foundation, which now co-governs it alongside Google's A2A, Block's goose, and AGENTS.md.
 - **Voice** answers it via a streaming, low-latency runtime: the agent loop has to close the turn fast enough that a human doesn't interrupt, which forces every other design decision.
 - **n8n** answers it via a visual workflow engine: teams that cannot staff a Python engineer still need to ship automations, and n8n's AI + MCP nodes are where that happens in 2025–2026.
 
@@ -51,3 +51,5 @@ Every deep-dive engages: (1) at least one live controversy — MCP security boun
 ## How to study this week
 
 Same priority order as every other week: experiment first, Must-read citations second, problem set third, prose last. Saturday's live sessions on 2026-05-09 and 2026-05-10 are kickers, not the core — the vault lessons are.
+
+_last_verified: 2026-07-17_

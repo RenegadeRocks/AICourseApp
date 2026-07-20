@@ -1,0 +1,5 @@
+{"id": "q001", "query": "What is the refund window for annual plans?", "gold_answer": "30 days from delivery for annual plans; 14 days for monthly.", "answerable": true}
+{"id": "q002", "query": "Which integrations require the enterprise tier?", "gold_answer": "SSO/SAML, audit-log export, and the Salesforce two-way sync.", "answerable": true}
+{"id": "q003", "query": "How did logo churn trend across the last three quarterly reviews?", "gold_answer": "Improved from 3.1% to 2.4% to 2.2% quarter over quarter.", "answerable": true}
+{"id": "q090", "query": "What was the company's 2019 headcount?", "gold_answer": null, "answerable": false}
+{"id": "q091", "query": "What does our contract with Initech specify about data residency?", "gold_answer": null, "answerable": false}

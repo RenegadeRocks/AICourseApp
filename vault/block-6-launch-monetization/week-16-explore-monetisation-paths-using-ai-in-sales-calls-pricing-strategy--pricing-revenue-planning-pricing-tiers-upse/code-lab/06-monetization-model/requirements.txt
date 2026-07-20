@@ -1,0 +1,6 @@
+# Week 16 monetization model — no third-party dependencies.
+# Pure Python standard library (dataclasses, argparse-free). Python 3.10+.
+# Pinned interpreter floor is enforced by the union-type syntax (str | None).
+#
+# If you later add a survey/plotting layer, pin it here, e.g.:
+#   matplotlib==3.9.2
